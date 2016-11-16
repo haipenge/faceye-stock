@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<!-- <parent> <groupId>org.faceye</groupId> <artifactId>faceye-feature</artifactId> 
+		<version>1.0</version> <relativePath>../parent/</relativePath> </parent> -->
+	<groupId>faceye-stock-web</groupId>
+	<artifactId>faceye-stock-web</artifactId>
+	<version>1.0</version>
+	<packaging>war</packaging>
+	<name>faceye-stock-web</name>
+	<properties>
+		<faceye-feature.version>1.0</faceye-feature.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jdk.version>1.7</jdk.version>
+		<jetty.version>9.0.2.v20130417</jetty.version>
+		<jetty.orbit.version>3.0.0.v201112011016</jetty.orbit.version>
+		<querydsl.version>4.1.2</querydsl.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>com.faceye.feature</groupId>
+			<artifactId>faceye-feature</artifactId>
+			<version>${faceye-feature.version}</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<finalName>faceye-stock-web</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>${jetty.version}</version>
+				<configuration>
+					<scanIntervalSeconds>15000000</scanIntervalSeconds>
+					<webApp>
+						<contextPath>/</contextPath>
+						<defaultsDescriptor>src/main/resources/webdefault.xml</defaultsDescriptor>
+						<descriptor>src/main/webapp/WEB-INF/web.xml</descriptor>
+						<baseResource implementation="org.eclipse.jetty.util.resource.ResourceCollection">
+							<resourcesAsCSV>src/main/webapp,../../faceye-feature/src/main/webapp</resourcesAsCSV>
+						</baseResource>
+					</webApp>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.mysema.maven</groupId>
+				<artifactId>apt-maven-plugin</artifactId>
+				<!-- <version>${querydsl.version}</version> -->
+				<executions>
+					<execution>
+						<goals>
+							<goal>process</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/generated-sources</outputDirectory>
+							<processor>org.springframework.data.mongodb.repository.support.MongoAnnotationProcessor</processor>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>com.mysema.querydsl</groupId>
+						<artifactId>querydsl-apt</artifactId>
+						<version>${querydsl.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>com.mysema.querydsl</groupId>
+						<artifactId>querydsl-mongodb</artifactId>
+						<classifier>apt</classifier>
+						<version>${querydsl.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>com.mysema.querydsl</groupId>
+						<artifactId>querydsl-codegen</artifactId>
+						<version>${querydsl.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<!-- not append assembly id in release file name -->
+					<appendAssemblyId>false</appendAssemblyId>
+					<!-- <descriptors> <descriptor> src/main/assemble/package.xml </descriptor> 
+						</descriptors> -->
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-jar</id><!-- 随便一个名字 -->
+						<phase>package</phase><!-- 绑定到package生命周期阶段上 -->
+						<goals>
+							<goal>single</goal><!-- 只运行一次 -->
+						</goals>
+						<configuration>
+							<skipAssembly>false</skipAssembly><!-- 跳过这个执行器 -->
+							<!-- 自定义输出目录（finalName为最终项目构建名称） -->
+							<!-- <outputDirectory> ${project.build.directory}/${project.build.finalName}/WEB-INF/lib 
+								</outputDirectory> -->
+							<!-- 描述符文件 -->
+							<descriptors>
+								<descriptor>src/main/resources/assembly/jar.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+					<!-- <execution> <id>make-zip</id> <phase>package</phase> <goals> <goal>single</goal> 
+						</goals> <configuration> <skipAssembly>true</skipAssembly> <descriptors> 
+						<descriptor>src/main/assembly/zip.xml</descriptor> </descriptors> </configuration> 
+						</execution> -->
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<excludes>
+						<exclude>**/**/*.xml</exclude>
+						<exclude>**/**/*.properties</exclude>
+						<exclude>**/**/*.txt</exclude>
+						<exclude>**/**/*.dic</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<shadedArtifactAttached>true</shadedArtifactAttached>
+							<shadedClassifierName>jar-with-dependencies</shadedClassifierName>
+							<transformers>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<mainClass>com.faceye.feature.service.impl.BeanContextUtil</mainClass>
+								</transformer>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+									<resource>META-INF/spring.handlers</resource>
+								</transformer>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+									<resource>META-INF/spring.schemas</resource>
+								</transformer>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+									<resource>META-INF/spring.tooling</resource>
+								</transformer>
+							</transformers>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<!-- YUI Compressor Maven压缩插件 -->
+				<groupId>net.alchim31.maven</groupId>
+				<artifactId>yuicompressor-maven-plugin</artifactId>
+				<version>1.3.0</version>
+				<executions>
+					<execution>
+						<phase>prepare-package</phase>
+						<!-- <phase>prepare-package</phase> <phase>compile</phase> -->
+						<goals>
+							<goal>compress</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<!-- 读取js,css文件采用UTF-8编码 -->
+					<encoding>UTF-8</encoding>
+					<!-- 不显示js可能的错误 -->
+					<jswarn>false</jswarn>
+					<!-- 若存在已压缩的文件，会先对比源文件是否有改动 有改动便压缩，无改动就不压缩 -->
+					<force>true</force>
+					<!-- 在指定的列号后插入新行 -->
+					<linebreakpos>-1</linebreakpos>
+					<!-- 压缩之前先执行聚合文件操作 -->
+					<preProcessAggregates>false</preProcessAggregates>
+					<!-- 压缩后保存文件后缀 -->
+					<suffix>.min</suffix>
+					<nosuffix>true</nosuffix>
+					<!-- 源目录，即需压缩的根目录 <sourceDirectory>${basedir}/src/main/webapp/js</sourceDirectory> -->
+					<!-- 压缩js和css文件 -->
+					<includes>
+						<include>**/*.js</include>
+						<include>**/*.css</include>
+					</includes>
+					<!-- 以下目录和文件不会被压缩 -->
+					<excludes>
+						<exclude>**/*.min.js</exclude>
+						<exclude>**/*.min.css</exclude>
+						<exclude>**/*.-min.js</exclude>
+						<exclude>**/*.-min.css</exclude>
+						<exclude>js/lib/**/*.*</exclude>
+					</excludes>
+					<!-- 压缩后输出文件目录 <outputDirectory>${basedir}/js</outputDirectory> -->
+					<!-- 聚合文件 -->
+					<aggregations>
+						<aggregation>
+							<!-- 合并每一个文件后插入一新行 -->
+							<insertNewLine>true</insertNewLine>
+							<!-- 需合并文件的根文件夹 -->
+							<inputDir>src/main/webapp/js/component</inputDir>
+							<!-- 最终合并的输出文件 -->
+							<output>src/main/webapp/js/component/app.js</output>
+							<!-- 把以下js文件合并成一个js文件，是按顺序合并的 -->
+							<includes>
+								<include>core/Core.js</include>
+								<include>core/Window.js</include>
+								<include>**/**.js</include>
+							</includes>
+						</aggregation>
+					</aggregations>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<filters>
+					<filter>src/main/filters/dev.properties</filter>
+				</filters>
+				<!-- <resources> <resource> <directory>src/main/webapp/jsp</directory> 
+					<filtering>true</filtering> <includes> <include>config.json</include> </includes> 
+					</resource> </resources> -->
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<configuration>
+							<archiveClasses>false</archiveClasses>
+							<webXml>src/main/webapp/WEB-INF/web.xml</webXml>
+							<warSourceExcludes>%regex[^.+(?:(?&lt;!(?:-|\.)min)\.js)]</warSourceExcludes>
+							<!-- <warSourceExcludes>js/component/app.js</warSourceExcludes> -->
+							<webResources>
+								<resource>
+									<directory>src/main/webapp</directory>
+									<!-- <excludes> <exclude>jsp/config.json</exclude> </excludes> -->
+									<filtering>true</filtering>
+								</resource>
+								<resource>
+									<directory>src/main/resources</directory>
+									<excludes>
+										<exclude>*.xml</exclude>
+										<exclude>*.properties</exclude>
+									</excludes>
+									<targetPath>WEB-INF/classes</targetPath>
+									<filtering>true</filtering>
+								</resource>
+							</webResources>
+							<resourceEncoding>UTF-8</resourceEncoding>
+							<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
+							<packingExcludes>
+								<exclude>/**/**/*jetty*.jar</exclude>
+							</packingExcludes>
+							<!-- <warSourceExcludes>**/*.js,**/*.css</warSourceExcludes> <warSourceExcludes>%regex[^.+(?:(?&lt;!(?:-|\.)min)\.js)]</warSourceExcludes> -->
+
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>test</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<filters>
+					<filter>src/main/filters/test.properties</filter>
+				</filters>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<configuration>
+							<archiveClasses>false</archiveClasses>
+							<webXml>src/main/webapp/WEB-INF/web.xml</webXml>
+							<webResources>
+								<resource>
+									<directory>src/main/webapp</directory>
+									<filtering>true</filtering>
+								</resource>
+								<resource>
+									<directory>src/main/resources</directory>
+									<excludes>
+										<exclude>*.xml</exclude>
+										<exclude>*.properties</exclude>
+									</excludes>
+									<targetPath>WEB-INF/classes</targetPath>
+								</resource>
+							</webResources>
+							<resourceEncoding>UTF-8</resourceEncoding>
+							<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
+							<packingExcludes>
+								<exclude>/**/**/*jetty*.jar</exclude>
+							</packingExcludes>
+							<warSourceExcludes>%regex[^.+(?:(?&lt;!(?:-|\.)min)\.js)]</warSourceExcludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>product</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<filters>
+					<filter>src/main/filters/product.properties</filter>
+				</filters>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<configuration>
+							<archive>
+								<addMavenDescriptor>false</addMavenDescriptor>
+							</archive>
+							<archiveClasses>false</archiveClasses>
+							<webXml>src/main/webapp/WEB-INF/web.xml</webXml>
+							<webResources>
+								<resource>
+									<directory>src/main/webapp</directory>
+								</resource>
+								<resource>
+									<directory>src/main/resources</directory>
+									<excludes>
+										<exclude>*.properties</exclude>
+										<exclude>*.xml</exclude>
+									</excludes>
+									<targetPath>WEB-INF/classes</targetPath>
+								</resource>
+							</webResources>
+							<resourceEncoding>UTF-8</resourceEncoding>
+							<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
+							<packingExcludes>
+								<exclude>/**/**/*jetty*.jar</exclude>
+							</packingExcludes>
+							<warSourceExcludes>%regex[^.+(?:(?&lt;!(?:-|\.)min)\.js)]</warSourceExcludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>jdk-1.7</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+				<jdk>${jdk.version}</jdk>
+			</activation>
+			<properties>
+				<maven.compiler.source>${jdk.version}</maven.compiler.source>
+				<maven.compiler.target>${jdk.version}</maven.compiler.target>
+				<maven.compiler.compilerVersion>${jdk.version}</maven.compiler.compilerVersion>
+			</properties>
+		</profile>
+	</profiles>
+	<repositories>
+		
+	</repositories>
+	<pluginRepositories>
+				
+	</pluginRepositories>
+</project>
+	

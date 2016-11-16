@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="2.0" xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_0.xsd">
+	<!-- 
+	<sql-result-set-mapping name="mappingName">
+		<entity-result entity-class="com.faceye.feature.repository.jpa.entity.Auth">
+			<field-result name="carTypeId" column="cartype_id" />
+			<field-result name="tel" column="tel" />
+			<field-result name="veLevel" column="star_level" />
+			<field-result name="name" column="name" />
+			<field-result name="companyName" column="company_name" />
+			<field-result name="imageUrl" column="image_url" />
+			<field-result name="imageUrlTail" column="image_url_tail" />
+			<field-result name="imageUrlSide" column="image_url_side" />
+			<field-result name="imageUrlUser" column="image_url_user" />
+			<field-result name="carBrand" column="car_brand" />
+			<field-result name="carPlates" column="car_plates" />
+			<field-result name="operunit" column="operunit" />
+			<field-result name="longitude" column="longitude" />
+			<field-result name="latitude" column="latitude" />
+			<field-result name="cargoTypeList" column="cargo_type_list" />
+			<field-result name="hidePlates" column="hide_plates" />
+			<field-result name="comment" column="comment" />
+			<field-result name="veResidentDesc" column="ve_resident_desc" />
+			<field-result name="remark" column="remark" />
+		</entity-result>
+	</sql-result-set-mapping>
+	 -->
+	<!-- 
+	<sql-result-set-mapping></sql-result-set-mapping>
+	 -->
+	
+</entity-mappings>
