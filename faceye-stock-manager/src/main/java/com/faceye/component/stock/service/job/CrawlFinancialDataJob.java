@@ -22,6 +22,7 @@ public class CrawlFinancialDataJob extends BaseJob {
 
 	@Override
 	public void run() {
+		logger.debug(">>FaceYe start run crawl financial data job");
 		this.crawlFinancialDataService.crawl();
 	}
 }

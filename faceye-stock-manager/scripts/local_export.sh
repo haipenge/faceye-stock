@@ -7,3 +7,5 @@ EXPORT_DIR="/work/project/faceye-stock/faceye-stock-manager/data/db"
 $MONGO_DIR/bin/mongoexport -d search -c stock_accounting_element -o $EXPORT_DIR/stock_accounting_element.bak
 $MONGO_DIR/bin/mongoexport -d search -c stock_accounting_subject -o $EXPORT_DIR/stock_accounting_subject.bak
 $MONGO_DIR/bin/mongoexport -d search -c stock_report_category -o $EXPORT_DIR/stock_report_category.bak
+$MONGO_DIR/bin/mongoexport -d search -c stock_stock -o $EXPORT_DIR/stock_stock.bak
+$MONGO_DIR/bin/mongoexport -d search -c stock_category -o $EXPORT_DIR/stock_category.bak
