@@ -18,8 +18,8 @@
 		<jetty.orbit.version>3.0.0.v201112011016</jetty.orbit.version>
 		<querydsl.version>4.1.2</querydsl.version>
 		<servlet-api.version>3.0-alpha-1</servlet-api.version>
-		<junit.version>4.11</junit.version>
-		<spring.version>4.3.0.RELEASE</spring.version>
+		<junit.version>4.12</junit.version>
+		<spring.version>4.3.5.RELEASE</spring.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -62,7 +62,6 @@
 					<exclude>i18n/*</exclude>
 				</excludes>
 			</resource>
-			
 			<resource>
 				<directory>../../faceye-feature-mongo/src/main/resources</directory>
 				<includes>
@@ -75,7 +74,7 @@
 				<filtering>true</filtering>
 			</resource>
 			<resource>
-				<directory>../../faceye-security/faceye-security-manager-mongo/src/main/resources</directory>
+				<directory>../../faceye-security-manager-mongo/faceye-security-manager-mongo/src/main/resources</directory>
 				<includes>
 					<include>i18n/**</include>
 					<include>tiles/manager/*.*</include>
@@ -87,6 +86,7 @@
 				<directory>../../faceye-feature/src/main/resources</directory>
 				<includes>
 					<include>i18n/*</include>
+					<include>tiles/manager/*.*</include>
 				</includes>
 			</resource>
 		</resources>
@@ -110,7 +110,7 @@
 						<defaultsDescriptor>src/main/resources/webdefault.xml</defaultsDescriptor>
 						<descriptor>src/main/webapp/WEB-INF/web.xml</descriptor>
 						<baseResource implementation="org.eclipse.jetty.util.resource.ResourceCollection">
-							<resourcesAsCSV>src/main/webapp,../../faceye-feature-mongo/src/main/webapp,../../faceye-security/faceye-security-manager-mongo/src/main/webapp,../../faceye-feature/src/main/webapp</resourcesAsCSV>
+							<resourcesAsCSV>src/main/webapp,../../faceye-feature-mongo/src/main/webapp,../../faceye-security-manager-mongo/faceye-security-manager-mongo/src/main/webapp,../../faceye-feature/src/main/webapp</resourcesAsCSV>
 						</baseResource>
 					</webApp>
 				</configuration>
@@ -275,7 +275,7 @@
 									<filtering>true</filtering>
 								</resource>
 								<resource>
-									<directory>../../faceye-security/faceye-security-manager-mongo/src/main/webapp</directory>
+									<directory>../../faceye-security-manager-mongo/faceye-security-manager-mongo/src/main/webapp</directory>
 								</resource>
 								<resource>
 									<directory>../../faceye-feature-mongo/src/main/webapp</directory>
@@ -318,7 +318,7 @@
 									<filtering>true</filtering>
 								</resource>
 								<resource>
-									<directory>../../faceye-security/faceye-security-manager-mongo/src/main/webapp</directory>
+									<directory>../../faceye-security-manager-mongo/faceye-security-manager-mongo/src/main/webapp</directory>
 								</resource>
 								<resource>
 									<directory>../../faceye-feature-mongo/src/main/webapp</directory>
@@ -363,7 +363,7 @@
 									<filtering>true</filtering>
 								</resource>
 								<resource>
-									<directory>../../faceye-security/faceye-security-manager-mongo/src/main/webapp</directory>
+									<directory>../../faceye-security-manager-mongo/faceye-security-manager-mongo/src/main/webapp</directory>
 								</resource>
 								<resource>
 									<directory>../../faceye-feature-mongo/src/main/webapp</directory>

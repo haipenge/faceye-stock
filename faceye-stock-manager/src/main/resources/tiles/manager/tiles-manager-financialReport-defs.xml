@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+    <!-- 模块:stock 业务对像:FinancialReport 管理后台 tiles模板配置 -->
+    <!-- 作者:haipege -->
+    <!-- FinancialReport 管理 首页(列表页) -->
+	<definition name="stock.financialReport.manager" extends="default.manager">
+	    <put-attribute name="default-center" value="stock.financialReport.center"></put-attribute>
+	</definition>
+	<definition name="stock.financialReport.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/stock/financialReport/financialReport_center.jsp"></put-attribute>
+	</definition>
+	
+	<!-- FinancialReport 新增,编辑页面 -->
+	<definition name="stock.financialReport.update" extends="default.manager">
+	    <put-attribute name="default-center" value="stock.financialReport.update.center"></put-attribute>
+	</definition>
+	<definition name="stock.financialReport.update.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/stock/financialReport/financialReport_update.jsp"></put-attribute>
+	</definition>
+	
+	<!-- FinancialReport 明细页 -->
+	<definition name="stock.financialReport.detail" extends="default.manager">
+	    <put-attribute name="default-center" value="stock.financialReport.detail.center"></put-attribute>
+	</definition>
+	<definition name="stock.financialReport.detail.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/stock/financialReport/financialReport_detail.jsp"></put-attribute>
+	</definition>
+	
+	<!-- 统计报告页面 -->
+	<definition name="stock.financialReport.charts" extends="default.manager">
+	   <put-attribute name="default-center" value="stock.financialReport.charts.center"></put-attribute>
+	</definition>
+	<definition name="stock.financialReport.charts.center" extends="default.center">
+	<put-attribute name="default-center-right" value="/component/stock/financialReport/financialReport_charts_center.jsp"></put-attribute>
+	</definition>
+	
+</tiles-definitions>

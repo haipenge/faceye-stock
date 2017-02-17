@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+    <!-- 模块:stock 业务对像:AccountingSubject 管理后台 tiles模板配置 -->
+    <!-- 作者:haipege -->
+    <!-- AccountingSubject 管理 首页(列表页) -->
+	<definition name="stock.accountingSubject.manager" extends="default.manager">
+	    <put-attribute name="default-center" value="stock.accountingSubject.center"></put-attribute>
+	</definition>
+	<definition name="stock.accountingSubject.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/stock/accountingSubject/accountingSubject_center.jsp"></put-attribute>
+	</definition>
+	
+	<!-- AccountingSubject 新增,编辑页面 -->
+	<definition name="stock.accountingSubject.update" extends="default.manager">
+	    <put-attribute name="default-center" value="stock.accountingSubject.update.center"></put-attribute>
+	</definition>
+	<definition name="stock.accountingSubject.update.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/stock/accountingSubject/accountingSubject_update.jsp"></put-attribute>
+	</definition>
+	
+	<!-- AccountingSubject 明细页 -->
+	<definition name="stock.accountingSubject.detail" extends="default.manager">
+	    <put-attribute name="default-center" value="stock.accountingSubject.detail.center"></put-attribute>
+	</definition>
+	<definition name="stock.accountingSubject.detail.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/stock/accountingSubject/accountingSubject_detail.jsp"></put-attribute>
+	</definition>
+	
+</tiles-definitions>

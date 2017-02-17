@@ -22,6 +22,7 @@
 	</div>
 	 -->
 	<div class="block-flat">
+	<c:import url="/component/core/template/msg/msg.jsp" />
 		<div class="content">
 			<form action="<c:url value="/@component.name@/@entity.config.name@/home"/>" method="post" role="form"
 				class="form-horizontal">
@@ -38,7 +39,6 @@
 			</form>
 		</div>
 		<div class="content">
-		  <div id="msg"></div>
 	       <button class="btn btn-primary btn-sm multi-remove"><fmt:message key="global.remove"></fmt:message></button>
 			<div classs="table-responsive">
 				<table class="table table-bordered">
@@ -46,15 +46,19 @@
 						<tr>
 						   <th><input type="checkbox" name="check-all"></th>
 							<!--@generate-entity-jsp-property-desc@-->
+							<th><fmt:message key="global.view"></fmt:message></th>
 							<th><fmt:message key="global.edit"></fmt:message></th>
 							<th><fmt:message key="global.remove"></fmt:message></th>
 						</tr>
 					</thead>
 					<tbody>
 						<c:forEach items="${page.content}" var="@entity.config.name@">
-							<tr>
+							<tr id="@entity.config.name@.id">
 							   <td><input type="checkbox" name="check-single" value="${@entity.config.name@.id}"></td>
 								<!--@generate-entity-jsp-property-value@-->
+								<td><a href="<c:url value="/@component.name@/@entity.config.name@/detail/${@entity.config.name@.id}"/>">
+										<fmt:message key="global.view"></fmt:message>
+								</a></td>
 								<td><a href="<c:url value="/@component.name@/@entity.config.name@/edit/${@entity.config.name@.id}"/>">
 										<fmt:message key="global.edit"></fmt:message>
 								</a></td>

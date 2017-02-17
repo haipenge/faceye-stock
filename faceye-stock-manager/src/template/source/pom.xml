@@ -399,51 +399,29 @@
 	</profiles>
 	<repositories>
 		<repository>
-			<id>nexus</id>
-			<name>Team Nexus Repository</name>
-			<url>http://nexus.easou.com/nexus/content/groups/public</url>
-		</repository>
-		<repository>
-			<id>thirdparty</id>
-			<name>Team Nexus Repository</name>
-			<url>http://nexus.easou.com/nexus/content/repositories/thirdparty</url>
-		</repository>
-		<repository>
-			<id>releases</id>
-			<name>Team Nexus Repository</name>
-			<url>http://nexus.easou.com/nexus/content/repositories/releases</url>
-		</repository>
-		<repository>
-			<id>spring-snapshot</id>
-			<name>Spring Snapshot Repository</name>
-			<url>http://repo.springsource.org/snapshot</url>
+			<id>nexus-oschina</id>
+			<name>local private nexus</name>
+			<url>http://maven.oschina.net/content/groups/public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 		</repository>
 	</repositories>
 	<pluginRepositories>
-		<pluginRepository>
-			<id>nexus</id>
-			<name>Team Nexus Repository</name>
-			<url>http://nexus.easou.com/nexus/content/groups/public</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
-		<pluginRepository>
-			<id>thirdparty</id>
-			<name>Team Nexus Repository</name>
-			<url>http://nexus.easou.com/nexus/content/repositories/thirdparty</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
-		<pluginRepository>
-			<id>releases</id>
-			<name>Team Nexus Repository</name>
-			<url>http://nexus.easou.com/nexus/content/repositories/releases</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
+				<pluginRepository>
+					<id>nexus-oschina</id>
+					<name>local private nexus</name>
+					<url>http://maven.oschina.net/content/groups/public/</url>
+					<releases>
+						<enabled>true</enabled>
+					</releases>
+					<snapshots>
+						<enabled>false</enabled>
+					</snapshots>
+				</pluginRepository>
 	</pluginRepositories>
 </project>
 	

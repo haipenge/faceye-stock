@@ -1,5 +1,6 @@
 package com.faceye.component.stock.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.faceye.component.stock.entity.Stock;
@@ -114,6 +116,22 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 			model.addAttribute("stock", entity);
 		}
 		return "stock.stock.detail";
+	}
+	
+	/**
+	 * 根据关键字查询时股票提示
+	 * @param request
+	 * @return
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2016年12月28日 下午12:33:19
+	 */
+	@RequestMapping("/queryTips")
+	@ResponseBody
+	public List<Stock> queryTips(HttpServletRequest request){
+		List<Stock> stocks=null;
+		
+		return stocks;
 	}
 
 }

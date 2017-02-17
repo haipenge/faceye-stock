@@ -23,6 +23,7 @@ import com.faceye.feature.util.AjaxResult;
 import com.faceye.feature.util.MathUtil;
 import com.faceye.feature.util.http.HttpUtil;
 import com.faceye.feature.util.regexp.RegexpUtil;
+import com.faceye.feature.util.GlobalEntity;
 /**
  * 模块:@component.name@<br>
  * 实体:@entity.name@<br>
@@ -52,6 +53,9 @@ public class @entity.name@Controller extends BaseController<@entity.name@, Long,
 		Map searchParams=HttpUtil.getRequestParams(request);
 		Page<@entity.name@> page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
 		model.addAttribute("page", page);
+		GlobalEntity global=new GlobalEntity();
+		global.setTitle(this.getI18N("@component.name@.@entity.config.name@"));
+		model.addAttribute("global",global);
 		return "@component.name@.@entity.config.name@.manager";
 	}
 
@@ -68,6 +72,9 @@ public class @entity.name@Controller extends BaseController<@entity.name@, Long,
 			@entity.name@ entity=this.service.get(id);
 			model.addAttribute("@entity.config.name@", entity);
 		}
+		GlobalEntity global=new GlobalEntity();
+		global.setTitle(this.getI18N("@component.name@.@entity.config.name@.edit"));
+		model.addAttribute("global",global);
 		return "@component.name@.@entity.config.name@.update";
 	}
 	
@@ -83,6 +90,9 @@ public class @entity.name@Controller extends BaseController<@entity.name@, Long,
 	@RequestMapping(value="/input")
 	public String input(@entity.name@ @entity.config.name@,Model model,HttpServletRequest request){
 		this.beforeInput(model,request)
+		GlobalEntity global=new GlobalEntity();
+		global.setTitle(this.getI18N("@component.name@.@entity.config.name@.add"));
+		model.addAttribute("global",global);
 		return "@component.name@.@entity.config.name@.update";
 	}
 	

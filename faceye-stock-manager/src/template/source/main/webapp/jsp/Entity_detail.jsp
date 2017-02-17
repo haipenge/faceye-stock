@@ -16,4 +16,9 @@
 			</table>
 		</div>
 	</div>
+	<div class="content">
+	  <a href="<c:url value="/@component.name@/@entity.config.name@/edit/${@entity.config.name@}.id"/>" class="btn btn-sm btn-primary"><fmt:message key="global.edit"/></a>
+	  <a href="<c:url value="/@component.name@/@entity.config.name@/remove/${@entity.config.name@}.id"/>" class="btn btn-sm btn-danger"><fmt:message key="global.remove"/></a>
+	  <a href="<c:url value="/@component.name@/@entity.config.name@/home"/>" class="btn btn-sm btn-info"><fmt:message key="global.back"/></a>
+	</div>
 </div>

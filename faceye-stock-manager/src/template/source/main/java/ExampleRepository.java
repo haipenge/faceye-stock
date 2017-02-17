@@ -18,7 +18,7 @@ import com.faceye.feature.repository.BaseRepository;
  * haipenge@gmail.com
 *  Create Date:2014年5月20日
  */
-public interface @entity.name@Repository extends BaseRepository<@entity.name@,Long> {
+public interface @entity.name@Repository extends @entity.name@GenRepository,@entity.name@CustomerRepository {
 	
 	
 }/**@generate-repository-source@**/

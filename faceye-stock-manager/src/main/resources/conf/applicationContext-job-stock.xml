@@ -101,5 +101,28 @@
 			<value>false</value>
 		</property>
 	</bean>
+	
+	<!-- Crawl financial data job -->
+	<bean id="crawlFinancialDataJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="crawlFinancialDataJobDetail" />
+		</property>
+		<property name="cronExpression">
+			<value>0 45 23 * * ?</value>
+		</property>
+	</bean>
+	<bean id="crawlFinancialDataJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="crawlFinancialDataJob" />
+		</property>
+		<property name="targetMethod">
+			<value>doJob</value>
+		</property>
+		<property name="concurrent">
+			<value>false</value>
+		</property>
+	</bean>
 
 </beans>

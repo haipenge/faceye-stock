@@ -15,21 +15,24 @@ import org.springframework.stereotype.Service;
 import com.faceye.component.@component.name@.entity.@entity.name@;
 
 import com.faceye.component.@component.name@.repository.mongo.@entity.name@Repository;
+import com.faceye.component.@component.name@.repository.mongo.customer.@entity.name@CustomerRepository;
 import com.faceye.component.@component.name@.service.@entity.name@Service;
 
 import com.faceye.feature.util.ServiceException;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
+import com.querydsl.core.types.Predicate;
 /**
  * @entity.name@ 服务实现类<br>
  * @author @haipenge <br>
  * haipenge@gmail.com<br>
 *  Create Date:2014年5月20日<br>
  */
-import com.mysema.query.types.Predicate;
+
 @Service
 public class @entity.name@ServiceImpl extends BaseMongoServiceImpl<@entity.name@, Long, @entity.name@Repository> implements @entity.name@Service {
-
+	@Autowired
+	private @entity.name@CustomerRepository @entity.config.name@CustomerRepository=null;
 	@Autowired
 	public @entity.name@ServiceImpl(@entity.name@Repository dao) {
 		super(dao);

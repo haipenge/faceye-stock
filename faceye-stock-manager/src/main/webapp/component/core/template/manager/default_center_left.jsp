@@ -21,12 +21,12 @@
 				<ul class="cl-vnavigation">
 					<li><a href="#"><i class="fa fa-file"></i><span>Pages</span></a>
 						<ul class="sub-menu">
-							<!--@generate-entity-manager-list-group-item@-->
+							
+<!--@generate-entity-manager-list-group-item@-->
+
+
 						</ul></li>
-					<li><a href="#"><i class="fa fa-list-alt"></i><span>Stocks</span></a>
-						<ul class="sub-menu">
-							<%@ include file="/component/core/template/manager/stock_default_center_left.jsp"%>
-						</ul></li>
+					<%@ include file="/component/core/template/manager/stock_default_center_left.jsp"%>
 					<li><a href="#"><i class="fa fa-home"></i><span><fmt:message key="global.manager"></fmt:message></span></a>
 						<ul class="sub-menu">
 							<li class="<%=JspUtil.isActive(request, "user")%>"><a href="<c:url value="/security/user/home"/>"><fmt:message

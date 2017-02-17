@@ -15,18 +15,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 import org.springframework.validation.BindingResult;
+
 import javax.validation.Valid;
 
 import com.faceye.component.@component.name@.entity.@entity.name@;
 import com.faceye.component.@component.name@.service.@entity.name@Service;
 
+
+
 import com.faceye.feature.util.AjaxResult;
 import com.faceye.feature.util.MathUtil;
 import com.faceye.feature.util.http.HttpUtil;
 import com.faceye.feature.util.regexp.RegexpUtil;
+import com.faceye.feature.util.view.MessageBuilder;
 import com.faceye.feature.util.AjaxResult;
 import com.faceye.feature.controller.BaseController;
+import com.faceye.feature.util.view.MessageBuilder;
+import com.faceye.feature.util.GlobalEntity;
 
 /**
  * 模块:@component.name@<br>
@@ -59,6 +66,9 @@ public class @entity.name@Controller extends BaseController<@entity.name@, Long,
 		model.addAttribute("page", page);
 		resetSearchParams(searchParams);
 		model.addAttribute("searchParams", searchParams);
+		GlobalEntity global=new GlobalEntity();
+		global.setTitle(this.getI18N("@component.name@.@entity.config.name@"));
+		model.addAttribute("global",global);
 		return "@component.name@.@entity.config.name@.manager";
 	}
 
@@ -76,6 +86,9 @@ public class @entity.name@Controller extends BaseController<@entity.name@, Long,
 			@entity.name@ entity=this.service.get(id);
 			model.addAttribute("@entity.config.name@", entity);
 		}
+		GlobalEntity global=new GlobalEntity();
+		global.setTitle(this.getI18N("@component.name@.@entity.config.name@.edit"));
+		model.addAttribute("global",global);
 		return "@component.name@.@entity.config.name@.update";
 	}
 	
@@ -91,6 +104,9 @@ public class @entity.name@Controller extends BaseController<@entity.name@, Long,
 	@RequestMapping(value="/input")
 	public String input(@entity.name@ @entity.config.name@,Model model,HttpServletRequest request){
 		beforeInput(model,request);
+		GlobalEntity global=new GlobalEntity();
+		global.setTitle(this.getI18N("@component.name@.@entity.config.name@.add"));
+		model.addAttribute("global",global);
 		return "@component.name@.@entity.config.name@.update";
 	}
 	
@@ -120,9 +136,15 @@ public class @entity.name@Controller extends BaseController<@entity.name@, Long,
 	 * @author:@haipenge haipenge@gmail.com 2014年5月24日<br>
 	 */
 	@RequestMapping("/remove/{id}")
-	public String remove(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+	public String remove(@PathVariable("id") Long id, RedirectAttributes redirectAttributes,RedirectAttributesModelMap model) {
 		if(id!=null){
-			this.service.remove(id);
+			@entity.name@ @entity.config.name@=this.service.get(id);
+			if(@entity.config.name@!=null){
+				if(beforeRemove(@entity.config.name@,model)){
+					this.service.remove(@entity.config.name@);	
+					//MessageBuilder.getInstance().setMessage(model,@entity.config.name@+" "+ this.getI18N("global.remove.success"));
+				}
+			}
 		}
 		return "redirect:/@component.name@/@entity.config.name@/home";
 	}
@@ -136,14 +158,21 @@ public class @entity.name@Controller extends BaseController<@entity.name@, Long,
 	 */
 	@RequestMapping("/multiRemove")
 	@ResponseBody
-	public String remove(@RequestParam(required=true) String  ids, RedirectAttributes redirectAttributes) {
+	public String remove(@RequestParam(required=true) String  ids, RedirectAttributes redirectAttributes,RedirectAttributesModelMap model) {
 		if(StringUtils.isNotEmpty(ids)){
 			String [] idArray=ids.split(",");
 			for(String id:idArray){
-				this.service.remove(Long.parseLong(id));
+				@entity.name@ @entity.config.name@=this.service.get(Long.parseLong(id));
+				if(@entity.config.name@!=null){
+					if(beforeRemove(@entity.config.name@,model)){
+						this.service.remove(@entity.config.name@);	
+						//MessageBuilder.getInstance().setMessage(model,@entity.config.name@+" "+ this.getI18N("global.remove.success"));
+					}
+				}
 			}
 		}
-		return AjaxResult.getInstance().buildDefaultResult(true);
+		String messages = MessageBuilder.getInstance().getMessages(model);
+		return AjaxResult.getInstance().buildDefaultResult(StringUtils.isEmpty(messages), messages);
 	}
 	/**
 	 * 取得数据明细<br>
@@ -158,8 +187,8 @@ public class @entity.name@Controller extends BaseController<@entity.name@, Long,
 	@RequestMapping("/detail/{id}")
 	public String detail(@PathVariable Long id,Model model){
 		if(id!=null){
-			@entity.name@ entity=this.service.get(id);
-			model.addAttribute("@entity.config.name@", entity);
+			@entity.name@ @entity.config.name@=this.service.get(id);
+			model.addAttribute("@entity.config.name@", @entity.config.name@);
 		}
 		return "@component.name@.@entity.config.name@.detail";
 	}
@@ -183,6 +212,14 @@ public class @entity.name@Controller extends BaseController<@entity.name@, Long,
 	 */
 	protected void beforeSave(@entity.name@ @entity.config.name@,HttpServletRequest request){
 		
+	}
+	/**
+	 * 删除前 数据回调
+	 */
+	protected boolean beforeRemove(@entity.name@ @entity.config.name@,Model model){
+		boolean res=true;
+		
+		return res;
 	}
 
 }

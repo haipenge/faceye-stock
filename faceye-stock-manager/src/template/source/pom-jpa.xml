@@ -11,6 +11,7 @@
 	<name>project-name</name>
 	<properties>
 		<faceye-security-manager.version>1.0</faceye-security-manager.version>
+		
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.7</jdk.version>
 		<jetty.version>9.0.2.v20130417</jetty.version>
@@ -18,7 +19,7 @@
 		<querydsl.version>3.4.2</querydsl.version>
 		<servlet-api.version>3.0-alpha-1</servlet-api.version>
 		<junit.version>4.11</junit.version>
-		<spring.version>4.1.1.RELEASE</spring.version>
+		<spring.version>4.1.6.RELEASE</spring.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -26,6 +27,7 @@
 			<artifactId>faceye-security-manager</artifactId>
 			<version>${faceye-security-manager.version}</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
@@ -64,6 +66,8 @@
 				<includes>
 					<include>i18n/**</include>
 					<include>tiles/manager/*.*</include>
+					<include>conf/applicationContext-jpa.xml</include>
+					<include>conf/applicationContext-config.xml</include>
 				</includes>
 				<filtering>true</filtering>
 			</resource>

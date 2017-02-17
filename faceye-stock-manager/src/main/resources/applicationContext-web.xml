@@ -175,19 +175,11 @@
 	<!-- i18n -->
 	<!-- 国际化资源文件绑定，该文件放置在src下 -->
 	<bean id="messageSource"
-		class="org.springframework.context.support.ResourceBundleMessageSource">
+		class="com.faceye.feature.service.impl.RegexPropertyMessageResources">
 		<property name="basenames">
 			<list>
-				<value>/i18n/global</value>
-				<value>/i18n/user</value>
-				<value>/i18n/role</value>
-				<value>/i18n/resource</value>
-				<value>/i18n/menu</value>
-<value>/i18n/stock</value>
-<value>/i18n/dailyData</value>
-<!--i18n-config -->
+				<value>classpath:i18n/*</value>
 			</list>
 		</property>
 	</bean>
-
 </beans> 

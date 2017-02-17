@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+    <!-- 模块:stock 业务对像:ReportCategory 管理后台 tiles模板配置 -->
+    <!-- 作者:haipege -->
+    <!-- ReportCategory 管理 首页(列表页) -->
+	<definition name="stock.reportCategory.web.home" extends="default.web">
+	    <put-attribute name="default-center" value="stock.reportCategory.center"></put-attribute>
+	</definition>
+	<definition name="stock.reportCategory.web.center" extends="default.web.center">
+	    <put-attribute name="default-center-right" value="/component/stock/reportCategory/reportCategory_center.jsp"></put-attribute>
+	</definition>
+	
+	<!-- ReportCategory 新增,编辑页面 -->
+	<definition name="stock.reportCategory.web.update" extends="default.web">
+	    <put-attribute name="default-center" value="stock.reportCategory.update.web.center"></put-attribute>
+	</definition>
+	<definition name="stock.reportCategory.update.web.center" extends="default.web.center">
+	    <put-attribute name="default-center-right" value="/component/stock/reportCategory/reportCategory_update.jsp"></put-attribute>
+	</definition>
+	
+	<!-- ReportCategory 明细页 -->
+	<definition name="stock.reportCategory.web.detail" extends="default.web">
+	    <put-attribute name="default-center" value="stock.reportCategory.detail.web.center"></put-attribute>
+	</definition>
+	<definition name="stock.reportCategory.detail.web.center" extends="default.web.center">
+	    <put-attribute name="default-center-right" value="/component/stock/reportCategory/reportCategory_detail.jsp"></put-attribute>
+	</definition>
+	
+</tiles-definitions>
