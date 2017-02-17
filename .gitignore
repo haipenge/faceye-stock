@@ -9,8 +9,8 @@
 /*/bin
 /*/*.sql
 /*/logs/*
-/*/data/*
-/*/db
+#/*/data/*
+#/*/db
 /*/build*.xml
 
 /*/*/.project
@@ -22,7 +22,7 @@
 /*/*/src/main/filters/dev.properties
 /*/*/src/template/project
 /*/*/logs/*
-/*/*/db
+#/*/*/db
 /*/*/build*.xml
 
 /.classpath
@@ -35,6 +35,6 @@
 /bin
 /logs/*
 /*.tar.gz
-/db
-/data
+#/db
+#/data
 /build*.xml

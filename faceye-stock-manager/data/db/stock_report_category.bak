@@ -1,0 +1,4 @@
+{"_id":{"$numberLong":"1"},"code":"BALANCE_SHEET","createDate":{"$date":"2016-12-16T02:23:53.122Z"},"name":"资产负责表"}
+{"_id":{"$numberLong":"2"},"code":"FINANCIAL_SUMMARY","createDate":{"$date":"2016-12-16T02:24:48.007Z"},"name":"财务摘要"}
+{"_id":{"$numberLong":"3"},"code":"IN_COME_SHEET","createDate":{"$date":"2016-12-16T02:24:11.901Z"},"name":"利润表"}
+{"_id":{"$numberLong":"4"},"code":"CASH_FLOW_SHEET","createDate":{"$date":"2016-12-16T02:24:02.999Z"},"name":"现金流量表"}

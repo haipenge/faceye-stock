@@ -1,0 +1,16 @@
+{"_id":{"$numberLong":"2"},"createDate":{"$date":"2016-12-20T06:55:41.733Z"},"name":"经营活动产生的现金流量","reportCategory":{"$id":{"$numberLong":"4"},"$ref":"stock_report_category"}}
+{"_id":{"$numberLong":"3"},"createDate":{"$date":"2016-12-21T04:53:06.502Z"},"name":"投资活动产生的现金流量","reportCategory":{"$id":{"$numberLong":"4"},"$ref":"stock_report_category"}}
+{"_id":{"$numberLong":"4"},"createDate":{"$date":"2016-12-21T05:05:32.591Z"},"name":"筹资活动产生的现金流量","reportCategory":{"$id":{"$numberLong":"4"},"$ref":"stock_report_category"}}
+{"_id":{"$numberLong":"5"},"createDate":{"$date":"2016-12-21T05:12:58.745Z"},"name":"附注","reportCategory":{"$id":{"$numberLong":"4"},"$ref":"stock_report_category"}}
+{"_id":{"$numberLong":"6"},"createDate":{"$date":"2016-12-21T05:37:47.513Z"},"name":"营业总收入","reportCategory":{"$id":{"$numberLong":"3"},"$ref":"stock_report_category"}}
+{"_id":{"$numberLong":"7"},"createDate":{"$date":"2016-12-21T05:42:02.334Z"},"name":"营业总成本","reportCategory":{"$id":{"$numberLong":"3"},"$ref":"stock_report_category"}}
+{"_id":{"$numberLong":"8"},"createDate":{"$date":"2016-12-21T05:53:22.029Z"},"name":"营业利润","reportCategory":{"$id":{"$numberLong":"3"},"$ref":"stock_report_category"}}
+{"_id":{"$numberLong":"9"},"createDate":{"$date":"2016-12-21T05:56:58.540Z"},"name":"净利润","reportCategory":{"$id":{"$numberLong":"3"},"$ref":"stock_report_category"}}
+{"_id":{"$numberLong":"10"},"createDate":{"$date":"2016-12-21T05:58:37.599Z"},"name":"每股收益","reportCategory":{"$id":{"$numberLong":"3"},"$ref":"stock_report_category"}}
+{"_id":{"$numberLong":"11"},"createDate":{"$date":"2016-12-21T06:00:23.052Z"},"name":"其他综合收益","reportCategory":{"$id":{"$numberLong":"3"},"$ref":"stock_report_category"}}
+{"_id":{"$numberLong":"12"},"createDate":{"$date":"2016-12-21T06:01:09.889Z"},"name":"综合收益总额","reportCategory":{"$id":{"$numberLong":"3"},"$ref":"stock_report_category"}}
+{"_id":{"$numberLong":"13"},"createDate":{"$date":"2016-12-21T06:04:24.683Z"},"name":"流动资产","reportCategory":{"$id":{"$numberLong":"1"},"$ref":"stock_report_category"}}
+{"_id":{"$numberLong":"14"},"createDate":{"$date":"2016-12-21T06:15:44.776Z"},"name":"非流动资产","reportCategory":{"$id":{"$numberLong":"1"},"$ref":"stock_report_category"}}
+{"_id":{"$numberLong":"15"},"createDate":{"$date":"2016-12-21T06:28:22.437Z"},"name":"流动负债","reportCategory":{"$id":{"$numberLong":"1"},"$ref":"stock_report_category"}}
+{"_id":{"$numberLong":"16"},"createDate":{"$date":"2016-12-21T06:40:50.352Z"},"name":"非流动负债","reportCategory":{"$id":{"$numberLong":"1"},"$ref":"stock_report_category"}}
+{"_id":{"$numberLong":"17"},"createDate":{"$date":"2016-12-21T06:44:34.170Z"},"name":"所有者权益","reportCategory":{"$id":{"$numberLong":"1"},"$ref":"stock_report_category"}}

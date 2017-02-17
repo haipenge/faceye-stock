@@ -1,0 +1,1019 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 使用ant 自动生成基础代码框架 -->
+<!-- Author @haipenge -->
+<!-- E-mail:haipenge@gmail.com -->
+<project name="generate-tools" basedir="." default="help">
+	<import file="build-scp.xml"></import>
+	<import file="build-empty-project.xml" />
+	<property file="build.properties"></property>
+	<!-- 定义常量 -->
+	<!-- 临时输出目录 -->
+	<property name="output.dir" value="${basedir}/target/output"></property>
+	<property name="generate.project.dir" value=".."></property>
+	<!-- 默认包名 -->
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" />
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<pathelement location="/program/apache-ant-1.9.2/lib/ant-contrib-1.0b3.jar" />
+		</classpath>
+	</taskdef>
+	<target name="info">
+		<echo>*****************************************************************
+		</echo>
+		<echo>************FaceYe 项目自助化工具*************</echo>
+		<echo>****解决问题:解决项目初期搭建调度与集成耗时现像</echo>
+		<echo>****项目模板包括:</echo>
+		<echo>1.Web前端.</echo>
+		<echo>2.管理后台.</echo>
+		<echo>3.移动服务端.</echo>
+		<echo>4.andorid(todo).</echo>
+		<echo>5.ios(todo)</echo>
+		<echo>****相关技术:</echo>
+		<echo>****1.spring mvc</echo>
+		<echo>****2.tiles,jstl.</echo>
+		<echo>****3.spring-data-jpa</echo>
+		<echo>****4.spring-data-redis</echo>
+		<echo>****5.spring-data-mongo</echo>
+		<echo>****6.hibernate</echo>
+		<echo>****7.maven</echo>
+		<echo>****8.ant</echo>
+		<echo>****Github:https://github.com/haipenge/faceye-generate-feature.git
+		</echo>
+		<echo>****与作者联系--></echo>
+		<echo>****Author:@haipenge</echo>
+		<echo>****Email:haipenge@gmail.com</echo>
+		<echo>*****************************************************************
+		</echo>
+	</target>
+	<target name="help" depends="info">
+		<echo>1.创建一个新项目: generate-project | generate-empty-project</echo>
+		<echo>2.创建一个模块: generate-component</echo>
+		<echo>3.创建实体 : generate-entity</echo>
+		<echo>4.为实体增加属性: generate-entity-property | generate-entity-properties</echo>
+		<echo>5.修改模板:修改src/template/source 下的模板类</echo>
+		<echo>6.删除一个实体: remove-entity</echo>
+		<echo>7.删除一个模块: remove-component</echo>
+	</target>
+	<!-- 创建或覆盖一个工程 -->
+	<target name="generate-project" depends="init-project-template">
+		<input message="请输入工程名称:" addProperty="generate.project.name"></input>
+		<input message="请输入包名:如:com.faceye" addProperty="generate.project.package.name"></input>
+		<input message="请输入包路径:com.faceye 对应为:com/faceye" addProperty="generate.project.package.path"></input>
+		<input message="请输入MySQL数据库用户名(Root权限):" addProperty="generate.project.db.user.name"></input>
+		<input message="请输入MySQL数据库密码:" addProperty="generate.project.db.user.password"></input>
+		<input
+			message="请选择项目结构: &#10;1-->管理后台+WEB前端. &#10;2-->管理后台+服务端+WEB前端.&#10;3-->管理后台+服务端+Web前端+android.&#10;4-->管理后台+服务端+Web前端+android+IOS"
+			addProperty="generate.project.struct"></input>
+		<mkdir dir="${generate.project.dir}/${generate.project.name}"></mkdir>
+		<antcall target="prepare-generate-project">
+			<param name="generate.project.name" value="${generate.project.name}"></param>
+			<param name="generate.project.package.path" value="${generate.project.package.path}"></param>
+			<param name="generate.project.package.name" value="${generate.project.package.name}"></param>
+			<param name="generate.project.db.user.name" value="${generate.project.db.user.name}"></param>
+			<param name="generate.project.db.user.password" value="${generate.project.db.user.password}"></param>
+		</antcall>
+		<antcall target="generate-project-entity">
+			<param name="generate.project.name" value="${generate.project.name}"></param>
+			<param name="generate.project.package.name" value="${generate.project.package.name}"></param>
+		</antcall>
+		<if>
+			<!-- 1 管理后台+WEB前端 -->
+			<equals arg1="${generate.project.struct}" arg2="1"></equals>
+			<then>
+				<antcall target="generate-project-manager">
+					<param name="generate.project.name" value="${generate.project.name}"></param>
+					<param name="generate.project.package.name" value="${generate.project.package.name}"></param>
+				</antcall>
+				<antcall target="generate-project-web">
+					<param name="generate.project.name" value="${generate.project.name}"></param>
+					<param name="generate.project.package.name" value="${generate.project.package.name}"></param>
+				</antcall>
+			</then>
+			<!-- 2 管理后台+服务端+WEB前端 -->
+			<elseif>
+				<equals arg1="${generate.project.struct}" arg2="2"></equals>
+				<then>
+					<antcall target="generate-project-manager">
+						<param name="generate.project.name" value="${generate.project.name}"></param>
+						<param name="generate.project.package.name" value="${generate.project.package.name}"></param>
+					</antcall>
+					<antcall target="generate-project-api">
+						<param name="generate.project.name" value="${generate.project.name}"></param>
+						<param name="generate.project.package.name" value="${generate.project.package.name}"></param>
+					</antcall>
+					<antcall target="generate-project-web">
+						<param name="generate.project.name" value="${generate.project.name}"></param>
+						<param name="generate.project.package.name" value="${generate.project.package.name}"></param>
+					</antcall>
+				</then>
+			</elseif>
+			<!-- 3 管理后台+服务端+Web前端+android -->
+			<elseif>
+				<equals arg1="${generate.project.struct}" arg2="3"></equals>
+				<then>
+					<antcall target="generate-project-manager">
+						<param name="generate.project.name" value="${generate.project.name}"></param>
+						<param name="generate.project.package.name" value="${generate.project.package.name}"></param>
+					</antcall>
+					<antcall target="generate-project-api">
+						<param name="generate.project.name" value="${generate.project.name}"></param>
+						<param name="generate.project.package.name" value="${generate.project.package.name}"></param>
+					</antcall>
+					<antcall target="generate-project-web">
+						<param name="generate.project.name" value="${generate.project.name}"></param>
+						<param name="generate.project.package.name" value="${generate.project.package.name}"></param>
+					</antcall>
+				</then>
+			</elseif>
+			<!-- 4 管理后台+服务端+Web前端+android+IOS -->
+			<elseif>
+				<equals arg1="${generate.project.struct}" arg2="4"></equals>
+				<then>
+					<antcall target="generate-project-manager">
+						<param name="generate.project.name" value="${generate.project.name}"></param>
+						<param name="generate.project.package.name" value="${generate.project.package.name}"></param>
+					</antcall>
+					<antcall target="generate-project-web">
+						<param name="generate.project.name" value="${generate.project.name}"></param>
+						<param name="generate.project.package.name" value="${generate.project.package.name}"></param>
+					</antcall>
+				</then>
+			</elseif>
+		</if>
+	</target>
+	<!-- 准备创建工程 -->
+	<target name="prepare-generate-project">
+		<!-- 清理输出目录 -->
+		<antcall target="clean-generate-path"></antcall>
+		<input message="请输入工程名称:" addProperty="generate.project.name"></input>
+		<input message="请输入包名:如:com.faceye" addProperty="generate.project.package.name"></input>
+		<input message="请输入包名:如:com/faceye" addProperty="generate.project.package.path"></input>
+		<input message="请输入MySQL数据库用户名(Root权限):" addProperty="generate.project.db.user.name"></input>
+		<input message="请输入MySQL数据库密码:" addProperty="generate.project.db.user.password"></input>
+		<mkdir dir="${output.dir}/project"></mkdir>
+		<mkdir dir="${output.dir}/project/src/main/resources/i18n" />
+		<copy todir="${output.dir}/project" overwrite="true" encoding="UTF-8"
+			outputencoding="UTF-8" includeEmptyDirs="true">
+			<fileset dir="${basedir}/src/template/project">
+				<exclude name="src/main/java/com/faceye/**"></exclude>
+				<exclude name="src/test/java/com/faceye/**"></exclude>
+				<exclude name="pom.xml"></exclude>
+				<exclude name="build.properties"></exclude>
+			</fileset>
+			<fileset dir="${basedir}">
+				<include name="build*.xml"></include>
+			</fileset>
+			<fileset dir="${basedir}/src/template/source">
+				<include name="build.properties"></include>
+				<include name="pom*.xml"></include>
+			</fileset>
+		</copy>
+		<replace file="${output.dir}/project/build.properties"
+			encoding="UTF-8">
+			<replacefilter token="@package@" value="${generate.project.package.name}"></replacefilter>
+			<replacefilter token="@package.path@" value="${generate.project.package.path}"></replacefilter>
+		</replace>
+		<!-- java业务代码 -->
+		<mkdir
+			dir="${output.dir}/project/src/main/java/${generate.project.package.path}"></mkdir>
+		<copy
+			todir="${output.dir}/project/src/main/java/${generate.project.package.path}"
+			overwrite="true" encoding="UTF-8" outputencoding="UTF-8"
+			includeEmptyDirs="true">
+			<fileset dir="${basedir}/src/template/project/src/main/java/com/faceye">
+				<include name="**/**/*.java"></include>
+			</fileset>
+		</copy>
+		<!-- 基础测试包 -->
+		<mkdir
+			dir="${output.dir}/project/src/test/java/${generate.project.package.path}/test"></mkdir>
+		<copy
+			todir="${output.dir}/project/src/test/java/${generate.project.package.path}/test"
+			overwrite="true" encoding="UTF-8" outputencoding="UTF-8"
+			includeEmptyDirs="true">
+			<fileset dir="${basedir}/src/test/java/com/faceye/test">
+				<include name="**/**/*.java"></include>
+			</fileset>
+		</copy>
+
+		<!-- 替换数据库信息 -->
+		<replace dir="${output.dir}/project/src/main" encoding="UTF-8">
+			<include name="**/**/*.properties"></include>
+			<include name="**/**/*.sql"></include>
+			<replacefilter token="facey_feature" value="${generate.project.name}"></replacefilter>
+			<replacefilter token="feature" value="${generate.project.db.user.name}"></replacefilter>
+			<replacefilter token="123456"
+				value="${generate.project.db.user.password}"></replacefilter>
+		</replace>
+		<!-- 替换包名 -->
+		<replace dir="${output.dir}/project" encoding="UTF-8">
+			<exclude name="pom*.xml"></exclude>
+			<replacefilter token="com.faceye" value="${generate.project.package.name}"></replacefilter>
+		</replace>
+
+	</target>
+	<!-- 创建项目管理后台 -->
+	<target name="generate-project-manager">
+		<echo message="创建项目管理后台"></echo>
+		<input message="请输入项目名称(注：项目名称后面会自动增加'-manager'字样)" addProperty="generate.project.name"></input>
+		<input message="请输入包名，如com.faceye" addProperty="generate.project.package.name"></input>
+		<property name="generate.project.manager.path"
+			value="${generate.project.dir}/${generate.project.name}/${generate.project.name}-manager"></property>
+		<mkdir dir="${generate.project.manager.path}"></mkdir>
+		<copy todir="${generate.project.manager.path}" overwrite="true"
+			encoding="UTF-8" outputencoding="UTF-8" includeEmptyDirs="true">
+			<fileset dir="${output.dir}/project">
+				<include name="**/*.*" />
+			</fileset>
+		</copy>
+		<move file="${generate.project.manager.path}/pom-manager.xml"
+			tofile="${generate.project.manager.path}/pom.xml" encoding="UTF-8"></move>
+		<replace dir="${generate.project.manager.path}" encoding="UTF-8">
+			<include name="pom*.xml"></include>
+			<replacefilter token="project-name-entity" value="${generate.project.name}-entity"></replacefilter>
+			<replacefilter token="project-name-security-manager-mongo"
+				value="faceye-security-manager-mongo"></replacefilter>
+			<replacefilter token="project-group-id" value="${generate.project.package.name}"></replacefilter>
+			<replacefilter token="project-name" value="${generate.project.name}-manager"></replacefilter>
+		</replace>
+	</target>
+	<!-- 创建项目web前台 -->
+	<target name="generate-project-web">
+		<echo message="创建项目Web/wap端"></echo>
+		<input message="请输入项目名称(注：项目名称后面会自动增加'-web'字样)" addProperty="generate.project.name"></input>
+		<input message="请输入包名，如com.faceye" addProperty="generate.project.package.name"></input>
+		<property name="generate.project.web.path"
+			value="${generate.project.dir}/${generate.project.name}/${generate.project.name}-web"></property>
+		<mkdir dir="${generate.project.web.path}"></mkdir>
+		<copy todir="${generate.project.web.path}" overwrite="true"
+			encoding="UTF-8" outputencoding="UTF-8" includeEmptyDirs="true">
+			<fileset dir="${output.dir}/project">
+				<include name="**/**/*.*"></include>
+			</fileset>
+		</copy>
+		<replace dir="${generate.project.web.path}" encoding="UTF-8">
+			<include name="pom*.xml"></include>
+			<replacefilter token="project-name-entity" value="${generate.project.name}-entity"></replacefilter>
+			<replacefilter token="project-name-security-manager-mongo"
+				value="faceye-security-manager-mongo"></replacefilter>
+			<replacefilter token="project-group-id" value="${generate.project.package.name}"></replacefilter>
+			<replacefilter token="project-name" value="${generate.project.name}-web"></replacefilter>
+		</replace>
+	</target>
+	<!-- 创建移动服务端 -->
+	<target name="generate-project-api">
+		<echo message="创建项目api"></echo>
+		<input message="请输入项目名称(注：项目名称后面会自动增加'-api'字样)" addProperty="generate.project.name"></input>
+		<input message="请输入包名，如com.faceye" addProperty="generate.project.package.name"></input>
+		<property name="generate.project.api.path"
+			value="${generate.project.dir}/${generate.project.name}/${generate.project.name}-api"></property>
+		<mkdir dir="${generate.project.api.path}"></mkdir>
+		<copy todir="${generate.project.api.path}" overwrite="true"
+			encoding="UTF-8" outputencoding="UTF-8" includeEmptyDirs="true">
+			<fileset dir="${output.dir}/project">
+				<exclude name="src/main/webapp/**/**/**.jsp"></exclude>
+				<exclude name="src/main/webapp/**/**/**.js"></exclude>
+				<exclude name="src/main/webapp/**/**/**.css"></exclude>
+				<exclude name="src/main/webapp/**/**/**.jpg"></exclude>
+				<exclude name="src/main/webapp/**/**/**.png"></exclude>
+				<exclude name="src/main/webapp/**/**/**.gif"></exclude>
+			</fileset>
+		</copy>
+		<replace dir="${generate.project.api.path}" encoding="UTF-8">
+			<include name="pom*.xml"></include>
+			<replacefilter token="project-name-security-manager-mongo"
+				value="faceye-security-manager-mongo"></replacefilter>
+			<replacefilter token="project-name-entity" value="${generate.project.name}-entity"></replacefilter>
+			<replacefilter token="project-group-id" value="${generate.project.package.name}"></replacefilter>
+			<replacefilter token="project-name" value="${generate.project.name}-api"></replacefilter>
+		</replace>
+	</target>
+	<!--生成实体工程 -->
+	<target name="generate-project-entity">
+		<echo message="创建项目 project entity "></echo>
+		<input message="请输入项目名称(注：项目名称后面会自动增加'-entity'字样)" addProperty="generate.project.name"></input>
+		<input message="请输入包名，如com.faceye" addProperty="generate.project.package.name"></input>
+		<property name="generate.project.entity.path"
+			value="${generate.project.dir}/${generate.project.name}/${generate.project.name}-entity"></property>
+		<mkdir dir="${generate.project.entity.path}" />
+		<copy todir="${generate.project.entity.path}" overwrite="true"
+			encoding="UTF-8" outputencoding="UTF-8" includeEmptyDirs="true">
+			<copy todir="${generate.project.api.path}" overwrite="true"
+				encoding="UTF-8" outputencoding="UTF-8">
+				<fileset dir="${output.dir}/project">
+					<include name="**/doc/*.*" />
+					<include name="**/entity/*.*" />
+				</fileset>
+			</copy>
+			<replace dir="${generate.project.entity.path}" encoding="UTF-8">
+				<include name="pom*.xml"></include>
+				<replacefilter token="project-name-entity" value="${generate.project.name}-entity"></replacefilter>
+				<replacefilter token="project-name-security-manager-mongo"
+					value="faceye-security-manager-mongo"></replacefilter>
+				<replacefilter token="project-group-id"
+					value="${generate.project.package.name}"></replacefilter>
+				<replacefilter token="project-name" value="${generate.project.name}-entity"></replacefilter>
+			</replace>
+		</copy>
+	</target>
+
+	<!-- 删除项目管理后台 -->
+	<target name="remove-project-manager">
+		<echo message="删除项目管理后台"></echo>
+		<input message="请输入待删除项目(注:项目后不需要增加'-manager')" addProperty="remove.project.name"></input>
+		<property name="remove.project.manager.path"
+			value="${generate.project.dir}/${remove.project.name}/${remove.project.name}-manager"></property>
+		<delete dir="${remove.project.manager.path}"></delete>
+	</target>
+	<!-- 删除项目Web -->
+	<target name="remove-project-web">
+		<echo message="删除项目管理后台"></echo>
+		<input message="请输入待删除项目(注:项目后不需要增加'-web')" addProperty="remove.project.name"></input>
+		<property name="remove.project.manager.path"
+			value="${generate.project.dir}/${remove.project.name}/${remove.project.name}-web"></property>
+		<delete dir="${remove.project.manager.path}"></delete>
+	</target>
+	<!-- 删除移动服务端 -->
+	<target name="remove-project-api">
+		<echo message="删除项目管理后台"></echo>
+		<input message="请输入待删除项目(注:项目后不需要增加'-api')" addProperty="remove.project.name"></input>
+		<property name="remove.project.manager.path"
+			value="${generate.project.dir}/${remove.project.name}/${remove.project.name}-api"></property>
+		<delete dir="${remove.project.manager.path}"></delete>
+	</target>
+	<!-- 创建一个模块 -->
+	<target name="generate-component">
+		<input message="请输入模块名称" addProperty="component.name"></input>
+		<property name="component.path"
+			value="${basedir}/src/main/java/${package.path}/component/${component.name}"></property>
+		<property name="component.test.path"
+			value="${basedir}/src/test/java/${package.path}/test/component/${component.name}"></property>
+		<property name="entity.path"
+			value="${project.root.dir}/${project.root.name}-entity/src/main/java/${package.path}/component/${component.name}/entity"></property>
+		<!--实体的资源文件路径 -->
+		<property name="entity.properties.path"
+			value="${project.root.dir}/${project.root.name}-entity/src/main/resources/i18n">
+		</property>
+		<property name="api.path"
+			value="${project.root.dir}/${project.root.name}-api/src/main/java/${package.path}/component/${component.name}"></property>
+		<property name="api.test.path"
+			value="${project.root.dir}/${project.root.name}-api/src/test/java/${package.path}/component/${component.name}"></property>
+
+		<!-- 生成 Entity 项目模块 -->
+		<mkdir dir="${entity.path}"></mkdir>
+		<mkdir dir="${entity.properties.path}"></mkdir>
+		<!-- 生成 Manager 项目模块 -->
+		<mkdir dir="${component.path}/repository"></mkdir>
+		<mkdir dir="${component.path}/service/impl"></mkdir>
+		<mkdir dir="${component.path}/controller"></mkdir>
+		<mkdir dir="${component.test.path}/repository/jpa"></mkdir>
+		<mkdir dir="${component.test.path}/repository/mongo"></mkdir>
+		<mkdir dir="${component.test.path}/controller"></mkdir>
+		<mkdir dir="${component.test.path}/service"></mkdir>
+		<mkdir dir="${basedir}/src/main/webapp/component/${component.name}"></mkdir>
+		<mkdir dir="${basedir}/src/main/webapp/js/component/${component.name}"></mkdir>
+		<mkdir dir="${basedir}/src/main/webapp/css/component/${component.name}"></mkdir>
+		<!-- 生成API项目模块 -->
+		<mkdir dir="${api.path}" />
+		<mkdir dir="${api.path}/repository" />
+		<mkdir dir="${api.path}/service/impl" />
+		<mkdir dir="${api.path}/controller" />
+		<mkdir dir="${api.test.path}/repository/jpa" />
+		<mkdir dir="${api.test.path}/repository/mongo" />
+		<mkdir dir="${api.test.path}/service" />
+		<mkdir dir="${api.test.path}/controller" />
+
+	</target>
+	<!-- 生成源码 涵盖Entity,Dao(repository),Service,Controller,JSP,js,css -->
+	<target name="generate-entity">
+		<echo message="生成源码 涵盖Entity,Dao(repository),Service,Controller,JSP,js,css"></echo>
+		<antcall target="clean-generate-path"></antcall>
+		<input message="请输入模块名(不含包名)" addProperty="component.name"></input>
+		<property name="entity.path"
+			value="${project.root.dir}/${project.root.name}-entity/src/main/java/${package.path}/component/${component.name}/entity"></property>
+		<!--实体的资源文件路径 -->
+		<property name="entity.properties.path"
+			value="${project.root.dir}/${project.root.name}-entity/src/main/resources/i18n">
+		</property>
+		<!-- API项目路径 -->
+		<property name="api.path"
+			value="${project.root.dir}/${project.root.name}-api/src/main/java/${package.path}/component/${component.name}"></property>
+		<property name="api.test.path"
+			value="${project.root.dir}/${project.root.name}-api/src/test/java/${package.path}/component/${component.name}"></property>
+
+		<property name="component.path"
+			value="${basedir}/src/main/java/${package.path}/component/${component.name}"></property>
+		<input message="请输入实体名称" addProperty="entity.name"></input>
+		<input message="请输入实体的配置名,如:User->user" addProperty="entity.config.name"></input>
+		<input message="请输入实体描述:" addProperty="entity.title"></input>
+		<input message="请输入持久化选择,mongo/jpa" addProperty="repository.type"></input>
+		<!-- 生成临时输出目录 -->
+		<mkdir dir="${output.dir}/source/main/java"></mkdir>
+		<mkdir dir="${output.dir}/source/test/java"></mkdir>
+		<mkdir dir="${output.dir}/source/main/resources/i18n"></mkdir>
+		<mkdir dir="${output.dir}/source/main/resources/tiles"></mkdir>
+		<mkdir dir="${output.dir}/source/main/webapp/jsp"></mkdir>
+		<mkdir dir="${output.dir}/source/main/webapp/js"></mkdir>
+		<mkdir dir="${output.dir}/source/main/webapp/css"></mkdir>
+		<!-- 生成web目录 -->
+		<mkdir
+			dir="${basedir}/src/main/webapp/component/${component.name}/${entity.config.name}/"></mkdir>
+		<mkdir
+			dir="${basedir}/src/main/webapp/js/component/${component.name}/${entity.config.name}/"></mkdir>
+		<mkdir
+			dir="${basedir}/src/main/webapp/css/component/${component.name}/${entity.config.name}/"></mkdir>
+		<!--生成实体目录 -->
+		<mkdir dir="${entity.path}" />
+		<mkdir dir="${entity.properties.path}" />
+		<!-- 拷贝java文件 -->
+		<copy todir="${output.dir}/source/main/java" overwrite="true"
+			encoding="UTF-8" outputencoding="UTF-8">
+			<fileset dir="${basedir}/src/template/source/main/java">
+				<include name="*.java"></include>
+			</fileset>
+		</copy>
+		<copy todir="${output.dir}/source/test/java" overwrite="true"
+			encoding="UTF-8" outputencoding="UTF-8">
+			<fileset dir="${basedir}/src/template/source/test/java">
+				<include name="*.java"></include>
+			</fileset>
+		</copy>
+		<!-- 拷贝资源文件 -->
+		<copy todir="${output.dir}/source/main/resources/i18n" overwrite="true"
+			encoding="UTF-8" outputencoding="UTF-8">
+			<fileset dir="${basedir}/src/template/source/main/resources/i18n">
+				<include name="*.*"></include>
+			</fileset>
+		</copy>
+		<!-- 拷贝tiles文件 -->
+		<copy todir="${output.dir}/source/main/resources/tiles"
+			overwrite="true" encoding="UTF-8" outputencoding="UTF-8">
+			<fileset dir="${basedir}/src/template/source/main/resources/tiles">
+				<include name="tiles-manager-defs-template.xml"></include>
+			</fileset>
+		</copy>
+		<!-- 拷贝jsp文件 -->
+		<copy todir="${output.dir}/source/main/webapp/jsp" overwrite="true"
+			encoding="UTF-8" outputencoding="UTF-8">
+			<fileset dir="${basedir}/src/template/source/main/webapp/jsp">
+				<include name="*.jsp"></include>
+			</fileset>
+		</copy>
+		<!-- 拷贝js文件 -->
+		<copy todir="${output.dir}/source/main/webapp/js" overwrite="true"
+			encoding="UTF-8" outputencoding="UTF-8">
+			<fileset dir="${basedir}/src/template/source/main/webapp/js">
+				<include name="*.js"></include>
+			</fileset>
+		</copy>
+		<!-- 拷贝css文件 -->
+		<copy todir="${output.dir}/source/main/webapp/css" overwrite="true"
+			encoding="UTF-8" outputencoding="UTF-8">
+			<fileset dir="${basedir}/src/template/source/main/webapp/css">
+				<include name="*.css"></include>
+			</fileset>
+		</copy>
+
+		<!-- 处理java,tiles,xml,jsp,js,css文件 -->
+		<replace dir="${output.dir}/source" encoding="UTF-8">
+			<include name="**/*.*"></include>
+			<replacefilter token="@component.name@" value="${component.name}"></replacefilter>
+			<replacefilter token="@entity.name@" value="${entity.name}"></replacefilter>
+			<replacefilter token="@entity.config.name@" value="${entity.config.name}"></replacefilter>
+			<replacefilter token="@entity.title@" value="${entity.title}"></replacefilter>
+		</replace>
+
+		<!-- 移动java文件 -->
+
+		<if>
+			<!-- 如果使用的是jpa做持久化 -->
+			<equals arg1="${repository.type}" arg2="mongo"></equals>
+			<then>
+				<property name="repository.entity.package" value="entity"></property>
+				<property name="class.name.prefix" value="Document"></property>
+			</then>
+			<elseif>
+				<equals arg1="${repository.type}" arg2="jpa"></equals>
+				<then>
+					<property name="repository.entity.package" value="entity"></property>
+					<property name="class.name.prefix" value="Example"></property>
+				</then>
+			</elseif>
+		</if>
+		<echo message="${repository.entity.package}" />
+		<move file="${output.dir}/source/main/java/${class.name.prefix}.java"
+			tofile="${entity.path}/${entity.name}.java" encoding="UTF-8"></move>
+		<move
+			file="${output.dir}/source/main/java/${class.name.prefix}Repository.java"
+			tofile="${component.path}/repository/${repository.type}/${entity.name}Repository.java"
+			encoding="UTF-8"></move>
+		<copy todir="${api.path}/repository" encoding="UTF-8">
+			<fileset dir="${component.path}/repository/${repository.type}">
+				<include name="${entity.name}Repository.java" />
+			</fileset>
+		</copy>
+		<move
+			file="${output.dir}/source/main/java/${class.name.prefix}Service.java"
+			tofile="${component.path}/service/${entity.name}Service.java"
+			encoding="UTF-8"></move>
+
+		<copy todir="${api.path}/service" encoding="UTF-8">
+			<fileset dir="${component.path}/service">
+				<include name="${entity.name}Service.java" />
+			</fileset>
+		</copy>
+		<move
+			file="${output.dir}/source/main/java/${class.name.prefix}ServiceImpl.java"
+			tofile="${component.path}/service/impl/${entity.name}ServiceImpl.java"
+			encoding="UTF-8"></move>
+		<copy todir="${api.path}/service/impl" encoding="UTF-8">
+			<fileset dir="${component.path}/service/impl">
+				<include name="${entity.name}ServiceImpl.java" />
+			</fileset>
+		</copy>
+		<move
+			file="${output.dir}/source/main/java/${class.name.prefix}Controller.java"
+			tofile="${component.path}/controller/${entity.name}Controller.java"
+			encoding="UTF-8"></move>
+		<move
+			file="${output.dir}/source/main/java/${class.name.prefix}ApiController.java"
+			tofile="${api.path}/controller/${entity.name}Controller.java"
+			encoding="UTF-8"></move>
+
+		<!-- 移动测试类 -->
+		<move file="${output.dir}/source/test/java/DocumentRepositoryTestCase.java"
+			tofile="${basedir}/src/test/java/${package.path}/test/component/${component.name}/repository/${entity.name}RepositoryTestCase.java"
+			encoding="UTF-8"></move>
+
+		<copy todir="${api.test.path}/repository" encoding="UTF-8">
+			<fileset
+				dir="${basedir}/src/test/java/${package.path}/test/component/${component.name}/repository">
+				<include name="${entity.name}RepositoryTestCase.java" />
+			</fileset>
+		</copy>
+		<move file="${output.dir}/source/test/java/DocumentServiceTestCase.java"
+			tofile="${basedir}/src/test/java/${package.path}/test/component/${component.name}/service/${entity.name}ServiceTestCase.java"
+			encoding="UTF-8"></move>
+		<copy todir="${api.test.path}/service" encoding="UTF-8">
+			<fileset
+				dir="${basedir}/src/test/java/${package.path}/test/component/${component.name}/service">
+				<include name="${entity.name}ServiceTestCase.java" />
+			</fileset>
+		</copy>
+
+		<!-- 移动properties文件 -->
+		<native2ascii encoding="UTF-8"
+			src="${output.dir}/source/main/resources/i18n" includes="Entity_zh_CN.source"
+			dest="${entity.properties.path}"></native2ascii>
+		<move file="${entity.properties.path}/Entity_zh_CN.source"
+			tofile="${entity.properties.path}/${entity.config.name}_zh_CN.properties"
+			encoding="UTF-8"></move>
+
+
+		<!-- 移动tiles文件（manager) -->
+		<move
+			file="${output.dir}/source/main/resources/tiles/tiles-manager-defs-template.xml"
+			tofile="${basedir}/src/main/resources/tiles/manager/tiles-manager-${entity.config.name}-defs.xml"
+			encoding="UTF-8"></move>
+		<!-- 移动jsp文件 -->
+		<move file="${output.dir}/source/main/webapp/jsp/Entity_update.jsp"
+			tofile="${basedir}/src/main/webapp/component/${component.name}/${entity.config.name}/${entity.config.name}_update.jsp"
+			encoding="UTF-8"></move>
+		<move file="${output.dir}/source/main/webapp/jsp/Entity_detail.jsp"
+			tofile="${basedir}/src/main/webapp/component/${component.name}/${entity.config.name}/${entity.config.name}_detail.jsp"
+			encoding="UTF-8"></move>
+		<move file="${output.dir}/source/main/webapp/jsp/Entity_center.jsp"
+			tofile="${basedir}/src/main/webapp/component/${component.name}/${entity.config.name}/${entity.config.name}_center.jsp"
+			encoding="UTF-8"></move>
+		<!-- 移动js文件 -->
+		<move file="${output.dir}/source/main/webapp/js/Entity.js"
+			tofile="${basedir}/src/main/webapp/js/component/${component.name}/${entity.config.name}/${entity.config.name}.js"
+			encoding="UTF-8"></move>
+		<!-- 移动css文件 -->
+		<move file="${output.dir}/source/main/webapp/css/Entity.css"
+			tofile="${basedir}/src/main/webapp/css/component/${component.name}/${entity.config.name}/${entity.config.name}.css"
+			encoding="UTF-8"></move>
+		<!-- 生成管理菜单 -->
+		<loadfile property="entity.manager.menu.jsp.source"
+			srcFile="${output.dir}/source/main/webapp/jsp/Entity_manager_list_group_item.jsp"
+			encoding="UTF-8" />
+		<replaceregexp encoding="UTF-8" flags="g">
+			<regexp pattern="&lt;\!--@generate-entity-manager-list-group-item@--&gt;" />
+			<substitution expression="${entity.manager.menu.jsp.source}" />
+			<fileset dir="${basedir}/src/main/webapp/component/core/template/manager">
+				<include name="default_center_left.jsp" />
+			</fileset>
+		</replaceregexp>
+
+
+		<!-- 引导用户生成三个属性,中断可使用CTRL+C,如要继续生成其它属性,使用 generate-entity-property task. -->
+		<echo
+			message="已生成实体对像${entity.name}及其对应的业务操作,${entity.name}中已包含id属性,可以根据引导，继续生成其它属性"></echo>
+
+		<antcall target="generate-entity-properties">
+			<param name="component.name" value="${component.name}"></param>
+			<param name="entity.name" value="${entity.name}"></param>
+			<param name="entity.config.name" value="${entity.config.name}"></param>
+			<param name="repository.type" value="${repository.type}"></param>
+		</antcall>
+		<echo message="如要继续生成其它属性,请使用 generate-entity-property task."></echo>
+	</target>
+	<!-- 删除生成的实体 -->
+	<target name="remove-entity">
+		<input message="请输入待删除的实体所在的模块:" addProperty="component.name"></input>
+		<input message="请输入等删除的实体名:" addProperty="entity.name"></input>
+		<input message="请输入实体配置名,如User->user" addProperty="entity.config.name"></input>
+		<input message="请输入技久化类型jpa/mongo" addProperty="repository.type"></input>
+		<property name="entity.path"
+			value="${project.root.dir}/${project.root.name}-entity/src/main/java/${package.path}/component/${component.name}/entity"></property>
+		<!--实体的资源文件路径 -->
+		<property name="entity.properties.path"
+			value="${project.root.dir}/${project.root.name}-entity/src/main/resources/i18n">
+		</property>
+		<property name="api.path"
+			value="${project.root.dir}/${project.root.name}-api/src/main/java/${package.path}/component/${component.name}"></property>
+		<property name="api.test.path"
+			value="${project.root.dir}/${project.root.name}-api/src/test/java/${package.path}/component/${component.name}"></property>
+		<!-- 清除java文件 -->
+		<delete
+			dir="${basedir}/src/main/java/${package.path}/component/${component.name}">
+			<include name="**/**/${entity.name}.java"></include>
+			<include name="**/**/${entity.name}Repository.java"></include>
+			<include name="**/**/${entity.name}RepositoryImpl.java"></include>
+			<include name="**/**/${entity.name}Service.java"></include>
+			<include name="**/**/${entity.name}ServiceImpl.java"></include>
+			<include name="**/**/${entity.name}Controller.java"></include>
+		</delete>
+		<delete dir="${entity.path}">
+		    <include name="${entity.name}.java"/>
+		</delete>
+		<delete dir="${entity.properties.path}">
+		    <include name="${entity.config.name}_*.properties"/>
+		</delete>
+		<delete dir="${api.path}">
+		     <include name="**/${entity.name}Repository.java"></include>
+			<include name="**/${entity.name}RepositoryImpl.java"></include>
+			<include name="**/${entity.name}Service.java"></include>
+			<include name="**/${entity.name}ServiceImpl.java"></include>
+			<include name="**/${entity.name}Controller.java"></include>
+		</delete>
+		<!-- 删除资源文件 -->
+		<delete dir="${basedir}/src/main/resources">
+			<include name="**/**/${entity.config.name}_*.properties"></include>
+			<include name="**/**/**${entity.config.name}-*defs*.xml"></include>
+		</delete>
+		<!-- 删除WEB文件 -->
+		<delete
+			dir="${basedir}/src/main/webapp/component/${component.name}/${entity.config.name}">
+			<include name="*"></include>
+		</delete>
+		<delete
+			dir="${basedir}/src/main/webapp/css/component/${component.name}/${entity.config.name}">
+			<include name="*"></include>
+		</delete>
+		<delete
+			dir="${basedir}/src/main/webapp/js/component/${component.name}/${entity.config.name}">
+			<include name="*"></include>
+		</delete>
+		<!-- 删除测试文件 -->
+		<delete
+			dir="${basedir}/src/test/java/${package.path}/test/component/${component.name}">
+			<include name="**/**/${entity.name}RepositoryTestCase.java"></include>
+			<include name="**/**/${entity.name}ServiceTestCase.java"></include>
+		</delete>
+		<delete dir="${api.test.path}">
+		    <include name="**/${entity.name}RepositoryTestCase.java"></include>
+			<include name="**/${entity.name}ServiceTestCase.java"></include>
+		</delete>
+	</target>
+	<!-- 生成多个bean属性 -->
+	<target name="generate-entity-properties">
+		<input message="请输入模块名:" addProperty="component.name"></input>
+		<input message="请输入实体名,如:User" addProperty="entity.name"></input>
+		<input message="请输入实体配置名,如:User->user" addProperty="entity.config.name"></input>
+		<input message="请输入持久化类型:jpa/mongo" addProperty="repository.type"></input>
+		<property name="is.continue" value="Y"></property>
+		<property name="entity.path"
+			value="${project.root.dir}/${project.root.name}-entity/src/main/java/${package.path}/component/${component.name}/entity"></property>
+		<!--实体的资源文件路径 -->
+		<property name="entity.properties.path"
+			value="${project.root.dir}/${project.root.name}-entity/src/main/resources/i18n">
+		</property>
+		<for list="a,b,c,d,e,f,g,h,i,j,k,l,m,n,y" param="letter"
+			keepgoing="true">
+			<sequential>
+				<antcall target="clean-generate-path"></antcall>
+				<antcall target="generate-entity-property">
+					<param name="component.name" value="${component.name}"></param>
+					<param name="entity.name" value="${entity.name}"></param>
+					<param name="entity.config.name" value="${entity.config.name}"></param>
+					<param name="repository.type" value="${repository.type}"></param>
+				</antcall>
+				<input message="是否继续生成其它属性?Y/N" addProperty="is.continue"></input>
+				<if>
+					<equals arg1="${is.continue}" arg2="N" />
+					<then>
+						<property name="myBreakProperty" value="nevermind the value" />
+					</then>
+				</if>
+				<fail if="myBreakProperty" />
+			</sequential>
+		</for>
+	</target>
+	<!-- 生成entity的属性 -->
+	<target name="generate-entity-property">
+		<echo message="**************************************************"></echo>
+		<echo message="***自动生成实体属性、数据库配置、资源文件,JSP基础页面***"></echo>
+		<echo message="**************************************************"></echo>
+		<antcall target="clean-generate-path"></antcall>
+		<input message="请输入模块名:" addProperty="component.name"></input>
+		<input message="请输入实体名,如:User" addProperty="entity.name"></input>
+		<input message="请输入实体配置名,如:User->user" addProperty="entity.config.name"></input>
+		<input message="请输入持久化类型:jpa/mongo" addProperty="repository.type"></input>
+		<input message="请输入属性类型,如:String" addProperty="property.type"></input>
+		<input message="请输入属性名,如:name" addProperty="property.name"></input>
+
+		<input message="请输入方法名,如输入:Name,将会增加getName(),setName()"
+			addProperty="property.method"></input>
+		<input
+			message="请输入数据库字段名,可为空,直接回车则默认为属性名${property.name},翻译为数据库字段时遵循马鞍命名：如userAddress->user_address"
+			addProperty="column.name"></input>
+		<input message="请输入属性说明:" addproperty="property.desc"></input>
+		<if>
+			<equals arg1="${column.name}" arg2=""></equals>
+			<then>
+				<property name="column.name" value="${property.name}"></property>
+			</then>
+		</if>
+		<if>
+			<equals arg1="${property.desc}" arg2=""></equals>
+			<then>
+				<property name="property.desc" value="${property.method}"></property>
+			</then>
+		</if>
+		<!-- 追加方法与属性到原实体 -->
+
+		<if>
+			<equals arg1="${repository.type}" arg2="mongo"></equals>
+			<then>
+				<property name="repository.entity.package" value="entity"></property>
+				<property name="class.name.prefix" value="Document"></property>
+			</then>
+			<elseif>
+				<equals arg1="${repository.type}" arg2="jpa"></equals>
+				<then>
+					<property name="repository.entity.package" value="entity"></property>
+					<property name="class.name.prefix" value="Example"></property>
+				</then>
+			</elseif>
+		</if>
+
+		<property name="component.path"
+			value="${basedir}/src/main/java/${package.path}/component/${component.name}"></property>
+		<property name="entity.path"
+			value="${project.root.dir}/${project.root.name}-entity/src/main/java/${package.path}/component/${component.name}/entity"></property>
+		<!--实体的资源文件路径 -->
+		<property name="entity.properties.path"
+			value="${project.root.dir}/${project.root.name}-entity/src/main/resources/i18n">
+		</property>
+		<copy todir="${output.dir}/source/main/java" overwrite="true"
+			encoding="UTF-8" outputencoding="UTF-8">
+			<fileset dir="${basedir}/src/template/source/main/java">
+				<include name="${class.name.prefix}Method.java"></include>
+			</fileset>
+		</copy>
+		<copy todir="${output.dir}/source/main/resources/i18n" overwrite="true"
+			encoding="UTF-8" outputencoding="UTF-8">
+			<fileset dir="${basedir}/src/template/source/main/resources/i18n">
+				<include name="Entity_property_i18n.properties"></include>
+			</fileset>
+		</copy>
+		<copy todir="${output.dir}/source/main/resources/i18n" overwrite="true"
+			encoding="UTF-8" outputencoding="UTF-8">
+			<fileset dir="${entity.properties.path}">
+				<include name="${entity.config.name}_zh_CN.properties"></include>
+			</fileset>
+		</copy>
+
+		<!-- 处理java类,properties,jsp,xml -->
+		<replace dir="${output.dir}/source/main" encoding="UTF-8">
+			<include name="**/**/*.*"></include>
+			<replacefilter token="@property.type@" value="${property.type}"></replacefilter>
+			<replacefilter token="@property.name@" value="${property.name}"></replacefilter>
+			<replacefilter token="@property.method@" value="${property.method}"></replacefilter>
+			<replacefilter token="@column.name@" value="${column.name}"></replacefilter>
+			<replacefilter token="@property.desc@" value="${property.desc}"></replacefilter>
+			<replacefilter token="@component.name@" value="${component.name}"></replacefilter>
+			<replacefilter token="@entity.name@" value="${entity.name}"></replacefilter>
+			<replacefilter token="@entity.config.name@" value="${entity.config.name}"></replacefilter>
+		</replace>
+
+		<echo message="----------${repository.entity.package}"></echo>
+		<replaceregexp encoding="UTF-8" flags="g">
+			<regexp pattern="}/\*\*@generate-entity-source@\*\*/" />
+			<substitution expression="" />
+			<fileset dir="${entity.path}">
+				<include name="${entity.name}.java" />
+			</fileset>
+		</replaceregexp>
+		<concat destfile="${entity.path}/${entity.name}.java" append="true"
+			fixlastline="true" encoding="UTF-8">
+			<fileset dir="${output.dir}/source/main/java/">
+				<include name="${class.name.prefix}Method.java" />
+			</fileset>
+		</concat>
+		<!-- 追加properties. -->
+		<replaceregexp encoding="UTF-8" flags="g">
+			<regexp pattern="#@generate-entity-property-i18n-source@" />
+			<substitution expression="" />
+			<fileset dir="${output.dir}/source/main/resources/i18n">
+				<include name="Entity_property_i18n.properties" />
+			</fileset>
+		</replaceregexp>
+		<concat
+			destfile="${output.dir}/source/main/resources/i18n/${entity.config.name}_zh_CN.properties"
+			append="true" fixlastline="true">
+			<fileset dir="${output.dir}/source/main/resources/i18n">
+				<include name="Entity_property_i18n.properties" />
+			</fileset>
+		</concat>
+		<native2ascii encoding="UTF-8"
+			src="${output.dir}/source/main/resources/i18n" includes="${entity.config.name}_zh_CN.properties"
+			dest="${entity.properties.path}"></native2ascii>
+		<!-- 处理jsp-center -->
+		<!--@generate-entity-jsp-property-value@ -->
+		<replaceregexp encoding="UTF-8" flags="g">
+			<regexp pattern="&lt;\!--@generate-entity-jsp-property-desc@--&gt;" />
+			<substitution
+				expression="&lt;th&gt;&lt;fmt:message key='${component.name}.${entity.config.name}.${property.name}'&gt;&lt;/fmt:message&gt;&lt;/th&gt;   &#10; &lt;\!--@generate-entity-jsp-property-desc@--&gt;" />
+			<fileset
+				dir="${basedir}/src/main/webapp/component/${component.name}/${entity.config.name}">
+				<include name="${entity.config.name}_center.jsp" />
+			</fileset>
+		</replaceregexp>
+
+		<replaceregexp encoding="UTF-8" flags="g">
+			<regexp pattern="&lt;\!--@generate-entity-jsp-property-value@--&gt;" />
+			<substitution
+				expression="&lt;td&gt;${@entity.config.name@.@property.name@}&lt;/td&gt;   &#10; &lt;\!--@generate-entity-jsp-property-value@--&gt;" />
+			<fileset
+				dir="${basedir}/src/main/webapp/component/${component.name}/${entity.config.name}">
+				<include name="${entity.config.name}_center.jsp" />
+			</fileset>
+		</replaceregexp>
+		<!-- 加载 jsp属性update文件 -->
+		<loadfile property="property.jsp.update.source"
+			srcFile="${basedir}/src/template/source/main/webapp/jsp/Entity_property_update.jsp"
+			encoding="UTF-8" />
+		<replaceregexp encoding="UTF-8" flags="g">
+			<regexp pattern="&lt;\!--@generate-entity-jsp-property-update@--&gt;" />
+			<substitution expression="${property.jsp.update.source}" />
+			<fileset
+				dir="${basedir}/src/main/webapp/component/${component.name}/${entity.config.name}">
+				<include name="${entity.config.name}_update.jsp" />
+			</fileset>
+		</replaceregexp>
+		<!-- 加载jsp 属性 property detail 文件 -->
+		<loadfile property="property.jsp.detail.source"
+			srcFile="${basedir}/src/template/source/main/webapp/jsp/Entity_property_detail.jsp"
+			encoding="UTF-8" />
+		<replaceregexp encoding="UTF-8" flags="g">
+			<regexp pattern="&lt;\!--@generate-entity-jsp-property-detail@--&gt;" />
+			<substitution expression="${property.jsp.detail.source}" />
+			<fileset
+				dir="${basedir}/src/main/webapp/component/${component.name}/${entity.config.name}">
+				<include name="${entity.config.name}_detail.jsp" />
+			</fileset>
+		</replaceregexp>
+
+		<!-- 加载jsp center query 文件 -->
+		<loadfile property="property.jsp.query.source"
+			srcFile="${basedir}/src/template/source/main/webapp/jsp/Entity_query.jsp"
+			encoding="UTF-8" />
+		<replaceregexp encoding="UTF-8" flags="g">
+			<regexp pattern="&lt;\!--@generate-entity-jsp-query-detail@--&gt;" />
+			<substitution expression="${property.jsp.query.source}" />
+			<fileset
+				dir="${basedir}/src/main/webapp/component/${component.name}/${entity.config.name}">
+				<include name="${entity.config.name}_center.jsp" />
+			</fileset>
+		</replaceregexp>
+		<!-- 对JSP文件进行替换 -->
+		<replace
+			dir="${basedir}/src/main/webapp/component/${component.name}/${entity.config.name}"
+			encoding="UTF-8">
+			<include name="**/**/*.jsp"></include>
+			<replacefilter token="@property.type@" value="${property.type}"></replacefilter>
+			<replacefilter token="@property.name@" value="${property.name}"></replacefilter>
+			<replacefilter token="@property.method@" value="${property.method}"></replacefilter>
+			<replacefilter token="@column.name@" value="${column.name}"></replacefilter>
+			<replacefilter token="@property.desc@" value="${property.desc}"></replacefilter>
+			<replacefilter token="@component.name@" value="${component.name}"></replacefilter>
+			<replacefilter token="@entity.name@" value="${entity.name}"></replacefilter>
+			<replacefilter token="@entity.config.name@" value="${entity.config.name}"></replacefilter>
+		</replace>
+		<echo
+			message="已为实体${entity.name}生成属性${property.type} ${property.name},并已生成getter/setter.对应数据库字段为:${column.name}"></echo>
+	</target>
+
+	<target name="clean-generate-path">
+		<delete dir="${output.dir}"></delete>
+		<mkdir dir="${output.dir}"></mkdir>
+	</target>
+
+	<!-- Int project template -->
+	<target name="init-project-template">
+		<antcall target="clean-generate-path"></antcall>
+		<delete dir="${basedir}/src/template/project/src"></delete>
+		<mkdir dir="${output.dir}/project/src"></mkdir>
+		<copy todir="${output.dir}/project/src" overwrite="true"
+			encoding="UTF-8" outputencoding="UTF-8">
+			<fileset dir="${basedir}/src">
+				<include name="**/**/*.*"></include>
+			</fileset>
+		</copy>
+		<copy todir="${output.dir}/project" overwrite="true" encoding="UTF-8"
+			outputencoding="UTF-8">
+			<fileset dir="${basedir}">
+				<include name="*.xml"></include>
+			</fileset>
+		</copy>
+		<copy todir="${basedir}/src/template/project" overwrite="true"
+			encoding="UTF-8" outputencoding="UTF-8">
+			<fileset dir="${output.dir}/project">
+				<include name="**/**/**.*"></include>
+			</fileset>
+		</copy>
+	</target>
+
+
+	<!-- 升级相关项目的build文件 -->
+	<target name="update-project-build">
+		<antcall target="clean-generate-path"></antcall>
+		<input message="输入要升级的项目" addProperty="update.project.name"></input>
+		<if>
+			<equals arg1="${update.project.name}" arg2="search">
+			</equals>
+			<then>
+				<antcall target="update-project-build-faceye-generate-search-manager"></antcall>
+				<antcall target="update-project-build-faceye-generate-search-web"></antcall>
+			</then>
+			<elseif>
+				<equals arg1="${update.project.name}" arg2="hadoop"></equals>
+				<then>
+					<antcall target="update-project-build-faceye-generate-hadoop-manager"></antcall>
+				</then>
+			</elseif>
+
+		</if>
+	</target>
+
+	<!-- Update Search Manager -->
+	<target name="update-project-build-faceye-generate-search-manager">
+		<copy todir="../faceye-generate-search/faceye-generate-search-manager"
+			overwrite="true">
+			<fileset dir="${basedir}">
+				<include name="build-tools.xml"></include>
+			</fileset>
+		</copy>
+		<copy
+			todir="../faceye-generate-search/faceye-generate-search-manager/src/template"
+			overwrite="true">
+			<fileset dir="${basedir}/src/template">
+				<include name="*/**/*.*"></include>
+			</fileset>
+		</copy>
+	</target>
+	<!-- Update search web -->
+	<target name="update-project-build-faceye-generate-search-web">
+		<copy todir="../faceye-generate-search/faceye-generate-search-web"
+			overwrite="true">
+			<fileset dir="${basedir}">
+				<include name="build-tools.xml"></include>
+			</fileset>
+		</copy>
+		<copy
+			todir="../faceye-generate-search/faceye-generate-search-web/src/template"
+			overwrite="true">
+			<fileset dir="${basedir}/src/template">
+				<include name="*/**/*.*"></include>
+			</fileset>
+		</copy>
+	</target>
+	<!-- Update faceye-generate-hadoop Manager -->
+	<target name="update-project-build-faceye-generate-hadoop-manager">
+		<copy todir="../faceye-generate-hadoop/faceye-generate-hadoop-manager"
+			overwrite="true">
+			<fileset dir="${basedir}">
+				<include name="build-tools.xml"></include>
+			</fileset>
+		</copy>
+		<copy
+			todir="../faceye-generate-hadoop/faceye-generate-hadoop-manager/src/template"
+			overwrite="true">
+			<fileset dir="${basedir}/src/template">
+				<include name="*/**/*.*"></include>
+			</fileset>
+		</copy>
+	</target>
+</project>
