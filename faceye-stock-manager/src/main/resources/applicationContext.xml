@@ -24,6 +24,7 @@
 	<import resource="classpath*:/conf/applicationContext-config.xml" />
 	<import resource="classpath*:/conf/applicationContext-mongo.xml" />
 	<import resource="classpath*:/conf/applicationContext-security.xml" />
+	<import resource="${x.app.job.stock}"/>
 	<!--
 	<import resource="classpath*:/conf/applicationContext-jpa.xml" />
 	<import resource="classpath*:/conf/applicationContext-cache.xml" /> 
