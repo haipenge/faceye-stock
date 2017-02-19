@@ -9,9 +9,9 @@
 	</appender>
 	<appender name="rollingFile"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${log.dir}/faceye-search-all-log.log</file>
+		<file>${log.dir}/faceye-stock-all-log.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${log.dir}/faceye-search-all-log.%d{yyyy-MM-dd}.log
+			<fileNamePattern>${log.dir}/faceye-stock-all-log.%d{yyyy-MM-dd}.log
 			</fileNamePattern>
 		</rollingPolicy>
 		<encoder>
@@ -27,9 +27,9 @@
 
 	<appender name="info-rollingFile"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${log.dir}/faceye-search-info-log.log</file>
+		<file>${log.dir}/faceye-stock-info-log.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${log.dir}/faceye-search-info-log.%d{yyyy-MM-dd}.log
+			<fileNamePattern>${log.dir}/faceye-stock-info-log.%d{yyyy-MM-dd}.log
 			</fileNamePattern>
 			<MaxHistory>30</MaxHistory>
 		</rollingPolicy>
@@ -47,9 +47,9 @@
 
 	<appender name="debug-rollingFile"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${log.dir}/faceye-search-debug-log.log</file>
+		<file>${log.dir}/faceye-stock-debug-log.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${log.dir}/faceye-search-debug-log.%d{yyyy-MM-dd}.log
+			<fileNamePattern>${log.dir}/faceye-stock-debug-log.%d{yyyy-MM-dd}.log
 			</fileNamePattern>
 			<MaxHistory>30</MaxHistory>
 		</rollingPolicy>
@@ -70,9 +70,9 @@
 
 	<appender name="error-rollingFile"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${log.dir}/faceye-search-error-log.log</file>
+		<file>${log.dir}/faceye-stock-error-log.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${log.dir}/faceye-search-error-log.%d{yyyy-MM-dd}.log
+			<fileNamePattern>${log.dir}/faceye-stock-error-log.%d{yyyy-MM-dd}.log
 			</fileNamePattern>
 			<MaxHistory>30</MaxHistory>
 		</rollingPolicy>
@@ -91,9 +91,9 @@
 
 	<appender name="warn-rollingFile"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${log.dir}/faceye-search-warn-log.log</file>
+		<file>${log.dir}/faceye-stock-warn-log.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${log.dir}/faceye-search-warn-log.%d{yyyy-MM-dd}.log
+			<fileNamePattern>${log.dir}/faceye-stock-warn-log.%d{yyyy-MM-dd}.log
 			</fileNamePattern>
 		</rollingPolicy>
 		<encoder>

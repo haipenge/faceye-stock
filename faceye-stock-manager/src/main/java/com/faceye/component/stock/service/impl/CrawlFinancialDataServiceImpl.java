@@ -69,6 +69,11 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 				String content = Http.getInstance().get(url, "gb2312");
 				this.parse(stock, accountingSubject, content);
 				url = "";
+				try {
+					Thread.sleep(2000L);
+				} catch (InterruptedException e) {
+					logger.error(">>FaceYe Throws Exception:",e);
+				}
 			}
 		}
 	}
