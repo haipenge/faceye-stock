@@ -45,7 +45,11 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 		List<Stock> stocks = this.stockService.getAll();
 		if (CollectionUtils.isNotEmpty(stocks)) {
 			for (Stock stock : stocks) {
+				try{
 				this.crawlStock(stock);
+				}catch(Exception e){
+					logger.error(">>FaceYe throws Exception :"+e);
+				}
 			}
 		}
 	}
@@ -61,7 +65,9 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	public void crawlStock(Stock stock) {
 		String code = stock.getCode();
 		String url = "";
-		List<AccountingSubject> accountingSubjects = this.accountingSubjectService.getAll();
+		if (accountingSubjects == null) {
+			accountingSubjects = this.getAccountingSubjects();
+		}
 		if (CollectionUtils.isNotEmpty(accountingSubjects)) {
 			for (AccountingSubject accountingSubject : accountingSubjects) {
 				url = accountingSubject.getSinaUrl();
@@ -72,10 +78,17 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 				try {
 					Thread.sleep(2000L);
 				} catch (InterruptedException e) {
-					logger.error(">>FaceYe Throws Exception:",e);
+					logger.error(">>FaceYe Throws Exception:", e);
 				}
 			}
 		}
+	}
+
+	List<AccountingSubject> accountingSubjects = null;
+
+	private List<AccountingSubject> getAccountingSubjects() {
+		accountingSubjects = this.accountingSubjectService.getAll();
+		return accountingSubjects;
 	}
 
 	/**
@@ -135,15 +148,15 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 				}
 			}
 		} catch (Exception e) {
-			logger.error(">>FaceYe Throws Exception:", e);
+			logger.error(">>FaceYe Throws Exception when parse stock financial data html:", e);
 		}
 		if (CollectionUtils.isNotEmpty(records)) {
-			Long accountingElementId=accountingSubject.getAccountingElement().getId();
+			Long accountingElementId = accountingSubject.getAccountingElement().getId();
 			for (Map<String, String> record : records) {
 				String date = MapUtils.getString(record, "date");
 				String data = MapUtils.getString(record, "data");
-				data=StringUtils.replace(data,",", "");
-				boolean isExist=this.isFinancialDataExist(stock.getId(), accountingSubject.getId(), date);
+				data = StringUtils.replace(data, ",", "");
+				boolean isExist = this.isFinancialDataExist(stock.getId(), accountingSubject.getId(), date);
 				if (!isExist && StringUtils.isNotEmpty(date)) {
 					FinancialData financialData = new FinancialData();
 					financialData.setAccountingSubjectId(accountingSubject.getId());
@@ -161,8 +174,10 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 			}
 		}
 	}
+
 	/**
 	 * 判断财报数据记录是否存在
+	 * 
 	 * @param stockId
 	 * @param accountingSubjectId
 	 * @param date
@@ -171,19 +186,19 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	 * @Author:haipenge
 	 * @Date:2017年2月13日 下午3:36:57
 	 */
-	private boolean isFinancialDataExist(Long stockId,Long accountingSubjectId,String date){
-		boolean isExist=false;
+	private boolean isFinancialDataExist(Long stockId, Long accountingSubjectId, String date) {
+		boolean isExist = false;
 		DateUtil.getDateFromString(date, "yyyy-MM-dd");
 		date = StringUtils.substring(date, 0, 10);
-		String start=date +" 00:00:00";
-		String end=date +" 23:59:59";
-		Map params=new HashMap();
+		String start = date + " 00:00:00";
+		String end = date + " 23:59:59";
+		Map params = new HashMap();
 		params.put("EQ|stockId", stockId);
 		params.put("EQ|accountingSubjectId", accountingSubjectId);
 		params.put("GTE|date", DateUtil.getDateFromString(start, "yyyy-MM-dd HH:mm:ss"));
 		params.put("LTE|date", DateUtil.getDateFromString(end, "yyyy-MM-dd HH:mm:ss"));
-		Page<FinancialData> page=this.financialDataService.getPage(params, 0, 1);
-		isExist=CollectionUtils.isNotEmpty(page.getContent());
+		Page<FinancialData> page = this.financialDataService.getPage(params, 0, 1);
+		isExist = CollectionUtils.isNotEmpty(page.getContent());
 		return isExist;
 	}
 }
