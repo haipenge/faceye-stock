@@ -1,6 +1,7 @@
 package com.faceye.component.stock.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +44,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	@Override
 	public void crawl() {
 		List<Stock> stocks = this.stockService.getAll();
+		Collections.shuffle(stocks);
 		if (CollectionUtils.isNotEmpty(stocks)) {
 			for (Stock stock : stocks) {
 				try {
