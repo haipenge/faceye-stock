@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+    <!-- 模块:stock 业务对像:DataStat 管理后台 tiles模板配置 -->
+    <!-- 作者:haipege -->
+    <!-- DataStat 管理 首页(列表页) -->
+	<definition name="stock.dataStat.web.home" extends="default.web">
+	    <put-attribute name="default-center" value="stock.dataStat.center"></put-attribute>
+	</definition>
+	<definition name="stock.dataStat.web.center" extends="default.web.center">
+	    <put-attribute name="default-center-right" value="/component/stock/dataStat/dataStat_center.jsp"></put-attribute>
+	</definition>
+	
+	<!-- DataStat 新增,编辑页面 -->
+	<definition name="stock.dataStat.web.update" extends="default.web">
+	    <put-attribute name="default-center" value="stock.dataStat.update.web.center"></put-attribute>
+	</definition>
+	<definition name="stock.dataStat.update.web.center" extends="default.web.center">
+	    <put-attribute name="default-center-right" value="/component/stock/dataStat/dataStat_update.jsp"></put-attribute>
+	</definition>
+	
+	<!-- DataStat 明细页 -->
+	<definition name="stock.dataStat.web.detail" extends="default.web">
+	    <put-attribute name="default-center" value="stock.dataStat.detail.web.center"></put-attribute>
+	</definition>
+	<definition name="stock.dataStat.detail.web.center" extends="default.web.center">
+	    <put-attribute name="default-center-right" value="/component/stock/dataStat/dataStat_detail.jsp"></put-attribute>
+	</definition>
+	
+</tiles-definitions>
