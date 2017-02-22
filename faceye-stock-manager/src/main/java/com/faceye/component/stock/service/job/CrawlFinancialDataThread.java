@@ -52,7 +52,7 @@ public class CrawlFinancialDataThread extends BaseThread {
 				Stock stock = (Stock) financialDataQueueService.get();
 				if (stock != null) {
 					this.crawlFinancialDataService.crawlStock(stock);
-					Thread.sleep(2000L);
+					//Thread.sleep(2000L);
 				} else {
 					logger.error(">>FaceYe --> have not got stock from queue.");
 					break;

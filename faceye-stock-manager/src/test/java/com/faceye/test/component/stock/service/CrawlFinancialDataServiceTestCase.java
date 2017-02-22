@@ -56,6 +56,13 @@ public class CrawlFinancialDataServiceTestCase extends BaseServiceTestCase {
 		}
 		Assert.isTrue(true);
 	}
+	@Test
+   public void testCrawlSingleStock() throws Exception{
+	  Long id=1335L;
+	  Stock stock=this.stockService.get(id);
+	  this.crawlFinancialDataService.crawlStock(stock);
+	  Assert.isTrue(true);
+   }
 
 	/**
 	 * 初始化股票代码

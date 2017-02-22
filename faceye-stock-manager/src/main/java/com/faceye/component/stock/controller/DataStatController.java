@@ -1,32 +1,35 @@
 package com.faceye.component.stock.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.validation.BindingResult;
-import javax.validation.Valid;
 
 import com.faceye.component.stock.entity.DataStat;
+import com.faceye.component.stock.entity.FinancialData;
+import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.service.DataStatService;
-
-import com.faceye.feature.util.AjaxResult;
-import com.faceye.feature.util.MathUtil;
-import com.faceye.feature.util.http.HttpUtil;
-import com.faceye.feature.util.regexp.RegexpUtil;
-import com.faceye.feature.util.AjaxResult;
+import com.faceye.component.stock.service.FinancialDataService;
+import com.faceye.component.stock.service.StockService;
+import com.faceye.component.stock.util.StockConstants;
 import com.faceye.feature.controller.BaseController;
+import com.faceye.feature.util.AjaxResult;
+import com.faceye.feature.util.http.HttpUtil;
 
 /**
  * 模块:stock<br>
@@ -39,7 +42,10 @@ import com.faceye.feature.controller.BaseController;
 @Scope("prototype")
 @RequestMapping("/stock/dataStat")
 public class DataStatController extends BaseController<DataStat, Long, DataStatService> {
-
+    @Autowired
+	private FinancialDataService financialDataService=null;
+    @Autowired
+    private StockService stockService=null;
 	@Autowired
 	public DataStatController(DataStatService service) {
 		super(service);
@@ -57,6 +63,16 @@ public class DataStatController extends BaseController<DataStat, Long, DataStatS
 		Map searchParams=HttpUtil.getRequestParams(request);
 		Page<DataStat> page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
 		model.addAttribute("page", page);
+		Long stockId=MapUtils.getLong(searchParams, "EQ|stockId");
+		Stock stock=this.stockService.get(stockId);
+		model.addAttribute("stock", stock);
+		//获取营业收入
+		Map params=new HashMap();
+		params.putAll(searchParams);
+		params.put("EQ|accountingSubjectId", StockConstants.OPERATING_INCOME);
+		Page<FinancialData> operatingIncome=this.financialDataService.getPage(params, 0, 1);
+		model.addAttribute("operatingIncome", operatingIncome);
+		
 		resetSearchParams(searchParams);
 		model.addAttribute("searchParams", searchParams);
 		return "stock.dataStat.manager";

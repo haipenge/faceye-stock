@@ -49,7 +49,17 @@
 		<form:errors path="dateCycle" cssClass="error"/>
 	</div>
 </div>
+<div class="form-group">
+	<label class="col-md-2 control-label" for="grossProfitMargin"> <spring:message
+			code="stock.dataStat.grossProfitMargin"/>
+	</label>
+	<div class="col-md-6">
+		<form:input path="grossProfitMargin" cssClass="form-control"/>
+		<form:errors path="grossProfitMargin" cssClass="error"/>
+	</div>
+</div>
 <!--@generate-entity-jsp-property-update@-->
+
 
 
 

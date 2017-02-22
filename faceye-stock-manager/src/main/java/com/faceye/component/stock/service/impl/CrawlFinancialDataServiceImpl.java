@@ -54,7 +54,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 		Collections.shuffle(stocks);
 		financialDataQueueService.addAll(stocks);
 		Runnable runnabe = new CrawlFinancialDataThread();
-		ThreadPoolController.getINSTANCE().execute("Crawl-Finanacial-data-Pool", runnabe, 10);
+		ThreadPoolController.getINSTANCE().execute("Crawl-Finanacial-data-Pool", runnabe, 3);
 
 		// if (CollectionUtils.isNotEmpty(stocks)) {
 		// for (Stock stock : stocks) {
@@ -153,6 +153,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 								if (StringUtils.equals(dataStr, "&nbsp;")) {
 									record.put("data", "");
 								} else {
+									logger.debug(">>FaceYe crawl FinancialData parse result:"+dataStr);
 									record.put("data", StringUtils.trim(dataStr));
 								}
 							}

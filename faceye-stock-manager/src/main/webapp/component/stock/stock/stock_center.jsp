@@ -41,6 +41,7 @@
 							<th><fmt:message key='stock.stock.market'></fmt:message></th>
 							<th><fmt:message key="stock.dailyData" /></th>
 							<th>财务报表</th>
+							<th>比率分析</th>
 							<th>原始财务数据</th>
 							<th><fmt:message key="global.edit"></fmt:message></th>
 							<th><fmt:message key="global.remove"></fmt:message></th>
@@ -56,6 +57,7 @@
 								<!--@generate-entity-jsp-property-value@-->
 								<td><a href="<c:url value="/stock/dailyData/home?EQ|stock.$id=${stock.id}"/>"><fmt:message key="stock.dailyData" /></a></td>
 								<td><a href="<c:url value="/stock/financialData/report?stockId=${stock.id}"/>">财务报表</a></td>
+								<td><a href="<c:url value="/stock/dataStat/home?EQ|stockId=${stock.id}"/>">比率分析</a>
 								<td><a href="<c:url value="/stock/financialData/home?EQ|stockId=${stock.id }"/>">原始财务数据</a></td>
 								<td><a href="<c:url value="/stock/stock/edit/${stock.id}"/>"> <fmt:message key="global.edit"></fmt:message></a></td>
 								<td><a href="<c:url value="/stock/stock/remove/${stock.id}"/>"> <fmt:message key="global.remove"></fmt:message></a></td>

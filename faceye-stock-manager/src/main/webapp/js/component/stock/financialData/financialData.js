@@ -12,7 +12,7 @@ var FinancialData = {
 		$('.multi-remove').click(function() {
 			FinancialData.multiRemove();
 		});
-		$('.start-crawl').click(function(){
+		$('.start-crawl').click(function() {
 			FinancialData.crawlStockFinancialData();
 		});
 
@@ -53,20 +53,86 @@ var FinancialData = {
 	 * 爬取股票数据
 	 */
 	crawlStockFinancialData : function() {
-        var stockId=$('#stock_id').val();
-        $.ajax({
-        	url:'/stock/financialData/crawlStockFinancialData',
-        	type:'post',
-        	data:{
-        		id:stockId
-        	},
-        	success:function(data,textStatus,xhr){
-        		if(data.result){
-        			var m=new Msg({msg:'已开始数据爬取任务...'});
-        			m.show();
-        		}
-        	}
-        });
+		var stockId = $('#stock_id').val();
+		$.ajax({
+			url : '/stock/financialData/crawlStockFinancialData',
+			type : 'post',
+			data : {
+				id : stockId
+			},
+			success : function(data, textStatus, xhr) {
+				if (data.result) {
+					var m = new Msg({
+						msg : '已开始数据爬取任务...'
+					});
+					m.show();
+				}
+			}
+		});
+	},
+	/**
+	 * 对某一会计科目的绘图统计
+	 */
+	chartsQuery : function(stockId, accountingSubjectId, el) {
+		$.ajax({
+			url : '/stock/financialData/chartQuery',
+			type : 'post',
+			data : {
+				stockId : stockId,
+				accountingSubjectId : accountingSubjectId
+			},
+			success : function(data, textStatus, xhr) {
+				var datas=[];
+				for(var i=0;i<data.length;i++){
+					var record=data[i];
+					var array=[record.date,record.data];
+					datas.push(array);
+				}
+				var plot_statistics = $.plot($(el), [ {
+					data : datas,
+					label : "￥"
+				} ], {
+					series : {
+						lines : {
+							show : true,
+							lineWidth : 2,
+							fill : true,
+							fillColor : {
+								colors : [ {
+									opacity : 0.25
+								}, {
+									opacity : 0.25
+								} ]
+							}
+						},
+						points : {
+							show : true
+						},
+						shadowSize : 2
+					},
+					legend : {
+						show : false
+					},
+					grid : {
+						labelMargin : 10,
+						axisMargin : 500,
+						hoverable : true,
+						clickable : true,
+						tickColor : "rgba(0,0,0,0.15)",
+						borderWidth : 0
+					},
+					colors : [ "#50ACFE", "#4A8CF7", "#52e136" ],
+					xaxis : {
+						ticks : 11,
+						tickDecimals : 0
+					},
+					yaxis : {
+						ticks : 5,
+						tickDecimals : 0
+					}
+				});
+			}
+		});
 	}
 };
 

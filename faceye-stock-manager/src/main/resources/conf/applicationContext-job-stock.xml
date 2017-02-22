@@ -26,6 +26,7 @@
 		<property name="triggers">
 			<list>
 			     <ref bean="crawlFinancialDataJobTrigger"/>
+			     <ref bean="dataStatJobTrigger"/>
 			     <!-- 
 			     <ref bean="crawlStockDailyDataJobTrigger"/>
 			     <ref bean="computeStockDailyDataAvgJobTrigger"/>
@@ -119,6 +120,30 @@
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject">
 			<ref bean="crawlFinancialDataJob" />
+		</property>
+		<property name="targetMethod">
+			<value>doJob</value>
+		</property>
+		<property name="concurrent">
+			<value>false</value>
+		</property>
+	</bean>
+	
+	
+	<!-- Data Stat Job -->
+	<bean id="dataStatJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="dataStatJobDetail" />
+		</property>
+		<property name="cronExpression">
+			<value>0 10 17 * * ?</value>
+		</property>
+	</bean>
+	<bean id="dataStatJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="dataStatJob" />
 		</property>
 		<property name="targetMethod">
 			<value>doJob</value>

@@ -25,7 +25,12 @@
 	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.dataStat.dateCycle"></fmt:message></td>
 	<td>${dataStat.dateCycle}</td>
 </tr>
+<tr>
+	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.dataStat.grossProfitMargin"></fmt:message></td>
+	<td>${dataStat.grossProfitMargin}</td>
+</tr>
 <!--@generate-entity-jsp-property-detail@-->
+
 
 
 

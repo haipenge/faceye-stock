@@ -417,7 +417,13 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 	@ResponseBody
 	public List<FinancialData> chartsQuery(HttpServletRequest request) {
 		List<FinancialData> datas = null;
-
+		Map params=HttpUtil.getRequestParams(request);
+		Long stockId=MapUtils.getLong(params, "stockId");
+		Long accountingSubjectId=MapUtils.getLong(params, "accountingSubjectId");
+		Map searchParams=new HashMap();
+		searchParams.put("EQ|stockId", stockId);
+		searchParams.put("EQ|accountingSubjectId", accountingSubjectId);
+		datas=this.service.getPage(searchParams, 0, 1).getContent();
 		return datas;
 	}
 	
@@ -443,6 +449,8 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 		}
 		return AjaxResult.getInstance().buildDefaultResult(true);
 	}
+	
+
 
 	/////////////////////////////////////////////// 以下为回调函数////////////////////////////////////////////
 	/**

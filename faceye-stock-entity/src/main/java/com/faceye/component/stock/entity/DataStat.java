@@ -3,12 +3,8 @@ package com.faceye.component.stock.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 /**
@@ -97,6 +93,24 @@ public class DataStat implements Serializable {
 	}
 	public void setDateCycle(Date dateCycle) {
 		this.dateCycle = dateCycle;
+	}
+	
+
+	
+   /**
+    * 说明:毛利率<br>
+    * 属性名: grossProfitMargin<br>
+    * 类型: Double<br>
+    * 数据库字段:gross_profit_margin<br>
+    * @author haipenge<br>
+    */
+    
+	private  Double grossProfitMargin;
+	public Double getGrossProfitMargin() {
+		return grossProfitMargin;
+	}
+	public void setGrossProfitMargin(Double grossProfitMargin) {
+		this.grossProfitMargin = grossProfitMargin;
 	}
 	
 }/**@generate-entity-source@**/
