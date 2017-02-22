@@ -1,4 +1,5 @@
 ROOT=$(dirname $(cd "$(dirname "$0")";pwd))
+rm -rf /data/logs/faceye-stock-manager/*
 cd $ROOT/faceye-stock-entity
 mvn clean compile package install -D maven.test.skip=true -P product
 cd $ROOT/faceye-stock-manager

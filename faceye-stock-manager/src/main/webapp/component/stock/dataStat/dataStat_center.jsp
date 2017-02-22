@@ -94,7 +94,7 @@
 							<tbody>
 								<c:forEach items="${operatingIncome}" var="income">
 									<tr>
-										<td style="width: 30%;"><fmt:formateDate value="${income.date }" pattern="yyyy-MM-dd" /></td>
+										<td style="width: 30%;"><fmt:formatDate value="${income.date }" pattern="yyyy-MM-dd" /></td>
 										<td class="text-right"><fmt:formatNumber value="${income.data }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 									</tr>
 								</c:forEach>

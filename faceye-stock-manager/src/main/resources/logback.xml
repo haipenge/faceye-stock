@@ -109,10 +109,10 @@
 
 
 	<!-- project default level -->
-	<logger name="com.faceye" level="DEBUG" />
+	<logger name="com.faceye" level="ERROR" />
 
 	<!--log4jdbc -->
-	<logger name="jdbc.sqltiming" level="INFO" />
+	<logger name="jdbc.sqltiming" level="ERROR" />
 
 	<logger name="error-rollingFile" level="ERROR" additivity="false">
 		<appender-ref ref="error-rollingFile" />

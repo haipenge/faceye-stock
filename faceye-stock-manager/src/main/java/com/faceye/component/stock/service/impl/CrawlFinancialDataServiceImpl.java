@@ -153,7 +153,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 								if (StringUtils.equals(dataStr, "&nbsp;")) {
 									record.put("data", "");
 								} else {
-									logger.debug(">>FaceYe crawl FinancialData parse result:"+dataStr);
+									logger.debug(">>FaceYe crawl FinancialData parse result:" + dataStr);
 									record.put("data", StringUtils.trim(dataStr));
 								}
 							}
@@ -175,20 +175,31 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 				String date = MapUtils.getString(record, "date");
 				String data = MapUtils.getString(record, "data");
 				data = StringUtils.replace(data, ",", "");
-				boolean isExist = this.isFinancialDataExist(stock.getId(), accountingSubject.getId(), date);
+				boolean isExist = true;
+				try {
+					isExist = this.isFinancialDataExist(stock.getId(), accountingSubject.getId(), date);
+				} catch (Exception e) {
+					logger.error(">>FaceYe throws Exception when check is financial data exist,", e);
+				}
 				if (!isExist && StringUtils.isNotEmpty(date)) {
-					FinancialData financialData = new FinancialData();
-					financialData.setAccountingSubjectId(accountingSubject.getId());
-					financialData.setAccountingElementId(accountingElementId);
-					financialData.setCreateDate(new Date());
-					if (StringUtils.isEmpty(data)) {
-						financialData.setData(null);
-					} else {
-						financialData.setData(NumberUtils.createDouble(data));
+					try {
+						FinancialData financialData = new FinancialData();
+						financialData.setAccountingSubjectId(accountingSubject.getId());
+						financialData.setAccountingElementId(accountingElementId);
+						financialData.setCreateDate(new Date());
+						if (StringUtils.isEmpty(data)) {
+							financialData.setData(null);
+						} else {
+							financialData.setData(NumberUtils.createDouble(data));
+						}
+						financialData.setDate(DateUtil.getDateFromString(date, "yyyy-MM-dd"));
+						financialData.setStockId(stock.getId());
+						this.financialDataService.save(financialData);
+					} catch (Exception e) {
+						logger.error(">>FaceYe throws Exception when save data,data :date is:" + data + ":" + date, e);
 					}
-					financialData.setDate(DateUtil.getDateFromString(date, "yyyy-MM-dd"));
-					financialData.setStockId(stock.getId());
-					this.financialDataService.save(financialData);
+				} else {
+					logger.debug(">>FaceYe --> financial data exist.");
 				}
 			}
 		} else {
@@ -207,7 +218,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	 * @Author:haipenge
 	 * @Date:2017年2月13日 下午3:36:57
 	 */
-	private boolean isFinancialDataExist(Long stockId, Long accountingSubjectId, String date) {
+	private boolean isFinancialDataExist(Long stockId, Long accountingSubjectId, String date) throws Exception {
 		boolean isExist = false;
 		DateUtil.getDateFromString(date, "yyyy-MM-dd");
 		date = StringUtils.substring(date, 0, 10);
