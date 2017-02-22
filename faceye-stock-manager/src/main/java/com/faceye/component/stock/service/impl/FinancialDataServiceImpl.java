@@ -53,9 +53,9 @@ public class FinancialDataServiceImpl extends BaseMongoServiceImpl<FinancialData
 		// NumberPath numberPath = new NumberPath(Number.class, path, "age");
 		// predicates.add(numberPath.eq(15));
 		Predicate predicate = DynamicSpecifications.builder(searchParams, entityClass);
-		if (predicate != null) {
-			logger.debug(">>FaceYe -->Query predicate is:" + predicate.toString());
-		}
+//		if (predicate != null) {
+//			logger.debug(">>FaceYe -->Query predicate is:" + predicate.toString());
+////		}
 		Sort sort = new Sort(Direction.DESC, "date");
 		Page<FinancialData> res = null;
 		if (size != 0) {

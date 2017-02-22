@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
@@ -16,14 +17,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.faceye.component.stock.entity.Stock;
+import com.faceye.component.stock.service.CrawlFinancialDataService;
 import com.faceye.component.stock.service.StockService;
 import com.faceye.feature.controller.BaseController;
+import com.faceye.feature.util.AjaxResult;
 import com.faceye.feature.util.http.HttpUtil;
 
 @Controller
 @Scope("prototype")
 @RequestMapping("/stock/stock")
 public class StockController extends BaseController<Stock, Long, StockService> {
+	@Autowired
+	private CrawlFinancialDataService crawlFinancialDataService = null;
 
 	@Autowired
 	public StockController(StockService service) {
@@ -39,7 +44,7 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 	 */
 	@RequestMapping("/home")
 	public String home(HttpServletRequest request, Model model) {
-		Map searchParams=HttpUtil.getRequestParams(request);
+		Map searchParams = HttpUtil.getRequestParams(request);
 		Page<Stock> page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
 		model.addAttribute("page", page);
 		return "stock.stock.manager";
@@ -53,28 +58,26 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 	 * @author:@haipenge haipenge@gmail.com 2014年5月24日
 	 */
 	@RequestMapping("/edit/{id}")
-	public String edit(@PathVariable("id") Long id,Model model) {
-		if(id!=null){
-			Stock entity=this.service.get(id);
+	public String edit(@PathVariable("id") Long id, Model model) {
+		if (id != null) {
+			Stock entity = this.service.get(id);
 			model.addAttribute("stock", entity);
 		}
 		return "stock.stock.update";
 	}
-	
+
 	/**
 	 * 转向新增页面
+	 * 
 	 * @todo
 	 * @param model
 	 * @return
-	 * @author:@haipenge
-	 * haipenge@gmail.com
-	 * 2014年5月27日
+	 * @author:@haipenge haipenge@gmail.com 2014年5月27日
 	 */
-	@RequestMapping(value="/input")
-	public String input(Model model){
+	@RequestMapping(value = "/input")
+	public String input(Model model) {
 		return "stock.stock.update";
 	}
-	
 
 	/**
 	 * 数据保存
@@ -94,32 +97,33 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 	 */
 	@RequestMapping("/remove/{id}")
 	public String remove(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
-		if(id!=null){
+		if (id != null) {
 			this.service.remove(id);
 		}
 		return "redirect:/stock/stock/home";
 	}
+
 	/**
 	 * 取得数据明细
+	 * 
 	 * @todo
 	 * @param id
 	 * @param model
 	 * @return
-	 * @author:@haipenge
-	 * haipenge@gmail.com
-	 * 2014年5月26日
+	 * @author:@haipenge haipenge@gmail.com 2014年5月26日
 	 */
 	@RequestMapping("/detail/{id}")
-	public String detail(@PathVariable Long id,Model model){
-		if(id!=null){
-			Stock entity=this.service.get(id);
+	public String detail(@PathVariable Long id, Model model) {
+		if (id != null) {
+			Stock entity = this.service.get(id);
 			model.addAttribute("stock", entity);
 		}
 		return "stock.stock.detail";
 	}
-	
+
 	/**
 	 * 根据关键字查询时股票提示
+	 * 
 	 * @param request
 	 * @return
 	 * @Desc:
@@ -128,10 +132,12 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 	 */
 	@RequestMapping("/queryTips")
 	@ResponseBody
-	public List<Stock> queryTips(HttpServletRequest request){
-		List<Stock> stocks=null;
-		
+	public List<Stock> queryTips(HttpServletRequest request) {
+		List<Stock> stocks = null;
+
 		return stocks;
 	}
+
+	
 
 }

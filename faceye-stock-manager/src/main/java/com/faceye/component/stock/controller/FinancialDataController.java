@@ -33,6 +33,7 @@ import com.faceye.component.stock.entity.ReportCategory;
 import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.service.AccountingElementService;
 import com.faceye.component.stock.service.AccountingSubjectService;
+import com.faceye.component.stock.service.CrawlFinancialDataService;
 import com.faceye.component.stock.service.FinancialDataService;
 import com.faceye.component.stock.service.ReportCategoryService;
 import com.faceye.component.stock.service.StockService;
@@ -61,6 +62,8 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 	private AccountingElementService accountingElementService = null;
 	@Autowired
 	private AccountingSubjectService accountingSubjectService = null;
+	@Autowired
+	private CrawlFinancialDataService crawlFinancialDataService=null;
 
 	@Autowired
 	public FinancialDataController(FinancialDataService service) {
@@ -416,6 +419,29 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 		List<FinancialData> datas = null;
 
 		return datas;
+	}
+	
+	/**
+	 * 爬取股票财报数据
+	 * 
+	 * @param request
+	 * @return
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年2月22日 下午3:13:48
+	 */
+	@RequestMapping("/crawlStockFinancialData")
+	@ResponseBody
+	public String crawlStockFinancialData(HttpServletRequest request) {
+		Map params = HttpUtil.getRequestParams(request);
+		Long id = MapUtils.getLong(params, "id");
+		if (id != null) {
+			Stock stock = this.stockService.get(id);
+			if (stock != null) {
+				this.crawlFinancialDataService.crawlStock(stock);
+			}
+		}
+		return AjaxResult.getInstance().buildDefaultResult(true);
 	}
 
 	/////////////////////////////////////////////// 以下为回调函数////////////////////////////////////////////

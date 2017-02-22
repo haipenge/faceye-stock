@@ -16,6 +16,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,9 @@ import com.faceye.component.stock.service.AccountingSubjectService;
 import com.faceye.component.stock.service.CrawlFinancialDataService;
 import com.faceye.component.stock.service.FinancialDataService;
 import com.faceye.component.stock.service.StockService;
+import com.faceye.component.stock.service.job.CrawlFinancialDataThread;
+import com.faceye.feature.service.QueueService;
+import com.faceye.feature.service.job.thread.ThreadPoolController;
 import com.faceye.feature.util.DateUtil;
 import com.faceye.feature.util.http.Http;
 import com.faceye.feature.util.regexp.RegexpUtil;
@@ -40,20 +44,27 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	private AccountingSubjectService accountingSubjectService = null;
 	@Autowired
 	private FinancialDataService financialDataService = null;
+	@Autowired
+	@Qualifier("financialDataQueueService")
+	private QueueService financialDataQueueService = null;
 
 	@Override
 	public void crawl() {
 		List<Stock> stocks = this.stockService.getAll();
 		Collections.shuffle(stocks);
-		if (CollectionUtils.isNotEmpty(stocks)) {
-			for (Stock stock : stocks) {
-				try {
-					this.crawlStock(stock);
-				} catch (Exception e) {
-					logger.error(">>FaceYe throws Exception :" + e);
-				}
-			}
-		}
+		financialDataQueueService.addAll(stocks);
+		Runnable runnabe = new CrawlFinancialDataThread();
+		ThreadPoolController.getINSTANCE().execute("Crawl-Finanacial-data-Pool", runnabe, 10);
+
+		// if (CollectionUtils.isNotEmpty(stocks)) {
+		// for (Stock stock : stocks) {
+		// try {
+		// this.crawlStock(stock);
+		// } catch (Exception e) {
+		// logger.error(">>FaceYe throws Exception :" + e);
+		// }
+		// }
+		// }
 	}
 
 	/**
@@ -74,14 +85,19 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 			for (AccountingSubject accountingSubject : accountingSubjects) {
 				url = accountingSubject.getSinaUrl();
 				url = StringUtils.replace(url, "000998", code);
+				logger.debug(">>FaceYe --> Crawl Financial Data Url is:" + url);
 				String content = Http.getInstance().get(url, "gb2312");
-				this.parse(stock, accountingSubject, content);
-				url = "";
-				try {
-					Thread.sleep(2000L);
-				} catch (InterruptedException e) {
-					logger.error(">>FaceYe Throws Exception:", e);
+				if (StringUtils.isNotEmpty(content)) {
+					this.parse(stock, accountingSubject, content);
+				} else {
+					logger.error(">>FaceYe have not got content of url: " + url);
 				}
+				url = "";
+				// try {
+				// Thread.sleep(1000L);
+				// } catch (InterruptedException e) {
+				// logger.error(">>FaceYe Throws Exception:", e);
+				// }
 			}
 		}
 	}
@@ -174,6 +190,8 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 					this.financialDataService.save(financialData);
 				}
 			}
+		} else {
+			logger.error(">>FaceYe -> have got empty record of stock :" + stock.getName() + "(" + stock.getCode() + "),[" + stock.getId() + "]");
 		}
 	}
 
