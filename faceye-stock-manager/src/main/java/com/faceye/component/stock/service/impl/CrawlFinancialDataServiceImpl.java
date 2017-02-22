@@ -153,8 +153,9 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 								if (StringUtils.equals(dataStr, "&nbsp;")) {
 									record.put("data", "");
 								} else {
-									logger.debug(">>FaceYe crawl FinancialData parse result:" + dataStr);
-									record.put("data", StringUtils.trim(dataStr));
+									dataStr = StringUtils.trim(dataStr);
+									dataStr = StringUtils.replace(dataStr, ",", "");
+									record.put("data", dataStr);
 								}
 							}
 							if (y >= 1) {
@@ -174,7 +175,8 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 			for (Map<String, String> record : records) {
 				String date = MapUtils.getString(record, "date");
 				String data = MapUtils.getString(record, "data");
-				data = StringUtils.replace(data, ",", "");
+
+				logger.debug(">>FaceYe --> parsed financial data is:" + date + ":" + data);
 				boolean isExist = true;
 				try {
 					isExist = this.isFinancialDataExist(stock.getId(), accountingSubject.getId(), date);
