@@ -11,7 +11,7 @@
 	</context-param>
 	<context-param>
 		<param-name>webAppRootKey</param-name>
-		<param-value>feature-feature</param-value>
+		<param-value>faceye-stock-mananger</param-value>
 	</context-param>
 <!-- 
 	<filter>

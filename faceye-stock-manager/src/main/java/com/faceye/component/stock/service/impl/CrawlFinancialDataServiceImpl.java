@@ -45,10 +45,10 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 		List<Stock> stocks = this.stockService.getAll();
 		if (CollectionUtils.isNotEmpty(stocks)) {
 			for (Stock stock : stocks) {
-				try{
-				this.crawlStock(stock);
-				}catch(Exception e){
-					logger.error(">>FaceYe throws Exception :"+e);
+				try {
+					this.crawlStock(stock);
+				} catch (Exception e) {
+					logger.error(">>FaceYe throws Exception :" + e);
 				}
 			}
 		}

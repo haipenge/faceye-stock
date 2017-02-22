@@ -20,14 +20,5 @@
      http://www.springframework.org/schema/data/jpa
     http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
     
-	<import resource="classpath*:/conf/applicationContext-jpa.xml" />
-	<import resource="classpath*:/conf/applicationContext-cache.xml" />
-	<import resource="classpath*:/conf/applicationContext-config.xml" />
-	<import resource="classpath*:/conf/applicationContext-mongo.xml" />
-	<import resource="classpath*:/conf/applicationContext-security.xml" />
-	<!-- 
-	<import resource="classpath*:/conf/applicationContext-redis.xml" />
-	 -->
-	<import resource="classpath*:/conf/applicationContext-mail.xml" />
-	<import resource="${x.job.stock}" />
+	
 </beans>
