@@ -54,7 +54,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 		Collections.shuffle(stocks);
 		financialDataQueueService.addAll(stocks);
 		Runnable runnabe = new CrawlFinancialDataThread();
-		ThreadPoolController.getINSTANCE().execute("Crawl-Finanacial-data-Pool", runnabe, 3);
+		ThreadPoolController.getINSTANCE().execute("Crawl-Finanacial-data-Pool", runnabe, 8);
 
 		// if (CollectionUtils.isNotEmpty(stocks)) {
 		// for (Stock stock : stocks) {
@@ -176,7 +176,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 				String date = MapUtils.getString(record, "date");
 				String data = MapUtils.getString(record, "data");
 
-				logger.debug(">>FaceYe --> parsed financial data is:" + date + ":" + data);
+				//logger.debug(">>FaceYe --> parsed financial data is:" + date + ":" + data);
 				boolean isExist = true;
 				try {
 					isExist = this.isFinancialDataExist(stock.getId(), accountingSubject.getId(), date);

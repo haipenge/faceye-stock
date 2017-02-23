@@ -28,11 +28,6 @@
 						<div class="col-md-1">
 							<input type="text" name="EQ|stockId" value="${searchParams.stockId}" placeholder="<fmt:message key="stock.dataStat.stockId"></fmt:message>" class="form-control input-sm">
 						</div>
-
-						<div class="col-md-1">
-							<input type="text" name="EQ|grossProfitMargin" value="${searchParams.grossProfitMargin}" placeholder="<fmt:message key="stock.dataStat.grossProfitMargin"></fmt:message>"
-								class="form-control input-sm">
-						</div>
 						<!--@generate-entity-jsp-query-detail@-->
 						<div class="col-md-1">
 							<button type="submit" class="btn btn-sm btn-primary">
@@ -65,7 +60,7 @@
 						<tbody>
 							<c:forEach items="${page.content}" var="dataStat">
 								<tr>
-									<td style="width: 30%;"><fmt:formateDate value="${dataStat.dateCycle }" pattern="yyyy-MM-dd" /></td>
+									<td style="width: 30%;"><fmt:formatDate value="${dataStat.dateCycle }" pattern="yyyy-MM-dd" /></td>
 									<td class="text-right"><fmt:formatNumber value="${dataStat.returnOnAssets *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
 								</tr>
 							</c:forEach>
