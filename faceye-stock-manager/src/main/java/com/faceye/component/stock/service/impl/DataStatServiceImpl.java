@@ -91,12 +91,12 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 			Map params = new HashMap();
 			params.put("EQ|stockId", stock.getId());
 			params.put("EQ|accountingSubjectId", StockConstants.TOTAL_ASSETS);
-			List<FinancialData> totalAssets = this.financialDataService.getPage(params, 0, 1).getContent();
+			List<FinancialData> totalAssets = this.financialDataService.getPage(params, 0, 0).getContent();
 			// 获取净利润
 			params = new HashMap();
 			params.put("EQ|stockId", stock.getId());
 			params.put("EQ|accountingSubjectId", StockConstants.NET_PROFIT);
-			List<FinancialData> netProfit = this.financialDataService.getPage(params, 0, 1).getContent();
+			List<FinancialData> netProfit = this.financialDataService.getPage(params, 0, 0).getContent();
 			if (CollectionUtils.isNotEmpty(totalAssets) && CollectionUtils.isNotEmpty(netProfit) && totalAssets.size() == netProfit.size()) {
 				for (FinancialData profit : netProfit) {
 					String profitDate = DateUtil.formatDate(profit.getDate(), "yyyy-MM-dd");
@@ -116,7 +116,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 						if (dataStat == null) {
 							dataStat = new DataStat();
 							dataStat.setStockId(stock.getId());
-							dataStat.setDateCycle(DateUtil.getDateFromString(profitDate, "yyyy-MM-dd HH:mm:ss"));
+							dataStat.setDateCycle(DateUtil.getDateFromString(profitDate+" 00:00:00", "yyyy-MM-dd HH:mm:ss"));
 							dataStat.setReturnOnAssets(returnOnAssets);
 						} else {
 							if (dataStat.getReturnOnAssets() != null && returnOnAssets.compareTo(dataStat.getReturnOnAssets()) == 0) {
@@ -125,11 +125,11 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 								logger.debug(">>FaceYe --> 两次计算的总资产回报率不同，股票：" + stock.getName() + "(" + stock.getCode() + ")，上次：" + dataStat.getReturnOnAssets() + ",本次："
 										+ returnOnAssets);
 								dataStat.setReturnOnAssets(returnOnAssets);
+								dataStat.setDateCycle(DateUtil.getDateFromString(profitDate+" 00:00:00", "yyyy-MM-dd HH:mm:ss"));
 							}
 						}
 						this.save(dataStat);
 					}
-
 				}
 			} else {
 				logger.error(">>FaceYe :总资产集合与净利润集合不对等,不可进行总资产回报率计算");
@@ -166,11 +166,16 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		List<Stock> stocks = this.stockService.getAll();
 		for (Stock stock : stocks) {
 			// 分析总资产回报率
-			try {
-				this.statReturnOnAssets(stock);
-			} catch (Exception e) {
-				logger.error(">>Faceye --> 分析股票总资产回报率抛出异常:", e);
-			}
+			this.stat(stock);
+		}
+	}
+
+	@Override
+	public void stat(Stock stock) {
+		try {
+			this.statReturnOnAssets(stock);
+		} catch (Exception e) {
+			logger.error(">>Faceye --> 分析股票总资产回报率抛出异常:", e);
 		}
 	}
 

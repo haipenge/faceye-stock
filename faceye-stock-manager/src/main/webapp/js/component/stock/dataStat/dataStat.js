@@ -16,6 +16,7 @@ var DataStat={
 	  var stockId=$('#stockId').val();
 	  //营业总收入
 	  FinancialData.chartsQuery(stockId,90,'operating_income');
+	  $('#stock_stat').click(function(){DataStat.stat();});
   },
   /**
    * 批量删除
@@ -43,6 +44,23 @@ var DataStat={
 		  var msg=new Msg({msg:'请选择要删除的数据',type:'warning'});
 		  msg.show();
 	  }
+  },
+  /**
+   * 数据分析
+   */
+  stat:function(){
+	  var stockId=$('input[name="stockId"]').val();
+	  $.ajax({
+		  url:'/stock/dataStat/stat',
+		  type:'post',
+		  dataType:'json',
+		  data:{
+			  stockId:stockId
+		  },
+		  success:function(data,textStatus,xhr){
+			  
+		  }
+	  });
   }
 };
 

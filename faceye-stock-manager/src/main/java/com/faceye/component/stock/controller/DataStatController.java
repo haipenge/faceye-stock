@@ -77,6 +77,22 @@ public class DataStatController extends BaseController<DataStat, Long, DataStatS
 		model.addAttribute("searchParams", searchParams);
 		return "stock.dataStat.manager";
 	}
+	
+	/**
+	 * 启动数据 分析
+	 * @param request
+	 * @return
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年2月24日 上午9:39:14
+	 */
+	public String stat(HttpServletRequest request){
+		Map params=HttpUtil.getRequestParams(request);
+		Long stockId=MapUtils.getLong(params, "stockId");
+		Stock stock=this.stockService.get(stockId);
+		this.service.stat(stock);
+		return AjaxResult.getInstance().buildDefaultResult(true);
+	}
 
 	/**
 	 * 转向编辑或新增页面<br>

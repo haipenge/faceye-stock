@@ -6,7 +6,6 @@
 <div class="page-head">
 	<h2>
 		<fmt:message key="stock.dataStat.manager"></fmt:message>
-		<a class="btn btn-primary" href="<c:url value="/stock/dataStat/input"/>"> <fmt:message key="stock.dataStat.add"></fmt:message>
 		</a>
 	</h2>
 </div>
@@ -37,35 +36,36 @@
 					</div>
 				</fieldset>
 			</form>
+			<button type="button" class="btn btn-sm btn-success" id="stock_stat">数据分析</button>
 		</div>
-	</div>
-    <div class="content">
-     ${stock.name }<span class="span-suffix">(${stock.code })</span><input type="hidden" name="stockId" value="${stock.id }">
-    </div>
-	<div class="row">
-		<div class="col-sm-6 col-md-6">
+		<div class="content">
+			${stock.name }<span class="span-suffix">(${stock.code })</span><input type="hidden" name="stockId" value="${stock.id }">
+		</div>
+		<div class="row">
+			<div class="col-sm-6 col-md-6">
 
-			<div class="block-flat">
-				<div class="header">
-					<h3>总资产回报率</h3>
-				</div>
-				<div class="content">
-					<table>
-						<thead>
-							<tr>
-								<th style="width: 50%;">时间</th>
-								<th>回报率</th>
-							</tr>
-						</thead>
-						<tbody>
-							<c:forEach items="${page.content}" var="dataStat">
+				<div class="block-flat">
+					<div class="header">
+						<h3>总资产回报率</h3>
+					</div>
+					<div class="content">
+						<table>
+							<thead>
 								<tr>
-									<td style="width: 30%;"><fmt:formatDate value="${dataStat.dateCycle }" pattern="yyyy-MM-dd" /></td>
-									<td class="text-right"><fmt:formatNumber value="${dataStat.returnOnAssets *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
+									<th style="width: 50%;">时间</th>
+									<th>回报率</th>
 								</tr>
-							</c:forEach>
-						</tbody>
-					</table>
+							</thead>
+							<tbody>
+								<c:forEach items="${page.content}" var="dataStat">
+									<tr>
+										<td style="width: 30%;"><fmt:formatDate value="${dataStat.dateCycle }" pattern="yyyy-MM-dd" /></td>
+										<td class="text-right"><fmt:formatNumber value="${dataStat.returnOnAssets *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 
@@ -74,7 +74,7 @@
 					<div class="header">
 						<h3>营业收入</h3>
 					</div>
-					<div class="content blue-chart" data-step="3" data-intro="<strong>Unique Styled Plugins</strong> <br/> We put love in every detail to give a great user experience!.">
+					<div class="content blue-chart" data-intro="<strong>Unique Styled Plugins</strong> <br/> We put love in every detail to give a great user experience!.">
 						<div id="operating_income" style="height: 180px;"></div>
 					</div>
 					<div class="content">
@@ -97,45 +97,46 @@
 					</div>
 				</div>
 			</div>
-			<div class="content">
-				<div id="msg"></div>
-				<button class="btn btn-primary btn-sm multi-remove">
-					<fmt:message key="global.remove"></fmt:message>
-				</button>
-				<div classs="table-responsive">
-					<table class="table table-bordered">
-						<thead>
+		</div>
+
+		<div class="content">
+			<div id="msg"></div>
+			<button class="btn btn-primary btn-sm multi-remove">
+				<fmt:message key="global.remove"></fmt:message>
+			</button>
+			<div classs="table-responsive">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th><input type="checkbox" name="check-all"></th>
+							<th><fmt:message key='stock.dataStat.stockId'></fmt:message></th>
+							<th><fmt:message key='stock.dataStat.returnOnAssets'></fmt:message></th>
+							<th><fmt:message key='stock.dataStat.grossProfitMargin'></fmt:message></th>
+							<th><fmt:message key='stock.dataStat.dateCycle'></fmt:message></th>
+							<!--@generate-entity-jsp-property-desc@-->
+							<th><fmt:message key="global.edit"></fmt:message></th>
+							<th><fmt:message key="global.remove"></fmt:message></th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach items="${page.content}" var="dataStat">
 							<tr>
-								<th><input type="checkbox" name="check-all"></th>
-								<th><fmt:message key='stock.dataStat.stockId'></fmt:message></th>
-								<th><fmt:message key='stock.dataStat.returnOnAssets'></fmt:message></th>
-								<th><fmt:message key='stock.dataStat.dateCycle'></fmt:message></th>
-								<th><fmt:message key='stock.dataStat.grossProfitMargin'></fmt:message></th>
-								<!--@generate-entity-jsp-property-desc@-->
-								<th><fmt:message key="global.edit"></fmt:message></th>
-								<th><fmt:message key="global.remove"></fmt:message></th>
-							</tr>
-						</thead>
-						<tbody>
-							<c:forEach items="${page.content}" var="dataStat">
-								<tr>
-									<td><input type="checkbox" name="check-single" value="${dataStat.id}"></td>
-									<td>${dataStat.stockId}</td>
-									<td>${dataStat.returnOnAssets}</td>
-									<td>${dataStat.dateCycle}</td>
-									<td>${dataStat.grossProfitMargin}</td>
-									<!--@generate-entity-jsp-property-value@-->
-									<td><a href="<c:url value="/stock/dataStat/edit/${dataStat.id}"/>"> <fmt:message key="global.edit"></fmt:message>
-									</a></td>
-									<td><a href="<c:url value="/stock/dataStat/remove/${dataStat.id}"/>"> <fmt:message key="global.remove"></fmt:message>
-									</a></td>
-								<tr>
-							</c:forEach>
-						</tbody>
-					</table>
-				</div>
-				<f:page page="${page}" url="/stock/dataStat/home" params="<%=request.getParameterMap()%>" />
+								<td><input type="checkbox" name="check-single" value="${dataStat.id}"></td>
+								<td>${dataStat.stockId}</td>
+								<td><fmt:formatNumber value="${dataStat.returnOnAssets  *100}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
+								<td><fmt:formatNumber value="${dataStat.grossProfitMargin  *100}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
+								<td><fmt:formatDate value="${dataStat.dateCycle}" pattern="yyyy-MM-dd" /></td>
+								<!--@generate-entity-jsp-property-value@-->
+								<td><a href="<c:url value="/stock/dataStat/edit/${dataStat.id}"/>"> <fmt:message key="global.edit"></fmt:message>
+								</a></td>
+								<td><a href="<c:url value="/stock/dataStat/remove/${dataStat.id}"/>"> <fmt:message key="global.remove"></fmt:message>
+								</a></td>
+							<tr>
+						</c:forEach>
+					</tbody>
+				</table>
 			</div>
+			<f:page page="${page}" url="/stock/dataStat/home" params="<%=request.getParameterMap()%>" />
 		</div>
 	</div>
 </div>
