@@ -102,8 +102,8 @@ var FinancialData = {
 					series : {
 						lines : {
 							show : true,
-							lineWidth : 2,
-							fill : true,
+							//lineWidth : 2,
+							//fill : true,
 							fillColor : {
 								colors : [ {
 									opacity : 0.25
@@ -114,8 +114,8 @@ var FinancialData = {
 						},
 						points : {
 							show : true
-						},
-						shadowSize : 2
+						}
+					//	shadowSize : 2
 					},
 //					legend : {
 //						show : false
