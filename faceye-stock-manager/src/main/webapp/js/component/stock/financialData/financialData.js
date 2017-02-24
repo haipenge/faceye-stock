@@ -84,16 +84,18 @@ var FinancialData = {
 			success : function(data, textStatus, xhr) {
 				var datas=[];
 				var dates=[];
+				var count=1;
 				for(var i=0;i<data.length;i++){
 					var record=data[i];
 					var newDate=new Date();
 					newDate.setTime(record.date);
 					var dateStr=newDate.format('yyyy-MM-dd');
 //					var array=[dateStr,record.data];
-					var arr1=[record.data/1000000,record.date];
-					var arr2=[record.data/1000000,dateStr];
+					var arr1=[count,record.data];
+					var arr2=[count,dateStr];
 					datas.push(arr1);
 					dates.push(arr2);
+					count++;
 				}
 				var plot_statistics = $.plot($(el), [ {
 					data : datas,
