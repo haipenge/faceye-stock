@@ -70,7 +70,7 @@ public class DataStatController extends BaseController<DataStat, Long, DataStatS
 		Map params=new HashMap();
 		params.putAll(searchParams);
 		params.put("EQ|accountingSubjectId", StockConstants.OPERATING_INCOME);
-		Page<FinancialData> operatingIncome=this.financialDataService.getPage(params, 0, 1);
+		Page<FinancialData> operatingIncome=this.financialDataService.getPage(params, 0, 0);
 		model.addAttribute("operatingIncome", operatingIncome);
 		
 		resetSearchParams(searchParams);
