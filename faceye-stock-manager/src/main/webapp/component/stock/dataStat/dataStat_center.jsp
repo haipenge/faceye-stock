@@ -74,7 +74,7 @@
 					<div class="header">
 						<h3>营业收入</h3>
 					</div>
-					<div class="content blue-chart" data-intro="<strong>Unique Styled Plugins</strong> <br/> We put love in every detail to give a great user experience!.">
+					<div class="content blue-chart" >
 						<div id="operating_income" style="height: 180px;"></div>
 					</div>
 					<div class="content">

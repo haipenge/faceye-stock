@@ -86,6 +86,8 @@ public class DataStatController extends BaseController<DataStat, Long, DataStatS
 	 * @Author:haipenge
 	 * @Date:2017年2月24日 上午9:39:14
 	 */
+	@RequestMapping("/stat")
+	@ResponseBody
 	public String stat(HttpServletRequest request){
 		Map params=HttpUtil.getRequestParams(request);
 		Long stockId=MapUtils.getLong(params, "stockId");
