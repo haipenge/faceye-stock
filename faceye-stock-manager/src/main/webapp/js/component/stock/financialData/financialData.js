@@ -86,7 +86,7 @@ var FinancialData = {
 				for(var i=0;i<data.length;i++){
 					var record=data[i];
 					var newDate=new Date();
-					newDate.setTime(date * 1000);
+					newDate.setTime(record.date * 1000);
 					var array=[newDate.format('yyyy-MM-dd'),record.data];
 					datas.push(array);
 				}
