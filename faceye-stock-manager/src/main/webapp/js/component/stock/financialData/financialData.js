@@ -120,14 +120,14 @@ var FinancialData = {
 					legend : {
 						show : false
 					},
-					grid : {
-						labelMargin : 10,
-						axisMargin : 500,
-						hoverable : true,
-						clickable : true,
-						tickColor : "rgba(0,0,0,0.15)",
-						borderWidth : 0
-					},
+//					grid : {
+//						labelMargin : 10,
+//						axisMargin : 500,
+//						hoverable : true,
+//						clickable : true,
+//						tickColor : "rgba(0,0,0,0.15)",
+//						borderWidth : 0
+//					},
 					colors : [ "#50ACFE", "#4A8CF7", "#52e136" ],
 					xaxis : {
 						ticks : dates,
