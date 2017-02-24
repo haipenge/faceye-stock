@@ -20,26 +20,33 @@
 	</div>
 	 -->
 	<div class="block-flat">
-		<div class="content">
-			<form action="<c:url value="/stock/dataStat/home"/>" method="post" role="form" class="form-horizontal">
-				<fieldset>
-					<div class="form-group">
-						<div class="col-md-1">
-							<input type="text" name="EQ|stockId" value="${searchParams.stockId}" placeholder="<fmt:message key="stock.dataStat.stockId"></fmt:message>" class="form-control input-sm">
-						</div>
-						<!--@generate-entity-jsp-query-detail@-->
-						<div class="col-md-1">
-							<button type="submit" class="btn btn-sm btn-primary">
-								<fmt:message key="global.search"></fmt:message>
-							</button>
-						</div>
-					</div>
-				</fieldset>
-			</form>
-			<button type="button" class="btn btn-sm btn-success" id="stock_stat">数据分析</button>
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="content">
+					<form action="<c:url value="/stock/dataStat/home"/>" method="post" role="form" class="form-horizontal">
+						<fieldset>
+							<div class="form-group">
+								<div class="col-md-1">
+									<input type="text" name="EQ|stockId" value="${searchParams.stockId}" placeholder="<fmt:message key="stock.dataStat.stockId"></fmt:message>" class="form-control input-sm">
+								</div>
+								<!--@generate-entity-jsp-query-detail@-->
+								<div class="col-md-1">
+									<button type="submit" class="btn btn-sm btn-primary">
+										<fmt:message key="global.search"></fmt:message>
+									</button>
+								</div>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+			<div class="col-sm-6"></div>
 		</div>
-		<div class="content">
-			${stock.name }<span class="span-suffix">(${stock.code })</span><input type="hidden" name="stockId" value="${stock.id }">
+		<div class="row">
+			<div class="content">
+				${stock.name }<span class="span-suffix">(${stock.code })</span><input type="hidden" name="stockId" value="${stock.id }">
+				<button type="button" class="btn btn-sm btn-success" id="stock_stat">数据分析</button>
+			</div>
 		</div>
 		<div class="row">
 			<div class="col-sm-6 col-md-6">
@@ -74,7 +81,7 @@
 					<div class="header">
 						<h3>营业收入</h3>
 					</div>
-					<div class="content blue-chart" >
+					<div class="content blue-chart">
 						<div id="operating_income" style="height: 180px;"></div>
 					</div>
 					<div class="content">
