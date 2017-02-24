@@ -135,11 +135,11 @@ var FinancialData = {
 						ticks : dates,
 						tickDecimals : 0
 					}
-//					,
-//					yaxis : {
-//						ticks : 5,
-//						tickDecimals : 0
-//					}
+					,
+					yaxis : {
+						ticks : 5,
+						tickDecimals : 0
+					}
 				});
 			}
 		});
