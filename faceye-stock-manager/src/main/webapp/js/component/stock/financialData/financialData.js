@@ -132,11 +132,12 @@ var FinancialData = {
 					xaxis : {
 						ticks : dates,
 						tickDecimals : 0
-					},
-					yaxis : {
-						ticks : 5,
-						tickDecimals : 0
 					}
+//					,
+//					yaxis : {
+//						ticks : 5,
+//						tickDecimals : 0
+//					}
 				});
 			}
 		});
