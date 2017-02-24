@@ -97,7 +97,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 			params.put("EQ|stockId", stock.getId());
 			params.put("EQ|accountingSubjectId", StockConstants.NET_PROFIT);
 			List<FinancialData> netProfit = this.financialDataService.getPage(params, 0, 0).getContent();
-			if (CollectionUtils.isNotEmpty(totalAssets) && CollectionUtils.isNotEmpty(netProfit) && totalAssets.size() == netProfit.size()) {
+			if (CollectionUtils.isNotEmpty(totalAssets) && CollectionUtils.isNotEmpty(netProfit)) {
 				for (FinancialData profit : netProfit) {
 					String profitDate = DateUtil.formatDate(profit.getDate(), "yyyy-MM-dd");
 					Double profitNum = profit.getData();
