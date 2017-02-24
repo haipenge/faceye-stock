@@ -75,7 +75,7 @@ var FinancialData = {
 	 */
 	chartsQuery : function(stockId, accountingSubjectId, el) {
 		$.ajax({
-			url : '/stock/financialData/chartQuery',
+			url : '/stock/financialData/chartsQuery',
 			type : 'post',
 			data : {
 				stockId : stockId,
