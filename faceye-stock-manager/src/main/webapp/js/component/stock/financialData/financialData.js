@@ -91,7 +91,7 @@ var FinancialData = {
 					newDate.setTime(record.date);
 					var dateStr=newDate.format('yyyy-MM-dd');
 //					var array=[dateStr,record.data];
-					var arr1=[count,record.data/1000000];
+					var arr1=[count,record.data/100000];
 					var arr2=[count,dateStr];
 					datas.push(arr1);
 					dates.push(arr2);
@@ -104,8 +104,8 @@ var FinancialData = {
 					series : {
 						lines : {
 							show : true,
-							//lineWidth : 2,
-							//fill : true,
+							lineWidth : 2,
+							fill : true,
 							fillColor : {
 								colors : [ {
 									opacity : 0.25
@@ -116,20 +116,20 @@ var FinancialData = {
 						},
 						points : {
 							show : true
-						}
-					//	shadowSize : 2
+						},
+						shadowSize : 2
 					},
-//					legend : {
-//						show : false
-//					},
-//					grid : {
-//						labelMargin : 10,
-//						axisMargin : 500,
-//						hoverable : true,
-//						clickable : true,
-//						tickColor : "rgba(0,0,0,0.15)",
-//						borderWidth : 0
-//					},
+					legend : {
+						show : false
+					},
+					grid : {
+						labelMargin : 10,
+						axisMargin : 500,
+						hoverable : true,
+						clickable : true,
+						tickColor : "rgba(0,0,0,0.15)",
+						borderWidth : 0
+					},
 					colors : [ "#50ACFE", "#4A8CF7", "#52e136" ],
 					xaxis : {
 						ticks : dates
