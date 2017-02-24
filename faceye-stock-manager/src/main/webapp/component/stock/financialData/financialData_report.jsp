@@ -60,7 +60,7 @@
 		</div>
 		<input type="hidden" value="${stock.id}" id="stock_id">
 		<div id="msg"></div>
-		<div class="content">股票:${stock.name} (${stock.code}) &nbsp;&nbsp;<c:if test="${empty page.content  }"><a href="#" class="btn btn-primary start-crawl">爬取数据</a></c:if></div>
+		<div class="content">股票:${stock.name} (${stock.code}) &nbsp;&nbsp;<c:if test="${empty page.content  }"><a href="#" class="btn btn-primary start-crawl">爬取数据</a></c:if><c:if test="${ not empty page.content  }"><a href="#" class="btn btn-primary start-crawl">重新爬取</a></c:if></div>
 		<div class="content">
 			<ul class="nav nav-pills" role="tablist">
 				<c:forEach items="${reportCategories}" var="reportCategory">
@@ -107,7 +107,6 @@
 							<tr>
 								<td>
 									<table>
-
 										<c:forEach items="${accountingSubjects}" var="accountingSubject">
 										 <c:if test="${accountingSubject.accountingElement.id eq accountingElement.id }">
 											<tr>

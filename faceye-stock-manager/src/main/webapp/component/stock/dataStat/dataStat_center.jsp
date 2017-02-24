@@ -64,7 +64,6 @@
 									<td class="text-right"><fmt:formatNumber value="${dataStat.returnOnAssets *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
 								</tr>
 							</c:forEach>
-
 						</tbody>
 					</table>
 				</div>
@@ -87,7 +86,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach items="${operatingIncome}" var="income">
+								<c:forEach items="${operatingIncome.content}" var="income">
 									<tr>
 										<td style="width: 30%;"><fmt:formatDate value="${income.date }" pattern="yyyy-MM-dd" /></td>
 										<td class="text-right"><fmt:formatNumber value="${income.data }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>

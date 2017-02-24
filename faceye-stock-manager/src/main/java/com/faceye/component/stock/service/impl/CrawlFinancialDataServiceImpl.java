@@ -108,7 +108,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	private boolean isStockFinancialDataCrawled(Stock stock) {
 		boolean isCrawled = false;
 		Map params = new HashMap();
-		params.put("stockId", stock.getId());
+		params.put("EQ|stockId", stock.getId());
 		Page<FinancialData> financialData = this.financialDataService.getPage(params, 0, 1);
 		isCrawled = CollectionUtils.isNotEmpty(financialData.getContent());
 		return isCrawled;
