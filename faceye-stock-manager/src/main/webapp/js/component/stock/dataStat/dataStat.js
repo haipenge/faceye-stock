@@ -15,7 +15,7 @@ var DataStat={
 	  });
 	  var stockId=$('#stockId').val();
 	  //营业总收入
-	  FinancialData.chartsQuery(stockId,90,'operating_income');
+	  FinancialData.chartsQuery(stockId,90,$('#operating_income'));
 	  $('#stock_stat').click(function(){DataStat.stat();});
   },
   /**
