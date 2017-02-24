@@ -83,17 +83,17 @@ var FinancialData = {
 			},
 			success : function(data, textStatus, xhr) {
 				var datas=[];
+				var dates=[];
 				for(var i=0;i<data.length;i++){
 					var record=data[i];
 					var newDate=new Date();
-					alert(' new date is :'+newDate);
-					alert(record.date);
 					newDate.setTime(record.date);
-					alert('after set time date is:'+newDate);
 					var dateStr=newDate.format('yyyy-MM-dd');
-					alert('date str is:'+dateStr);
-					var array=[dateStr,record.data];
-					datas.push(array);
+//					var array=[dateStr,record.data];
+					var arr1=[record.data,record.date];
+					var arr2=[record.data,dateStr];
+					datas.push(arr1);
+					dates.push(arr2);
 				}
 				var plot_statistics = $.plot($(el), [ {
 					data : datas,
@@ -130,7 +130,7 @@ var FinancialData = {
 					},
 					colors : [ "#50ACFE", "#4A8CF7", "#52e136" ],
 					xaxis : {
-						ticks : 11,
+						ticks : dates,
 						tickDecimals : 0
 					},
 					yaxis : {
