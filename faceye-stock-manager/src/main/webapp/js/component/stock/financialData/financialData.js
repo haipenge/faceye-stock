@@ -98,8 +98,8 @@ var FinancialData = {
 					count++;
 				}
 				var plot_statistics = $.plot($(el), [ {
-					data : datas
-					//label : "￥"
+					data : datas,
+					label : "百万[￥]"
 				} ], {
 					series : {
 						lines : {
@@ -132,8 +132,8 @@ var FinancialData = {
 					},
 					colors : [ "#50ACFE", "#4A8CF7", "#52e136" ],
 					xaxis : {
-						ticks : dates
-						//tickDecimals : 0
+						ticks : dates,
+						tickDecimals : 0
 					}
 //					,
 //					yaxis : {
