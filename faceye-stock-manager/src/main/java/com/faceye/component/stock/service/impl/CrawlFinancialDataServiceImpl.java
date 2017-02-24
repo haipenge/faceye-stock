@@ -76,30 +76,42 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	 * @Date:2016年12月21日 下午3:17:28
 	 */
 	public void crawlStock(Stock stock) {
-		String code = stock.getCode();
-		String url = "";
-		if (accountingSubjects == null) {
-			accountingSubjects = this.getAccountingSubjects();
-		}
-		if (CollectionUtils.isNotEmpty(accountingSubjects)) {
-			for (AccountingSubject accountingSubject : accountingSubjects) {
-				url = accountingSubject.getSinaUrl();
-				url = StringUtils.replace(url, "000998", code);
-				logger.debug(">>FaceYe --> Crawl Financial Data Url is:" + url);
-				String content = Http.getInstance().get(url, "gb2312");
-				if (StringUtils.isNotEmpty(content)) {
-					this.parse(stock, accountingSubject, content);
-				} else {
-					logger.error(">>FaceYe have not got content of url: " + url);
+		boolean isStockCrawled = this.isStockFinancialDataCrawled(stock);
+		if (!isStockCrawled) {
+			String code = stock.getCode();
+			String url = "";
+			if (accountingSubjects == null) {
+				accountingSubjects = this.getAccountingSubjects();
+			}
+			if (CollectionUtils.isNotEmpty(accountingSubjects)) {
+				for (AccountingSubject accountingSubject : accountingSubjects) {
+					url = accountingSubject.getSinaUrl();
+					url = StringUtils.replace(url, "000998", code);
+					logger.debug(">>FaceYe --> Crawl Financial Data Url is:" + url);
+					String content = Http.getInstance().get(url, "gb2312");
+					if (StringUtils.isNotEmpty(content)) {
+						this.parse(stock, accountingSubject, content);
+					} else {
+						logger.error(">>FaceYe have not got content of url: " + url);
+					}
+					url = "";
+					// try {
+					// Thread.sleep(1000L);
+					// } catch (InterruptedException e) {
+					// logger.error(">>FaceYe Throws Exception:", e);
+					// }
 				}
-				url = "";
-				// try {
-				// Thread.sleep(1000L);
-				// } catch (InterruptedException e) {
-				// logger.error(">>FaceYe Throws Exception:", e);
-				// }
 			}
 		}
+	}
+
+	private boolean isStockFinancialDataCrawled(Stock stock) {
+		boolean isCrawled = false;
+		Map params = new HashMap();
+		params.put("stockId", stock.getId());
+		Page<FinancialData> financialData = this.financialDataService.getPage(params, 0, 1);
+		isCrawled = CollectionUtils.isNotEmpty(financialData.getContent());
+		return isCrawled;
 	}
 
 	List<AccountingSubject> accountingSubjects = null;
@@ -176,7 +188,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 				String date = MapUtils.getString(record, "date");
 				String data = MapUtils.getString(record, "data");
 
-				//logger.debug(">>FaceYe --> parsed financial data is:" + date + ":" + data);
+				// logger.debug(">>FaceYe --> parsed financial data is:" + date + ":" + data);
 				boolean isExist = true;
 				try {
 					isExist = this.isFinancialDataExist(stock.getId(), accountingSubject.getId(), date);
