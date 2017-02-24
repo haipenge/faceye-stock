@@ -117,9 +117,9 @@ var FinancialData = {
 						},
 						shadowSize : 2
 					},
-					legend : {
-						show : false
-					},
+//					legend : {
+//						show : false
+//					},
 //					grid : {
 //						labelMargin : 10,
 //						axisMargin : 500,
@@ -130,8 +130,8 @@ var FinancialData = {
 //					},
 					colors : [ "#50ACFE", "#4A8CF7", "#52e136" ],
 					xaxis : {
-						ticks : dates,
-						tickDecimals : 0
+						ticks : dates
+						//tickDecimals : 0
 					}
 //					,
 //					yaxis : {
