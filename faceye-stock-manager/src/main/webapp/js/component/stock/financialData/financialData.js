@@ -89,6 +89,7 @@ var FinancialData = {
 	 * 绑定气泡
 	 */
 	bindPlothover : function(el) {
+		var previousPoint = null;
 		$(el).bind("plothover", function(event, pos, item) {
 			var str = "(" + pos.x.toFixed(2) + ", " + pos.y.toFixed(2) + ")";
 			if (item) {
