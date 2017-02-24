@@ -423,7 +423,7 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 		Map searchParams=new HashMap();
 		searchParams.put("EQ|stockId", stockId);
 		searchParams.put("EQ|accountingSubjectId", accountingSubjectId);
-		datas=this.service.getPage(searchParams, 0, 5).getContent();
+		datas=this.service.getPage(searchParams, 0, 0).getContent();
 		return datas;
 	}
 	
