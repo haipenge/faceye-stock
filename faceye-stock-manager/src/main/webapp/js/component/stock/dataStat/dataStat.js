@@ -13,7 +13,7 @@ var DataStat={
 	  $('.multi-remove').click(function(){
 		  DataStat.multiRemove();
 	  });
-	  var stockId=$('#stockId').val();
+	  var stockId=$('input[name="stockId"]').val();
 	  //营业总收入
 	  FinancialData.chartsQuery(stockId,90,$('#operating_income'));
 	  $('#stock_stat').click(function(){DataStat.stat();});
