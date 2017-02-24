@@ -97,7 +97,7 @@ var FinancialData = {
 					previousPoint = item.dataIndex;
 					$("#tooltip").remove();
 					var x = item.datapoint[0].toFixed(2), y = item.datapoint[1].toFixed(2);
-					showTooltip(item.pageX, item.pageY, item.series.label + " of " + x + " = " + y);
+					FinancialData.showTooltip(item.pageX, item.pageY, item.series.label + " of " + x + " = " + y);
 				}
 			} else {
 				$("#tooltip").remove();
