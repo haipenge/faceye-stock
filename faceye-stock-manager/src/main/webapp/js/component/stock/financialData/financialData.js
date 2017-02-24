@@ -98,8 +98,8 @@ var FinancialData = {
 					count++;
 				}
 				var plot_statistics = $.plot($(el), [ {
-					data : datas,
-					label : "￥"
+					data : datas
+					//label : "￥"
 				} ], {
 					series : {
 						lines : {
