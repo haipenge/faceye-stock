@@ -107,16 +107,14 @@ var FinancialData = {
 	},
 	/**
 	 * 对某一会计科目的绘图统计
+	 * params:{stockId:1,accountingSubjectId:90}
 	 */
-	chartsQuery : function(stockId, accountingSubjectId, el) {
+	chartsQuery : function(params, el) {
 		FinancialData.bindPlothover(el);
 		$.ajax({
 			url : '/stock/financialData/chartsQuery',
 			type : 'post',
-			data : {
-				stockId : stockId,
-				accountingSubjectId : accountingSubjectId
-			},
+			data : params,
 			success : function(data, textStatus, xhr) {
 				var datas = [];
 				var dates = [];

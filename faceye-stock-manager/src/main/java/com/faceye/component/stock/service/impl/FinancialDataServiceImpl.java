@@ -1,8 +1,11 @@
 package com.faceye.component.stock.service.impl;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -13,32 +16,33 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.faceye.component.stock.entity.FinancialData;
-
 import com.faceye.component.stock.repository.mongo.FinancialDataRepository;
 import com.faceye.component.stock.repository.mongo.customer.FinancialDataCustomerRepository;
 import com.faceye.component.stock.service.FinancialDataService;
 import com.faceye.component.stock.service.wrapper.FinancialReportWrapper;
-import com.faceye.feature.util.ServiceException;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
+import com.faceye.feature.util.ServiceException;
 import com.querydsl.core.types.Predicate;
+
 /**
  * FinancialData 服务实现类<br>
+ * 
  * @author @haipenge <br>
- * haipenge@gmail.com<br>
-*  Create Date:2014年5月20日<br>
+ *         haipenge@gmail.com<br>
+ *         Create Date:2014年5月20日<br>
  */
 
 @Service
 public class FinancialDataServiceImpl extends BaseMongoServiceImpl<FinancialData, Long, FinancialDataRepository> implements FinancialDataService {
 	@Autowired
-	private FinancialDataCustomerRepository financialDataCustomerRepository=null;
+	private FinancialDataCustomerRepository financialDataCustomerRepository = null;
+
 	@Autowired
 	public FinancialDataServiceImpl(FinancialDataRepository dao) {
 		super(dao);
 	}
-	
-	
+
 	@Override
 	public Page<FinancialData> getPage(Map<String, Object> searchParams, int page, int size) throws ServiceException {
 		if (page != 0) {
@@ -53,10 +57,32 @@ public class FinancialDataServiceImpl extends BaseMongoServiceImpl<FinancialData
 		// NumberPath numberPath = new NumberPath(Number.class, path, "age");
 		// predicates.add(numberPath.eq(15));
 		Predicate predicate = DynamicSpecifications.builder(searchParams, entityClass);
-//		if (predicate != null) {
-//			logger.debug(">>FaceYe -->Query predicate is:" + predicate.toString());
-////		}
-		Sort sort = new Sort(Direction.DESC, "date");
+		// if (predicate != null) {
+		// logger.debug(">>FaceYe -->Query predicate is:" + predicate.toString());
+		//// }
+		Sort sort = null;
+		Iterator<String> it = searchParams.keySet().iterator();
+		while (it.hasNext()) {
+			String key = it.next();
+			if (StringUtils.startsWith(key, "SORT")) {
+				String property = StringUtils.split(key, "|")[1];
+				String order = MapUtils.getString(searchParams, key);
+				Direction direction = Direction.ASC;
+				if (StringUtils.equals(order, "asc")) {
+					direction = Direction.ASC;
+				} else {
+					direction = Direction.DESC;
+				}
+				if (sort == null) {
+					sort = new Sort(direction, property);
+				} else {
+					sort.and(new Sort(direction, property));
+				}
+			}
+		}
+		if (sort == null) {
+			sort = new Sort(Direction.DESC, "date");
+		}
 		Page<FinancialData> res = null;
 		if (size != 0) {
 			Pageable pageable = new PageRequest(page, size, sort);
@@ -71,10 +97,9 @@ public class FinancialDataServiceImpl extends BaseMongoServiceImpl<FinancialData
 		return res;
 	}
 
-
 	@Override
 	public FinancialReportWrapper getFinancialReportWrapper(Long stockId, String date) {
 		return null;
 	}
-	
-}/**@generate-service-source@**/
+
+}/** @generate-service-source@ **/

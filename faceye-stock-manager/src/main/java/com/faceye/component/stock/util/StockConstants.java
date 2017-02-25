@@ -2,6 +2,15 @@ package com.faceye.component.stock.util;
 
 public class StockConstants {
 
+	//年报
+	public static final Integer REPORT_TYPE_YEAR=0;
+	//一季报
+	public static final Integer REPORT_TYPE_1=1;
+	//中报
+	public static final Integer REPORT_TYPE_2=2;
+	//三季报
+	public static final Integer REPORT_TYPE_3=3;
+	///////////////////////////////////////////////////////////////////////////
 	//总资产=股东权益+负债
 	public static final Long TOTAL_ASSETS=189L;
 	//净利润

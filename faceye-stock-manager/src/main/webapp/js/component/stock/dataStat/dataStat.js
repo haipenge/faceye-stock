@@ -15,8 +15,28 @@ var DataStat={
 	  });
 	  var stockId=$('input[name="stockId"]').val();
 	  //营业总收入
-	  FinancialData.chartsQuery(stockId,90,$('#operating_income'));
+//	  FinancialData.chartsQuery(stockId,90,$('#operating_income'));
+	  FinancialData.chartsQuery({stockId:stockId,accountingSubjectId:90},$('#operating_income'));
 	  $('#stock_stat').click(function(){DataStat.stat();});
+	  $('.operating_income_0').click(function(){
+		  $('#operating_income').empty();
+		  FinancialData.chartsQuery({stockId:stockId,accountingSubjectId:90,type:0},$('#operating_income'));
+	  });
+	  //营业收入一季报绘图
+	  $('.operating_income_1').click(function(){
+		  $('#operating_income').empty();
+		  FinancialData.chartsQuery({stockId:stockId,accountingSubjectId:90,type:1},$('#operating_income'));
+	  });
+	  //营业收入中报绘图
+	  $('.operating_income_2').click(function(){
+		  $('#operating_income').empty();
+		  FinancialData.chartsQuery({stockId:stockId,accountingSubjectId:90,type:2},$('#operating_income'));
+	  });
+	  //营业收入三季报绘图
+	  $('.operating_income_3').click(function(){
+		  $('#operating_income').empty();
+		  FinancialData.chartsQuery({stockId:stockId,accountingSubjectId:90,type:3},$('#operating_income'));
+	  });
   },
   /**
    * 批量删除

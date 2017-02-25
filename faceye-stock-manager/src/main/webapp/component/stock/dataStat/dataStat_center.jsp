@@ -5,8 +5,9 @@
 <script type="text/javascript" src="<c:url value="/js/component/stock/dataStat/dataStat.js"/>"></script>
 <div class="page-head">
 	<h2>
+		${stock.name }(${stock.code }) &nbsp;&nbsp;
 		<fmt:message key="stock.dataStat.manager"></fmt:message>
-		</a>
+
 	</h2>
 </div>
 <div class="cl-mcont">
@@ -20,13 +21,13 @@
 	</div>
 	 -->
 	<div class="block-flat">
-		<div class="row">
-			<div class="col-sm-6">
+		<div class="row" style="margin-top: 2px;">
+			<div class="col-sm-9">
 				<div class="content">
 					<form action="<c:url value="/stock/dataStat/home"/>" method="post" role="form" class="form-horizontal">
 						<fieldset>
 							<div class="form-group">
-								<div class="col-md-1">
+								<div class="col-md-4">
 									<input type="text" name="EQ|stockId" value="${searchParams.stockId}" placeholder="<fmt:message key="stock.dataStat.stockId"></fmt:message>" class="form-control input-sm">
 								</div>
 								<!--@generate-entity-jsp-query-detail@-->
@@ -40,17 +41,15 @@
 					</form>
 				</div>
 			</div>
-			<div class="col-sm-6"></div>
-		</div>
-		<div class="row">
-			<div class="content">
-				${stock.name }<span class="span-suffix">(${stock.code })</span><input type="hidden" name="stockId" value="${stock.id }">
-				<button type="button" class="btn btn-sm btn-success" id="stock_stat">数据分析</button>
+			<div class="col-sm-3">
+				<div class="content">
+					<input type="hidden" name="stockId" value="${stock.id }">
+					<button type="button" class="btn btn-sm btn-success" id="stock_stat">数据分析</button>
+				</div>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-sm-6 col-md-6">
-
 				<div class="block-flat">
 					<div class="header">
 						<h3>总资产回报率</h3>
@@ -79,7 +78,7 @@
 			<div class="col-sm-6 col-md-6">
 				<div class="block-flat">
 					<div class="header">
-						<h3>营业收入</h3>
+						<h3>营业收入<a href="#" class="operating_income_0">年</a>|<a href="#" class="operating_income_1">一季报</a>|<a href="#" class="operating_income_2">中报</a>|<a href="#" class="operating_income_3">三季度</a></h3>
 					</div>
 					<div class="content blue-chart">
 						<div id="operating_income" style="height: 180px;"></div>

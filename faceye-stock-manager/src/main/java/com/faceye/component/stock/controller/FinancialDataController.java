@@ -37,6 +37,7 @@ import com.faceye.component.stock.service.CrawlFinancialDataService;
 import com.faceye.component.stock.service.FinancialDataService;
 import com.faceye.component.stock.service.ReportCategoryService;
 import com.faceye.component.stock.service.StockService;
+import com.faceye.component.stock.util.StockConstants;
 import com.faceye.feature.controller.BaseController;
 import com.faceye.feature.util.AjaxResult;
 import com.faceye.feature.util.DateUtil;
@@ -63,7 +64,7 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 	@Autowired
 	private AccountingSubjectService accountingSubjectService = null;
 	@Autowired
-	private CrawlFinancialDataService crawlFinancialDataService=null;
+	private CrawlFinancialDataService crawlFinancialDataService = null;
 
 	@Autowired
 	public FinancialDataController(FinancialDataService service) {
@@ -263,15 +264,16 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 			}
 		}
 	}
-	
+
 	/**
 	 * 对利润表做同型分析
+	 * 
 	 * @param datas
 	 * @Desc:
 	 * @Author:haipenge
 	 * @Date:2017年2月15日 下午8:56:24
 	 */
-	private void statLiRunBiao(List<FinancialData> datas){
+	private void statLiRunBiao(List<FinancialData> datas) {
 		Map<String, Double> map = new HashMap<String, Double>();
 		// 找到营业总成本
 		for (FinancialData data : datas) {
@@ -283,15 +285,15 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 				}
 			}
 		}
-		//对利润表做同型分析
-		Iterator<String> it=map.keySet().iterator();
-		while(it.hasNext()){
-			String key=it.next();
-			Double value=map.get(key);
-			for(FinancialData data : datas){
-				Double sData =data.getData();
-				String date=DateUtil.formatDate(data.getDate(), "yyyy-MM-dd");
-				if(sData!=null && StringUtils.equals(date, key)&& sData.compareTo(0D)>0){
+		// 对利润表做同型分析
+		Iterator<String> it = map.keySet().iterator();
+		while (it.hasNext()) {
+			String key = it.next();
+			Double value = map.get(key);
+			for (FinancialData data : datas) {
+				Double sData = data.getData();
+				String date = DateUtil.formatDate(data.getDate(), "yyyy-MM-dd");
+				if (sData != null && StringUtils.equals(date, key) && sData.compareTo(0D) > 0) {
 					Double rate = data.getData() / value;
 					data.setRate(rate);
 				}
@@ -417,16 +419,22 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 	@ResponseBody
 	public List<FinancialData> chartsQuery(HttpServletRequest request) {
 		List<FinancialData> datas = null;
-		Map params=HttpUtil.getRequestParams(request);
-		Long stockId=MapUtils.getLong(params, "stockId");
-		Long accountingSubjectId=MapUtils.getLong(params, "accountingSubjectId");
-		Map searchParams=new HashMap();
+		Map params = HttpUtil.getRequestParams(request);
+		// 报表分类，年报，季报？0（年报），1（一季报），2，3
+		Integer type = MapUtils.getInteger(params, "type");
+		if (type==null) {
+			type =StockConstants.REPORT_TYPE_YEAR;
+		}
+		Long stockId = MapUtils.getLong(params, "stockId");
+		Long accountingSubjectId = MapUtils.getLong(params, "accountingSubjectId");
+		Map searchParams = new HashMap();
 		searchParams.put("EQ|stockId", stockId);
 		searchParams.put("EQ|accountingSubjectId", accountingSubjectId);
-		datas=this.service.getPage(searchParams, 0, 0).getContent();
+		searchParams.put("SORT|date", "asc");
+		datas = this.service.getPage(searchParams, 0, 0).getContent();
 		return datas;
 	}
-	
+
 	/**
 	 * 爬取股票财报数据
 	 * 
@@ -449,8 +457,6 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 		}
 		return AjaxResult.getInstance().buildDefaultResult(true);
 	}
-	
-
 
 	/////////////////////////////////////////////// 以下为回调函数////////////////////////////////////////////
 	/**
