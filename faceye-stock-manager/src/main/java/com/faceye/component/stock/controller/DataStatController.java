@@ -218,7 +218,10 @@ public class DataStatController extends BaseController<DataStat, Long, DataStatS
 		if(params==null){
 			params=new HashMap();
 		}
+		Long stockId=MapUtils.getLong(params, "stockId");
 		params.put("SORT|dateCycle", "asc");
+		params.remove("stockId");
+		params.put("EQ|stockId", stockId);
 	    Page<DataStat> page=this.service.getPage(params, 0, 0);
 	    if(page!=null &&CollectionUtils.isNotEmpty(page.getContent())){
 	       for(DataStat dataStat:page.getContent()){
