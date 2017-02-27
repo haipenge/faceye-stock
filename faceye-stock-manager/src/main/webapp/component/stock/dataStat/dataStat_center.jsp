@@ -51,12 +51,15 @@
 		<div class="col-sm-6 col-md-6">
 			<div class="block-flat">
 				<div class="header">
-					<h3>总资产回报率</h3>
+					<h3>总资产回报率<small><a href="#" class="returnOnAssets_0">年报</a>|<a href="#" class="returnOnAssets_1">一季报</a>|<a href="#" class="returnOnAssets_2">二季报</a>|<a href="#" class="returnOnAssets_3">三季报</a>|<a href="#" class="returnOnAssets_4">全部</a></small></h3>
 				</div>
 				<div class="content blue-chart">
 				   <div id="returnOnAssets_chart" style="height:180px;"></div>
 				</div>
 				<div class="content">
+				  <p class="text-right"><a href="#" id="toggle_returnOnAssets">数据列表</a>
+				</div>
+				<div class="content" style="display:none;" id="returnOnAssets_list">
 					<table>
 						<thead>
 							<tr>

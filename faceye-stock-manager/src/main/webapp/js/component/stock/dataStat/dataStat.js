@@ -74,7 +74,7 @@ var DataStat = {
 			stockId : stockId,
 			accountingSubjectId : 128
 		}, $('#net_profit'));
-		
+
 		$('.net_profit_0').click(function() {
 			$('#net_profit').empty();
 			FinancialData.chartsQuery({
@@ -116,11 +116,50 @@ var DataStat = {
 				type : 4
 			}, $('#net_profit'));
 		});
-		
+
+		/**
+		 * 绘制总资产回报率
+		 */
 		DataStat.chartDataStat({
-			stockId:stockId,
-			type:0
-		},$('#returnOnAssets_chart'));
+			stockId : stockId,
+			type : 0
+		}, $('#returnOnAssets_chart'));
+
+		$('.returnOnAssets_0').click(function() {
+			DataStat.chartDataStat({
+				stockId : stockId,
+				type : 0
+			}, $('#returnOnAssets_chart'));
+		});
+		$('.returnOnAssets_1').click(function() {
+			DataStat.chartDataStat({
+				stockId : stockId,
+				type : 1
+			}, $('#returnOnAssets_chart'));
+		});
+		$('.returnOnAssets_2').click(function() {
+			DataStat.chartDataStat({
+				stockId : stockId,
+				type : 2
+			}, $('#returnOnAssets_chart'));
+		});
+
+		$('.returnOnAssets_3').click(function() {
+			DataStat.chartDataStat({
+				stockId : stockId,
+				type : 3
+			}, $('#returnOnAssets_chart'));
+		});
+		$('.returnOnAssets_4').click(function() {
+			DataStat.chartDataStat({
+				stockId : stockId,
+				type : 4
+			}, $('#returnOnAssets_chart'));
+		});
+
+		$('#toggle_returnOnAssets').click(function() {
+			$('#returnOnAssets_list').toggle();
+		});
 
 	},
 	/**
@@ -191,7 +230,7 @@ var DataStat = {
 					newDate.setTime(record.dateCycle);
 					var dateStr = newDate.format('yyyy-MM-dd');
 					// var array=[dateStr,record.data];
-					var arr1 = [ count, record.returnOnAssets *100 ];
+					var arr1 = [ count, record.returnOnAssets * 100 ];
 					var arr2 = [ count, dateStr ];
 					datas.push(arr1);
 					dates.push(arr2);
