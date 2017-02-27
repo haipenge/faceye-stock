@@ -418,20 +418,36 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 	@RequestMapping("/chartsQuery")
 	@ResponseBody
 	public List<FinancialData> chartsQuery(HttpServletRequest request) {
-		List<FinancialData> datas = null;
+		List<FinancialData> datas = new ArrayList<FinancialData>();
 		Map params = HttpUtil.getRequestParams(request);
 		// 报表分类，年报，季报？0（年报），1（一季报），2，3
 		Integer type = MapUtils.getInteger(params, "type");
-		if (type==null) {
-			type =StockConstants.REPORT_TYPE_YEAR;
+		if (type == null) {
+			type = StockConstants.REPORT_TYPE_YEAR;
 		}
 		Long stockId = MapUtils.getLong(params, "stockId");
 		Long accountingSubjectId = MapUtils.getLong(params, "accountingSubjectId");
 		Map searchParams = new HashMap();
 		searchParams.put("EQ|stockId", stockId);
 		searchParams.put("EQ|accountingSubjectId", accountingSubjectId);
+		
 		searchParams.put("SORT|date", "asc");
-		datas = this.service.getPage(searchParams, 0, 5).getContent();
+		Page<FinancialData> page = this.service.getPage(searchParams, 0, 0);
+		if (page != null && CollectionUtils.isNotEmpty(page.getContent())) {
+			for (FinancialData data : page.getContent()) {
+				Date date = data.getDate();
+				int month = date.getMonth();
+				if (type == 0 && month == 11) {
+					datas.add(data);
+				} else if (type == 1 && month == 2) {
+					datas.add(data);
+				} else if (type == 2 && month == 5) {
+					datas.add(data);
+				} else if (type == 3 && month == 8) {
+					datas.add(data);
+				}
+			}
+		}
 		return datas;
 	}
 
