@@ -21,6 +21,7 @@ var DataStat = {
 		}, $('#operating_income'));
 		$('#stock_stat').click(function() {
 			DataStat.stat();
+			return false;
 		});
 		$('.operating_income_0').click(function() {
 			$('#operating_income').empty();
@@ -29,6 +30,7 @@ var DataStat = {
 				accountingSubjectId : 90,
 				type : 0
 			}, $('#operating_income'));
+			return false;
 		});
 		// 营业收入一季报绘图
 		$('.operating_income_1').click(function() {
@@ -38,6 +40,7 @@ var DataStat = {
 				accountingSubjectId : 90,
 				type : 1
 			}, $('#operating_income'));
+			return false;
 		});
 		// 营业收入中报绘图
 		$('.operating_income_2').click(function() {
@@ -47,6 +50,7 @@ var DataStat = {
 				accountingSubjectId : 90,
 				type : 2
 			}, $('#operating_income'));
+			return false;
 		});
 		// 营业收入三季报绘图
 		$('.operating_income_3').click(function() {
@@ -56,6 +60,7 @@ var DataStat = {
 				accountingSubjectId : 90,
 				type : 3
 			}, $('#operating_income'));
+			return false;
 		});
 		// 营业收入-全部
 		$('.operating_income_4').click(function() {
@@ -65,9 +70,11 @@ var DataStat = {
 				accountingSubjectId : 90,
 				type : 4
 			}, $('#operating_income'));
+			return false;
 		});
 		$('.operating_data_detail').click(function() {
 			$('#operating_data_detail').toggle();
+			return false;
 		});
 		// 净利润绘图:
 		FinancialData.chartsQuery({
@@ -82,6 +89,7 @@ var DataStat = {
 				accountingSubjectId : 128,
 				type : 0
 			}, $('#net_profit'));
+			return false;
 		});
 
 		$('.net_profit_1').click(function() {
@@ -91,6 +99,7 @@ var DataStat = {
 				accountingSubjectId : 128,
 				type : 1
 			}, $('#net_profit'));
+			return false;
 		});
 		$('.net_profit_2').click(function() {
 			$('#net_profit').empty();
@@ -99,6 +108,7 @@ var DataStat = {
 				accountingSubjectId : 128,
 				type : 2
 			}, $('#net_profit'));
+			return false;
 		});
 		$('.net_profit_3').click(function() {
 			$('#net_profit').empty();
@@ -107,6 +117,7 @@ var DataStat = {
 				accountingSubjectId : 128,
 				type : 3
 			}, $('#net_profit'));
+			return false;
 		});
 		$('.net_profit_4').click(function() {
 			$('#net_profit').empty();
@@ -115,6 +126,7 @@ var DataStat = {
 				accountingSubjectId : 128,
 				type : 4
 			}, $('#net_profit'));
+			return false;
 		});
 
 		/**
@@ -130,18 +142,21 @@ var DataStat = {
 				stockId : stockId,
 				type : 0
 			}, $('#returnOnAssets_chart'));
+			return false;
 		});
 		$('.returnOnAssets_1').click(function() {
 			DataStat.chartDataStat({
 				stockId : stockId,
 				type : 1
 			}, $('#returnOnAssets_chart'));
+			return false;
 		});
 		$('.returnOnAssets_2').click(function() {
 			DataStat.chartDataStat({
 				stockId : stockId,
 				type : 2
 			}, $('#returnOnAssets_chart'));
+			return false;
 		});
 
 		$('.returnOnAssets_3').click(function() {
@@ -149,16 +164,19 @@ var DataStat = {
 				stockId : stockId,
 				type : 3
 			}, $('#returnOnAssets_chart'));
+			return false;
 		});
 		$('.returnOnAssets_4').click(function() {
 			DataStat.chartDataStat({
 				stockId : stockId,
 				type : 4
 			}, $('#returnOnAssets_chart'));
+			return false;
 		});
 
 		$('#toggle_returnOnAssets').click(function() {
 			$('#returnOnAssets_list').toggle();
+			return false;
 		});
 
 	},

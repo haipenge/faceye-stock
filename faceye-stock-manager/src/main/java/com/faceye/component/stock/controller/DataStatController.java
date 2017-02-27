@@ -68,7 +68,7 @@ public class DataStatController extends BaseController<DataStat, Long, DataStatS
 			searchParams=new HashMap();
 		}
 		searchParams.put("SORT|dateCycle", "desc");
-		Page<DataStat> page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
+		Page<DataStat> page = this.service.getPage(searchParams, 0, 0);
 		model.addAttribute("page", page);
 		Long stockId=MapUtils.getLong(searchParams, "EQ|stockId");
 		Stock stock=this.stockService.get(stockId);

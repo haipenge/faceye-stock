@@ -69,7 +69,10 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		if (predicate != null) {
 			logger.debug(">>FaceYe -->Query predicate is:" + predicate.toString());
 		}
-		Sort sort=this.buildSort(searchParams);
+		Sort sort = this.buildSort(searchParams);
+		if (sort != null) {
+			logger.debug(">>FaceYe --> sort is:" + sort.toString());
+		}
 		Page<DataStat> res = null;
 		if (size != 0) {
 			Pageable pageable = new PageRequest(page, size, sort);
@@ -77,7 +80,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		} else {
 			// OrderSpecifier<Comparable> orderPOrderSpecifier=new OrderSpecifier<Comparable>(new Order(), new NumberExpression<DataStat>("id") {
 			// })
-			List<DataStat> items = (List) this.dao.findAll(predicate,sort);
+			List<DataStat> items = (List) this.dao.findAll(predicate, sort);
 			res = new PageImpl<DataStat>(items);
 
 		}
@@ -116,7 +119,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 						if (dataStat == null) {
 							dataStat = new DataStat();
 							dataStat.setStockId(stock.getId());
-							dataStat.setDateCycle(DateUtil.getDateFromString(profitDate+" 00:00:00", "yyyy-MM-dd HH:mm:ss"));
+							dataStat.setDateCycle(DateUtil.getDateFromString(profitDate + " 00:00:00", "yyyy-MM-dd HH:mm:ss"));
 							dataStat.setReturnOnAssets(returnOnAssets);
 						} else {
 							if (dataStat.getReturnOnAssets() != null && returnOnAssets.compareTo(dataStat.getReturnOnAssets()) == 0) {
@@ -125,7 +128,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 								logger.debug(">>FaceYe --> 两次计算的总资产回报率不同，股票：" + stock.getName() + "(" + stock.getCode() + ")，上次：" + dataStat.getReturnOnAssets() + ",本次："
 										+ returnOnAssets);
 								dataStat.setReturnOnAssets(returnOnAssets);
-								dataStat.setDateCycle(DateUtil.getDateFromString(profitDate+" 00:00:00", "yyyy-MM-dd HH:mm:ss"));
+								dataStat.setDateCycle(DateUtil.getDateFromString(profitDate + " 00:00:00", "yyyy-MM-dd HH:mm:ss"));
 							}
 						}
 						this.save(dataStat);
