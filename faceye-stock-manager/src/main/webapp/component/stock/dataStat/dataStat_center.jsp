@@ -48,7 +48,7 @@
 </div>
 </div>
 -->
-		<div class="row" style="border:1px solid;margin-top:0px;">
+		<div class="row" style="margin-top:0px;">
 			<div class="col-sm-6 col-md-6">
 				<div class="block-flat">
 					<div class="header">
@@ -96,7 +96,7 @@
 							<thead>
 								<tr>
 									<th style="width: 30%;">时间</th>
-									<th class="text-right">收入</th>
+									<th class="text-right">收入&nbsp;&nbsp;<span class="span-suffix">元</span></th>
 								</tr>
 							</thead>
 							<tbody>
