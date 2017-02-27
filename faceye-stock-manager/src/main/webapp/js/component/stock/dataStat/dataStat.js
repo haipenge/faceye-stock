@@ -67,10 +67,10 @@ var DataStat = {
 			}, $('#operating_income'));
 		});
 		$('.operating_data_detail').click(function() {
-			$('#operating_data_detail').removeClass('hidden');
+//			//$('#operating_data_detail').removeClass('hidden');
 //			$('#operating_data_detail').addClass('show');
 			alert($('#operating_data_detail').length);
-			$('#operating_data_detail').hide();
+			$('#operating_data_detail').show();
 			alert(2);
 		});
 	},
