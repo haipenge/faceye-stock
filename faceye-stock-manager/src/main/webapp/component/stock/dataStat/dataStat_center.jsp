@@ -109,6 +109,15 @@
 					</table>
 				</div>
 			</div>
+
+			<div class="block-flat">
+				<div class="header">
+					<h3>净利润<small><a href="#" class=".net_profit_0">年报</a>|<a href="#" class=".net_profit_1">一季报</a>|<a href="#" class=".net_profit_2">中报</a>|<a href="#" class=".net_profit_3">三报报</a>|<a href="#" class=".net_profit_4">全部</a></small></h3>
+				</div>
+				<div class="content blue-chart">
+					<div id="net_profit" style="height: 180px;"></div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="block-flat">

@@ -69,6 +69,53 @@ var DataStat = {
 		$('.operating_data_detail').click(function() {
 			$('#operating_data_detail').toggle();
 		});
+		//净利润绘图:
+		FinancialData.chartsQuery({
+			stockId : stockId,
+			accountingSubjectId : 128
+		}, $('#net_profit'));
+		$('.net_profit_0').click(function() {
+			$('#net_profit').empty();
+			FinancialData.chartsQuery({
+				stockId : stockId,
+				accountingSubjectId : 128,
+				type : 0
+			}, $('#net_profit'));
+		});
+		
+		$('.net_profit_1').click(function() {
+			$('#net_profit').empty();
+			FinancialData.chartsQuery({
+				stockId : stockId,
+				accountingSubjectId : 128,
+				type : 1
+			}, $('#net_profit'));
+		});
+		$('.net_profit_2').click(function() {
+			$('#net_profit').empty();
+			FinancialData.chartsQuery({
+				stockId : stockId,
+				accountingSubjectId : 128,
+				type : 2
+			}, $('#net_profit'));
+		});
+		$('.net_profit_3').click(function() {
+			$('#net_profit').empty();
+			FinancialData.chartsQuery({
+				stockId : stockId,
+				accountingSubjectId : 128,
+				type : 3
+			}, $('#net_profit'));
+		});
+		$('.net_profit_4').click(function() {
+			$('#net_profit').empty();
+			FinancialData.chartsQuery({
+				stockId : stockId,
+				accountingSubjectId : 128,
+				type : 4
+			}, $('#net_profit'));
+		});
+		
 	},
 	/**
 	 * 批量删除
