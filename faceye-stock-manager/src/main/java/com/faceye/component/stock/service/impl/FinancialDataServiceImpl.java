@@ -62,24 +62,24 @@ public class FinancialDataServiceImpl extends BaseMongoServiceImpl<FinancialData
 		//// }
 		Sort sort = null;
 		Iterator<String> it = searchParams.keySet().iterator();
-//		while (it.hasNext()) {
-//			String key = it.next();
-//			if (StringUtils.startsWith(key, "SORT")) {
-//				String property = StringUtils.split(key, "|")[1];
-//				String order = MapUtils.getString(searchParams, key);
-//				Direction direction = Direction.ASC;
-//				if (StringUtils.equals(order, "asc")) {
-//					direction = Direction.ASC;
-//				} else {
-//					direction = Direction.DESC;
-//				}
-//				if (sort == null) {
-//					sort = new Sort(direction, property);
-//				} else {
-//					sort.and(new Sort(direction, property));
-//				}
-//			}
-//		}
+		while (it.hasNext()) {
+			String key = it.next();
+			if (StringUtils.startsWith(key, "SORT")) {
+				String property = StringUtils.split(key, "|")[1];
+				String order = MapUtils.getString(searchParams, key);
+				Direction direction = Direction.ASC;
+				if (StringUtils.equals(order, "asc")) {
+					direction = Direction.ASC;
+				} else {
+					direction = Direction.DESC;
+				}
+				if (sort == null) {
+					sort = new Sort(direction, property);
+				} else {
+					sort.and(new Sort(direction, property));
+				}
+			}
+		}
 		if (sort == null) {
 			sort = new Sort(Direction.DESC, "date");
 		}
