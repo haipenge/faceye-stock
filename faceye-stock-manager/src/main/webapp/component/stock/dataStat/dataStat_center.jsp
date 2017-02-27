@@ -7,7 +7,8 @@
 	<h2>
 		${stock.name }(${stock.code }) &nbsp;&nbsp;
 		<fmt:message key="stock.dataStat.manager"></fmt:message>
-
+		&nbsp;&nbsp;<small><input type="hidden" name="stockId" value="${stock.id }">
+			<button type="button" class="btn btn-sm btn-success" id="stock_stat">数据分析</button></small>
 	</h2>
 </div>
 <div class="cl-mcont">
@@ -21,6 +22,7 @@
 	</div>
 	 -->
 	<div class="block-flat">
+		<!-- 
 		<div class="row" style="margin-top: 2px;">
 			<div class="col-sm-9">
 				<div class="content">
@@ -30,24 +32,22 @@
 								<div class="col-md-4">
 									<input type="text" name="EQ|stockId" value="${searchParams.stockId}" placeholder="<fmt:message key="stock.dataStat.stockId"></fmt:message>" class="form-control input-sm">
 								</div>
-								<!--@generate-entity-jsp-query-detail@-->
-								<div class="col-md-1">
-									<button type="submit" class="btn btn-sm btn-primary">
-										<fmt:message key="global.search"></fmt:message>
-									</button>
-								</div>
-							</div>
-						</fieldset>
-					</form>
-				</div>
-			</div>
-			<div class="col-sm-3">
-				<div class="content">
-					<input type="hidden" name="stockId" value="${stock.id }">
-					<button type="button" class="btn btn-sm btn-success" id="stock_stat">数据分析</button>
-				</div>
-			</div>
+								
+		<div class="col-md-1">
+			<button type="submit" class="btn btn-sm btn-primary">
+				<fmt:message key="global.search"></fmt:message>
+			</button>
 		</div>
+	</div>
+	</fieldset>
+	</form>
+</div>
+</div>
+<div class="col-sm-3">
+	<div class="content"></div>
+</div>
+</div>
+-->
 		<div class="row">
 			<div class="col-sm-6 col-md-6">
 				<div class="block-flat">
@@ -78,12 +78,20 @@
 			<div class="col-sm-6 col-md-6">
 				<div class="block-flat">
 					<div class="header">
-						<h3>营业收入&nbsp;&nbsp;<small><a href="#" class="operating_income_0">年报</a>|<a href="#" class="operating_income_1">一季报</a>|<a href="#" class="operating_income_2">中报</a>|<a href="#" class="operating_income_3">三季报</a>|<a href="#" class="operating_income_4">全部</a> &nbsp;&nbsp;<a href="#" class="operating_data_detail">数据列表</a></small></h3>
+						<h3>
+							营业收入&nbsp;&nbsp;<small><a href="#" class="operating_income_0">年报</a>|<a href="#" class="operating_income_1">一季报</a>|<a href="#" class="operating_income_2">中报</a>|<a
+								href="#" class="operating_income_3">三季报</a>|<a href="#" class="operating_income_4">全部</a> </small>
+						</h3>
 					</div>
 					<div class="content blue-chart">
 						<div id="operating_income" style="height: 180px;"></div>
 					</div>
-					<div class="content" style="display:none;" id="operating_data_detail">
+					<div class="content">
+						<p class="text-right">
+							<a href="#" class="operating_data_detail">数据列表</a>
+						</p>
+					</div>
+					<div class="content" style="display: none;" id="operating_data_detail">
 						<table>
 							<thead>
 								<tr>

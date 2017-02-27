@@ -78,38 +78,7 @@ public class FinancialDataServiceImpl extends BaseMongoServiceImpl<FinancialData
 		return res;
 	}
 	
-	/**
-	 * 构造sort对像,params 参数结构 :params.put("SORT|property","asc");
-	 * 
-	 * @param params
-	 * @return
-	 * @Desc:
-	 * @Author:haipenge
-	 * @Date:2017年2月27日 下午12:27:55
-	 */
-	private Sort buildSort(Map params){
-		Sort sort = null;
-		Iterator<String> it = params.keySet().iterator();
-		while (it.hasNext()) {
-			String key = it.next();
-			if (StringUtils.startsWith(key, "SORT")) {
-				String property = StringUtils.split(key, "|")[1];
-				String order = MapUtils.getString(params, key);
-				Direction direction = Direction.ASC;
-				if (StringUtils.equals(order, "asc")) {
-					direction = Direction.ASC;
-				} else {
-					direction = Direction.DESC;
-				}
-				if (sort == null) {
-					sort = new Sort(direction, property);
-				} else {
-					sort.and(new Sort(direction, property));
-				}
-			}
-		}
-		return sort;
-	}
+
 
 	@Override
 	public FinancialReportWrapper getFinancialReportWrapper(Long stockId, String date) {

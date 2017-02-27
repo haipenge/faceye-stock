@@ -69,7 +69,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		if (predicate != null) {
 			logger.debug(">>FaceYe -->Query predicate is:" + predicate.toString());
 		}
-		Sort sort = new Sort(Direction.DESC, "id");
+		Sort sort = new Sort(Direction.DESC, "dateCycle");
 		Page<DataStat> res = null;
 		if (size != 0) {
 			Pageable pageable = new PageRequest(page, size, sort);
@@ -77,7 +77,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		} else {
 			// OrderSpecifier<Comparable> orderPOrderSpecifier=new OrderSpecifier<Comparable>(new Order(), new NumberExpression<DataStat>("id") {
 			// })
-			List<DataStat> items = (List) this.dao.findAll(predicate);
+			List<DataStat> items = (List) this.dao.findAll(predicate,sort);
 			res = new PageImpl<DataStat>(items);
 
 		}
