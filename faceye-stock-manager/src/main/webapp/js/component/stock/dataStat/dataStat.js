@@ -116,6 +116,11 @@ var DataStat = {
 				type : 4
 			}, $('#net_profit'));
 		});
+		
+		DataStat.chartDataStat({
+			stockId:stockId,
+			type:0
+		},$('#returnOnAssets_chart'));
 
 	},
 	/**

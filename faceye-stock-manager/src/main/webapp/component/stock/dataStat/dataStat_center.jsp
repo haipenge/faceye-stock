@@ -54,7 +54,7 @@
 					<h3>总资产回报率</h3>
 				</div>
 				<div class="content blue-chart">
-				   <div id="returnOnAssets_chart"></div>
+				   <div id="returnOnAssets_chart" style="height:180px;"></div>
 				</div>
 				<div class="content">
 					<table>
