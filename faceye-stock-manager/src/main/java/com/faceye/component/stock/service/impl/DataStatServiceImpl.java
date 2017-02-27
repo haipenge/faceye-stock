@@ -69,7 +69,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		if (predicate != null) {
 			logger.debug(">>FaceYe -->Query predicate is:" + predicate.toString());
 		}
-		Sort sort = new Sort(Direction.DESC, "dateCycle");
+		Sort sort = new Sort(Direction.ASC, "dateCycle");
 		Page<DataStat> res = null;
 		if (size != 0) {
 			Pageable pageable = new PageRequest(page, size, sort);

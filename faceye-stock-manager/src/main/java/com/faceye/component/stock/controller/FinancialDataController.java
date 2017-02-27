@@ -449,7 +449,7 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 				}
 			}
 		}
-		//取尾部数据
+		// 取尾部数据
 		if (CollectionUtils.isNotEmpty(datas)) {
 			int size = datas.size();
 			int startIndex = 0;
@@ -457,13 +457,12 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 				if (size > 6) {
 					startIndex = size - 6;
 				}
-				datas = datas.subList(startIndex, size);
 			} else {
 				if (size > 10) {
 					startIndex = size - 10;
 				}
-				datas = datas.subList(startIndex, size);
 			}
+			datas = datas.subList(startIndex, size);
 		}
 		return datas;
 	}

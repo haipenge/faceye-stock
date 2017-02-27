@@ -60,7 +60,8 @@ public class FinancialDataServiceImpl extends BaseMongoServiceImpl<FinancialData
 		// if (predicate != null) {
 		// logger.debug(">>FaceYe -->Query predicate is:" + predicate.toString());
 		//// }
-		Sort sort=this.buildSort(searchParams);
+		
+		Sort sort=buildSort(searchParams);
 		if (sort == null) {
 			sort = new Sort(Direction.DESC, "date");
 		}
@@ -78,7 +79,6 @@ public class FinancialDataServiceImpl extends BaseMongoServiceImpl<FinancialData
 		return res;
 	}
 	
-
 
 	@Override
 	public FinancialReportWrapper getFinancialReportWrapper(Long stockId, String date) {

@@ -1,11 +1,14 @@
 package com.faceye.component.stock.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +64,10 @@ public class DataStatController extends BaseController<DataStat, Long, DataStatS
 	@RequestMapping("/home")
 	public String home(HttpServletRequest request, Model model) {
 		Map searchParams=HttpUtil.getRequestParams(request);
+		if(searchParams==null){
+			searchParams=new HashMap();
+		}
+		searchParams.put("SORT|dateCycle", "asc");
 		Page<DataStat> page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
 		model.addAttribute("page", page);
 		Long stockId=MapUtils.getLong(searchParams, "EQ|stockId");
@@ -196,6 +203,53 @@ public class DataStatController extends BaseController<DataStat, Long, DataStatS
 			model.addAttribute("dataStat", entity);
 		}
 		return "stock.dataStat.detail";
+	}
+	
+	@RequestMapping("/chartsQuery")
+	@ResponseBody
+	public List<DataStat> chartsQuery(HttpServletRequest request){
+		List<DataStat> dataStats=new ArrayList<DataStat>();
+		Map params=HttpUtil.getRequestParams(request);
+		Integer type=MapUtils.getInteger(params, "type");
+		if(type==null){
+			type=0;
+		}
+		if(params==null){
+			params=new HashMap();
+		}
+		params.put("SORT|dateCycle", "asc");
+	    Page<DataStat> page=this.service.getPage(params, 0, 0);
+	    if(page!=null &&CollectionUtils.isNotEmpty(page.getContent())){
+	       for(DataStat dataStat:page.getContent()){
+	    	   int month=dataStat.getDateCycle().getMonth();
+	    	   if(type==0 && month==11){
+	    		   dataStats.add(dataStat);
+	    	   }else if(type==1&&month==2){
+	    		   dataStats.add(dataStat);
+	    	   }else if(type==2&&month==5){
+	    		   dataStats.add(dataStat);
+	    	   }else if(type ==3 && month==8){
+	    		   dataStats.add(dataStat);
+	    	   }else if(type==4){
+	    		   dataStats.add(dataStat);
+	    	   }
+	       }
+	    }
+	    if(CollectionUtils.isNotEmpty(dataStats)){
+	    	int startIndex=0;
+	    	int size=dataStats.size();
+	    	if(type!=4){
+	    		if(size>6){
+	    			startIndex=size-6;
+	    		}
+	    	}else{
+	    		if(size>10){
+	    			startIndex=size-10;
+	    		}
+	    	}
+	    	dataStats=dataStats.subList(startIndex, size);
+	    }
+		return dataStats;
 	}
 	
 	///////////////////////////////////////////////以下为回调函数////////////////////////////////////////////
