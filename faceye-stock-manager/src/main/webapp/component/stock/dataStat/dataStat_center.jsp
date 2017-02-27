@@ -83,7 +83,7 @@
 					<div class="content blue-chart">
 						<div id="operating_income" style="height: 180px;"></div>
 					</div>
-					<div class="content">
+					<div class="content hide">
 						<table>
 							<thead>
 								<tr>
