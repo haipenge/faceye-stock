@@ -67,7 +67,7 @@ var DataStat = {
 			}, $('#operating_income'));
 		});
 		$('.operating_data_detail').click(function() {
-			$('#operating_data_detail').toggle(true);
+			$('#operating_data_detail').toggle();
 		});
 	},
 	/**
