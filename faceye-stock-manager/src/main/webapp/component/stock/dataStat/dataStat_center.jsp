@@ -48,7 +48,7 @@
 </div>
 </div>
 -->
-		<div class="row">
+		<div class="row" style="border:1px solid;">
 			<div class="col-sm-6 col-md-6">
 				<div class="block-flat">
 					<div class="header">
