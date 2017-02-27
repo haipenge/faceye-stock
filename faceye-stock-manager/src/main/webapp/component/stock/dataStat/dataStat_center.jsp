@@ -48,7 +48,7 @@
 </div>
 </div>
 -->
-		<div class="row" style="margin-top:0px;">
+		<div class="row dash-cols" style="margin-top: 0px;">
 			<div class="col-sm-6 col-md-6">
 				<div class="block-flat">
 					<div class="header">
