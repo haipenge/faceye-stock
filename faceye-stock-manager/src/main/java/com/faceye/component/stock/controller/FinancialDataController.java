@@ -430,8 +430,7 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 		Map searchParams = new HashMap();
 		searchParams.put("EQ|stockId", stockId);
 		searchParams.put("EQ|accountingSubjectId", accountingSubjectId);
-		
-		searchParams.put("SORT|date", "asc");
+		searchParams.put("SORT|date", "desc");
 		Page<FinancialData> page = this.service.getPage(searchParams, 0, 0);
 		if (page != null && CollectionUtils.isNotEmpty(page.getContent())) {
 			for (FinancialData data : page.getContent()) {
