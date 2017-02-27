@@ -74,6 +74,7 @@ var DataStat = {
 			stockId : stockId,
 			accountingSubjectId : 128
 		}, $('#net_profit'));
+		
 		$('.net_profit_0').click(function() {
 			$('#net_profit').empty();
 			FinancialData.chartsQuery({
