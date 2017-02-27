@@ -454,8 +454,8 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 			int size = datas.size();
 			int startIndex = 0;
 			if (type != 4) {
-				if (size > 6) {
-					startIndex = size - 6;
+				if (size > 8) {
+					startIndex = size - 8;
 				}
 			} else {
 				if (size > 10) {

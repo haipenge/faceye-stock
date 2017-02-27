@@ -243,8 +243,8 @@ public class DataStatController extends BaseController<DataStat, Long, DataStatS
 	    	int startIndex=0;
 	    	int size=dataStats.size();
 	    	if(type!=4){
-	    		if(size>6){
-	    			startIndex=size-6;
+	    		if(size>8){
+	    			startIndex=size-8;
 	    		}
 	    	}else{
 	    		if(size>10){
