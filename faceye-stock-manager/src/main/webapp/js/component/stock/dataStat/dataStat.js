@@ -69,7 +69,7 @@ var DataStat = {
 		$('.operating_data_detail').click(function() {
 //			$('#operating_data_detail').removeClass('hidden');
 //			$('#operating_data_detail').addClass('show');
-			alert(1);
+			alert($('#operating_data_detail').length);
 			$('#operating_data_detail').show();
 			alert(2);
 		});
