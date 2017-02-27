@@ -482,12 +482,22 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 		Map params = HttpUtil.getRequestParams(request);
 		Long id = MapUtils.getLong(params, "id");
 		if (id != null) {
+			this.clearCrawledFinancialData(id);
 			Stock stock = this.stockService.get(id);
 			if (stock != null) {
 				this.crawlFinancialDataService.crawlStock(stock);
 			}
 		}
 		return AjaxResult.getInstance().buildDefaultResult(true);
+	}
+	
+	private void clearCrawledFinancialData(Long id){
+		List<FinancialData> datas=this.service.getAll();
+		if(CollectionUtils.isNotEmpty(datas)){
+			for(FinancialData data:datas){
+				this.service.remove(data);
+			}
+		}
 	}
 
 	/////////////////////////////////////////////// 以下为回调函数////////////////////////////////////////////

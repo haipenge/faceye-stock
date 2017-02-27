@@ -102,6 +102,8 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 					// }
 				}
 			}
+		}else{
+			logger.debug(">>FaceYe --> stock:"+stock.getName()+"("+stock.getCode()+") 已爬取");
 		}
 	}
 
