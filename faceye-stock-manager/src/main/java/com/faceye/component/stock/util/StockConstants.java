@@ -10,6 +10,8 @@ public class StockConstants {
 	public static final Integer REPORT_TYPE_2=2;
 	//三季报
 	public static final Integer REPORT_TYPE_3=3;
+	//全部，含一，二，三，四
+	public static final Integer REPORT_TYPE_4=4;
 	///////////////////////////////////////////////////////////////////////////
 	//总资产=股东权益+负债
 	public static final Long TOTAL_ASSETS=189L;

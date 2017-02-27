@@ -430,7 +430,7 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 		Map searchParams = new HashMap();
 		searchParams.put("EQ|stockId", stockId);
 		searchParams.put("EQ|accountingSubjectId", accountingSubjectId);
-		searchParams.put("SORT|date", "desc");
+		searchParams.put("SORT|date", "asc");
 		Page<FinancialData> page = this.service.getPage(searchParams, 0, 0);
 		if (page != null && CollectionUtils.isNotEmpty(page.getContent())) {
 			for (FinancialData data : page.getContent()) {
@@ -444,7 +444,17 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 					datas.add(data);
 				} else if (type == 3 && month == 8) {
 					datas.add(data);
+				} else if (type == 4) {
+					datas.add(data);
 				}
+			}
+		}
+
+		if (CollectionUtils.isNotEmpty(datas)) {
+			if (type != 4) {
+				datas = datas.subList(0, 6);
+			} else {
+				datas = datas.subList(0, 10);
 			}
 		}
 		return datas;

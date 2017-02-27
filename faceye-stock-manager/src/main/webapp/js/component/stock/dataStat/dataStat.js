@@ -37,6 +37,10 @@ var DataStat={
 		  $('#operating_income').empty();
 		  FinancialData.chartsQuery({stockId:stockId,accountingSubjectId:90,type:3},$('#operating_income'));
 	  });
+	  $('.operating_income_4').click(function(){
+		  $('#operating_income').empty();
+		  FinancialData.chartsQuery({stockId:stockId,accountingSubjectId:90,type:4},$('#operating_income'));
+	  });
   },
   /**
    * 批量删除
