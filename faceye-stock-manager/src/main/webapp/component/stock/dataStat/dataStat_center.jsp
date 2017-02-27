@@ -95,7 +95,7 @@
 						<thead>
 							<tr>
 								<th style="width: 30%;">时间</th>
-								<th class="text-right">收入<span class="span-suffix">元</span></th>
+								<th class="text-right">收入&nbsp;&nbsp;(元)</th>
 							</tr>
 						</thead>
 						<tbody>
