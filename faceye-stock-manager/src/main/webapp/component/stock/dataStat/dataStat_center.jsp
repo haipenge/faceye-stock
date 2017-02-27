@@ -21,7 +21,7 @@
 		</a>
 	</div>
 	 -->
-		<!-- 
+	<!-- 
 		<div class="row" style="margin-top: 2px;">
 			<div class="col-sm-9">
 				<div class="content">
@@ -47,71 +47,71 @@
 </div>
 </div>
 -->
-		<div class="row dash-cols" style="margin-top: 0px;">
-			<div class="col-sm-6 col-md-6">
-				<div class="block-flat">
-					<div class="header">
-						<h3>总资产回报率</h3>
-					</div>
-					<div class="content">
-						<table>
-							<thead>
-								<tr>
-									<th style="width: 50%;">时间</th>
-									<th>回报率</th>
-								</tr>
-							</thead>
-							<tbody>
-								<c:forEach items="${page.content}" var="dataStat">
-									<tr>
-										<td style="width: 30%;"><fmt:formatDate value="${dataStat.dateCycle }" pattern="yyyy-MM-dd" /></td>
-										<td class="text-right"><fmt:formatNumber value="${dataStat.returnOnAssets *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
-									</tr>
-								</c:forEach>
-							</tbody>
-						</table>
-					</div>
+	<div class="row dash-cols" style="margin-top: 0px;">
+		<div class="col-sm-6 col-md-6">
+			<div class="block-flat">
+				<div class="header">
+					<h3>总资产回报率</h3>
 				</div>
-			</div>
-
-			<div class="col-sm-6 col-md-6">
-				<div class="block-flat">
-					<div class="header">
-						<h3>
-							营业收入&nbsp;&nbsp;<small><a href="#" class="operating_income_0">年报</a>|<a href="#" class="operating_income_1">一季报</a>|<a href="#" class="operating_income_2">中报</a>|<a
-								href="#" class="operating_income_3">三季报</a>|<a href="#" class="operating_income_4">全部</a> </small>
-						</h3>
-					</div>
-					<div class="content blue-chart">
-						<div id="operating_income" style="height: 180px;"></div>
-					</div>
-					<div class="content">
-						<p class="text-right">
-							<a href="#" class="operating_data_detail">数据列表</a>
-						</p>
-					</div>
-					<div class="content" style="display: none;" id="operating_data_detail">
-						<table>
-							<thead>
+				<div class="content">
+					<table>
+						<thead>
+							<tr>
+								<th style="width: 50%;">时间</th>
+								<th>回报率</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach items="${page.content}" var="dataStat">
 								<tr>
-									<th style="width: 30%;">时间</th>
-									<th class="text-right">收入&nbsp;&nbsp;<span class="span-suffix">元</span></th>
+									<td style="width: 30%;"><fmt:formatDate value="${dataStat.dateCycle }" pattern="yyyy-MM-dd" /></td>
+									<td class="text-right"><fmt:formatNumber value="${dataStat.returnOnAssets *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
 								</tr>
-							</thead>
-							<tbody>
-								<c:forEach items="${operatingIncome.content}" var="income">
-									<tr>
-										<td style="width: 30%;"><fmt:formatDate value="${income.date }" pattern="yyyy-MM-dd" /></td>
-										<td class="text-right"><fmt:formatNumber value="${income.data }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
-									</tr>
-								</c:forEach>
-							</tbody>
-						</table>
-					</div>
+							</c:forEach>
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
 
+		<div class="col-sm-6 col-md-6">
+			<div class="block-flat">
+				<div class="header">
+					<h3>
+						营业收入&nbsp;&nbsp;<small><a href="#" class="operating_income_0">年报</a>|<a href="#" class="operating_income_1">一季报</a>|<a href="#" class="operating_income_2">中报</a>|<a
+							href="#" class="operating_income_3">三季报</a>|<a href="#" class="operating_income_4">全部</a> </small>
+					</h3>
+				</div>
+				<div class="content blue-chart">
+					<div id="operating_income" style="height: 180px;"></div>
+				</div>
+				<div class="content">
+					<p class="text-right">
+						<a href="#" class="operating_data_detail">数据列表</a>
+					</p>
+				</div>
+				<div class="content" style="display: none;" id="operating_data_detail">
+					<table>
+						<thead>
+							<tr>
+								<th style="width: 30%;">时间</th>
+								<th class="text-right">收入&nbsp;&nbsp;<span class="span-suffix">元</span></th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach items="${operatingIncome.content}" var="income">
+								<tr>
+									<td style="width: 30%;"><fmt:formatDate value="${income.date }" pattern="yyyy-MM-dd" /></td>
+									<td class="text-right"><fmt:formatNumber value="${income.data }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="block-flat">
 		<div class="content">
 			<div id="msg"></div>
 			<button class="btn btn-primary btn-sm multi-remove">
@@ -148,9 +148,8 @@
 						</c:forEach>
 					</tbody>
 				</table>
-				<f:page page="${page}" url="/stock/dataStat/home" params="<%=request.getParameterMap()%>" />
 			</div>
-			
-		
+			<f:page page="${page}" url="/stock/dataStat/home" params="<%=request.getParameterMap()%>" />
+		</div>
 	</div>
 </div>
