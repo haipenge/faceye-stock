@@ -60,13 +60,41 @@ public class FinancialDataServiceImpl extends BaseMongoServiceImpl<FinancialData
 		// if (predicate != null) {
 		// logger.debug(">>FaceYe -->Query predicate is:" + predicate.toString());
 		//// }
+		Sort sort=this.buildSort(searchParams);
+		if (sort == null) {
+			sort = new Sort(Direction.DESC, "date");
+		}
+		Page<FinancialData> res = null;
+		if (size != 0) {
+			Pageable pageable = new PageRequest(page, size, sort);
+			res = this.dao.findAll(predicate, pageable);
+		} else {
+			// OrderSpecifier<Comparable> orderPOrderSpecifier=new OrderSpecifier<Comparable>(new Order(), new NumberExpression<FinancialData>("id") {
+			// })
+			List<FinancialData> items = (List) this.dao.findAll(predicate, sort);
+			res = new PageImpl<FinancialData>(items);
+
+		}
+		return res;
+	}
+	
+	/**
+	 * 构造sort对像,params 参数结构 :params.put("SORT|property","asc");
+	 * 
+	 * @param params
+	 * @return
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年2月27日 下午12:27:55
+	 */
+	private Sort buildSort(Map params){
 		Sort sort = null;
-		Iterator<String> it = searchParams.keySet().iterator();
+		Iterator<String> it = params.keySet().iterator();
 		while (it.hasNext()) {
 			String key = it.next();
 			if (StringUtils.startsWith(key, "SORT")) {
 				String property = StringUtils.split(key, "|")[1];
-				String order = MapUtils.getString(searchParams, key);
+				String order = MapUtils.getString(params, key);
 				Direction direction = Direction.ASC;
 				if (StringUtils.equals(order, "asc")) {
 					direction = Direction.ASC;
@@ -80,21 +108,7 @@ public class FinancialDataServiceImpl extends BaseMongoServiceImpl<FinancialData
 				}
 			}
 		}
-		if (sort == null) {
-			sort = new Sort(Direction.DESC, "date");
-		}
-		Page<FinancialData> res = null;
-		if (size != 0) {
-			Pageable pageable = new PageRequest(page, size, sort);
-			res = this.dao.findAll(predicate, pageable);
-		} else {
-			// OrderSpecifier<Comparable> orderPOrderSpecifier=new OrderSpecifier<Comparable>(new Order(), new NumberExpression<FinancialData>("id") {
-			// })
-			List<FinancialData> items = (List) this.dao.findAll(predicate);
-			res = new PageImpl<FinancialData>(items);
-
-		}
-		return res;
+		return sort;
 	}
 
 	@Override
