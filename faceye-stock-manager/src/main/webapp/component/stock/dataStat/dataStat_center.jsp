@@ -21,7 +21,6 @@
 		</a>
 	</div>
 	 -->
-	<div class="block-flat">
 		<!-- 
 		<div class="row" style="margin-top: 2px;">
 			<div class="col-sm-9">
@@ -149,8 +148,9 @@
 						</c:forEach>
 					</tbody>
 				</table>
+				<f:page page="${page}" url="/stock/dataStat/home" params="<%=request.getParameterMap()%>" />
 			</div>
-			<f:page page="${page}" url="/stock/dataStat/home" params="<%=request.getParameterMap()%>" />
-		</div>
+			
+		
 	</div>
 </div>
