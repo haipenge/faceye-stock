@@ -182,10 +182,10 @@ var DataStat = {
 				for (var i = 0; i < data.length; i++) {
 					var record = data[i];
 					var newDate = new Date();
-					newDate.setTime(record.date);
+					newDate.setTime(record.dateCycle);
 					var dateStr = newDate.format('yyyy-MM-dd');
 					// var array=[dateStr,record.data];
-					var arr1 = [ count, record.data / 100000 ];
+					var arr1 = [ count, record.returnOnAssets *100 ];
 					var arr2 = [ count, dateStr ];
 					datas.push(arr1);
 					dates.push(arr2);
@@ -193,7 +193,7 @@ var DataStat = {
 				}
 				var plot_statistics = $.plot($(el), [ {
 					data : datas,
-					label : "百万[￥]"
+					label : "%"
 				} ], {
 					series : {
 						lines : {

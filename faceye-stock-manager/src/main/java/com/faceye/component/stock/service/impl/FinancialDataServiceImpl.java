@@ -1,11 +1,8 @@
 package com.faceye.component.stock.service.impl;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -60,7 +57,6 @@ public class FinancialDataServiceImpl extends BaseMongoServiceImpl<FinancialData
 		// if (predicate != null) {
 		// logger.debug(">>FaceYe -->Query predicate is:" + predicate.toString());
 		//// }
-		
 		Sort sort=buildSort(searchParams);
 		if (sort == null) {
 			sort = new Sort(Direction.DESC, "date");
@@ -78,7 +74,6 @@ public class FinancialDataServiceImpl extends BaseMongoServiceImpl<FinancialData
 		}
 		return res;
 	}
-	
 
 	@Override
 	public FinancialReportWrapper getFinancialReportWrapper(Long stockId, String date) {
