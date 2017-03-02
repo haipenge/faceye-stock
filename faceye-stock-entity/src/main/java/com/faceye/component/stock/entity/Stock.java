@@ -105,5 +105,7 @@ public class Stock implements Serializable {
 		this.market = market;
 	}
 	
+	
+	
 }/**@generate-entity-source@**/
 	
