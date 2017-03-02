@@ -164,19 +164,7 @@ public class CategoryController extends BaseController<Category, Long, CategoryS
 		return "stock.category.detail";
 	}
 	
-	/**
-	 * 初始化股票分类
-	 * @param request
-	 * @return
-	 * @Desc:
-	 * @Author:haipenge
-	 * @Date:2017年2月27日 下午9:42:03
-	 */
-	@RequestMapping("/init")
-	@ResponseBody
-	public String init(HttpServletRequest request){
-		
-	}
+	
 	
 	///////////////////////////////////////////////以下为回调函数////////////////////////////////////////////
 	/**
