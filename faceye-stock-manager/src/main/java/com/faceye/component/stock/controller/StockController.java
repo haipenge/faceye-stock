@@ -5,7 +5,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
@@ -20,7 +19,6 @@ import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.service.CrawlFinancialDataService;
 import com.faceye.component.stock.service.StockService;
 import com.faceye.feature.controller.BaseController;
-import com.faceye.feature.util.AjaxResult;
 import com.faceye.feature.util.http.HttpUtil;
 
 @Controller
@@ -29,7 +27,7 @@ import com.faceye.feature.util.http.HttpUtil;
 public class StockController extends BaseController<Stock, Long, StockService> {
 	@Autowired
 	private CrawlFinancialDataService crawlFinancialDataService = null;
-
+	
 	@Autowired
 	public StockController(StockService service) {
 		super(service);

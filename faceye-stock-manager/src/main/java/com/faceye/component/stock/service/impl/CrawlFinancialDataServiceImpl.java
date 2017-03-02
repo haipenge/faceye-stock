@@ -54,7 +54,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 		Collections.shuffle(stocks);
 		financialDataQueueService.addAll(stocks);
 		Runnable runnabe = new CrawlFinancialDataThread();
-		ThreadPoolController.getINSTANCE().execute("Crawl-Finanacial-data-Pool", runnabe, 8);
+		ThreadPoolController.getINSTANCE().execute("Crawl-Finanacial-data-Pool", runnabe, 2);
 
 		// if (CollectionUtils.isNotEmpty(stocks)) {
 		// for (Stock stock : stocks) {
@@ -76,7 +76,8 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	 * @Date:2016年12月21日 下午3:17:28
 	 */
 	public void crawlStock(Stock stock) {
-		boolean isStockCrawled = this.isStockFinancialDataCrawled(stock);
+//		boolean isStockCrawled = this.isStockFinancialDataCrawled(stock);
+		boolean isStockCrawled=false;
 		if (!isStockCrawled) {
 			String code = stock.getCode();
 			String url = "";
