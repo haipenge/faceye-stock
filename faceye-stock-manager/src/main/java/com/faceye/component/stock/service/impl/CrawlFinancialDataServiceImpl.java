@@ -50,12 +50,13 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 
 	@Override
 	public void crawl() {
-		List<Stock> stocks = this.stockService.getAll();
-		Collections.shuffle(stocks);
-		financialDataQueueService.addAll(stocks);
-		Runnable runnabe = new CrawlFinancialDataThread();
-		ThreadPoolController.getINSTANCE().execute("Crawl-Finanacial-data-Pool", runnabe, 2);
-
+		if (financialDataQueueService.isEmpty()) {
+			List<Stock> stocks = this.stockService.getAll();
+			Collections.shuffle(stocks);
+			financialDataQueueService.addAll(stocks);
+			Runnable runnabe = new CrawlFinancialDataThread();
+			ThreadPoolController.getINSTANCE().execute("Crawl-Finanacial-data-Pool", runnabe, 2);
+		}
 		// if (CollectionUtils.isNotEmpty(stocks)) {
 		// for (Stock stock : stocks) {
 		// try {
@@ -76,8 +77,8 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	 * @Date:2016年12月21日 下午3:17:28
 	 */
 	public void crawlStock(Stock stock) {
-//		boolean isStockCrawled = this.isStockFinancialDataCrawled(stock);
-		boolean isStockCrawled=false;
+		// boolean isStockCrawled = this.isStockFinancialDataCrawled(stock);
+		boolean isStockCrawled = false;
 		if (!isStockCrawled) {
 			String code = stock.getCode();
 			String url = "";
@@ -103,8 +104,8 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 					// }
 				}
 			}
-		}else{
-			logger.debug(">>FaceYe --> stock:"+stock.getName()+"("+stock.getCode()+") 已爬取");
+		} else {
+			logger.debug(">>FaceYe --> stock:" + stock.getName() + "(" + stock.getCode() + ") 已爬取");
 		}
 	}
 
