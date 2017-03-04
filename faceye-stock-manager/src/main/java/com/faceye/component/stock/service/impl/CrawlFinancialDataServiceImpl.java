@@ -47,15 +47,18 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	@Autowired
 	@Qualifier("financialDataQueueService")
 	private QueueService financialDataQueueService = null;
+	
+	private boolean isCrawled=false;
 
 	@Override
 	public void crawl() {
-		if (financialDataQueueService.isEmpty()) {
+		if (!isCrawled) {
 			List<Stock> stocks = this.stockService.getAll();
 			Collections.shuffle(stocks);
 			financialDataQueueService.addAll(stocks);
 			Runnable runnabe = new CrawlFinancialDataThread();
-			ThreadPoolController.getINSTANCE().execute("Crawl-Finanacial-data-Pool", runnabe, 2);
+			ThreadPoolController.getINSTANCE().execute("Crawl-Finanacial-data-Pool", runnabe, 3);
+			isCrawled=true;
 		}
 		// if (CollectionUtils.isNotEmpty(stocks)) {
 		// for (Stock stock : stocks) {
@@ -238,7 +241,6 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	 */
 	private boolean isFinancialDataExist(Long stockId, Long accountingSubjectId, String date) throws Exception {
 		boolean isExist = false;
-		DateUtil.getDateFromString(date, "yyyy-MM-dd");
 		date = StringUtils.substring(date, 0, 10);
 		String start = date + " 00:00:00";
 		String end = date + " 23:59:59";
