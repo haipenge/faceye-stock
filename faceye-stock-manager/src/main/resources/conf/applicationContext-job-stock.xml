@@ -25,11 +25,9 @@
 		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-			
+			<!-- 
 			     <ref bean="crawlFinancialDataJobTrigger"/>
-			     <!-- 
 			     <ref bean="dataStatJobTrigger"/>
-			     
 			     <ref bean="crawlStockDailyDataJobTrigger"/>
 			     <ref bean="computeStockDailyDataAvgJobTrigger"/>
 			     <ref bean="crawlStockMonthDataJobTrigger"/>
