@@ -198,12 +198,12 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 				String data = MapUtils.getString(record, "data");
 
 				// logger.debug(">>FaceYe --> parsed financial data is:" + date + ":" + data);
-				boolean isExist = true;
-				try {
-					isExist = this.isFinancialDataExist(stock.getId(), accountingSubject.getId(), date);
-				} catch (Exception e) {
-					logger.error(">>FaceYe throws Exception when check is financial data exist,", e);
-				}
+				boolean isExist = false;
+//				try {
+//					isExist = this.isFinancialDataExist(stock.getId(), accountingSubject.getId(), date);
+//				} catch (Exception e) {
+//					logger.error(">>FaceYe throws Exception when check is financial data exist,", e);
+//				}
 				if (!isExist && StringUtils.isNotEmpty(date)) {
 					try {
 						FinancialData financialData = new FinancialData();
@@ -254,6 +254,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 		params.put("EQ|accountingSubjectId", accountingSubjectId);
 		params.put("GTE|date", DateUtil.getDateFromString(start, "yyyy-MM-dd HH:mm:ss"));
 		params.put("LTE|date", DateUtil.getDateFromString(end, "yyyy-MM-dd HH:mm:ss"));
+		params.put("SORT|id", "asc");
 		Page<FinancialData> page = this.financialDataService.getPage(params, 0, 1);
 		isExist = CollectionUtils.isNotEmpty(page.getContent());
 		return isExist;
