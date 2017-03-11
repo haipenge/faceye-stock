@@ -191,6 +191,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 			logger.error(">>FaceYe Throws Exception when parse stock financial data html:", e);
 		}
 		if (CollectionUtils.isNotEmpty(records)) {
+			List<FinancialData> datas=new ArrayList<FinancialData>();
 			Long accountingElementId = accountingSubject.getAccountingElement().getId();
 			for (Map<String, String> record : records) {
 				String date = MapUtils.getString(record, "date");
@@ -216,13 +217,16 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 						}
 						financialData.setDate(DateUtil.getDateFromString(date, "yyyy-MM-dd"));
 						financialData.setStockId(stock.getId());
-						this.financialDataService.save(financialData);
+						datas.add(financialData);
 					} catch (Exception e) {
 						logger.error(">>FaceYe throws Exception when save data,data :date is:" + data + ":" + date, e);
 					}
 				} else {
 					logger.debug(">>FaceYe --> financial data exist.");
 				}
+			}
+			if(CollectionUtils.isNotEmpty(datas)){
+				this.financialDataService.save(datas);
 			}
 		} else {
 			logger.error(">>FaceYe -> have got empty record of stock :" + stock.getName() + "(" + stock.getCode() + "),[" + stock.getId() + "]");
