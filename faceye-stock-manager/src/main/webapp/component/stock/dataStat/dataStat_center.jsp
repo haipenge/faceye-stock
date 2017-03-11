@@ -144,7 +144,6 @@
 				<table class="table table-bordered">
 					<thead>
 						<tr>
-							<th><fmt:message key='stock.dataStat.stockId'></fmt:message></th>
 							<th><fmt:message key='stock.dataStat.grossProfitMargin'></fmt:message></th>
 							<th><fmt:message key='stock.dataStat.dateCycle'></fmt:message></th>
 							<th><fmt:message key='stock.dataStat.netProfitMargin'></fmt:message></th>
@@ -158,10 +157,9 @@
 					<tbody>
 						<c:forEach items="${page.content}" var="dataStat">
 							<tr>
-								<td>${dataStat.stockId}</td>
 								<td><fmt:formatNumber value="${dataStat.grossProfitMargin  *100}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
 								<td><fmt:formatDate value="${dataStat.dateCycle}" pattern="yyyy-MM-dd" /></td>
-								<td><fmt:formatNumber value="${dataStat.returnOnAssets *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
+								<td><fmt:formatNumber value="${dataStat.netProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
 								<td><fmt:formatNumber value="${dataStat.totalAssetsTurnover *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
 								<td><fmt:formatNumber value="${dataStat.totalAssetsNetProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
 								<td><fmt:formatNumber value="${dataStat.debtToAssetsRatio *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
