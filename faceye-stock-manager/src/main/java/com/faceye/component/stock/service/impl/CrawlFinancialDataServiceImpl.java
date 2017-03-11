@@ -52,14 +52,14 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	public void crawl() {
 		if (financialDataQueueService.isEmpty()) {
 			List<Stock> stocks = this.stockService.getAll();
-			Collections.shuffle(stocks);
+//			Collections.shuffle(stocks);
 			financialDataQueueService.addAll(stocks);
 			List<Runnable> runnables=new ArrayList<Runnable>();
-			for(int i=0;i<10;i++){
+			for(int i=0;i<3;i++){
 				Runnable runnabe = new CrawlFinancialDataThread();
 				runnables.add(runnabe);
 			}
-			ThreadPoolController.getINSTANCE().execute("Crawl-Finanacial-data-Pool", runnables, 10);
+			ThreadPoolController.getINSTANCE().execute("Crawl-Finanacial-data-Pool", runnables, 3);
 
 		}
 		// if (CollectionUtils.isNotEmpty(stocks)) {
@@ -139,7 +139,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	 * @Author:haipenge
 	 * @Date:2016年12月21日 下午3:30:34
 	 */
-	public void parse(Stock stock, AccountingSubject accountingSubject, String content) {
+ 	public synchronized void parse(Stock stock, AccountingSubject accountingSubject, String content) {
 		String regexp = "<table width=\"775px\" id=\"Table1\">([\\s\\S]*?)<\\/table>";
 		List<Map<String, String>> records = new ArrayList<Map<String, String>>(0);
 		int x = 0;
