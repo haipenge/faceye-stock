@@ -19,7 +19,6 @@
      http://www.springframework.org/schema/cache/spring-cache.xsd
      http://www.springframework.org/schema/data/jpa
     http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
-
 	<description>Spring常量配置</description>
 	<bean name="stockScheduler" lazy-init="false" autowire="no"
 		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">

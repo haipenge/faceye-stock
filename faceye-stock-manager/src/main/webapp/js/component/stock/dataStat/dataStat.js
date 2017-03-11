@@ -248,7 +248,7 @@ var DataStat = {
 					newDate.setTime(record.dateCycle);
 					var dateStr = newDate.format('yyyy-MM-dd');
 					// var array=[dateStr,record.data];
-					var arr1 = [ count, record.returnOnAssets * 100 ];
+					var arr1 = [ count, record.totalAssetsNetProfitMargin * 100 ];
 					var arr2 = [ count, dateStr ];
 					datas.push(arr1);
 					dates.push(arr2);
