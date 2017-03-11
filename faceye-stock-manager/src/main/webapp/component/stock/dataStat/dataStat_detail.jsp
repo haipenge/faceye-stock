@@ -29,7 +29,32 @@
 	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.dataStat.grossProfitMargin"></fmt:message></td>
 	<td>${dataStat.grossProfitMargin}</td>
 </tr>
+<tr>
+	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.dataStat.netProfitMargin"></fmt:message></td>
+	<td>${dataStat.netProfitMargin}</td>
+</tr>
+<tr>
+	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.dataStat.totalAssetsTurnover"></fmt:message></td>
+	<td>${dataStat.totalAssetsTurnover}</td>
+</tr>
+<tr>
+	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.dataStat.totalAssetsNetProfitMargin"></fmt:message></td>
+	<td>${dataStat.totalAssetsNetProfitMargin}</td>
+</tr>
+<tr>
+	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.dataStat.debtToAssetsRatio"></fmt:message></td>
+	<td>${dataStat.debtToAssetsRatio}</td>
+</tr>
+<tr>
+	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.dataStat.roe"></fmt:message></td>
+	<td>${dataStat.roe}</td>
+</tr>
 <!--@generate-entity-jsp-property-detail@-->
+
+
+
+
+
 
 
 

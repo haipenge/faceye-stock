@@ -105,12 +105,100 @@ public class DataStat implements Serializable {
     * @author haipenge<br>
     */
     
-	private  Double grossProfitMargin;
+	private  Double grossProfitMargin=null;
 	public Double getGrossProfitMargin() {
 		return grossProfitMargin;
 	}
 	public void setGrossProfitMargin(Double grossProfitMargin) {
 		this.grossProfitMargin = grossProfitMargin;
+	}
+	
+   /**
+    * 说明:净利率<br>
+    * 属性名: netProfitMargin<br>
+    * 类型: Double<br>
+    * 数据库字段:net_profit_margin<br>
+    * @author haipenge<br>
+    */
+    
+	private  Double netProfitMargin=null;
+	public Double getNetProfitMargin() {
+		return netProfitMargin;
+	}
+	public void setNetProfitMargin(Double netProfitMargin) {
+		this.netProfitMargin = netProfitMargin;
+	}
+	
+
+	
+   /**
+    * 说明:资产周围率<br>
+    * 属性名: totalAssetsTurnover<br>
+    * 类型: Double<br>
+    * 数据库字段:total_assets_turn_over<br>
+    * @author haipenge<br>
+    */
+    
+	private  Double totalAssetsTurnover;
+	public Double getTotalAssetsTurnover() {
+		return totalAssetsTurnover;
+	}
+	public void setTotalAssetsTurnover(Double totalAssetsTurnover) {
+		this.totalAssetsTurnover = totalAssetsTurnover;
+	}
+	
+
+	
+   /**
+    * 说明:总资产净利率<br>
+    * 属性名: totalAssetsNetProfitMargin<br>
+    * 类型: Double<br>
+    * 数据库字段:total_assets_netprofit_margin<br>
+    * @author haipenge<br>
+    */
+    
+	private  Double totalAssetsNetProfitMargin;
+	public Double getTotalAssetsNetProfitMargin() {
+		return totalAssetsNetProfitMargin;
+	}
+	public void setTotalAssetsNetProfitMargin(Double totalAssetsNetProfitMargin) {
+		this.totalAssetsNetProfitMargin = totalAssetsNetProfitMargin;
+	}
+	
+
+	
+   /**
+    * 说明:资产负债率<br>
+    * 属性名: debtToAssetsRatio<br>
+    * 类型: Double<br>
+    * 数据库字段:debt_to_assets_ratio<br>
+    * @author haipenge<br>
+    */
+    
+	private  Double debtToAssetsRatio;
+	public Double getDebtToAssetsRatio() {
+		return debtToAssetsRatio;
+	}
+	public void setDebtToAssetsRatio(Double debtToAssetsRatio) {
+		this.debtToAssetsRatio = debtToAssetsRatio;
+	}
+	
+
+	
+   /**
+    * 说明:净资产收益 率<br>
+    * 属性名: roe<br>
+    * 类型: Double<br>
+    * 数据库字段:roe<br>
+    * @author haipenge<br>
+    */
+    
+	private  Double roe;
+	public Double getRoe() {
+		return roe;
+	}
+	public void setRoe(Double roe) {
+		this.roe = roe;
 	}
 	
 }/**@generate-entity-source@**/

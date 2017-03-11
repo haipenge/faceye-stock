@@ -21,4 +21,7 @@ public class StockConstants {
 	public static final Long OPERATING_COSTS = 97L;
 	// 营业收入
 	public static final Long OPERATING_INCOME = 90L;
+	//负债合计 liabilities
+	public static final Long TOTAL_LIABILITIES=230L;
+	
 }

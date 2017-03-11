@@ -141,7 +141,12 @@
 							<th><fmt:message key='stock.dataStat.returnOnAssets'></fmt:message></th>
 							<th><fmt:message key='stock.dataStat.grossProfitMargin'></fmt:message></th>
 							<th><fmt:message key='stock.dataStat.dateCycle'></fmt:message></th>
-							<!--@generate-entity-jsp-property-desc@-->
+							<th><fmt:message key='stock.dataStat.netProfitMargin'></fmt:message></th>   
+ <th><fmt:message key='stock.dataStat.totalAssetsTurnover'></fmt:message></th>   
+ <th><fmt:message key='stock.dataStat.totalAssetsNetProfitMargin'></fmt:message></th>   
+ <th><fmt:message key='stock.dataStat.debtToAssetsRatio'></fmt:message></th>   
+ <th><fmt:message key='stock.dataStat.roe'></fmt:message></th>   
+ <!--@generate-entity-jsp-property-desc@-->
 							<th><fmt:message key="global.edit"></fmt:message></th>
 							<th><fmt:message key="global.remove"></fmt:message></th>
 						</tr>
@@ -154,7 +159,12 @@
 								<td><fmt:formatNumber value="${dataStat.returnOnAssets  *100}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
 								<td><fmt:formatNumber value="${dataStat.grossProfitMargin  *100}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
 								<td><fmt:formatDate value="${dataStat.dateCycle}" pattern="yyyy-MM-dd" /></td>
-								<!--@generate-entity-jsp-property-value@-->
+								<td>${dataStat.netProfitMargin}</td>   
+ <td>${dataStat.totalAssetsTurnover}</td>   
+ <td>${dataStat.totalAssetsNetProfitMargin}</td>   
+ <td>${dataStat.debtToAssetsRatio}</td>   
+ <td>${dataStat.roe}</td>   
+ <!--@generate-entity-jsp-property-value@-->
 								<td><a href="<c:url value="/stock/dataStat/edit/${dataStat.id}"/>"> <fmt:message key="global.edit"></fmt:message>
 								</a></td>
 								<td><a href="<c:url value="/stock/dataStat/remove/${dataStat.id}"/>"> <fmt:message key="global.remove"></fmt:message>

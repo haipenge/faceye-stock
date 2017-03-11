@@ -13,16 +13,6 @@ import com.faceye.feature.service.BaseService;
  */
 public interface DataStatService extends BaseService<DataStat, Long> {
 
-	/**
-	 * 分析股票的总资产回报率，计算公式：2*净利润/(期初总资产+期末总资产)
-	 * 
-	 * @param stock
-	 * @return
-	 * @Desc:
-	 * @Author:haipenge
-	 * @Date:2017年2月22日 下午3:54:01
-	 */
-	public void statReturnOnAssets(Stock stock);
 
 	/**
 	 * 数据分析入口

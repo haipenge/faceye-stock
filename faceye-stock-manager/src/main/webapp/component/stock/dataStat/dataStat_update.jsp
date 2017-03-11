@@ -58,7 +58,57 @@
 		<form:errors path="grossProfitMargin" cssClass="error"/>
 	</div>
 </div>
+<div class="form-group">
+	<label class="col-md-2 control-label" for="netProfitMargin"> <spring:message
+			code="stock.dataStat.netProfitMargin"/>
+	</label>
+	<div class="col-md-6">
+		<form:input path="netProfitMargin" cssClass="form-control"/>
+		<form:errors path="netProfitMargin" cssClass="error"/>
+	</div>
+</div>
+<div class="form-group">
+	<label class="col-md-2 control-label" for="totalAssetsTurnover"> <spring:message
+			code="stock.dataStat.totalAssetsTurnover"/>
+	</label>
+	<div class="col-md-6">
+		<form:input path="totalAssetsTurnover" cssClass="form-control"/>
+		<form:errors path="totalAssetsTurnover" cssClass="error"/>
+	</div>
+</div>
+<div class="form-group">
+	<label class="col-md-2 control-label" for="totalAssetsNetProfitMargin"> <spring:message
+			code="stock.dataStat.totalAssetsNetProfitMargin"/>
+	</label>
+	<div class="col-md-6">
+		<form:input path="totalAssetsNetProfitMargin" cssClass="form-control"/>
+		<form:errors path="totalAssetsNetProfitMargin" cssClass="error"/>
+	</div>
+</div>
+<div class="form-group">
+	<label class="col-md-2 control-label" for="debtToAssetsRatio"> <spring:message
+			code="stock.dataStat.debtToAssetsRatio"/>
+	</label>
+	<div class="col-md-6">
+		<form:input path="debtToAssetsRatio" cssClass="form-control"/>
+		<form:errors path="debtToAssetsRatio" cssClass="error"/>
+	</div>
+</div>
+<div class="form-group">
+	<label class="col-md-2 control-label" for="roe"> <spring:message
+			code="stock.dataStat.roe"/>
+	</label>
+	<div class="col-md-6">
+		<form:input path="roe" cssClass="form-control"/>
+		<form:errors path="roe" cssClass="error"/>
+	</div>
+</div>
 <!--@generate-entity-jsp-property-update@-->
+
+
+
+
+
 
 
 
