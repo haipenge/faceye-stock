@@ -139,7 +139,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	 * @Author:haipenge
 	 * @Date:2016年12月21日 下午3:30:34
 	 */
- 	public synchronized void parse(Stock stock, AccountingSubject accountingSubject, String content) {
+ 	public  void parse(Stock stock, AccountingSubject accountingSubject, String content) {
 		String regexp = "<table width=\"775px\" id=\"Table1\">([\\s\\S]*?)<\\/table>";
 		List<Map<String, String>> records = new ArrayList<Map<String, String>>(0);
 		int x = 0;
