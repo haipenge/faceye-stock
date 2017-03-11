@@ -51,15 +51,19 @@
 		<div class="col-sm-6 col-md-6">
 			<div class="block-flat">
 				<div class="header">
-					<h3>总资产回报率(净利率)&nbsp;&nbsp;<small><a href="#" class="returnOnAssets_0">年报</a>|<a href="#" class="returnOnAssets_1">一季报</a>|<a href="#" class="returnOnAssets_2">二季报</a>|<a href="#" class="returnOnAssets_3">三季报</a>|<a href="#" class="returnOnAssets_4">全部</a></small></h3>
+					<h3>
+						总资产回报率(净利率)&nbsp;&nbsp;<small><a href="#" class="returnOnAssets_0">年报</a>|<a href="#" class="returnOnAssets_1">一季报</a>|<a href="#" class="returnOnAssets_2">二季报</a>|<a
+							href="#" class="returnOnAssets_3">三季报</a>|<a href="#" class="returnOnAssets_4">全部</a></small>
+					</h3>
 				</div>
 				<div class="content blue-chart">
-				   <div id="returnOnAssets_chart" style="height:180px;"></div>
+					<div id="returnOnAssets_chart" style="height: 180px;"></div>
 				</div>
 				<div class="content">
-				  <p class="text-right"><a href="#" id="toggle_returnOnAssets">数据列表</a>
+					<p class="text-right">
+						<a href="#" id="toggle_returnOnAssets">数据列表</a>
 				</div>
-				<div class="content" style="display:none;" id="returnOnAssets_list">
+				<div class="content" style="display: none;" id="returnOnAssets_list">
 					<table>
 						<thead>
 							<tr>
@@ -71,7 +75,8 @@
 							<c:forEach items="${page.content}" var="dataStat">
 								<tr>
 									<td style="width: 30%;"><fmt:formatDate value="${dataStat.dateCycle }" pattern="yyyy-MM-dd" /></td>
-									<td class="text-right"><fmt:formatNumber value="${dataStat.totalAssetsNetProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
+									<td class="text-right"><fmt:formatNumber value="${dataStat.totalAssetsNetProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2"
+											groupingUsed="true" />%</td>
 								</tr>
 							</c:forEach>
 						</tbody>
@@ -118,7 +123,10 @@
 
 			<div class="block-flat">
 				<div class="header">
-					<h3>净利润&nbsp;&nbsp;<small><a href="#" class="net_profit_0">年报</a>|<a href="#" class="net_profit_1">一季报</a>|<a href="#" class="net_profit_2">中报</a>|<a href="#" class="net_profit_3">三报报</a>|<a href="#" class="net_profit_4">全部</a></small></h3>
+					<h3>
+						净利润&nbsp;&nbsp;<small><a href="#" class="net_profit_0">年报</a>|<a href="#" class="net_profit_1">一季报</a>|<a href="#" class="net_profit_2">中报</a>|<a href="#"
+							class="net_profit_3">三报报</a>|<a href="#" class="net_profit_4">全部</a></small>
+					</h3>
 				</div>
 				<div class="content blue-chart">
 					<div id="net_profit" style="height: 180px;"></div>
@@ -136,34 +144,29 @@
 				<table class="table table-bordered">
 					<thead>
 						<tr>
-							<th><input type="checkbox" name="check-all"></th>
 							<th><fmt:message key='stock.dataStat.stockId'></fmt:message></th>
-							<th><fmt:message key='stock.dataStat.returnOnAssets'></fmt:message></th>
 							<th><fmt:message key='stock.dataStat.grossProfitMargin'></fmt:message></th>
 							<th><fmt:message key='stock.dataStat.dateCycle'></fmt:message></th>
-							<th><fmt:message key='stock.dataStat.netProfitMargin'></fmt:message></th>   
- <th><fmt:message key='stock.dataStat.totalAssetsTurnover'></fmt:message></th>   
- <th><fmt:message key='stock.dataStat.totalAssetsNetProfitMargin'></fmt:message></th>   
- <th><fmt:message key='stock.dataStat.debtToAssetsRatio'></fmt:message></th>   
- <th><fmt:message key='stock.dataStat.roe'></fmt:message></th>   
- <!--@generate-entity-jsp-property-desc@-->
-							
+							<th><fmt:message key='stock.dataStat.netProfitMargin'></fmt:message></th>
+							<th><fmt:message key='stock.dataStat.totalAssetsTurnover'></fmt:message></th>
+							<th><fmt:message key='stock.dataStat.totalAssetsNetProfitMargin'></fmt:message></th>
+							<th><fmt:message key='stock.dataStat.debtToAssetsRatio'></fmt:message></th>
+							<th><fmt:message key='stock.dataStat.roe'></fmt:message></th>
+							<!--@generate-entity-jsp-property-desc@-->
 						</tr>
 					</thead>
 					<tbody>
 						<c:forEach items="${page.content}" var="dataStat">
 							<tr>
-								<td><input type="checkbox" name="check-single" value="${dataStat.id}"></td>
 								<td>${dataStat.stockId}</td>
-								<td><fmt:formatNumber value="${dataStat.returnOnAssets  *100}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
 								<td><fmt:formatNumber value="${dataStat.grossProfitMargin  *100}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
 								<td><fmt:formatDate value="${dataStat.dateCycle}" pattern="yyyy-MM-dd" /></td>
-								<td><fmt:formatNumber value="${dataStat.returnOnAssets *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>   
- <td><fmt:formatNumber value="${dataStat.totalAssetsTurnover *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>   
- <td><fmt:formatNumber value="${dataStat.totalAssetsNetProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>   
- <td><fmt:formatNumber value="${dataStat.debtToAssetsRatio *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>   
- <td><fmt:formatNumber value="${dataStat.roe *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>   
- <!--@generate-entity-jsp-property-value@-->
+								<td><fmt:formatNumber value="${dataStat.returnOnAssets *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
+								<td><fmt:formatNumber value="${dataStat.totalAssetsTurnover *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
+								<td><fmt:formatNumber value="${dataStat.totalAssetsNetProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
+								<td><fmt:formatNumber value="${dataStat.debtToAssetsRatio *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
+								<td><fmt:formatNumber value="${dataStat.roe *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
+								<!--@generate-entity-jsp-property-value@-->
 								<td><a href="<c:url value="/stock/dataStat/edit/${dataStat.id}"/>"> <fmt:message key="global.edit"></fmt:message>
 								</a></td>
 								<td><a href="<c:url value="/stock/dataStat/remove/${dataStat.id}"/>"> <fmt:message key="global.remove"></fmt:message>
