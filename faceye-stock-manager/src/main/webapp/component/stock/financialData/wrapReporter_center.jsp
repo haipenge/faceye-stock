@@ -29,13 +29,18 @@
 		<div class="content">
 			<ul class="nav nav-pills" role="tablist">
 				<c:forEach items="${reportCategories}" var="reportCategory">
-					<li role="presentation"><a href="<c:url value="/stock/financialData/wrapReporter?reportCategoryId=${reportCategory.id}&stockId=${stock.id}"/>">${reportCategory.name }</a></li>
+					<li role="presentation" <c:if test="${(param.reportCategoryId eq reportCategory.id) or (empty param.reportCategoryId and reportCategory.id eq  4) }"> class="active"</c:if>><a
+						href="<c:url value="/stock/financialData/wrapReporter?reportCategoryId=${reportCategory.id}&stockId=${stock.id}"/>">${reportCategory.name }</a></li>
 				</c:forEach>
+				<li role="presentation" <c:if test="${param.type eq 0 or empty param.type }"> class="active"</c:if>><a
+					href="<c:url value="/stock/financialData/wrapReporter?reportCategoryId=${param.reportCategoryId}&stockId=${param.stockId }&type=0"/>">年报</a></li>
+				<li role="presentation" <c:if test="${param.type eq 1}"> class="active"</c:if>><a
+					href="<c:url value="/stock/financialData/wrapReporter?reportCategoryId=${param.reportCategoryId}&stockId=${param.stockId }&type=1"/>">一季报</a></li>
+				<li role="presentation" <c:if test="${param.type eq 2}"> class="active"</c:if>><a
+					href="<c:url value="/stock/financialData/wrapReporter?reportCategoryId=${param.reportCategoryId}&stockId=${param.stockId }&type=2"/>">中报</a></li>
+				<li role="presentation" <c:if test="${param.type eq 3}"> class="active"</c:if>><a
+					href="<c:url value="/stock/financialData/wrapReporter?reportCategoryId=${param.reportCategoryId}&stockId=${param.stockId }&type=3"/>">三季报</a></li>
 			</ul>
-			<a href="<c:url value="/stock/financialData/wrapReporter?reportCategoryId=${param.reportCategoryId}&stockId=${param.stockId }&type=0"/>">年报</a>| <a
-				href="<c:url value="/stock/financialData/wrapReporter?reportCategoryId=${param.reportCategoryId}&stockId=${param.stockId }&type=1"/>">一季报</a>| <a
-				href="<c:url value="/stock/financialData/wrapReporter?reportCategoryId=${param.reportCategoryId}&stockId=${param.stockId }&type=2"/>">中报</a>| <a
-				href="<c:url value="/stock/financialData/wrapReporter?reportCategoryId=${param.reportCategoryId}&stockId=${param.stockId }&type=3"/>">三季报</a>|
 		</div>
 		<div class="row">
 			<div class="col-sm-12">
