@@ -1,5 +1,6 @@
 package com.faceye.component.stock.controller;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -30,13 +32,17 @@ import com.faceye.component.stock.entity.AccountingElement;
 import com.faceye.component.stock.entity.AccountingSubject;
 import com.faceye.component.stock.entity.FinancialData;
 import com.faceye.component.stock.entity.ReportCategory;
+import com.faceye.component.stock.entity.ReportData;
 import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.service.AccountingElementService;
 import com.faceye.component.stock.service.AccountingSubjectService;
 import com.faceye.component.stock.service.CrawlFinancialDataService;
 import com.faceye.component.stock.service.FinancialDataService;
 import com.faceye.component.stock.service.ReportCategoryService;
+import com.faceye.component.stock.service.ReportDataService;
 import com.faceye.component.stock.service.StockService;
+import com.faceye.component.stock.service.wrapper.Record;
+import com.faceye.component.stock.service.wrapper.WrapReporter;
 import com.faceye.component.stock.util.StockConstants;
 import com.faceye.feature.controller.BaseController;
 import com.faceye.feature.util.AjaxResult;
@@ -65,6 +71,8 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 	private AccountingSubjectService accountingSubjectService = null;
 	@Autowired
 	private CrawlFinancialDataService crawlFinancialDataService = null;
+	@Autowired
+	private ReportDataService reportDataService = null;
 
 	@Autowired
 	public FinancialDataController(FinancialDataService service) {
@@ -219,6 +227,53 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 		model.addAttribute("accountingSubjects", accountingSubjects);
 		model.addAttribute("stock", stock);
 		return "stock.financialData.report";
+	}
+
+	/**
+	 * 财务报告
+	 * 
+	 * @param request
+	 * @param model
+	 * @return
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年3月19日 上午11:38:47
+	 */
+	@RequestMapping("/wrapReporter")
+	public String wrapReporter(HttpServletRequest request, Model model) {
+		WrapReporter wrapReporter = null;
+		Map searchParams = HttpUtil.getRequestParams(request);
+		Long reportCategoryId = MapUtils.getLong(searchParams, "reportCategoryId");
+		if (reportCategoryId == null) {
+			reportCategoryId = 3L;// 利润表
+		}
+		Long stockId = MapUtils.getLong(searchParams, "stockId");
+		Stock stock = this.stockService.get(stockId);
+		model.addAttribute("stock", stock);
+		String date = MapUtils.getString(searchParams, "date");// Year
+		// 报表分类，年报，季报？0（年报），1（一季报），2，3
+		String type = MapUtils.getString(searchParams, "type");
+		if (StringUtils.isEmpty(type)) {
+			type = "0";
+		}
+		ReportCategory reportCategory = null;
+		if (reportCategoryId != null) {
+			reportCategory = this.reportCategoryService.get(reportCategoryId);
+		} else {
+			// 财务摘要
+			reportCategory = this.reportCategoryService.getReportCategoryByCode("FINANCIAL_SUMMARY");
+		}
+		List<ReportCategory> reportCategories=this.reportCategoryService.getAll();
+		Map params = new HashMap();
+		params.put("EQ|stockId", stockId);
+		params.put("EQ|type", type);
+		params.put("SORT|date", "desc");
+		List<ReportData> reportDatas = this.reportDataService.getPage(params, 1, 5).getContent();
+		wrapReporter = this.reportDataService.wrapReportData(reportDatas, reportCategory.getCode());
+		model.addAttribute("wrapReporter", wrapReporter);
+		model.addAttribute("reportCategory", reportCategory);
+		model.addAttribute("reportCategories", reportCategories);
+		return "stock.financialData.wrapReporter";
 	}
 
 	/**
@@ -417,8 +472,9 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 	 */
 	@RequestMapping("/chartsQuery")
 	@ResponseBody
-	public List<FinancialData> chartsQuery(HttpServletRequest request) {
-		List<FinancialData> datas = new ArrayList<FinancialData>();
+	public List<Record> chartsQuery(HttpServletRequest request) {
+		List<Record> records = new ArrayList<Record>(0);
+		List<ReportData> datas = new ArrayList<ReportData>();
 		Map params = HttpUtil.getRequestParams(request);
 		// 报表分类，年报，季报？0（年报），1（一季报），2，3
 		Integer type = MapUtils.getInteger(params, "type");
@@ -429,11 +485,13 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 		Long accountingSubjectId = MapUtils.getLong(params, "accountingSubjectId");
 		Map searchParams = new HashMap();
 		searchParams.put("EQ|stockId", stockId);
-		searchParams.put("EQ|accountingSubjectId", accountingSubjectId);
 		searchParams.put("SORT|date", "asc");
-		Page<FinancialData> page = this.service.getPage(searchParams, 0, 0);
-		if (page != null && CollectionUtils.isNotEmpty(page.getContent())) {
-			for (FinancialData data : page.getContent()) {
+		List<ReportData> reportDatas = this.reportDataService.getPage(searchParams, 0, 0).getContent();
+		AccountingSubject accountingSubject = this.accountingSubjectService.get(accountingSubjectId);
+
+		// Page<FinancialData> page = this.service.getPage(searchParams, 0, 0);
+		if (CollectionUtils.isNotEmpty(reportDatas)) {
+			for (ReportData data : reportDatas) {
 				Date date = data.getDate();
 				int month = date.getMonth();
 				if (type == 0 && month == 11) {
@@ -464,7 +522,36 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 			}
 			datas = datas.subList(startIndex, size);
 		}
-		return datas;
+		for (ReportData reportData : datas) {
+			Record record = new Record();
+			record.setDate(reportData.getDate());
+			AccountingElement accountingElement = accountingSubject.getAccountingElement();
+			String propertyName = accountingSubject.getCode() + "_" + accountingSubject.getId();
+			String eleName = "ele" + accountingElement.getId();
+			String categoryName = accountingElement.getReportCategory().getCode();
+			String[] cArray = categoryName.split("_");
+			String realShortClassName = cArray[0].toLowerCase();
+			for (int i = 1; i < cArray.length; i++) {
+				realShortClassName += cArray[i].charAt(0);
+				realShortClassName += cArray[i].toLowerCase().substring(1, cArray[i].toLowerCase().length());
+			}
+			Object categoryObject;
+			try {
+				categoryObject = PropertyUtils.getNestedProperty(reportData, realShortClassName);
+				Object eleObject = PropertyUtils.getProperty(categoryObject, eleName);
+				Double data = (Double) PropertyUtils.getProperty(eleObject, propertyName);
+				record.setData(data);
+				records.add(record);
+			} catch (IllegalAccessException e) {
+				logger.error(">>FaceYe Throws Exception:", e);
+			} catch (InvocationTargetException e) {
+				logger.error(">>FaceYe Throws Exception:", e);
+			} catch (NoSuchMethodException e) {
+				logger.error(">>FaceYe Throws Exception:", e);
+			}
+
+		}
+		return records;
 	}
 
 	/**
@@ -490,11 +577,11 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 		}
 		return AjaxResult.getInstance().buildDefaultResult(true);
 	}
-	
-	private void clearCrawledFinancialData(Long id){
-		List<FinancialData> datas=this.service.getAll();
-		if(CollectionUtils.isNotEmpty(datas)){
-			for(FinancialData data:datas){
+
+	private void clearCrawledFinancialData(Long id) {
+		List<FinancialData> datas = this.service.getAll();
+		if (CollectionUtils.isNotEmpty(datas)) {
+			for (FinancialData data : datas) {
 				this.service.remove(data);
 			}
 		}

@@ -16,7 +16,6 @@ import com.faceye.component.stock.entity.FinancialData;
 import com.faceye.component.stock.repository.mongo.FinancialDataRepository;
 import com.faceye.component.stock.repository.mongo.customer.FinancialDataCustomerRepository;
 import com.faceye.component.stock.service.FinancialDataService;
-import com.faceye.component.stock.service.wrapper.FinancialReportWrapper;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.faceye.feature.util.ServiceException;
@@ -75,9 +74,6 @@ public class FinancialDataServiceImpl extends BaseMongoServiceImpl<FinancialData
 		return res;
 	}
 
-	@Override
-	public FinancialReportWrapper getFinancialReportWrapper(Long stockId, String date) {
-		return null;
-	}
+	
 
 }/** @generate-service-source@ **/

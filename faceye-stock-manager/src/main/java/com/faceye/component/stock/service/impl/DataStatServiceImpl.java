@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -17,11 +16,13 @@ import org.springframework.stereotype.Service;
 
 import com.faceye.component.stock.entity.DataStat;
 import com.faceye.component.stock.entity.FinancialData;
+import com.faceye.component.stock.entity.ReportData;
 import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.repository.mongo.DataStatRepository;
 import com.faceye.component.stock.repository.mongo.customer.DataStatCustomerRepository;
 import com.faceye.component.stock.service.DataStatService;
 import com.faceye.component.stock.service.FinancialDataService;
+import com.faceye.component.stock.service.ReportDataService;
 import com.faceye.component.stock.service.StockService;
 import com.faceye.component.stock.util.StockConstants;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
@@ -46,6 +47,8 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	private FinancialDataService financialDataService = null;
 	@Autowired
 	private StockService stockService = null;
+	@Autowired
+	private ReportDataService reportDataService=null;
 
 	@Autowired
 	public DataStatServiceImpl(DataStatRepository dao) {
@@ -97,21 +100,18 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	 * @Author:haipenge
 	 * @Date:2017年3月11日 上午10:56:54
 	 */
-	private DataStat statNetProfitMargin(Stock stock, DataStat dataStat) {
+	private DataStat statNetProfitMargin(Stock stock, ReportData reportData,DataStat dataStat) {
 		Date date = dataStat.getDateCycle();
 		String sDate = DateUtil.formatDate(date, "yyyy-MM-dd");
 		// 营业收入
-		List<FinancialData> operatingIncomes = this.getFinancialData(stock.getId(), StockConstants.OPERATING_INCOME, sDate);
+		Double operatingIncome=reportData.getInComeSheet().getEle6().getCinst61_89();
+//		List<FinancialData> operatingIncomes = this.getFinancialData(stock.getId(), StockConstants.OPERATING_INCOME, sDate);
 		// 净利润
-		List<FinancialData> netProfits = this.getFinancialData(stock.getId(), StockConstants.NET_PROFIT, sDate);
-		if (CollectionUtils.isNotEmpty(operatingIncomes) && CollectionUtils.isNotEmpty(netProfits)
-				&& CollectionUtils.size(operatingIncomes) + CollectionUtils.size(netProfits) == 2) {
-			Double operatingIncome = operatingIncomes.get(0).getData();
-			Double netProfit = netProfits.get(0).getData();
-			if (operatingIncome != null && netProfit != null) {
-				Double netProfitMargin = netProfit / operatingIncome;
-				dataStat.setNetProfitMargin(netProfitMargin);
-			}
+//		List<FinancialData> netProfits = this.getFinancialData(stock.getId(), StockConstants.NET_PROFIT, sDate);
+		Double netProfit=reportData.getInComeSheet().getEle9().getCinst24_128();
+		if(operatingIncome!=null && netProfit!=null){
+			Double netProfitMargin = netProfit / operatingIncome;
+			dataStat.setNetProfitMargin(netProfitMargin);
 		}
 		return dataStat;
 	}
@@ -126,21 +126,24 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	 * @Author:haipenge
 	 * @Date:2017年3月11日 上午11:15:00
 	 */
-	private DataStat statTotalAssetsTurnover(Stock stock, DataStat dataStat) {
+	private DataStat statTotalAssetsTurnover(Stock stock,ReportData reportData, DataStat dataStat) {
 		Date date = dataStat.getDateCycle();
 		String sDate = DateUtil.formatDate(date, "yyyy-MM-dd");
 		// 营业收入
-		List<FinancialData> operatingIncomes = this.getFinancialData(stock.getId(), StockConstants.OPERATING_INCOME, sDate);
+//		List<FinancialData> operatingIncomes = this.getFinancialData(stock.getId(), StockConstants.OPERATING_INCOME, sDate);
+		Double operatingIncome=reportData.getInComeSheet().getEle6().getCinst61_89();
 		// 资产总额
-		List<FinancialData> totalAssets = this.getFinancialData(stock.getId(), StockConstants.TOTAL_ASSETS, sDate);
-		if (CollectionUtils.isNotEmpty(operatingIncomes) && CollectionUtils.isNotEmpty(totalAssets) && operatingIncomes.size() + totalAssets.size() == 2) {
-			Double operatingIncome = operatingIncomes.get(0).getData();
-			Double totalAsset = totalAssets.get(0).getData();
-			if (operatingIncome != null && totalAsset != null && totalAsset != 0) {
-				Double totalAssetsTurnover = operatingIncome / totalAsset;
-				dataStat.setTotalAssetsTurnover(totalAssetsTurnover);
-			}
+//		List<FinancialData> totalAssets = this.getFinancialData(stock.getId(), StockConstants.TOTAL_ASSETS, sDate);
+		Double totalAsset=reportData.getBalanceSheet().getEle14().getCbsheet46_189();
+		if (operatingIncome != null && totalAsset != null && totalAsset != 0) {
+			Double totalAssetsTurnover = operatingIncome / totalAsset;
+			dataStat.setTotalAssetsTurnover(totalAssetsTurnover);
 		}
+//		if (CollectionUtils.isNotEmpty(operatingIncomes) && CollectionUtils.isNotEmpty(totalAssets) && operatingIncomes.size() + totalAssets.size() == 2) {
+//			Double operatingIncome = operatingIncomes.get(0).getData();
+//			Double totalAsset = totalAssets.get(0).getData();
+//			
+//		}
 		return dataStat;
 	}
 
@@ -154,7 +157,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	 * @Author:haipenge
 	 * @Date:2017年3月11日 上午11:42:22
 	 */
-	private DataStat statTotalAssetsNeProfitMargin(Stock stock, DataStat dataStat) {
+	private DataStat statTotalAssetsNeProfitMargin(Stock stock,ReportData reportData, DataStat dataStat) {
 		if (dataStat != null && dataStat.getTotalAssetsTurnover() != null && dataStat.getNetProfitMargin() != null) {
 			Double totalAssetsNetProfitMargin = dataStat.getNetProfitMargin() * dataStat.getTotalAssetsTurnover();
 			dataStat.setTotalAssetsNetProfitMargin(totalAssetsNetProfitMargin);
@@ -172,20 +175,17 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	 * @Author:haipenge
 	 * @Date:2017年3月11日 上午11:47:53
 	 */
-	private DataStat statDebtToAssetsRatio(Stock stock, DataStat dataStat) {
+	private DataStat statDebtToAssetsRatio(Stock stock,ReportData reportData, DataStat dataStat) {
 		Date date = dataStat.getDateCycle();
 		String sDate = DateUtil.formatDate(date, "yyyy-MM-dd");
 		// 资产总额
-		List<FinancialData> totalAssets = this.getFinancialData(stock.getId(), StockConstants.TOTAL_ASSETS, sDate);
+//		List<FinancialData> totalAssets = this.getFinancialData(stock.getId(), StockConstants.TOTAL_ASSETS, sDate);
+		Double totalAsset=reportData.getBalanceSheet().getEle14().getCbsheet46_189();
 		// 总负债
-		List<FinancialData> totalLiabilities = this.getFinancialData(stock.getId(), StockConstants.TOTAL_LIABILITIES, sDate);
-		if (CollectionUtils.isNotEmpty(totalLiabilities) && CollectionUtils.isNotEmpty(totalLiabilities) && totalAssets.size() + totalLiabilities.size() == 2) {
-			Double totalAsset = totalAssets.get(0).getData();
-			Double totalLiabilite = totalLiabilities.get(0).getData();
-			if (totalAsset != null && totalLiabilite != null) {
-				Double debtToAssetsRatio = totalLiabilite / totalAsset;
-				dataStat.setDebtToAssetsRatio(debtToAssetsRatio);
-			}
+		Double totalLiabilite=reportData.getBalanceSheet().getEle16().getCbsheet77_230();
+		if (totalAsset != null && totalLiabilite != null) {
+			Double debtToAssetsRatio = totalLiabilite / totalAsset;
+			dataStat.setDebtToAssetsRatio(debtToAssetsRatio);
 		}
 		return dataStat;
 	}
@@ -270,33 +270,55 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 				// 获取总资产
 				Map params = new HashMap();
 				params.put("EQ|stockId", stock.getId());
-				params.put("EQ|accountingSubjectId", StockConstants.TOTAL_ASSETS);
-				List<FinancialData> totalAssets = this.financialDataService.getPage(params, 0, 0).getContent();
-				if (CollectionUtils.isNotEmpty(totalAssets)) {
-					for (FinancialData totalAsset : totalAssets) {
-						Date date = totalAsset.getDate();
-						String sDate = DateUtil.formatDate(date, "yyyy-MM-dd");
-						DataStat dataStat = this.getDataStat(stock, sDate);
-						if (dataStat == null) {
-							dataStat = new DataStat();
-							dataStat.setStockId(stock.getId());
-							dataStat.setDateCycle(DateUtil.getDateFromString(sDate + " 00:00:00", "yyyy-MM-dd HH:mm:ss"));
-						}
-						//净利率
-						this.statNetProfitMargin(stock, dataStat);
-						//总资产周围率
-						this.statTotalAssetsTurnover(stock, dataStat);
-						//总资产利润率
-						this.statTotalAssetsNeProfitMargin(stock, dataStat);
-						//负债率
-						this.statDebtToAssetsRatio(stock, dataStat);
-						//净资产回报率
-						this.statROE(stock, dataStat);
-						this.save(dataStat);
+				List<ReportData> reportDatas=this.reportDataService.getPage(params, 0, 0).getContent();
+				for(ReportData reportData:reportDatas){
+					Date date=reportData.getDate();
+					String sDate = DateUtil.formatDate(date, "yyyy-MM-dd");
+					DataStat dataStat = this.getDataStat(stock, sDate);
+					if (dataStat == null) {
+						dataStat = new DataStat();
+						dataStat.setStockId(stock.getId());
+						dataStat.setDateCycle(DateUtil.getDateFromString(sDate + " 00:00:00", "yyyy-MM-dd HH:mm:ss"));
 					}
-				} else {
-					logger.error(">>FaceYe :总资产集合与净利润集合不对等,不可进行总资产回报率计算");
+					//净利率
+					this.statNetProfitMargin(stock,reportData, dataStat);
+					//总资产周围率
+					this.statTotalAssetsTurnover(stock,reportData, dataStat);
+					//总资产利润率
+					this.statTotalAssetsNeProfitMargin(stock,reportData, dataStat);
+					//负债率
+					this.statDebtToAssetsRatio(stock,reportData, dataStat);
+					//净资产回报率
+					this.statROE(stock, dataStat);
+					this.save(dataStat);
 				}
+//				params.put("EQ|accountingSubjectId", StockConstants.TOTAL_ASSETS);
+//				List<FinancialData> totalAssets = this.financialDataService.getPage(params, 0, 0).getContent();
+//				if (CollectionUtils.isNotEmpty(totalAssets)) {
+//					for (FinancialData totalAsset : totalAssets) {
+//						Date date = totalAsset.getDate();
+//						String sDate = DateUtil.formatDate(date, "yyyy-MM-dd");
+//						DataStat dataStat = this.getDataStat(stock, sDate);
+//						if (dataStat == null) {
+//							dataStat = new DataStat();
+//							dataStat.setStockId(stock.getId());
+//							dataStat.setDateCycle(DateUtil.getDateFromString(sDate + " 00:00:00", "yyyy-MM-dd HH:mm:ss"));
+//						}
+//						//净利率
+//						this.statNetProfitMargin(stock, dataStat);
+//						//总资产周围率
+//						this.statTotalAssetsTurnover(stock, dataStat);
+//						//总资产利润率
+//						this.statTotalAssetsNeProfitMargin(stock, dataStat);
+//						//负债率
+//						this.statDebtToAssetsRatio(stock, dataStat);
+//						//净资产回报率
+//						this.statROE(stock, dataStat);
+//						this.save(dataStat);
+//					}
+//				} else {
+//					logger.error(">>FaceYe :总资产集合与净利润集合不对等,不可进行总资产回报率计算");
+//				}
 			}
 		} catch (Exception e) {
 			logger.error(">>Faceye --> 分析股票总资产回报率抛出异常:", e);

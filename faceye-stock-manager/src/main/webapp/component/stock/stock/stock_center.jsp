@@ -15,7 +15,7 @@
 			<form action="<c:url value="/stock/stock/home"/>" method="post" role="form" class="form-horizontal">
 				<fieldset>
 					<div class="form-group">
-					<div class="col-md-2">
+						<div class="col-md-2">
 							<input type="text" name="like|name" value="${searchParams.name}" placeholder="名称" class="form-control input-sm">
 						</div>
 						<div class="col-md-2">
@@ -56,7 +56,7 @@
 								<td><c:if test="${stock.market eq 'sz'}">深圳(SZ)</c:if> <c:if test="${stock.market eq 'sh'}">上海(SH)</c:if></td>
 								<!--@generate-entity-jsp-property-value@-->
 								<td><a href="<c:url value="/stock/dailyData/home?EQ|stock.$id=${stock.id}"/>"><fmt:message key="stock.dailyData" /></a></td>
-								<td><a href="<c:url value="/stock/financialData/report?stockId=${stock.id}"/>">财务报表</a></td>
+								<td><a href="<c:url value="/stock/financialData/wrapReporter?stockId=${stock.id}"/>">财务报表</a></td>
 								<td><a href="<c:url value="/stock/dataStat/home?EQ|stockId=${stock.id}"/>">比率分析</a>
 								<td><a href="<c:url value="/stock/financialData/home?EQ|stockId=${stock.id }"/>">原始财务数据</a></td>
 								<td><a href="<c:url value="/stock/stock/edit/${stock.id}"/>"> <fmt:message key="global.edit"></fmt:message></a></td>

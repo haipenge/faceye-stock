@@ -1,7 +1,8 @@
 package com.faceye.component.stock.service.impl;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -9,10 +10,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +23,12 @@ import org.springframework.stereotype.Service;
 
 import com.faceye.component.stock.entity.AccountingSubject;
 import com.faceye.component.stock.entity.FinancialData;
+import com.faceye.component.stock.entity.ReportData;
 import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.service.AccountingSubjectService;
 import com.faceye.component.stock.service.CrawlFinancialDataService;
 import com.faceye.component.stock.service.FinancialDataService;
+import com.faceye.component.stock.service.ReportDataService;
 import com.faceye.component.stock.service.StockService;
 import com.faceye.component.stock.service.job.CrawlFinancialDataThread;
 import com.faceye.feature.service.QueueService;
@@ -47,15 +50,17 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	@Autowired
 	@Qualifier("financialDataQueueService")
 	private QueueService financialDataQueueService = null;
+	@Autowired
+	private ReportDataService reportDataService = null;
 
 	@Override
 	public void crawl() {
 		if (financialDataQueueService.isEmpty()) {
 			List<Stock> stocks = this.stockService.getAll();
-//			Collections.shuffle(stocks);
+			// Collections.shuffle(stocks);
 			financialDataQueueService.addAll(stocks);
-			List<Runnable> runnables=new ArrayList<Runnable>();
-			for(int i=0;i<3;i++){
+			List<Runnable> runnables = new ArrayList<Runnable>();
+			for (int i = 0; i < 3; i++) {
 				Runnable runnabe = new CrawlFinancialDataThread();
 				runnables.add(runnabe);
 			}
@@ -83,6 +88,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	 */
 	public void crawlStock(Stock stock) {
 		boolean isStockCrawled = this.isStockFinancialDataCrawled(stock);
+//		boolean isStockCrawled=false;
 		if (!isStockCrawled) {
 			String code = stock.getCode();
 			String url = "";
@@ -117,7 +123,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 		boolean isCrawled = false;
 		Map params = new HashMap();
 		params.put("EQ|stockId", stock.getId());
-		Page<FinancialData> financialData = this.financialDataService.getPage(params, 0, 1);
+		Page<FinancialData> financialData = this.reportDataService.getPage(params, 1, 1);
 		isCrawled = CollectionUtils.isNotEmpty(financialData.getContent());
 		return isCrawled;
 	}
@@ -139,7 +145,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	 * @Author:haipenge
 	 * @Date:2016年12月21日 下午3:30:34
 	 */
- 	public  void parse(Stock stock, AccountingSubject accountingSubject, String content) {
+	public void parse(Stock stock, AccountingSubject accountingSubject, String content) {
 		String regexp = "<table width=\"775px\" id=\"Table1\">([\\s\\S]*?)<\\/table>";
 		List<Map<String, String>> records = new ArrayList<Map<String, String>>(0);
 		int x = 0;
@@ -191,72 +197,177 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 			logger.error(">>FaceYe Throws Exception when parse stock financial data html:", e);
 		}
 		if (CollectionUtils.isNotEmpty(records)) {
-			List<FinancialData> datas=new ArrayList<FinancialData>();
-			Long accountingElementId = accountingSubject.getAccountingElement().getId();
-			for (Map<String, String> record : records) {
-				String date = MapUtils.getString(record, "date");
-				String data = MapUtils.getString(record, "data");
-
-				// logger.debug(">>FaceYe --> parsed financial data is:" + date + ":" + data);
-				boolean isExist = false;
-//				try {
-//					isExist = this.isFinancialDataExist(stock.getId(), accountingSubject.getId(), date);
-//				} catch (Exception e) {
-//					logger.error(">>FaceYe throws Exception when check is financial data exist,", e);
+			this.saveParseData(stock, records, accountingSubject);
+//			List<FinancialData> datas = new ArrayList<FinancialData>();
+//			Long accountingElementId = accountingSubject.getAccountingElement().getId();
+//			for (Map<String, String> record : records) {
+//				String date = MapUtils.getString(record, "date");
+//				String data = MapUtils.getString(record, "data");
+//
+//				// logger.debug(">>FaceYe --> parsed financial data is:" + date + ":" + data);
+//				boolean isExist = false;
+//				 
+//				if (!isExist && StringUtils.isNotEmpty(date)) {
+//					try {
+//						FinancialData financialData = new FinancialData();
+//						financialData.setAccountingSubjectId(accountingSubject.getId());
+//						financialData.setAccountingElementId(accountingElementId);
+//						financialData.setCreateDate(new Date());
+//						if (StringUtils.isEmpty(data)) {
+//							financialData.setData(null);
+//						} else {
+//							financialData.setData(NumberUtils.createDouble(data));
+//						}
+//						financialData.setDate(DateUtil.getDateFromString(date, "yyyy-MM-dd"));
+//						financialData.setStockId(stock.getId());
+//						datas.add(financialData);
+//					} catch (Exception e) {
+//						logger.error(">>FaceYe throws Exception when save data,data :date is:" + data + ":" + date, e);
+//					}
+//				} else {
+//					logger.debug(">>FaceYe --> financial data exist.");
 //				}
-				if (!isExist && StringUtils.isNotEmpty(date)) {
-					try {
-						FinancialData financialData = new FinancialData();
-						financialData.setAccountingSubjectId(accountingSubject.getId());
-						financialData.setAccountingElementId(accountingElementId);
-						financialData.setCreateDate(new Date());
-						if (StringUtils.isEmpty(data)) {
-							financialData.setData(null);
-						} else {
-							financialData.setData(NumberUtils.createDouble(data));
-						}
-						financialData.setDate(DateUtil.getDateFromString(date, "yyyy-MM-dd"));
-						financialData.setStockId(stock.getId());
-						datas.add(financialData);
-					} catch (Exception e) {
-						logger.error(">>FaceYe throws Exception when save data,data :date is:" + data + ":" + date, e);
-					}
-				} else {
-					logger.debug(">>FaceYe --> financial data exist.");
-				}
-			}
-			if(CollectionUtils.isNotEmpty(datas)){
-				this.financialDataService.save(datas);
-			}
+//			}
+//			if (CollectionUtils.isNotEmpty(datas)) {
+//				this.financialDataService.save(datas);
+//			}
 		} else {
 			logger.error(">>FaceYe -> have got empty record of stock :" + stock.getName() + "(" + stock.getCode() + "),[" + stock.getId() + "]");
 		}
 	}
 
 	/**
-	 * 判断财报数据记录是否存在
+	 * 保存解析数据
 	 * 
-	 * @param stockId
-	 * @param accountingSubjectId
-	 * @param date
-	 * @return
+	 * @param records
+	 * @param accountingSubject
 	 * @Desc:
 	 * @Author:haipenge
-	 * @Date:2017年2月13日 下午3:36:57
+	 * @Date:2017年3月12日 下午9:49:46
 	 */
-	private boolean isFinancialDataExist(Long stockId, Long accountingSubjectId, String date) throws Exception {
-		boolean isExist = false;
-		date = StringUtils.substring(date, 0, 10);
-		String start = date + " 00:00:00";
-		String end = date + " 23:59:59";
+	private void saveParseData(Stock stock, List<Map<String,String>> records, AccountingSubject accountingSubject) {
 		Map params = new HashMap();
-		params.put("EQ|stockId", stockId);
-		params.put("EQ|accountingSubjectId", accountingSubjectId);
-		params.put("GTE|date", DateUtil.getDateFromString(start, "yyyy-MM-dd HH:mm:ss"));
-		params.put("LTE|date", DateUtil.getDateFromString(end, "yyyy-MM-dd HH:mm:ss"));
-		params.put("SORT|id", "asc");
-		Page<FinancialData> page = this.financialDataService.getPage(params, 0, 1);
-		isExist = CollectionUtils.isNotEmpty(page.getContent());
-		return isExist;
+		params.put("EQ|stockId", stock.getId());
+		List<ReportData> reportDatas = this.reportDataService.getPage(params, 0, 0).getContent();
+		Map<String, ReportData> structs = this.buildReportDataStruct(reportDatas);
+		for (Map record : records) {
+			String date = MapUtils.getString(record, "date");
+			String data = MapUtils.getString(record, "data");
+			Date dDate=DateUtil.getDateFromString(date + " 00:00:00", "yyyy-MM-dd HH:mm:ss");
+			Integer type=0;//年报
+			if(dDate.getMonth()==2){
+				type=1;//一季报3.31
+			}
+			if(dDate.getMonth()==5){
+				type=2;//中报,6.30
+			}
+			if(dDate.getMonth()==8){
+				type=3;//三报报,9.30
+			}
+			if(dDate.getMonth()==11){
+				type=0;//年报,12.21
+			}
+			
+			ReportData reportData = null;
+			if (structs.containsKey(date)) {
+				reportData = structs.get(date);
+				reportData.setType(type);
+			} else {
+				reportData = new ReportData();
+				reportData.setDate(dDate);
+				reportData.setStockId(stock.getId());
+				reportData.setType(type);
+				structs.put(date, reportData);
+			}
+			this.setReportData(reportData, accountingSubject, data);
+		}
+		this.reportDataService.save(structs.values());
+	}
+
+	/**
+	 * 设置对像属性值
+	 * 
+	 * @param reportData
+	 * @param accountingSubject
+	 * @param date
+	 * @param data
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年3月14日 下午2:31:24
+	 */
+	private void setReportData(ReportData reportData, AccountingSubject accountingSubject, String data) {
+		Long accountingElementId = accountingSubject.getAccountingElement().getId();
+		Long accountingSubjectId = accountingSubject.getId();
+		String eleClassName = "com.faceye.component.stock.entity.Ele" + accountingElementId;
+		String propertyName = accountingSubject.getCode().toLowerCase() + "_" + accountingSubjectId;
+		if (StringUtils.isNotEmpty(data)) {
+			String reportCategoryClassName = "com.faceye.component.stock.entity." + accountingSubject.getAccountingElement().getReportCategory().getCode();
+			reportCategoryClassName=reportCategoryClassName.toLowerCase().replaceAll("_", "");
+			Field[] categoryClazz = ReportData.class.getDeclaredFields();
+			Object categoryObject = null;
+			for (Field field : categoryClazz) {
+				if (field.getType().getName().toLowerCase().equals(reportCategoryClassName)) {
+					try {
+						categoryObject=PropertyUtils.getNestedProperty(reportData, field.getName());
+					} catch (IllegalAccessException e) {
+						logger.error(">>FaceYe Throws Exception:",e);
+					} catch (InvocationTargetException e) {
+						logger.error(">>FaceYe Throws Exception:",e);
+					} catch (NoSuchMethodException e) {
+						logger.error(">>FaceYe Throws Exception:",e);
+					}
+//					
+					break;
+				}
+			}
+			Object element = null;
+			if (categoryObject != null) {
+				Field elObjects[] = categoryObject.getClass().getDeclaredFields();
+				for (Field el : elObjects) {
+					if (el.getType().getName().equals(eleClassName)) {
+						try {
+							element=PropertyUtils.getProperty(categoryObject, el.getName());
+						} catch (IllegalAccessException e) {
+							logger.error(">>FaceYe Throws Exception:",e);
+						} catch (InvocationTargetException e) {
+							logger.error(">>FaceYe Throws Exception:",e);
+						} catch (NoSuchMethodException e) {
+							logger.error(">>FaceYe Throws Exception:",e);
+						}
+//						element = ReflectionUtils.getField(el, categoryObject);
+						break;
+					}
+				}
+			}
+			
+			if (element != null) {
+				try {
+					PropertyUtils.setProperty(element, propertyName,Double.parseDouble(data));
+				} catch (NumberFormatException e) {
+					logger.error(">>FaceYe Throws Exception:",e);
+				} catch (IllegalAccessException e) {
+					logger.error(">>FaceYe Throws Exception:",e);
+				} catch (InvocationTargetException e) {
+					logger.error(">>FaceYe Throws Exception:",e);
+				} catch (NoSuchMethodException e) {
+					logger.error(">>FaceYe Throws Exception:",e);
+				}
+			}
+		}
+
+	}
+
+	private Map<String, ReportData> buildReportDataStruct(List<ReportData> reportDatas) {
+		Map<String, ReportData> struts = new HashMap<String, ReportData>();
+		if (CollectionUtils.isNotEmpty(reportDatas)) {
+			for (ReportData reportData : reportDatas) {
+				Date date = reportData.getDate();
+				String sDate = DateUtil.formatDate(date, "yyyy-MM-dd");
+				if (!struts.containsKey(sDate)) {
+					struts.put(sDate, reportData);
+				}
+			}
+		}
+		return struts;
 	}
 }

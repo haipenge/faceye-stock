@@ -73,10 +73,10 @@ public class CrawlFinancialDataServiceTestCase extends BaseServiceTestCase {
 	 * @Date:2017年1月4日 下午2:41:44
 	 */
 	private void initStockCodes() throws Exception {
-		List<Stock> stocks=this.stockService.getAll();
-		for(Stock stock:stocks){
-			stockCodes.add(stock.getCode());
-		}
+//		List<Stock> stocks=this.stockService.getAll();
+//		for(Stock stock:stocks){
+//			stockCodes.add(stock.getCode());
+//		}
 		//以下为稀土行业29只股票
 //		stockCodes.add("600058");
 //		stockCodes.add("600111");

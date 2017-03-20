@@ -137,9 +137,6 @@
 	<div class="block-flat">
 		<div class="content">
 			<div id="msg"></div>
-			<button class="btn btn-primary btn-sm multi-remove">
-				<fmt:message key="global.remove"></fmt:message>
-			</button>
 			<div classs="table-responsive">
 				<table class="table table-bordered">
 					<thead>
