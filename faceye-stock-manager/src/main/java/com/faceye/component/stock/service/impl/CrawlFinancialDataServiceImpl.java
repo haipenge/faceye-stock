@@ -60,11 +60,11 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 			// Collections.shuffle(stocks);
 			financialDataQueueService.addAll(stocks);
 			List<Runnable> runnables = new ArrayList<Runnable>();
-			for (int i = 0; i < 3; i++) {
+			for (int i = 0; i < 1; i++) {
 				Runnable runnabe = new CrawlFinancialDataThread();
 				runnables.add(runnabe);
 			}
-			ThreadPoolController.getINSTANCE().execute("Crawl-Finanacial-data-Pool", runnables, 3);
+			ThreadPoolController.getINSTANCE().execute("Crawl-Finanacial-data-Pool", runnables, 1);
 
 		}
 		// if (CollectionUtils.isNotEmpty(stocks)) {
