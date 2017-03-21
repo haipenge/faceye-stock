@@ -71,24 +71,7 @@ public class DataStat implements Serializable {
 		this.stockId = stockId;
 	}
 
-	/**
-	 * 说明:总资产回报率 <br>
-	 * 属性名: returnOnAssets<br>
-	 * 类型: Double<br>
-	 * 数据库字段:return_on_assets<br>
-	 * 
-	 * @author haipenge<br>
-	 */
-
-	private Double returnOnAssets = null;
-
-	public Double getReturnOnAssets() {
-		return returnOnAssets;
-	}
-
-	public void setReturnOnAssets(Double returnOnAssets) {
-		this.returnOnAssets = returnOnAssets;
-	}
+	
 
 	/**
 	 * 说明:数据 日期<br>
@@ -175,7 +158,7 @@ public class DataStat implements Serializable {
 	}
 
 	/**
-	 * 说明:资产周围率<br>
+	 * 说明:资产周转率<br>
 	 * 属性名: totalAssetsTurnover<br>
 	 * 类型: Double<br>
 	 * 数据库字段:total_assets_turn_over<br>
@@ -232,7 +215,7 @@ public class DataStat implements Serializable {
 	}
 
 	/**
-	 * 说明:净资产收益 率<br>
+	 * 说明:净资产收益率<br>
 	 * 属性名: roe<br>
 	 * 类型: Double<br>
 	 * 数据库字段:roe<br>
