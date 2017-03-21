@@ -20,6 +20,8 @@ public class StockConstants {
 	public static final String REPORT_CATEGORY_IN_COME_SHEET="IN_COME_SHEET";
 	//资产负债表
 	public static final String REPORT_CATEGORY_BALANCE_SHEET="BALANCE_SHEET";
+	//财务接要
+	public static final String REPORT_CATEOGRY_FINANCIAL_SUMMARY="FINANCIAL_SUMMARY";
 	
 	///////////////////////////////////////////////////////////////////////////
 	// 总资产=股东权益+负债

@@ -229,56 +229,7 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 		return "stock.financialData.report";
 	}
 
-	/**
-	 * 财务报告
-	 * 
-	 * @param request
-	 * @param model
-	 * @return
-	 * @Desc:
-	 * @Author:haipenge
-	 * @Date:2017年3月19日 上午11:38:47
-	 */
-	@RequestMapping("/wrapReporter")
-	public String wrapReporter(HttpServletRequest request, Model model) {
-		WrapReporter wrapReporter = null;
-		Map searchParams = HttpUtil.getRequestParams(request);
-		Long reportCategoryId = MapUtils.getLong(searchParams, "reportCategoryId");
-		Long startDate=MapUtils.getLong(searchParams, "startDate");
-		if (reportCategoryId == null) {
-			reportCategoryId = 3L;// 利润表
-		}
-		Long stockId = MapUtils.getLong(searchParams, "stockId");
-		Stock stock = this.stockService.get(stockId);
-		model.addAttribute("stock", stock);
-		String date = MapUtils.getString(searchParams, "date");// Year
-		// 报表分类，年报，季报？0（年报），1（一季报），2，3
-		String type = MapUtils.getString(searchParams, "type");
-		if (StringUtils.isEmpty(type)) {
-			type = "0";
-		}
-		ReportCategory reportCategory = null;
-		if (reportCategoryId != null) {
-			reportCategory = this.reportCategoryService.get(reportCategoryId);
-		} else {
-			// 财务摘要
-			reportCategory = this.reportCategoryService.getReportCategoryByCode("FINANCIAL_SUMMARY");
-		}
-		List<ReportCategory> reportCategories=this.reportCategoryService.getAll();
-		Map params = new HashMap();
-		params.put("EQ|stockId", stockId);
-		params.put("EQ|type", type);
-		if(startDate!=null){
-			params.put("LT|date", new Date(startDate));
-		}
-		params.put("SORT|date", "desc");
-		List<ReportData> reportDatas = this.reportDataService.getPage(params, 1, 5).getContent();
-		wrapReporter = this.reportDataService.wrapReportData(reportDatas, reportCategory.getCode());
-		model.addAttribute("wrapReporter", wrapReporter);
-		model.addAttribute("reportCategory", reportCategory);
-		model.addAttribute("reportCategories", reportCategories);
-		return "stock.financialData.wrapReporter";
-	}
+	
 
 	/**
 	 * 对资产负债表做同型分析

@@ -85,6 +85,42 @@ public class DataStatController extends BaseController<DataStat, Long, DataStatS
 		model.addAttribute("searchParams", searchParams);
 		return "stock.dataStat.manager";
 	}
+	/**
+	 * 数据分析结果
+	 * @param request
+	 * @param model
+	 * @return
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年3月21日 下午3:42:49
+	 */
+	@RequestMapping("/result")
+	public String result(HttpServletRequest request, Model model) {
+		Map searchParams=HttpUtil.getRequestParams(request);
+		if(searchParams==null){
+			searchParams=new HashMap();
+		}
+		searchParams.put("SORT|dateCycle", "desc");
+		Page<DataStat> page = this.service.getPage(searchParams, 0, 0);
+		model.addAttribute("page", page);
+		Long stockId=MapUtils.getLong(searchParams, "EQ|stockId");
+		Stock stock=this.stockService.get(stockId);
+		model.addAttribute("stock", stock);
+		//获取营业收入
+//		Map params=new HashMap();
+//		params.putAll(searchParams);
+//		params.put("EQ|accountingSubjectId", StockConstants.OPERATING_INCOME);
+//		params.put("SORT|date", "desc");
+//		Page<FinancialData> operatingIncome=this.financialDataService.getPage(params, 0, 0);
+//		model.addAttribute("operatingIncome", operatingIncome);
+		
+		resetSearchParams(searchParams);
+		model.addAttribute("searchParams", searchParams);
+		return "stock.dataStat.result";
+	}
+	
+	
+	
 	
 	/**
 	 * 启动数据 分析

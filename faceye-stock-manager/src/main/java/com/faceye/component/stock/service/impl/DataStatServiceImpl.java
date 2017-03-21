@@ -131,7 +131,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		// 营业成本
 		Double operatingCosts = reportData.getInComeSheet().getEle7().getCinst3_97();
 		Double grossProfitMargin = 0.0D;
-		if (operatingIncome - operatingCosts != 0 && operatingIncome !=0) {
+		if (operatingIncome!=null && operatingCosts!=null &&operatingIncome - operatingCosts != 0 && operatingIncome !=0) {
 			grossProfitMargin = (operatingIncome - operatingCosts) / operatingIncome;
 		}
 		dataStat.setGrossProfitMargin(grossProfitMargin);
@@ -204,7 +204,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	 * @Author:haipenge
 	 * @Date:2017年3月11日 上午11:42:22
 	 */
-	private DataStat statTotalAssetsNeProfitMargin(Stock stock, ReportData reportData, DataStat dataStat) {
+	private DataStat statTotalAssetsNeProfitMargin(Stock stock, ReportData reportData, DataStat dataStat) throws Exception{
 		if (dataStat != null && dataStat.getTotalAssetsTurnover() != null && dataStat.getNetProfitMargin() != null) {
 			Double totalAssetsNetProfitMargin = dataStat.getNetProfitMargin() * dataStat.getTotalAssetsTurnover();
 			dataStat.setTotalAssetsNetProfitMargin(totalAssetsNetProfitMargin);
@@ -222,7 +222,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	 * @Author:haipenge
 	 * @Date:2017年3月11日 上午11:47:53
 	 */
-	private DataStat statDebtToAssetsRatio(Stock stock, ReportData reportData, DataStat dataStat) {
+	private DataStat statDebtToAssetsRatio(Stock stock, ReportData reportData, DataStat dataStat)  throws Exception {
 		Date date = dataStat.getDateCycle();
 		String sDate = DateUtil.formatDate(date, "yyyy-MM-dd");
 		// 资产总额
@@ -230,7 +230,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		Double totalAsset = reportData.getBalanceSheet().getEle14().getCbsheet46_189();
 		// 总负债
 		Double totalLiabilite = reportData.getBalanceSheet().getEle16().getCbsheet77_230();
-		if (totalAsset != null && totalLiabilite != null) {
+		if (totalAsset != null && totalLiabilite != null&& totalAsset!=0) {
 			Double debtToAssetsRatio = totalLiabilite / totalAsset;
 			dataStat.setDebtToAssetsRatio(debtToAssetsRatio);
 		}
@@ -247,7 +247,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	 * @Author:haipenge
 	 * @Date:2017年3月11日 上午11:58:31
 	 */
-	private DataStat statROE(Stock stock, DataStat dataStat) {
+	private DataStat statROE(Stock stock, DataStat dataStat) throws Exception {
 		if (dataStat.getDebtToAssetsRatio() != null && dataStat.getTotalAssetsNetProfitMargin() != null) {
 			Double roe = dataStat.getTotalAssetsNetProfitMargin() * (1 / (1 - dataStat.getDebtToAssetsRatio()));
 			dataStat.setRoe(roe);
