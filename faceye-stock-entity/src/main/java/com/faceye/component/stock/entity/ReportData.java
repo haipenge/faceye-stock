@@ -88,6 +88,22 @@ public class ReportData {
 	}
 
 	public void setDate(Date date) {
+		if (date != null) {
+			Integer type = 0;// 年报
+			if (date.getMonth() == 2) {
+				type = 1;// 一季报3.31
+			}
+			if (date.getMonth() == 5) {
+				type = 2;// 中报,6.30
+			}
+			if (date.getMonth() == 8) {
+				type = 3;// 三报报,9.30
+			}
+			if (date.getMonth() == 11) {
+				type = 0;// 年报,12.21
+			}
+			this.setType(type);
+		}
 		this.date = date;
 	}
 
@@ -101,10 +117,11 @@ public class ReportData {
 	public void setStockId(Long stockId) {
 		this.stockId = stockId;
 	}
+
 	/**
 	 * 报表分类，年报，季报？0（年报），1（一季报），2，3
 	 */
-	private Integer type=null;
+	private Integer type = null;
 
 	public Integer getType() {
 		return type;
@@ -113,5 +130,5 @@ public class ReportData {
 	public void setType(Integer type) {
 		this.type = type;
 	}
-	
+
 }
