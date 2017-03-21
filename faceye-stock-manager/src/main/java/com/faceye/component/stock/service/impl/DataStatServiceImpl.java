@@ -347,7 +347,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 				}
 			}
 		} catch (Exception e) {
-			logger.error(">>Faceye --> 分析股票总资产回报率抛出异常:", e);
+			logger.error(">>Faceye --> 分析股票总资产回报率抛出异常:",e.getMessage());
 		}
 	}
 
