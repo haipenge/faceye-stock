@@ -162,10 +162,7 @@
 								<td><fmt:formatNumber value="${dataStat.debtToAssetsRatio *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
 								<td><fmt:formatNumber value="${dataStat.roe *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
 								<!--@generate-entity-jsp-property-value@-->
-								<td><a href="<c:url value="/stock/dataStat/edit/${dataStat.id}"/>"> <fmt:message key="global.edit"></fmt:message>
-								</a></td>
-								<td><a href="<c:url value="/stock/dataStat/remove/${dataStat.id}"/>"> <fmt:message key="global.remove"></fmt:message>
-								</a></td>
+								
 							<tr>
 						</c:forEach>
 					</tbody>

@@ -244,6 +244,7 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 		WrapReporter wrapReporter = null;
 		Map searchParams = HttpUtil.getRequestParams(request);
 		Long reportCategoryId = MapUtils.getLong(searchParams, "reportCategoryId");
+		Long startDate=MapUtils.getLong(searchParams, "startDate");
 		if (reportCategoryId == null) {
 			reportCategoryId = 3L;// 利润表
 		}
@@ -267,6 +268,9 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 		Map params = new HashMap();
 		params.put("EQ|stockId", stockId);
 		params.put("EQ|type", type);
+		if(startDate!=null){
+			params.put("LT|date", new Date(startDate));
+		}
 		params.put("SORT|date", "desc");
 		List<ReportData> reportDatas = this.reportDataService.getPage(params, 1, 5).getContent();
 		wrapReporter = this.reportDataService.wrapReportData(reportDatas, reportCategory.getCode());

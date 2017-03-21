@@ -31,6 +31,7 @@ import com.faceye.component.stock.service.wrapper.Data2Record;
 import com.faceye.component.stock.service.wrapper.WrapRecords;
 import com.faceye.component.stock.service.wrapper.WrapReporter;
 import com.faceye.component.stock.service.wrapper.WrapReporterTitle;
+import com.faceye.component.stock.util.StockConstants;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.faceye.feature.util.ServiceException;
@@ -107,6 +108,7 @@ public class ReportDataServiceImpl extends BaseMongoServiceImpl<ReportData, Long
 				break;
 			}
 		}
+		wrapReporter.setReportCategory(reportCategory);
 		String cArray[] = reportCategory.getCode().split("_");
 		categoryPropertyName = cArray[0].toLowerCase();
 		for (int i = 1; i < cArray.length; i++) {
@@ -143,6 +145,7 @@ public class ReportDataServiceImpl extends BaseMongoServiceImpl<ReportData, Long
 						Double data = (Double) PropertyUtils.getProperty(elObj, accountingSubject.getCode() + "_" + accountingSubject.getId());
 						Data2Record data2Record = new Data2Record();
 						data2Record.setAccountingSubjectId(accountingSubject.getId());
+						data2Record.setAccountingElementId(accountingElement.getId());
 						data2Record.setData(data);
 						data2Records.add(data2Record);
 					}
@@ -155,7 +158,84 @@ public class ReportDataServiceImpl extends BaseMongoServiceImpl<ReportData, Long
 				logger.error(">>FaceYe Throws Exception:", e);
 			}
 		}
+		// 同型分析
+		this.commonSizeAnalysis(wrapReporter);
+		//趋势分析
+		this.trendAnalysis(wrapReporter);
 		return wrapReporter;
+	}
+
+	/**
+	 * 对结果进行同型分析
+	 * 
+	 * @param wrapReporter
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年3月20日 下午3:14:04
+	 */
+	private void commonSizeAnalysis(WrapReporter wrapReporter) {
+		Double base = 0.0D;
+		Long seedId = 0L;
+		if (wrapReporter.getReportCategory().getCode().equals(StockConstants.REPORT_CATEGORY_BALANCE_SHEET)) {
+			// 资产负债表
+			seedId = StockConstants.TOTAL_ASSETS;// 总资产
+		} else if (wrapReporter.getReportCategory().getCode().equals(StockConstants.REPORT_CATEGORY_CASH_FLOW_SHEET)) {
+			// 现金流量表
+
+		} else if (wrapReporter.getReportCategory().getCode().equals(StockConstants.REPORT_CATEGORY_IN_COME_SHEET)) {
+			// 利润表
+			seedId = StockConstants.OPERATING_INCOME;// 营业收入
+		}
+		if (seedId.intValue() != 0) {
+			for (WrapRecords wrapRecords : wrapReporter.getRecords()) {
+				Date date = wrapRecords.getDate();
+				for (Data2Record data2Record : wrapRecords.getData2Record()) {
+					if (data2Record.getAccountingSubjectId().compareTo(seedId) == 0) {
+						base = data2Record.getData();
+						break;
+					}
+				}
+				if (base > 0) {
+					for (Data2Record data2Record : wrapRecords.getData2Record()) {
+						if (data2Record.getData() != null) {
+							Double commonSizeAnalysisResult = data2Record.getData() / base;
+							data2Record.setCommonSizeAnalysisResult(commonSizeAnalysisResult);
+						}
+					}
+				}
+
+			}
+		}
+	}
+
+	/**
+	 * 趋势分析
+	 * 
+	 * @param wrapReporter
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年3月20日 下午4:40:47
+	 */
+	private void trendAnalysis(WrapReporter wrapReporter) {
+		for (int i = 0; i < wrapReporter.getRecords().size(); i++) {
+			WrapRecords wrapRecords = wrapReporter.getRecords().get(i);
+			WrapRecords lastYearWrapRecord=null;
+			if(i<wrapReporter.getRecords().size()-1){
+				int index=i+1;
+				lastYearWrapRecord=wrapReporter.getRecords().get(index);
+			}
+			for (int j = 0; j < wrapRecords.getData2Record().size(); j++) {
+				Data2Record data2Record = wrapRecords.getData2Record().get(j);
+				Data2Record lastYearData2Record=null;
+				if(lastYearWrapRecord!=null){
+					lastYearData2Record=lastYearWrapRecord.getData2Record().get(j);
+				}
+				if(lastYearData2Record!=null && data2Record.getData()!=null && lastYearData2Record.getData()!=null){
+					Double trendAnalysisResult=(data2Record.getData()-lastYearData2Record.getData())/lastYearData2Record.getData();
+					data2Record.setTrendAnalysisResult(trendAnalysisResult);
+				}
+			}
+		}
 	}
 
 }/** @generate-service-source@ **/

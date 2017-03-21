@@ -12,6 +12,15 @@ public class StockConstants {
 	public static final Integer REPORT_TYPE_3 = 3;
 	// 全部，含一，二，三，四
 	public static final Integer REPORT_TYPE_4 = 4;
+	
+	//财报分类
+	//现金流量表
+	public static final String REPORT_CATEGORY_CASH_FLOW_SHEET="CASH_FLOW_SHEET";
+	//利润表
+	public static final String REPORT_CATEGORY_IN_COME_SHEET="IN_COME_SHEET";
+	//资产负债表
+	public static final String REPORT_CATEGORY_BALANCE_SHEET="BALANCE_SHEET";
+	
 	///////////////////////////////////////////////////////////////////////////
 	// 总资产=股东权益+负债
 	public static final Long TOTAL_ASSETS = 189L;
