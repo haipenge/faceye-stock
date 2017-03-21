@@ -11,4 +11,6 @@ import com.faceye.component.stock.repository.mongo.gen.ReportCategoryGenReposito
 public interface ReportCategoryRepository extends ReportCategoryGenRepository{
 	
 	public ReportCategory getReportCategoryByCode(String code);
+	
+	
 }/**@generate-repository-source@**/

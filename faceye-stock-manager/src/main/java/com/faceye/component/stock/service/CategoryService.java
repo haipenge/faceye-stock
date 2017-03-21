@@ -12,4 +12,6 @@ public interface CategoryService extends BaseService<Category,Long>{
 
 	public void init();
 	
+	public Category getCategoryByName(String name);
+	
 }/**@generate-service-source@**/

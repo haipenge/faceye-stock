@@ -76,6 +76,12 @@ public class CategoryServiceImpl extends BaseMongoServiceImpl<Category, Long, Ca
 	@Override
 	public void init() {
 	}
+
+
+	@Override
+	public Category getCategoryByName(String name) {
+		return dao.getCategoryByName(name);
+	}
 	
 	
 	

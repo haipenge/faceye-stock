@@ -12,14 +12,19 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.faceye.component.stock.entity.Category;
 import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.repository.mongo.StockRepository;
+import com.faceye.component.stock.service.CategoryService;
 import com.faceye.component.stock.service.StockService;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.faceye.feature.util.http.Http;
 
 @Service
 public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRepository> implements StockService {
+
+	@Autowired
+	private CategoryService categoryService = null;
 
 	@Autowired
 	public StockServiceImpl(StockRepository dao) {
@@ -88,12 +93,10 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 	}
 
 	/**
-	 * 从和讯财经检查初始化股票
-	 * http://quote.eastmoney.com/stocklist.html
+	 * 从和讯财经检查初始化股票 http://quote.eastmoney.com/stocklist.html
+	 * 
 	 * @todo
-	 * @author:@haipenge
-	 * haipenge@gmail.com
-	 * 2015年2月17日
+	 * @author:@haipenge haipenge@gmail.com 2015年2月17日
 	 */
 	private void checkStockFromHexun() {
 		String url = "http://quote.eastmoney.com/stocklist.html";
@@ -105,9 +108,35 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 
 	@Override
 	public Stock getStockByCode(String code) {
-		Stock stock=this.dao.getStockByCode(code);
+		Stock stock = this.dao.getStockByCode(code);
 		return stock;
 	}
 
+	/**
+	 * 初始化股票分类
+	 * 
+	 * @return
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年3月21日 上午10:43:44
+	 */
+	public boolean initStockCategory() {
+		boolean res = false;
+		List<Stock> stocks = this.getAll();
+		for (Stock stock : stocks) {
+			String categoryName = StringUtils.isNotEmpty(stock.getBusiness()) ? StringUtils.trim(stock.getBusiness()) : "Default";
+			Category category = this.categoryService.getCategoryByName(categoryName);
+			if(category==null){
+				category=new Category();
+				category.setName(categoryName);
+				this.categoryService.save(category);
+			}
+			stock.setCategory(category);
+			this.save(stock);
+		}
+		res = true;
+		return res;
+	}
+
 }
-/**@generate-service-source@**/
+/** @generate-service-source@ **/

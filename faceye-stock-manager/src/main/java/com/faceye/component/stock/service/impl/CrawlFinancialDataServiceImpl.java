@@ -254,29 +254,13 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 			String date = MapUtils.getString(record, "date");
 			String data = MapUtils.getString(record, "data");
 			Date dDate=DateUtil.getDateFromString(date + " 00:00:00", "yyyy-MM-dd HH:mm:ss");
-			Integer type=0;//年报
-			if(dDate.getMonth()==2){
-				type=1;//一季报3.31
-			}
-			if(dDate.getMonth()==5){
-				type=2;//中报,6.30
-			}
-			if(dDate.getMonth()==8){
-				type=3;//三报报,9.30
-			}
-			if(dDate.getMonth()==11){
-				type=0;//年报,12.21
-			}
-			
 			ReportData reportData = null;
 			if (structs.containsKey(date)) {
 				reportData = structs.get(date);
-				reportData.setType(type);
 			} else {
 				reportData = new ReportData();
 				reportData.setDate(dDate);
 				reportData.setStockId(stock.getId());
-				reportData.setType(type);
 				structs.put(date, reportData);
 			}
 			this.setReportData(reportData, accountingSubject, data);

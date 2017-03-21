@@ -3,39 +3,72 @@
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/component/stock/stock/stock.css"/>" />
 <script type="text/javascript" src="<c:url value="/js/component/stock/stock/stock.js"/>"></script>
 <div class="page-head">
-	<h2>
-		<fmt:message key="stock.stock.manager"></fmt:message>
-		<a class="btn btn-primary" href="<c:url value="/stock/stock/input"/>"> <fmt:message key="stock.stock.add"></fmt:message>
-		</a>
-	</h2>
+	<div class="row" style="margin-top: 0px; margin-bottom: 0px;">
+		<div class="col-sm-8">
+			<h2>
+				<fmt:message key="stock.stock.manager"></fmt:message>
+			</h2>
+		</div>
+		<div class="col-sm-4 text-right">
+			<a class="btn btn-primary btn-sm" href="<c:url value="/stock/stock/input"/>"> <fmt:message key="stock.stock.add"></fmt:message></a>
+			<button class="btn btn-sm btn-warning" type="button" id="init-stock-category">初始化股票分类</button>
+		</div>
+	</div>
 </div>
 <div class="cl-mcont">
 	<div class="block-flat">
-		<div class="content">
-			<form action="<c:url value="/stock/stock/home"/>" method="post" role="form" class="form-horizontal">
-				<fieldset>
-					<div class="form-group">
-						<div class="col-md-2">
-							<input type="text" name="like|name" value="${searchParams.name}" placeholder="名称" class="form-control input-sm">
-						</div>
-						<div class="col-md-2">
-							<input type="text" name="like|code" value="${searchParams.code}" placeholder="股票代码" class="form-control input-sm">
-						</div>
-						<div class="col-md-1">
-							<button type="submit" class="btn btn-sm btn-primary">
-								<fmt:message key="global.search"></fmt:message>
-							</button>
-						</div>
-					</div>
-				</fieldset>
-			</form>
+		<div id="msg"></div>
+		<div class="row" style="margin-top: 0px; margin-bottom: 0px;">
+			<div class="col-sm-8">
+				<div class="content">
+					<form action="<c:url value="/stock/stock/home"/>" method="post" role="form" class="form-horizontal" style="margin-bottom: 0px;">
+						<fieldset>
+							<div class="form-group" style="margin-top: 0px; margin-bottom: 0px;">
+								<div class="col-md-2">
+									<input type="text" name="like|name" value="${searchParams.name}" placeholder="名称" class="form-control input-sm">
+								</div>
+								<div class="col-md-2">
+									<input type="text" name="like|code" value="${searchParams.code}" placeholder="股票代码" class="form-control input-sm">
+								</div>
+								<div class="col-md-1">
+									<button type="submit" class="btn btn-sm btn-primary">
+										<fmt:message key="global.search"></fmt:message>
+									</button>
+								</div>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+			<div class="col-sm-4 text-right">
+				<button type="button" class="btn btn-sm btn-warning" id="toggle-category">股票分类</button>
+			</div>
+		</div>
+
+		<div class="content category-container" style="display: none;">
+			<c:forEach items="${categories}" var="category" varStatus="status">
+			<!-- 
+				<c:choose>
+					<c:when test="${status.first }">
+						<p>
+					</c:when>
+					<c:when test="${status.index mod 8==0 && !status.last}">
+						</p>
+						<p>
+					</c:when>
+					<c:when test="${status.last && status.index mod 8 !=0 }">
+						</p>
+					</c:when>
+				</c:choose>
+				 -->
+				<span class="label label-info" style="margin-top:15px;margin-bottom:5px;margin-left:5px;margin-right:5p;;width:50px;"><a href="<c:url value="/stock/stock/home?EQ|category.$id=${category.id}"/>">${category.name }</a></span>
+			</c:forEach>
 		</div>
 		<div class="content">
 			<div classs="table-responsive">
 				<table class="table table-bordered table-hover">
 					<thead>
 						<tr>
-							<th><fmt:message key='stock.stock.code'></fmt:message></th>
 							<th><fmt:message key='stock.stock.name'></fmt:message></th>
 							<th><fmt:message key='stock.stock.business'></fmt:message></th>
 							<th><fmt:message key='stock.stock.market'></fmt:message></th>
@@ -50,9 +83,9 @@
 					<tbody>
 						<c:forEach items="${page.content}" var="stock">
 							<tr>
-								<td><a href="<c:url value="/stock/stock/detail/${stock.id}"/>">${stock.code}</a></td>
-								<td>${stock.name}</td>
-								<td>${stock.business}</td>
+								
+								<td>${stock.name}&nbsp;&nbsp;<small>(<a href="<c:url value="/stock/stock/detail/${stock.id}"/>">${stock.code}</a>)</small></td>
+								<td>${stock.category.name}</td>
 								<td><c:if test="${stock.market eq 'sz'}">深圳(SZ)</c:if> <c:if test="${stock.market eq 'sh'}">上海(SH)</c:if></td>
 								<!--@generate-entity-jsp-property-value@-->
 								<td><a href="<c:url value="/stock/dailyData/home?EQ|stock.$id=${stock.id}"/>"><fmt:message key="stock.dailyData" /></a></td>

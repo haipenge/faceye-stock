@@ -115,6 +115,30 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	}
 
 	/**
+	 * 计算毛利率=（营业收入-营业成本)/营业收入
+	 * 
+	 * @param stock
+	 * @param reportData
+	 * @param dataStat
+	 * @return
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年3月21日 上午10:26:58
+	 */
+	private DataStat statGrossProfitMargin(Stock stock, ReportData reportData, DataStat dataStat) {
+		// 营业收入
+		Double operatingIncome = reportData.getInComeSheet().getEle6().getCinst61_89();
+		// 营业成本
+		Double operatingCosts = reportData.getInComeSheet().getEle7().getCinst3_97();
+		Double grossProfitMargin = 0.0D;
+		if (operatingIncome - operatingCosts != 0) {
+			grossProfitMargin = (operatingIncome - operatingCosts) / operatingIncome;
+		}
+		dataStat.setGrossProfitMargin(grossProfitMargin);
+		return dataStat;
+	}
+
+	/**
 	 * 计算总资产周转率=营业收入/总资产 总资产：(期初总资产+期末总资产)/2
 	 * 
 	 * @param stock
@@ -155,8 +179,8 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		}
 		if (endPeriodTotalAsset != 0.0D && startPeriodTotalAsset != 0.0D) {
 			totalAsset = (endPeriodTotalAsset + startPeriodTotalAsset) / 2;
-		}else{
-			totalAsset=endPeriodTotalAsset;
+		} else {
+			totalAsset = endPeriodTotalAsset;
 		}
 		if (operatingIncome != null && totalAsset != null && totalAsset != 0) {
 			Double totalAssetsTurnover = operatingIncome / totalAsset;
@@ -277,20 +301,24 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		return dataStat;
 	}
 
+	boolean isStated = false;
+
 	@Override
 	public void stat() {
-		List<Stock> stocks = this.stockService.getAll();
-		for (Stock stock : stocks) {
-			// 分析总资产回报率
-			this.stat(stock);
+		if (!isStated) {
+			isStated = true;
+			List<Stock> stocks = this.stockService.getAll();
+			for (Stock stock : stocks) {
+				this.stat(stock);
+			}
 		}
+
 	}
 
 	@Override
 	public void stat(Stock stock) {
 		try {
 			if (stock != null) {
-				// 获取总资产
 				Map params = new HashMap();
 				params.put("EQ|stockId", stock.getId());
 				List<ReportData> reportDatas = this.reportDataService.getPage(params, 0, 0).getContent();
@@ -313,35 +341,10 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 					this.statDebtToAssetsRatio(stock, reportData, dataStat);
 					// 净资产回报率
 					this.statROE(stock, dataStat);
+					// 毛利率
+					this.statGrossProfitMargin(stock, reportData, dataStat);
 					this.save(dataStat);
 				}
-				// params.put("EQ|accountingSubjectId", StockConstants.TOTAL_ASSETS);
-				// List<FinancialData> totalAssets = this.financialDataService.getPage(params, 0, 0).getContent();
-				// if (CollectionUtils.isNotEmpty(totalAssets)) {
-				// for (FinancialData totalAsset : totalAssets) {
-				// Date date = totalAsset.getDate();
-				// String sDate = DateUtil.formatDate(date, "yyyy-MM-dd");
-				// DataStat dataStat = this.getDataStat(stock, sDate);
-				// if (dataStat == null) {
-				// dataStat = new DataStat();
-				// dataStat.setStockId(stock.getId());
-				// dataStat.setDateCycle(DateUtil.getDateFromString(sDate + " 00:00:00", "yyyy-MM-dd HH:mm:ss"));
-				// }
-				// //净利率
-				// this.statNetProfitMargin(stock, dataStat);
-				// //总资产周围率
-				// this.statTotalAssetsTurnover(stock, dataStat);
-				// //总资产利润率
-				// this.statTotalAssetsNeProfitMargin(stock, dataStat);
-				// //负债率
-				// this.statDebtToAssetsRatio(stock, dataStat);
-				// //净资产回报率
-				// this.statROE(stock, dataStat);
-				// this.save(dataStat);
-				// }
-				// } else {
-				// logger.error(">>FaceYe :总资产集合与净利润集合不对等,不可进行总资产回报率计算");
-				// }
 			}
 		} catch (Exception e) {
 			logger.error(">>Faceye --> 分析股票总资产回报率抛出异常:", e);

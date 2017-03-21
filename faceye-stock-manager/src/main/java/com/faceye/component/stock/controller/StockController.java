@@ -15,10 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.faceye.component.stock.entity.Category;
 import com.faceye.component.stock.entity.Stock;
+import com.faceye.component.stock.service.CategoryService;
 import com.faceye.component.stock.service.CrawlFinancialDataService;
 import com.faceye.component.stock.service.StockService;
 import com.faceye.feature.controller.BaseController;
+import com.faceye.feature.util.AjaxResult;
 import com.faceye.feature.util.http.HttpUtil;
 
 @Controller
@@ -27,6 +30,8 @@ import com.faceye.feature.util.http.HttpUtil;
 public class StockController extends BaseController<Stock, Long, StockService> {
 	@Autowired
 	private CrawlFinancialDataService crawlFinancialDataService = null;
+	@Autowired
+	private CategoryService categoryService=null;
 	
 	@Autowired
 	public StockController(StockService service) {
@@ -45,6 +50,8 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 		Map searchParams = HttpUtil.getRequestParams(request);
 		Page<Stock> page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
 		model.addAttribute("page", page);
+		List<Category> categories=this.categoryService.getAll();
+		model.addAttribute("categories", categories);
 		return "stock.stock.manager";
 	}
 
@@ -136,6 +143,19 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 		return stocks;
 	}
 
+	/**
+	 * 初始化股票所属分类
+	 * @return
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年3月21日 上午10:45:01
+	 */
+	@RequestMapping("/initStockCategory")
+	@ResponseBody
+	public String initStockCategory(){
+		boolean res=this.service.initStockCategory();
+		return AjaxResult.getInstance().buildDefaultResult(res);
+	}
 	
 
 }
