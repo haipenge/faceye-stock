@@ -131,7 +131,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		// 营业成本
 		Double operatingCosts = reportData.getInComeSheet().getEle7().getCinst3_97();
 		Double grossProfitMargin = 0.0D;
-		if (operatingIncome - operatingCosts != 0) {
+		if (operatingIncome - operatingCosts != 0 && operatingIncome !=0) {
 			grossProfitMargin = (operatingIncome - operatingCosts) / operatingIncome;
 		}
 		dataStat.setGrossProfitMargin(grossProfitMargin);
@@ -333,7 +333,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 					}
 					// 净利率
 					this.statNetProfitMargin(stock, reportData, dataStat);
-					// 总资产周围率
+					// 总资产周转率
 					this.statTotalAssetsTurnover(stock, reportData, dataStat);
 					// 总资产利润率
 					this.statTotalAssetsNeProfitMargin(stock, reportData, dataStat);
