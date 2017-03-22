@@ -364,7 +364,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		@Override
 		public int compare(StatRecord o1, StatRecord o2) {
 			int res = 0;
-			res = o1.getDataStats().get(0).getTotalAssetsNetProfitMargin().compareTo(o2.getDataStats().get(0).getTotalAssetsNetProfitMargin());
+			res = o2.getDataStats().get(0).getTotalAssetsNetProfitMargin().compareTo(o1.getDataStats().get(0).getTotalAssetsNetProfitMargin());
 			return res;
 		}
 
@@ -394,7 +394,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 			type = 0;// 年报
 		}
 		if (totalAssetsNetProfitMargin == null) {
-			totalAssetsNetProfitMargin = 0.1;// 1%
+			totalAssetsNetProfitMargin = 0.2;// 1%
 		}
 		Map dataStatParams = new HashMap();
 		dataStatParams.put("EQ|stockId", stockId);
@@ -403,7 +403,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		dataStatParams.put("GTE|dateCycle", calendar.getTime());
 		dataStatParams.put("SORT|dateCycle:0", "desc");
 		// dataStatParams.put("SORT|totalAssetsNetProfitMargin:1", "desc");
-		List<DataStat> dataStats = this.getPage(dataStatParams, 0, 0).getContent();
+		List<DataStat> dataStats = this.getPage(dataStatParams, 0, 5).getContent();
 		if (CollectionUtils.isNotEmpty(dataStats) && dataStats.size() >= 5) {
 			results = dataStats;
 		}
