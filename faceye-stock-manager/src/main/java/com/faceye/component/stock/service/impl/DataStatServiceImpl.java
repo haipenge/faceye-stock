@@ -389,8 +389,9 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		Double totalAssetsNetProfitMargin = MapUtils.getDouble(params, "totalAssetsNetProfitMargin");
 		// 取最后五年的报表
 		Date now = new Date();
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(now.getYear() - 5, 11, 31);
+		Date begin=new Date(now.getTime()-5*365*24*60*60*1000L);
+//		Calendar calendar = Calendar.getInstance();
+//		calendar.set(now.getYear() - 5, 11, 31);
 		if (type == null) {
 			type = 0;// 年报
 		}
@@ -401,7 +402,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		dataStatParams.put("EQ|stockId", stockId);
 		dataStatParams.put("EQ|type", type);
 		dataStatParams.put("GTE|totalAssetsNetProfitMargin", totalAssetsNetProfitMargin);
-		dataStatParams.put("GTE|dateCycle", calendar.getTime());
+		dataStatParams.put("GTE|dateCycle", begin);
 		dataStatParams.put("SORT|dateCycle:0", "desc");
 		// dataStatParams.put("SORT|totalAssetsNetProfitMargin:1", "desc");
 		List<DataStat> dataStats = this.getPage(dataStatParams, 0, 5).getContent();
