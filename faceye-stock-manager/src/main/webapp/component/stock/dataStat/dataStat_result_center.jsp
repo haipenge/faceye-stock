@@ -43,42 +43,42 @@
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${statRecord.dataStats}" var="dataStat">
-							<tr>
-								<td>总资产净利率</td>
+						<tr>
+							<td>总资产净利率</td>
+							<c:forEach items="${statRecord.dataStats}" var="dataStat">
 								<td><fmt:formatNumber value="${dataStat.totalAssetsNetProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
-							<tr>
-						</c:forEach>
-						<c:forEach items="${statRecord.dataStats}" var="dataStat">
-							<tr>
-								<td>净资产收益率</td>
+							</c:forEach>
+						</tr>
+						<tr>
+							<td>净资产收益率</td>
+							<c:forEach items="${statRecord.dataStats}" var="dataStat">
 								<td><fmt:formatNumber value="${dataStat.roe *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
-							<tr>
-						</c:forEach>
-						<c:forEach items="${statRecord.dataStats}" var="dataStat">
-							<tr>
-								<td>净利率</td>
+							</c:forEach>
+						</tr>
+						<tr>
+							<td>净利率</td>
+							<c:forEach items="${statRecord.dataStats}" var="dataStat">
 								<td><fmt:formatNumber value="${dataStat.netProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
-							<tr>
-						</c:forEach>
-						<c:forEach items="${statRecord.dataStats}" var="dataStat">
-							<tr>
-								<td>毛利率</td>
+							</c:forEach>
+						</tr>
+						<tr>
+							<td>毛利率</td>
+							<c:forEach items="${statRecord.dataStats}" var="dataStat">
 								<td><fmt:formatNumber value="${dataStat.grossProfitMargin  *100}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
-							<tr>
-						</c:forEach>
-						<c:forEach items="${statRecord.dataStats}" var="dataStat">
-							<tr>
-								<td>资产负债率</td>
+							</c:forEach>
+						</tr>
+						<tr>
+							<td>资产负债率</td>
+							<c:forEach items="${statRecord.dataStats}" var="dataStat">
 								<td><fmt:formatNumber value="${dataStat.debtToAssetsRatio *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
-							<tr>
-						</c:forEach>
-						<c:forEach items="${statRecord.dataStats}" var="dataStat">
-							<tr>
-								<td>资产周转率</td>
+							</c:forEach>
+						</tr>
+						<tr>
+							<td>资产周转率</td>
+							<c:forEach items="${statRecord.dataStats}" var="dataStat">
 								<td><fmt:formatNumber value="${dataStat.totalAssetsTurnover *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
-							<tr>
-						</c:forEach>
+							</c:forEach>
+						</tr>
 					</tbody>
 				</table>
 			</div>
