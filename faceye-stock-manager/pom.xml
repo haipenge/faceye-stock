@@ -2,8 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<!-- <parent> <groupId>org.faceye</groupId> <artifactId>faceye-generate-feature</artifactId> 
-		<version>1.0</version> <relativePath>../parent/</relativePath> </parent> -->
+	<!-- <parent> <groupId>org.faceye</groupId> <artifactId>faceye-generate-feature</artifactId> <version>1.0</version> <relativePath>../parent/</relativePath> 
+		</parent> -->
 	<groupId>com.faceye</groupId>
 	<artifactId>faceye-stock-manager</artifactId>
 	<version>1.0</version>
@@ -114,6 +114,12 @@
 						</baseResource>
 					</webApp>
 				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.eclipse.jetty</groupId>
+						<artifactId>jetty-servlet</artifactId>
+					</dependency>
+				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>com.mysema.maven</groupId>
@@ -129,7 +135,7 @@
 						</configuration>
 					</execution>
 				</executions>
-				
+
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -184,8 +190,7 @@
 				<configuration>
 					<!-- not append assembly id in release file name -->
 					<appendAssemblyId>false</appendAssemblyId>
-					<!-- <descriptors> <descriptor> src/main/assemble/package.xml </descriptor> 
-						</descriptors> -->
+					<!-- <descriptors> <descriptor> src/main/assemble/package.xml </descriptor> </descriptors> -->
 				</configuration>
 				<executions>
 					<execution>
@@ -197,18 +202,15 @@
 						<configuration>
 							<skipAssembly>false</skipAssembly><!-- 跳过这个执行器 -->
 							<!-- 自定义输出目录（finalName为最终项目构建名称） -->
-							<!-- <outputDirectory> ${project.build.directory}/${project.build.finalName}/WEB-INF/lib 
-								</outputDirectory> -->
+							<!-- <outputDirectory> ${project.build.directory}/${project.build.finalName}/WEB-INF/lib </outputDirectory> -->
 							<!-- 描述符文件 -->
 							<descriptors>
 								<descriptor>src/main/resources/assembly/jar.xml</descriptor>
 							</descriptors>
 						</configuration>
 					</execution>
-					<!-- <execution> <id>make-zip</id> <phase>package</phase> <goals> <goal>single</goal> 
-						</goals> <configuration> <skipAssembly>true</skipAssembly> <descriptors> 
-						<descriptor>src/main/assembly/zip.xml</descriptor> </descriptors> </configuration> 
-						</execution> -->
+					<!-- <execution> <id>make-zip</id> <phase>package</phase> <goals> <goal>single</goal> </goals> <configuration> <skipAssembly>true</skipAssembly> 
+						<descriptors> <descriptor>src/main/assembly/zip.xml</descriptor> </descriptors> </configuration> </execution> -->
 				</executions>
 			</plugin>
 			<plugin>
@@ -231,19 +233,13 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-shade-plugin</artifactId> 
-				<executions> <execution> <phase>package</phase> <goals> <goal>shade</goal> 
-				</goals> <configuration> <shadedArtifactAttached>true</shadedArtifactAttached> 
-				<shadedClassifierName>jar-with-dependencies</shadedClassifierName> <transformers> 
-				<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"> 
-				<mainClass>com.faceye.feature.service.impl.BeanContextUtil</mainClass> </transformer> 
-				<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer"> 
-				<resource>META-INF/spring.handlers</resource> </transformer> <transformer 
-				implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer"> 
-				<resource>META-INF/spring.schemas</resource> </transformer> <transformer 
-				implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer"> 
-				<resource>META-INF/spring.tooling</resource> </transformer> </transformers> 
-				</configuration> </execution> </executions> </plugin> -->
+			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-shade-plugin</artifactId> <executions> <execution> <phase>package</phase> 
+				<goals> <goal>shade</goal> </goals> <configuration> <shadedArtifactAttached>true</shadedArtifactAttached> <shadedClassifierName>jar-with-dependencies</shadedClassifierName> 
+				<transformers> <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"> <mainClass>com.faceye.feature.service.impl.BeanContextUtil</mainClass> 
+				</transformer> <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer"> <resource>META-INF/spring.handlers</resource> 
+				</transformer> <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer"> <resource>META-INF/spring.schemas</resource> 
+				</transformer> <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer"> <resource>META-INF/spring.tooling</resource> 
+				</transformer> </transformers> </configuration> </execution> </executions> </plugin> -->
 
 		</plugins>
 	</build>
@@ -257,9 +253,8 @@
 				<filters>
 					<filter>src/main/filters/dev.properties</filter>
 				</filters>
-				<!-- <resources> <resource> <directory>src/main/webapp/jsp</directory> 
-					<filtering>true</filtering> <includes> <include>config.json</include> </includes> 
-					</resource> </resources> -->
+				<!-- <resources> <resource> <directory>src/main/webapp/jsp</directory> <filtering>true</filtering> <includes> <include>config.json</include> 
+					</includes> </resource> </resources> -->
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -397,10 +392,10 @@
 		</profile>
 	</profiles>
 	<repositories>
-		
+
 	</repositories>
 	<pluginRepositories>
-				
+
 	</pluginRepositories>
 </project>
 	
