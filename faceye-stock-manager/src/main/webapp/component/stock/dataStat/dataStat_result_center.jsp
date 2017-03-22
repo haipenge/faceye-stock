@@ -12,22 +12,6 @@
 <div class="block-flat">
 	<div class="content">
 		<div id="msg"></div>
-		<div classs="table-responsive">
-			<table class="table table-bordered">
-				<thead>
-					<tr>
-						<th><fmt:message key='stock.dataStat.grossProfitMargin'></fmt:message></th>
-						<th><fmt:message key='stock.dataStat.dateCycle'></fmt:message></th>
-						<th><fmt:message key='stock.dataStat.netProfitMargin'></fmt:message></th>
-						<th><fmt:message key='stock.dataStat.totalAssetsTurnover'></fmt:message></th>
-						<th><fmt:message key='stock.dataStat.totalAssetsNetProfitMargin'></fmt:message></th>
-						<th><fmt:message key='stock.dataStat.debtToAssetsRatio'></fmt:message></th>
-						<th><fmt:message key='stock.dataStat.roe'></fmt:message></th>
-						<!--@generate-entity-jsp-property-desc@-->
-					</tr>
-				</thead>
-			</table>
-		</div>
 		<c:forEach items="${statRecords}" var="statRecord">
 			<h4>${statRecord.stock.name}
 				<small>(${statRecord.stock.code })</small>
@@ -40,6 +24,7 @@
 							<c:forEach items="${statRecord.dataStats }" var="record">
 								<th><fmt:formatDate value="${record.dateCycle }" pattern="yyyy-MM-dd" /></th>
 							</c:forEach>
+							<th>平均</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -48,36 +33,42 @@
 							<c:forEach items="${statRecord.dataStats}" var="dataStat">
 								<td><fmt:formatNumber value="${dataStat.totalAssetsNetProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
 							</c:forEach>
+							<td>${statRecord.avgTotalAssetsNetProfitMargin }</td>
 						</tr>
 						<tr>
 							<td>净资产收益率</td>
 							<c:forEach items="${statRecord.dataStats}" var="dataStat">
 								<td><fmt:formatNumber value="${dataStat.roe *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
 							</c:forEach>
+							<td></td>
 						</tr>
 						<tr>
 							<td>净利率</td>
 							<c:forEach items="${statRecord.dataStats}" var="dataStat">
 								<td><fmt:formatNumber value="${dataStat.netProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
 							</c:forEach>
+							<td></td>
 						</tr>
 						<tr>
 							<td>毛利率</td>
 							<c:forEach items="${statRecord.dataStats}" var="dataStat">
 								<td><fmt:formatNumber value="${dataStat.grossProfitMargin  *100}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
 							</c:forEach>
+							<td></td>
 						</tr>
 						<tr>
 							<td>资产负债率</td>
 							<c:forEach items="${statRecord.dataStats}" var="dataStat">
 								<td><fmt:formatNumber value="${dataStat.debtToAssetsRatio *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
 							</c:forEach>
+							<td></td>
 						</tr>
 						<tr>
 							<td>资产周转率</td>
 							<c:forEach items="${statRecord.dataStats}" var="dataStat">
 								<td><fmt:formatNumber value="${dataStat.totalAssetsTurnover *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
 							</c:forEach>
+							<td></td>
 						</tr>
 					</tbody>
 				</table>
