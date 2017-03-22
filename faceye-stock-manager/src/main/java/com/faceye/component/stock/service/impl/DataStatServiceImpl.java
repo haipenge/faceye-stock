@@ -364,7 +364,8 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		@Override
 		public int compare(StatRecord o1, StatRecord o2) {
 			int res = 0;
-			res = o2.getDataStats().get(0).getTotalAssetsNetProfitMargin().compareTo(o1.getDataStats().get(0).getTotalAssetsNetProfitMargin());
+			//以多年平均总资产净收益率排序
+			res = o2.getAvgTotalAssetsNetProfitMargin().compareTo(o1.getAvgTotalAssetsNetProfitMargin());
 			return res;
 		}
 

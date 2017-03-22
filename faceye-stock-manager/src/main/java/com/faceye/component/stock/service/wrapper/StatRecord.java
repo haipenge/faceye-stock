@@ -25,7 +25,27 @@ public class StatRecord {
 		return dataStats;
 	}
 	public void setDataStats(List<DataStat> dataStats) {
+		if(this.avgTotalAssetsNetProfitMargin==null){
+			Double total=0.0D;
+			for(DataStat dataStat:dataStats){
+				total+=dataStat.getTotalAssetsNetProfitMargin();
+			}
+			if(total>0.0D){
+				this.setAvgTotalAssetsNetProfitMargin(total/dataStats.size());
+			}
+		}
 		this.dataStats = dataStats;
 	}
+	
+	
+	//多年平均总资产净收益率
+	private Double avgTotalAssetsNetProfitMargin=null;
+	public Double getAvgTotalAssetsNetProfitMargin() {
+		return avgTotalAssetsNetProfitMargin;
+	}
+	public void setAvgTotalAssetsNetProfitMargin(Double avgTotalAssetsNetProfitMargin) {
+		this.avgTotalAssetsNetProfitMargin = avgTotalAssetsNetProfitMargin;
+	}
+	
 	
 }
