@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StopWatch;
+import org.springframework.util.StopWatch.TaskInfo;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.faceye.component.stock.entity.DataStat;
@@ -58,6 +60,8 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 	@RequestMapping("/report")
 	public String reporter(HttpServletRequest request, Model model) {
 		WrapReporter wrapReporter = null;
+		StopWatch watch = new StopWatch();
+		watch.start("0");
 		Map searchParams = HttpUtil.getRequestParams(request);
 		Long reportCategoryId = MapUtils.getLong(searchParams, "reportCategoryId");
 		Long startDate = MapUtils.getLong(searchParams, "startDate");
@@ -81,6 +85,8 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 			// 财务摘要
 			reportCategory = this.reportCategoryService.getReportCategoryByCode(StockConstants.REPORT_CATEOGRY_FINANCIAL_SUMMARY);
 		}
+		watch.stop();
+
 		if (StringUtils.equals(reportCategory.getCode(), StockConstants.REPORT_CATEOGRY_FINANCIAL_SUMMARY)) {
 			// 财务接要,获取财务分析数据
 			// 杜邦分析数据
@@ -101,12 +107,21 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 				params.put("LT|date", new Date(startDate));
 			}
 			params.put("SORT|date", "desc");
+			watch.start("1");
 			List<ReportData> reportDatas = this.service.getPage(params, 1, 5).getContent();
+			watch.stop();
+			watch.start("2");
 			wrapReporter = this.service.wrapReportData(reportDatas, reportCategory.getCode());
+			watch.stop();
 			model.addAttribute("wrapReporter", wrapReporter);
 		}
 		model.addAttribute("reportCategory", reportCategory);
 		model.addAttribute("reportCategories", reportCategories);
+		logger.error("-------------------------Stop Watch monitor------------------------------------");
+		TaskInfo[] infos = watch.getTaskInfo();
+		for (TaskInfo info : infos) {
+			logger.error("View" + info.getTaskName() + " Cost :" + info.getTimeMillis());
+		}
 		return "stock.reportData.report";
 	}
 }

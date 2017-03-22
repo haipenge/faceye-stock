@@ -159,9 +159,9 @@ public class ReportDataServiceImpl extends BaseMongoServiceImpl<ReportData, Long
 			}
 		}
 		// 同型分析
-		//this.commonSizeAnalysis(wrapReporter);
+		this.commonSizeAnalysis(wrapReporter);
 		//趋势分析
-		//this.trendAnalysis(wrapReporter);
+		this.trendAnalysis(wrapReporter);
 		return wrapReporter;
 	}
 
