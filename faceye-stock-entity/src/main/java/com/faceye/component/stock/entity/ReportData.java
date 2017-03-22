@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "stock_report_data")
-@CompoundIndexes({ @CompoundIndex(name = "report_data_index", def = "{stockId : 1, type : 1}") })
+@CompoundIndexes({ @CompoundIndex(name = "report_data_index", def = "{stockId : 1, type : 1, date : -1}") })
 public class ReportData {
 	@Id
 	private Long id = null;
@@ -107,7 +107,6 @@ public class ReportData {
 		this.date = date;
 	}
 
-	@Indexed
 	private Long stockId = null;
 
 	public Long getStockId() {
