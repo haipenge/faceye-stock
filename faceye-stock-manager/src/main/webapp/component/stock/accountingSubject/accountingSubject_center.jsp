@@ -8,6 +8,11 @@
 		<a class="btn btn-primary" href="<c:url value="/stock/accountingSubject/input?accountingElementid=${accountingElement.id}"/>"> <fmt:message key="stock.accountingSubject.add"></fmt:message>
 		</a>
 	</h2>
+	<ol class="breadcrumb">
+		<li><a href="<c:url value="/stock/reportCategory/home"/>">报告分类</a></li>
+		<li><a href="<c:url value="/stock/accountingElement/home?EQ|reportCategory.$id=${accountingElement.reportCategory.id }"/>">${accountingElement.reportCategory.name }</a></li>
+		<li class="active">${accountingElement.name}</li>
+	</ol>
 </div>
 <div class="cl-mcont">
 	<!-- 
@@ -55,7 +60,9 @@
 							<th><fmt:message key='stock.accountingSubject.code'></fmt:message></th>
 							<th><fmt:message key="stock.accountingElement" /></th>
 							<th><fmt:message key="stock.reportCategory" /></th>
+							<!-- 
 							<th><fmt:message key='stock.accountingSubject.sinaUrl'></fmt:message></th>
+							 -->
 							<!--@generate-entity-jsp-property-desc@-->
 							<th><fmt:message key="global.edit"></fmt:message></th>
 							<th><fmt:message key="global.remove"></fmt:message></th>
@@ -69,7 +76,7 @@
 								<td>${accountingSubject.code}</td>
 								<td>${accountingSubject.accountingElement.name }</td>
 								<td>${accountingSubject.accountingElement.reportCategory.name }</td>
-								<td>${accountingSubject.sinaUrl}</td>
+								<!--  <td>${accountingSubject.sinaUrl}</td>-->
 								<!--@generate-entity-jsp-property-value@-->
 								<td><a href="<c:url value="/stock/accountingSubject/edit/${accountingSubject.id}"/>"> <fmt:message key="global.edit"></fmt:message>
 								</a></td>

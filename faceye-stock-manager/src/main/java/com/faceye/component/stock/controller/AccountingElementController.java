@@ -57,7 +57,7 @@ public class AccountingElementController extends BaseController<AccountingElemen
 	@RequestMapping("/home")
 	public String home(HttpServletRequest request, Model model) {
 		Map searchParams=HttpUtil.getRequestParams(request);
-		Long reportCategoryId=MapUtils.getLong(searchParams, "reportCategory.$id");
+		Long reportCategoryId=MapUtils.getLong(searchParams, "EQ|reportCategory.$id");
 		Page<AccountingElement> page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
 		if(reportCategoryId!=null){
 			ReportCategory reportCategory=this.reportCategoryService.get(reportCategoryId);

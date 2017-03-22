@@ -65,9 +65,9 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 		Map searchParams = HttpUtil.getRequestParams(request);
 		Long reportCategoryId = MapUtils.getLong(searchParams, "reportCategoryId");
 		Long startDate = MapUtils.getLong(searchParams, "startDate");
-		List<ReportCategory> reportCategories = this.reportCategoryService.getAll();
+		List<ReportCategory> reportCategories = this.reportCategoryService.getPage(null, 0, 0).getContent();
 		if (reportCategoryId == null) {
-			reportCategoryId = 3L;// 利润表
+			reportCategoryId = 2L;// 财务摘要
 		}
 		Long stockId = MapUtils.getLong(searchParams, "stockId");
 		Stock stock = this.stockService.get(stockId);

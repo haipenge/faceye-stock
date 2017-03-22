@@ -26,5 +26,12 @@
 	<definition name="stock.dataStat.detail.center" extends="default.center">
 	    <put-attribute name="default-center-right" value="/component/stock/dataStat/dataStat_detail.jsp"></put-attribute>
 	</definition>
-	
+	<!-- 数据分析结果 -->
+	<definition name="stock.dataStat.result" extends="default.manager">
+	    <put-attribute name="default-center" value="stock.dataStat.result.center"></put-attribute>
+	</definition>
+	<definition name="stock.dataStat.result.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/stock/dataStat/dataStat_result_center.jsp"></put-attribute>
+	</definition>
+
 </tiles-definitions>

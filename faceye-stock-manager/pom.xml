@@ -187,6 +187,21 @@
 							</includes>
 						</configuration>
 					</execution>
+					<execution>
+						<id>native2ascii-utf8-resources-security</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>native2ascii</goal>
+						</goals>
+						<configuration>
+							<dest>target/classes/i18n</dest>
+							<src>../../faceye-security-manager-mongo/faceye-security-entity-mongo/src/main/resources/i18n</src>
+							<encoding>UTF-8</encoding>
+							<includes>
+								*.properties
+							</includes>
+						</configuration>
+					</execution>
 				</executions>
 				<dependencies>
 					<dependency>

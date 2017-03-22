@@ -32,7 +32,13 @@
 						<div class="col-md-1">
 							<input type="text" name="EQ|code" value="${searchParams.code}" placeholder="<fmt:message key="stock.reportCategory.code"></fmt:message>" class="form-control input-sm">
 						</div>
-						<!--@generate-entity-jsp-query-detail@-->
+						
+<div class="col-md-1">
+	<input type="text" name="EQ|orderIndex" value="${searchParams.orderIndex}"
+		placeholder="<fmt:message key="stock.reportCategory.orderIndex"></fmt:message>"
+		class="form-control input-sm">
+</div>
+<!--@generate-entity-jsp-query-detail@-->
 						<div class="col-md-1">
 							<button type="submit" class="btn btn-sm btn-primary">
 								<fmt:message key="global.search"></fmt:message>
@@ -55,7 +61,8 @@
 							<th><fmt:message key='stock.reportCategory.name'></fmt:message></th>
 							<th><fmt:message key='stock.reportCategory.code'></fmt:message></th>
 							<th><fmt:message key="stock.accountingElement"></fmt:message></th>
-							<!--@generate-entity-jsp-property-desc@-->
+							<th><fmt:message key='stock.reportCategory.orderIndex'></fmt:message></th>   
+ <!--@generate-entity-jsp-property-desc@-->
 							<th><fmt:message key="global.edit"></fmt:message></th>
 							<th><fmt:message key="global.remove"></fmt:message></th>
 						</tr>
@@ -66,8 +73,9 @@
 								<td><input type="checkbox" name="check-single" value="${reportCategory.id}"></td>
 								<td>${reportCategory.name}</td>
 								<td>${reportCategory.code}</td>
-								<td><a href="<c:url value="/stock/accountingElement/home?reportCategory.$id=${reportCategory.id }"/>">会计科目分类</a></td>
-								<!--@generate-entity-jsp-property-value@-->
+								<td><a href="<c:url value="/stock/accountingElement/home?EQ|reportCategory.$id=${reportCategory.id }"/>">会计科目分类</a></td>
+								<td>${reportCategory.orderIndex}</td>   
+ <!--@generate-entity-jsp-property-value@-->
 								<td><a href="<c:url value="/stock/reportCategory/edit/${reportCategory.id}"/>"> <fmt:message key="global.edit"></fmt:message>
 								</a></td>
 								<td><a href="<c:url value="/stock/reportCategory/remove/${reportCategory.id}"/>"> <fmt:message key="global.remove"></fmt:message>

@@ -29,6 +29,7 @@ import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.service.DataStatService;
 import com.faceye.component.stock.service.FinancialDataService;
 import com.faceye.component.stock.service.StockService;
+import com.faceye.component.stock.service.wrapper.StatRecord;
 import com.faceye.component.stock.util.StockConstants;
 import com.faceye.feature.controller.BaseController;
 import com.faceye.feature.util.AjaxResult;
@@ -100,12 +101,12 @@ public class DataStatController extends BaseController<DataStat, Long, DataStatS
 		if(searchParams==null){
 			searchParams=new HashMap();
 		}
-		searchParams.put("SORT|dateCycle", "desc");
-		Page<DataStat> page = this.service.getPage(searchParams, 0, 0);
-		model.addAttribute("page", page);
-		Long stockId=MapUtils.getLong(searchParams, "EQ|stockId");
-		Stock stock=this.stockService.get(stockId);
-		model.addAttribute("stock", stock);
+//		searchParams.put("SORT|dateCycle", "desc");
+//		Page<DataStat> page = this.service.getPage(searchParams, 0, 0);
+//		model.addAttribute("page", page);
+//		Long stockId=MapUtils.getLong(searchParams, "EQ|stockId");
+//		Stock stock=this.stockService.get(stockId);
+//		model.addAttribute("stock", stock);
 		//获取营业收入
 //		Map params=new HashMap();
 //		params.putAll(searchParams);
@@ -114,6 +115,8 @@ public class DataStatController extends BaseController<DataStat, Long, DataStatS
 //		Page<FinancialData> operatingIncome=this.financialDataService.getPage(params, 0, 0);
 //		model.addAttribute("operatingIncome", operatingIncome);
 		
+		List<StatRecord> statRecords=this.service.getStatResults(searchParams);
+		model.addAttribute("statRecords", statRecords);
 		resetSearchParams(searchParams);
 		model.addAttribute("searchParams", searchParams);
 		return "stock.dataStat.result";

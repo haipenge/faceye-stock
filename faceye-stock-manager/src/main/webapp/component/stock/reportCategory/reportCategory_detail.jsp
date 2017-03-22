@@ -21,7 +21,12 @@
 	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.reportCategory.code"></fmt:message></td>
 	<td>${reportCategory.code}</td>
 </tr>
+<tr>
+	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.reportCategory.orderIndex"></fmt:message></td>
+	<td>${reportCategory.orderIndex}</td>
+</tr>
 <!--@generate-entity-jsp-property-detail@-->
+
 
 
 			</table>

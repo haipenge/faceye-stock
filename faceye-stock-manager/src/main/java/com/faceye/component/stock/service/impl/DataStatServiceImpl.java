@@ -1,11 +1,16 @@
 package com.faceye.component.stock.service.impl;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -15,15 +20,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.faceye.component.stock.entity.DataStat;
-import com.faceye.component.stock.entity.FinancialData;
 import com.faceye.component.stock.entity.ReportData;
 import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.repository.mongo.DataStatRepository;
 import com.faceye.component.stock.repository.mongo.customer.DataStatCustomerRepository;
 import com.faceye.component.stock.service.DataStatService;
-import com.faceye.component.stock.service.FinancialDataService;
 import com.faceye.component.stock.service.ReportDataService;
 import com.faceye.component.stock.service.StockService;
+import com.faceye.component.stock.service.wrapper.StatRecord;
 import com.faceye.component.stock.util.StockConstants;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
@@ -43,8 +47,7 @@ import com.querydsl.core.types.Predicate;
 public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, DataStatRepository> implements DataStatService {
 	@Autowired
 	private DataStatCustomerRepository dataStatCustomerRepository = null;
-	@Autowired
-	private FinancialDataService financialDataService = null;
+
 	@Autowired
 	private StockService stockService = null;
 	@Autowired
@@ -131,7 +134,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		// 营业成本
 		Double operatingCosts = reportData.getInComeSheet().getEle7().getCinst3_97();
 		Double grossProfitMargin = 0.0D;
-		if (operatingIncome!=null && operatingCosts!=null &&operatingIncome - operatingCosts != 0 && operatingIncome !=0) {
+		if (operatingIncome != null && operatingCosts != null && operatingIncome - operatingCosts != 0 && operatingIncome != 0) {
 			grossProfitMargin = (operatingIncome - operatingCosts) / operatingIncome;
 		}
 		dataStat.setGrossProfitMargin(grossProfitMargin);
@@ -204,7 +207,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	 * @Author:haipenge
 	 * @Date:2017年3月11日 上午11:42:22
 	 */
-	private DataStat statTotalAssetsNeProfitMargin(Stock stock, ReportData reportData, DataStat dataStat) throws Exception{
+	private DataStat statTotalAssetsNeProfitMargin(Stock stock, ReportData reportData, DataStat dataStat) throws Exception {
 		if (dataStat != null && dataStat.getTotalAssetsTurnover() != null && dataStat.getNetProfitMargin() != null) {
 			Double totalAssetsNetProfitMargin = dataStat.getNetProfitMargin() * dataStat.getTotalAssetsTurnover();
 			dataStat.setTotalAssetsNetProfitMargin(totalAssetsNetProfitMargin);
@@ -222,7 +225,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	 * @Author:haipenge
 	 * @Date:2017年3月11日 上午11:47:53
 	 */
-	private DataStat statDebtToAssetsRatio(Stock stock, ReportData reportData, DataStat dataStat)  throws Exception {
+	private DataStat statDebtToAssetsRatio(Stock stock, ReportData reportData, DataStat dataStat) throws Exception {
 		Date date = dataStat.getDateCycle();
 		String sDate = DateUtil.formatDate(date, "yyyy-MM-dd");
 		// 资产总额
@@ -230,7 +233,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		Double totalAsset = reportData.getBalanceSheet().getEle14().getCbsheet46_189();
 		// 总负债
 		Double totalLiabilite = reportData.getBalanceSheet().getEle16().getCbsheet77_230();
-		if (totalAsset != null && totalLiabilite != null&& totalAsset!=0) {
+		if (totalAsset != null && totalLiabilite != null && totalAsset != 0) {
 			Double debtToAssetsRatio = totalLiabilite / totalAsset;
 			dataStat.setDebtToAssetsRatio(debtToAssetsRatio);
 		}
@@ -253,28 +256,6 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 			dataStat.setRoe(roe);
 		}
 		return dataStat;
-	}
-
-	/**
-	 * 获取指定的基础财务数据
-	 * 
-	 * @param stockId
-	 * @param accountingSubjectId
-	 * @param date
-	 * @return
-	 * @Desc:
-	 * @Author:haipenge
-	 * @Date:2017年3月11日 上午11:03:30
-	 */
-	private List<FinancialData> getFinancialData(Long stockId, Long accountingSubjectId, String date) {
-		List<FinancialData> datas = null;
-		Map params = new HashMap();
-		params.put("EQ|stockId", stockId);
-		params.put("EQ|accountingSubjectId", accountingSubjectId);
-		params.put("GTE|date", DateUtil.getDateFromString(date + " 00:00:00", "yyyy-MM-dd HH:mm:ss"));
-		params.put("LTE|date", DateUtil.getDateFromString(date + " 23:59:59", "yyyy-MM-dd HH:mm:ss"));
-		datas = this.financialDataService.getPage(params, 0, 0).getContent();
-		return datas;
 	}
 
 	/**
@@ -347,8 +328,87 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 				}
 			}
 		} catch (Exception e) {
-			logger.error(">>Faceye --> 分析股票总资产回报率抛出异常:",e.getMessage());
+			logger.error(">>Faceye --> 分析股票总资产回报率抛出异常:", e.getMessage());
 		}
+	}
+
+	/**
+	 * 根据特定条件筛选股票
+	 */
+	@Override
+	public List<StatRecord> getStatResults(Map params) {
+		List<StatRecord> stockRecords = new ArrayList<StatRecord>(0);
+		Long reportCategoryId = MapUtils.getLong(params, "reportCategoryId");
+		Map stockParams = new HashMap();
+		if (reportCategoryId != null) {
+			stockParams.put("EQ|reportCategory.$id", reportCategoryId);
+		}
+		List<Stock> stocks = this.stockService.getPage(stockParams, 0, 0).getContent();
+		if (CollectionUtils.isNotEmpty(stocks)) {
+			for (Stock stock : stocks) {
+				List<DataStat> dataStats = this.totalAssetsNetProfitMarginFilter(stock, params);
+				if (CollectionUtils.isNotEmpty(dataStats)) {
+					StatRecord statRecord = new StatRecord();
+					statRecord.setDataStats(dataStats);
+					statRecord.setStock(stock);
+					stockRecords.add(statRecord);
+				}
+			}
+		}
+		Collections.sort(stockRecords, new StatRecordComparator());
+		return stockRecords;
+	}
+
+	class StatRecordComparator implements Comparator<StatRecord> {
+
+		@Override
+		public int compare(StatRecord o1, StatRecord o2) {
+			int res = 0;
+			res = o1.getDataStats().get(0).getTotalAssetsNetProfitMargin().compareTo(o2.getDataStats().get(0).getTotalAssetsNetProfitMargin());
+			return res;
+		}
+
+	}
+
+	/**
+	 * 总资产净利率过滤器
+	 * 
+	 * @param stock
+	 * @param params
+	 * @return
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年3月22日 下午6:00:41
+	 */
+	private List<DataStat> totalAssetsNetProfitMarginFilter(Stock stock, Map params) {
+		List<DataStat> results = null;
+		Long stockId = stock.getId();
+		Integer type = MapUtils.getInteger(params, "type");
+		// 总资产净利率过滤器
+		Double totalAssetsNetProfitMargin = MapUtils.getDouble(params, "totalAssetsNetProfitMargin");
+		// 取最后五年的报表
+		Date now = new Date();
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(now.getYear() - 5, 11, 31);
+		if (type == null) {
+			type = 0;// 年报
+		}
+		if (totalAssetsNetProfitMargin == null) {
+			totalAssetsNetProfitMargin = 0.1;// 1%
+		}
+		Map dataStatParams = new HashMap();
+		dataStatParams.put("EQ|stockId", stockId);
+		dataStatParams.put("EQ|type", type);
+		dataStatParams.put("GTE|totalAssetsNetProfitMargin", totalAssetsNetProfitMargin);
+		dataStatParams.put("GTE|dateCycle", calendar.getTime());
+		dataStatParams.put("SORT|dateCycle:0", "desc");
+		// dataStatParams.put("SORT|totalAssetsNetProfitMargin:1", "desc");
+		List<DataStat> dataStats = this.getPage(dataStatParams, 0, 0).getContent();
+		if (CollectionUtils.isNotEmpty(dataStats) && dataStats.size() >= 5) {
+			results = dataStats;
+		}
+		return results;
+
 	}
 
 }/** @generate-service-source@ **/

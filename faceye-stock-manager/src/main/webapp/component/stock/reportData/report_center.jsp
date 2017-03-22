@@ -6,7 +6,7 @@
 	<div class="row">
 		<div class="col-sm-8">
 			<h2>
-				${stock.name} <small>(${stock.code})</small>&nbsp;&nbsp;财报<input type="hidden" value="${stock.id}" id="stock_id">
+				${stock.name} <small>(${stock.code})</small>&nbsp;&nbsp;财报<input type="hidden" name="stockId" value="${stock.id}" id="stock_id">
 			</h2>
 		</div>
 		<div class="col-sm-4 text-right">
@@ -20,21 +20,13 @@
 	</div>
 </div>
 <div class="cl-mcont">
-	<!-- 
-	<div class="header">
-		<h2>
-			<fmt:message key="security.role.manager"></fmt:message>
-		</h2>
-		<a class="btn btn-default" href="<c:url value="/security/role/input"/>"> <fmt:message key="security.role.add"></fmt:message>
-		</a>
-	</div>
-	 -->
 	<div class="block-flat">
+	   <div id="msg"></div>
 		<div class="row" style="margin-top: 0px; margin-bottom: 0px;">
 			<div class="col-sm-4">
 				<ul class="nav nav-pills bg-success" role="tablist">
 					<c:forEach items="${reportCategories}" var="reportCategory">
-						<li role="presentation" <c:if test="${(param.reportCategoryId eq reportCategory.id) or (empty param.reportCategoryId and reportCategory.id eq  3) }"> class="active"</c:if>><a
+						<li role="presentation" <c:if test="${(param.reportCategoryId eq reportCategory.id) or (empty param.reportCategoryId and reportCategory.id eq  2) }"> class="active"</c:if>><a
 							href="<c:url value="/stock/reportData/report?reportCategoryId=${reportCategory.id}&stockId=${stock.id}&type=${param.type }"/>">${reportCategory.name }</a></li>
 					</c:forEach>
 				</ul>
@@ -53,7 +45,7 @@
 			</div>
 			<div class="col-sm-2">
 				<ul class="nav nav-pills navbar-right bg-warning" style="margin-right: 5px;" role="tablist">
-					<li role="presentation"><a href="<c:url value="/stock/dataStat/home?EQ|stockId=${stock.id }"/>">杜邦分析</a></li>
+					<li role="presentation"><a href="<c:url value="/stock/dataStat/home?EQ|stockId=${stock.id }"/>" class="stock-stat">杜邦分析</a></li>
 				</ul>
 			</div>
 			<div class="col-sm-2">
@@ -114,12 +106,11 @@
 											<c:forEach items="${record.data2Record}" var="data2Record">
 												<c:if test="${accountingSubject.id eq data2Record.accountingSubjectId}">
 													<td <c:if test="${status.last}"> style="border-bottom:2px solid gray;"</c:if> class="text-center">
-														<p style="margin-top: 0px; margin-bottom: 0px;">
+														<p class="p-data">
 															<span class="small pull-left text-info"><c:if test="${data2Record.commonSizeAnalysisResult gt 0 }">
 																	<fmt:formatNumber value="${data2Record.commonSizeAnalysisResult *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</c:if></span> <span
-																style="margin-left: 5px; margin-right: 5px;"><fmt:formatNumber value="${data2Record.data }" type="number" pattern="#,##0.0#" maxFractionDigits="2"
-																	groupingUsed="true" /></span> <span class="small pull-right text-info"><c:if
-																	test="${ data2Record.trendAnalysisResult lt 0 or data2Record.trendAnalysisResult gt 0 }">
+																class="span-data"><fmt:formatNumber value="${data2Record.data }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></span> <span
+																class="small pull-right text-info"><c:if test="${ data2Record.trendAnalysisResult lt 0 or data2Record.trendAnalysisResult gt 0 }">
 																	<fmt:formatNumber value="${data2Record.trendAnalysisResult *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</c:if></span>
 														</p>
 													</td>

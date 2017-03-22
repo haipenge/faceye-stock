@@ -41,7 +41,7 @@
 				</div>
 			</div>
 			<div class="col-sm-4 text-right">
-				<button type="button" class="btn btn-sm btn-warning" id="toggle-category">股票分类</button>
+				<button type="button" class="btn btn-sm btn-warning" id="toggle-category">行业</button>
 			</div>
 		</div>
 
@@ -74,8 +74,6 @@
 							<th><fmt:message key='stock.stock.market'></fmt:message></th>
 							<th><fmt:message key="stock.dailyData" /></th>
 							<th>财务报表</th>
-							<th>比率分析</th>
-							<th>原始财务数据</th>
 							<th><fmt:message key="global.edit"></fmt:message></th>
 							<th><fmt:message key="global.remove"></fmt:message></th>
 						</tr>
@@ -83,15 +81,12 @@
 					<tbody>
 						<c:forEach items="${page.content}" var="stock">
 							<tr>
-								
 								<td>${stock.name}&nbsp;&nbsp;<small>(<a href="<c:url value="/stock/stock/detail/${stock.id}"/>">${stock.code}</a>)</small></td>
 								<td>${stock.category.name}</td>
 								<td><c:if test="${stock.market eq 'sz'}">深圳(SZ)</c:if> <c:if test="${stock.market eq 'sh'}">上海(SH)</c:if></td>
 								<!--@generate-entity-jsp-property-value@-->
 								<td><a href="<c:url value="/stock/dailyData/home?EQ|stock.$id=${stock.id}"/>"><fmt:message key="stock.dailyData" /></a></td>
 								<td><a href="<c:url value="/stock/reportData/report?stockId=${stock.id}"/>">财务报表</a></td>
-								<td><a href="<c:url value="/stock/dataStat/home?EQ|stockId=${stock.id}"/>">比率分析</a>
-								<td><a href="<c:url value="/stock/financialData/home?EQ|stockId=${stock.id }"/>">原始财务数据</a></td>
 								<td><a href="<c:url value="/stock/stock/edit/${stock.id}"/>"> <fmt:message key="global.edit"></fmt:message></a></td>
 								<td><a href="<c:url value="/stock/stock/remove/${stock.id}"/>"> <fmt:message key="global.remove"></fmt:message></a></td>
 							<tr>

@@ -81,6 +81,27 @@ public class ReportCategory implements Serializable {
 	public void setCode(String code) {
 		this.code = code;
 	}
+
+	
+	
+	
+
+	
+   /**
+    * 说明:排序值<br>
+    * 属性名: orderIndex<br>
+    * 类型: Integer<br>
+    * 数据库字段:order_index<br>
+    * @author haipenge<br>
+    */
+    
+	private  Integer orderIndex=0;
+	public Integer getOrderIndex() {
+		return orderIndex;
+	}
+	public void setOrderIndex(Integer orderIndex) {
+		this.orderIndex = orderIndex;
+	}
 	
 }/**@generate-entity-source@**/
 	

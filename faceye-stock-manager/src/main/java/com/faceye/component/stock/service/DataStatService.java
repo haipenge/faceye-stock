@@ -1,7 +1,11 @@
 package com.faceye.component.stock.service;
 
+import java.util.List;
+import java.util.Map;
+
 import com.faceye.component.stock.entity.DataStat;
 import com.faceye.component.stock.entity.Stock;
+import com.faceye.component.stock.service.wrapper.StatRecord;
 import com.faceye.feature.service.BaseService;
 
 /**
@@ -30,4 +34,14 @@ public interface DataStatService extends BaseService<DataStat, Long> {
 	 * @Date:2017年2月24日 上午9:37:13
 	 */
 	public void stat(Stock stock);
+	
+	/**
+	 * 取得特定条件下股票分析结果 
+	 * @param params
+	 * @return
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年3月22日 下午5:53:45
+	 */
+	public List<StatRecord> getStatResults(Map params);
 }/** @generate-service-source@ **/

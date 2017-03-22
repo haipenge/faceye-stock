@@ -89,9 +89,8 @@ public class ReportDataServiceImpl extends BaseMongoServiceImpl<ReportData, Long
 		} else {
 			// OrderSpecifier<Comparable> orderPOrderSpecifier=new OrderSpecifier<Comparable>(new Order(), new NumberExpression<AccountingElement>("id") {
 			// })
-			List<ReportData> items = (List) this.dao.findAll(predicate);
+			List<ReportData> items = (List) this.dao.findAll(predicate,sort);
 			res = new PageImpl<ReportData>(items);
-
 		}
 		return res;
 	}

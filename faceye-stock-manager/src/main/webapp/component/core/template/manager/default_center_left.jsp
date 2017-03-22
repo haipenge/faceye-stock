@@ -14,30 +14,18 @@
 						<img src="<c:url value="/js/lib/clean-zone/images/avatar1_50.jpg"/>" alt="Avatar" />
 					</div>
 					<div class="info">
-						<a href="#">Jeff Hanneman</a> <img src="<c:url value="/js/lib/clean-zone/images/state_online.png"/>" alt="Status" />
-						<span>Online</span>
+						<a href="#">Jeff Hanneman</a> <img src="<c:url value="/js/lib/clean-zone/images/state_online.png"/>" alt="Status" /> <span>Online</span>
 					</div>
 				</div>
 				<ul class="cl-vnavigation">
+					<!-- 
 					<li><a href="#"><i class="fa fa-file"></i><span>Pages</span></a>
 						<ul class="sub-menu">
 							
-<!--@generate-entity-manager-list-group-item@-->
-
-
 						</ul></li>
+						 -->
 					<%@ include file="/component/core/template/manager/stock_default_center_left.jsp"%>
-					<li><a href="#"><i class="fa fa-home"></i><span><fmt:message key="global.manager"></fmt:message></span></a>
-						<ul class="sub-menu">
-							<li class="<%=JspUtil.isActive(request, "user")%>"><a href="<c:url value="/security/user/home"/>"><fmt:message
-										key="security.user.manager"></fmt:message></a></li>
-							<li class="<%=JspUtil.isActive(request, "role")%>"><a href="<c:url value="/security/role/home"/>"><fmt:message
-										key="security.role.manager"></fmt:message></a></li>
-							<li class="<%=JspUtil.isActive(request, "resource")%>"><a href="<c:url value="/security/resource/home"/>"><fmt:message
-										key="security.resource.manager"></fmt:message></a></li>
-							<li class="<%=JspUtil.isActive(request, "menu")%>"><a href="/security/menu/home"><fmt:message
-										key="security.menu.manager"></fmt:message></a></li>
-						</ul></li>
+					<c:import url="/component/core/template/manager/security_default_center_left.jsp"/>
 					<!-- 
 					<li><a href="#"><i class="fa fa-table"></i><span>Tables</span></a>
 						<ul class="sub-menu">

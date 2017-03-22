@@ -22,23 +22,25 @@ import com.faceye.feature.util.ServiceException;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.querydsl.core.types.Predicate;
+
 /**
  * ReportCategory 服务实现类<br>
+ * 
  * @author @haipenge <br>
- * haipenge@gmail.com<br>
-*  Create Date:2014年5月20日<br>
+ *         haipenge@gmail.com<br>
+ *         Create Date:2014年5月20日<br>
  */
 
 @Service
 public class ReportCategoryServiceImpl extends BaseMongoServiceImpl<ReportCategory, Long, ReportCategoryRepository> implements ReportCategoryService {
 	@Autowired
-	private ReportCategoryCustomerRepository reportCategoryCustomerRepository=null;
+	private ReportCategoryCustomerRepository reportCategoryCustomerRepository = null;
+
 	@Autowired
 	public ReportCategoryServiceImpl(ReportCategoryRepository dao) {
 		super(dao);
 	}
-	
-	
+
 	@Override
 	public Page<ReportCategory> getPage(Map<String, Object> searchParams, int page, int size) throws ServiceException {
 		if (page != 0) {
@@ -56,7 +58,7 @@ public class ReportCategoryServiceImpl extends BaseMongoServiceImpl<ReportCatego
 		if (predicate != null) {
 			logger.debug(">>FaceYe -->Query predicate is:" + predicate.toString());
 		}
-		Sort sort = new Sort(Direction.DESC, "id");
+		Sort sort = new Sort(Direction.ASC, "orderIndex");
 		Page<ReportCategory> res = null;
 		if (size != 0) {
 			Pageable pageable = new PageRequest(page, size, sort);
@@ -64,17 +66,16 @@ public class ReportCategoryServiceImpl extends BaseMongoServiceImpl<ReportCatego
 		} else {
 			// OrderSpecifier<Comparable> orderPOrderSpecifier=new OrderSpecifier<Comparable>(new Order(), new NumberExpression<ReportCategory>("id") {
 			// })
-			List<ReportCategory> items = (List) this.dao.findAll(predicate);
+			List<ReportCategory> items = (List) this.dao.findAll(predicate,sort);
 			res = new PageImpl<ReportCategory>(items);
 
 		}
 		return res;
 	}
 
-
 	@Override
 	public ReportCategory getReportCategoryByCode(String code) {
 		return this.dao.getReportCategoryByCode(code);
 	}
-	
-}/**@generate-service-source@**/
+
+}/** @generate-service-source@ **/

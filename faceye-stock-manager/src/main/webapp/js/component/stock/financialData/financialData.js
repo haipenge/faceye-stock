@@ -12,9 +12,7 @@ var FinancialData = {
 		$('.multi-remove').click(function() {
 			FinancialData.multiRemove();
 		});
-		$('.start-crawl').click(function() {
-			FinancialData.crawlStockFinancialData();
-		});
+		
 
 	},
 	/**
@@ -49,27 +47,7 @@ var FinancialData = {
 			msg.show();
 		}
 	},
-	/**
-	 * 爬取股票数据
-	 */
-	crawlStockFinancialData : function() {
-		var stockId = $('#stock_id').val();
-		$.ajax({
-			url : '/stock/financialData/crawlStockFinancialData',
-			type : 'post',
-			data : {
-				id : stockId
-			},
-			success : function(data, textStatus, xhr) {
-				if (data.result) {
-					var m = new Msg({
-						msg : '已开始数据爬取任务...'
-					});
-					m.show();
-				}
-			}
-		});
-	},
+	
 	showTooltip : function(x, y, contents) {
 		$("<div id='tooltip'>" + contents + "</div>").css({
 			position : "absolute",

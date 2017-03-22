@@ -40,7 +40,17 @@
 		<form:errors path="code" cssClass="error"/>
 	</div>
 </div>
+<div class="form-group">
+	<label class="col-md-2 control-label" for="orderIndex"> <spring:message
+			code="stock.reportCategory.orderIndex"/>
+	</label>
+	<div class="col-md-6">
+		<form:input path="orderIndex" cssClass="form-control"/>
+		<form:errors path="orderIndex" cssClass="error"/>
+	</div>
+</div>
 <!--@generate-entity-jsp-property-update@-->
+
 
 
 				<div class="form-group">
