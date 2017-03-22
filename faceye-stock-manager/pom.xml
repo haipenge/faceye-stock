@@ -14,10 +14,9 @@
 		<faceye-stock-entity.version>1.0</faceye-stock-entity.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.7</jdk.version>
-		<!--  
+
 		<jetty.version>9.0.2.v20130417</jetty.version>
-		-->
-		<jetty.version>9.4.2.v20170220</jetty.version>
+		<!-- <jetty.version>9.4.2.v20170220</jetty.version> -->
 		<jetty.orbit.version>3.0.0.v201112011016</jetty.orbit.version>
 		<querydsl.version>4.1.2</querydsl.version>
 		<servlet-api.version>3.0-alpha-1</servlet-api.version>
@@ -108,6 +107,17 @@
 				<version>${jetty.version}</version>
 				<configuration>
 					<scanIntervalSeconds>15000000</scanIntervalSeconds>
+					<!-- 
+					<systemProperties>
+					 <properties>
+					   <property>
+					     <name>add-to-start</name>
+					     <value>servlets</value>
+					   </property>
+					 
+					 </properties>
+					</systemProperties>
+					-->
 					<webApp>
 						<contextPath>/</contextPath>
 						<defaultsDescriptor>src/main/resources/webdefault.xml</defaultsDescriptor>
@@ -116,6 +126,7 @@
 							<resourcesAsCSV>src/main/webapp,../../faceye-feature-mongo/src/main/webapp,../../faceye-security-manager-mongo/faceye-security-manager-mongo/src/main/webapp,../../faceye-feature/src/main/webapp</resourcesAsCSV>
 						</baseResource>
 					</webApp>
+					
 				</configuration>
 				<dependencies>
 					<dependency>
