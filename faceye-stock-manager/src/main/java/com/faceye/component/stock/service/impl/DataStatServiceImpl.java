@@ -385,8 +385,25 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		List<DataStat> results = null;
 		Long stockId = stock.getId();
 		Integer type = MapUtils.getInteger(params, "type");
+		Integer years=MapUtils.getInteger(params, "years");//连续多少年
+		
 		// 总资产净利率过滤器
-		Double totalAssetsNetProfitMargin = MapUtils.getDouble(params, "totalAssetsNetProfitMargin");
+//		Double totalAssetsNetProfitMargin = MapUtils.getDouble(params, "totalAssetsNetProfitMargin");
+		Double minTotalAssetsNetProfitMargin=MapUtils.getDouble(params, "minTotalAssetsNetProfitMargin");
+		Double maxTotalAssetsNetProfitMargin=MapUtils.getDouble(params, "maxTotalAssetsNetProfitMargin");
+		if(minTotalAssetsNetProfitMargin==null){
+			minTotalAssetsNetProfitMargin=0.05D;
+		}else{
+			minTotalAssetsNetProfitMargin=minTotalAssetsNetProfitMargin/100;
+		}
+		if(maxTotalAssetsNetProfitMargin==null){
+			maxTotalAssetsNetProfitMargin=0.5D;
+		}else{
+			maxTotalAssetsNetProfitMargin=maxTotalAssetsNetProfitMargin/100;
+		}
+		if(years==null){
+			years=5;
+		}
 		// 取最后五年的报表
 		Date now = new Date();
 		Date begin=new Date(now.getTime()-5*365*24*60*60*1000L);
@@ -395,13 +412,14 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		if (type == null) {
 			type = 0;// 年报
 		}
-		if (totalAssetsNetProfitMargin == null) {
-			totalAssetsNetProfitMargin = 0.2;// 1%
-		}
+//		if (totalAssetsNetProfitMargin == null) {
+//			totalAssetsNetProfitMargin = 0.2;// 1%
+//		}
 		Map dataStatParams = new HashMap();
 		dataStatParams.put("EQ|stockId", stockId);
 		dataStatParams.put("EQ|type", type);
-		dataStatParams.put("GTE|totalAssetsNetProfitMargin", totalAssetsNetProfitMargin);
+		dataStatParams.put("GTE|totalAssetsNetProfitMargin", minTotalAssetsNetProfitMargin);
+		dataStatParams.put("LTE|totalAssetsNetProfitMargin", maxTotalAssetsNetProfitMargin);
 		dataStatParams.put("GTE|dateCycle", begin);
 		dataStatParams.put("SORT|dateCycle:0", "desc");
 		// dataStatParams.put("SORT|totalAssetsNetProfitMargin:1", "desc");
