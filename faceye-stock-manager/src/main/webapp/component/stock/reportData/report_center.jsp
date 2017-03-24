@@ -19,7 +19,7 @@
 				动态市盈率:<fmt:formatNumber value="${dailyStat.dynamicPe}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;
 				30天最高价:￥ <fmt:formatNumber value="${dailyStat.topPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;(<fmt:formatDate value="${dailyStat.topPriceDate }" pattern="yyy-MM-dd"/>)&nbsp;&nbsp;
 				30天最低价:￥ <fmt:formatNumber value="${dailyStat.lowPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;(<fmt:formatDate value="${dailyStat.lowPriceDate }" pattern="yyy-MM-dd"/>)&nbsp;&nbsp;
-				波幅:<font class="${price-css }"><c:if test="${dailyStat.topPriceDate lt dailyStat.lowPriceDate }">-</c:if><fmt:formatNumber value="${100* ( dailyStat.topPriceOf30Day - dailyStat.lowPriceOf30Day )/dailyStat.lowPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</font>
+				波幅:<font class="${price-css}"><c:if test="${dailyStat.topPriceDate lt dailyStat.lowPriceDate }">-</c:if><fmt:formatNumber value="${100* ( dailyStat.topPriceOf30Day - dailyStat.lowPriceOf30Day )/dailyStat.lowPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</font>
 				</c:if>
 		</div>
 		<div class="col-sm-2 text-right">
