@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*,com.faceye.feature.util.*,com.faceye.feature.util.host.*" pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
+<link rel="stylesheet" type="text/css" href="<c:url value="/css/component/stock/stock.css"/>" />
 <li><a href="#"><i class="fa fa-list-alt"></i><span>股票</span></a>
 	<ul class="sub-menu">
 		<li class="<%=JspUtil.isActive(request, "stock")%>"><a href="/stock/stock/home"><fmt:message key="stock.stock.manager"></fmt:message></a></li>
