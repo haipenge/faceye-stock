@@ -4,12 +4,12 @@
 <script type="text/javascript" src="<c:url value="/js/component/stock/reportData/reportData.js"/>"></script>
 <div class="page-head">
 	<div class="row">
-		<div class="col-sm-4">
+		<div class="col-sm-2">
 			<h2>
 				${stock.name} <small>(${stock.code})</small>&nbsp;&nbsp;财报<input type="hidden" name="stockId" value="${stock.id}" id="stock_id">
 			</h2>
 		</div>
-		<div class="col-sm-4 text-center">
+		<div class="col-sm-6 text-center">
 		   <c:if test="${not empty dailyStat }">
 				<c:set var="price-css" value="price-rise"/>
 				<c:if test="${dailyStat.topPriceDate lt dailyStat.lowPriceDate }">
