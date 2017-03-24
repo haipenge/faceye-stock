@@ -142,7 +142,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 					}
 				}
 			}
-			dailyStat.setLowerpriceOf30Day(lowerPriceOf30Days);
+			dailyStat.setLowPriceOf30Day(lowerPriceOf30Days);
 			dailyStat.setLowerPriceDate(lowerPriceDate);
 			dailyStat.setTopPriceOf30Day(topPriceOf30Days);
 			dailyStat.setTopPriceDate(topPriceDate);
