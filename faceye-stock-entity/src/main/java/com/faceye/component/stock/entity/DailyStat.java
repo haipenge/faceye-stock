@@ -55,7 +55,7 @@ public class DailyStat implements Serializable {
     * @author haipenge<br>
     */
     
-	private  Long stockId;
+	private  Long stockId=null;
 	public Long getStockId() {
 		return stockId;
 	}
@@ -73,7 +73,7 @@ public class DailyStat implements Serializable {
     * @author haipenge<br>
     */
     
-	private  Double topPriceOf30Day;
+	private  Double topPriceOf30Day=null;
 	public Double getTopPriceOf30Day() {
 		return topPriceOf30Day;
 	}
@@ -91,7 +91,7 @@ public class DailyStat implements Serializable {
     * @author haipenge<br>
     */
     
-	private  Double lowerPriceOf30Day;
+	private  Double lowerPriceOf30Day=null;
 	public Double getLowerpriceOf30Day() {
 		return lowerPriceOf30Day;
 	}
@@ -109,7 +109,7 @@ public class DailyStat implements Serializable {
     * @author haipenge<br>
     */
     
-	private  Double pe;
+	private  Double pe=null;
 	public Double getPe() {
 		return pe;
 	}
@@ -127,7 +127,7 @@ public class DailyStat implements Serializable {
     * @author haipenge<br>
     */
     
-	private  Date topPriceDate;
+	private  Date topPriceDate=null;
 	public Date getTopPriceDate() {
 		return topPriceDate;
 	}
@@ -145,7 +145,7 @@ public class DailyStat implements Serializable {
     * @author haipenge<br>
     */
     
-	private  Date lowerPriceDate;
+	private  Date lowerPriceDate=null;
 	public Date getLowerPriceDate() {
 		return lowerPriceDate;
 	}
@@ -163,7 +163,7 @@ public class DailyStat implements Serializable {
     * @author haipenge<br>
     */
     
-	private  Long categoryId;
+	private  Long categoryId=null;
 	public Long getCategoryId() {
 		return categoryId;
 	}
@@ -181,7 +181,7 @@ public class DailyStat implements Serializable {
     * @author haipenge<br>
     */
     
-	private  Double dynamicPe;
+	private  Double dynamicPe=null;
 	public Double getDynamicPe() {
 		return dynamicPe;
 	}
@@ -199,7 +199,7 @@ public class DailyStat implements Serializable {
     * @author haipenge<br>
     */
     
-	private  Double pb;
+	private  Double pb=null;
 	public Double getPb() {
 		return pb;
 	}
