@@ -4,12 +4,12 @@
 <script type="text/javascript" src="<c:url value="/js/component/stock/reportData/reportData.js"/>"></script>
 <div class="page-head">
 	<div class="row">
-		<div class="col-sm-2">
+		<div class="col-sm-3">
 			<h2>
 				${stock.name} <small>(${stock.code})</small>&nbsp;&nbsp;财报<input type="hidden" name="stockId" value="${stock.id}" id="stock_id">
 			</h2>
 		</div>
-		<div class="col-sm-6 text-center">
+		<div class="col-sm-7 text-center">
 		   <c:if test="${not empty dailyStat }">
 				<c:set var="price-css" value="price-rise"/>
 				<c:if test="${dailyStat.topPriceDate lt dailyStat.lowPriceDate }">
@@ -22,7 +22,7 @@
 				波动幅度: <span class="${price-css}"><c:if test="${dailyStat.topPriceDate lt dailyStat.lowPriceDate }">-</c:if>&nbsp;&nbsp;<fmt:formatNumber value="${100* ( dailyStat.topPriceOf30Day - dailyStat.lowPriceOf30Day )/dailyStat.lowPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</span>
 				</c:if>
 		</div>
-		<div class="col-sm-4 text-right">
+		<div class="col-sm-2 text-right">
 			<c:if test="${empty wrapReporter.records  }">
 				<a href="#" class="btn btn-sm btn-warning start-crawl">爬取数据</a>
 			</c:if>
