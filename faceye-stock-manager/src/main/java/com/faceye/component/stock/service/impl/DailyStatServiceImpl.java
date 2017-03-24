@@ -154,7 +154,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 	 * 市净率指的是每股股价与每股净资产的比率。每股净资产= 股东权益÷总股数<br>
 	 * 
 	 * 另： 动态市盈率＝静态市盈率/(1+年复合增长率)N次方<br>
-	 *  动态市盈率，其计算公式是以静态市盈率为基数,乘以动态系数，该系数为1／（1＋i）^n，i为企业每股收益的增长性比率，n为企业的可持续发展的存续期。<br>
+	 * 动态市盈率，其计算公式是以静态市盈率为基数,乘以动态系数，该系数为1／（1＋i）^n，i为企业每股收益的增长性比率，n为企业的可持续发展的存续期。<br>
 	 * 比如说，上市公司目前股价为20元，每股收益为0．38元，去年同期每股收益为0．28元，成长性为35%，即i＝35%，该企业未来保持该增长速度的时间可持续5年，即n＝5.<br>
 	 * 则动态系数为1／（1＋35％）^5＝22%。相应地，动态市盈率为11．6倍即：52（静态市盈率：20元／0．38元＝52）×22%
 	 * 
@@ -179,46 +179,48 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 		params.put("SORT|date", "desc");
 		List<DailyData> dailyDatas = this.dailyDataService.getPage(params, 1, 1).getContent();
 		DailyData dailyData = CollectionUtils.isEmpty(dailyDatas) ? null : dailyDatas.get(0);
-		Double shoupanjia = dailyData.getShoupanjia();
-		// 计算市盈率
-		Double pe = null;
-		params = new HashMap();
-		params.put("EQ|stockId", stock.getId());
-		params.put("EQ|type", StockConstants.REPORT_TYPE_YEAR);
-		params.put("SORT|date", "desc");
-		// 取得最近一份年报
-		List<ReportData> reportDatas = this.reportDataService.getPage(params, 1, 1).getContent();
-		// 取得每股盈利
-		Double yearEps = null;
-		if (CollectionUtils.isNotEmpty(reportDatas)) {
-			yearEps = reportDatas.get(0).getInComeSheet().getEle10().getMgsy_131();
-		}
-		if (yearEps != null && yearEps > 0 && shoupanjia != null) {
-			pe = shoupanjia / yearEps;
-		}
-		// 计算动态市盈率
-		Double dynamicPe = null;
-		params = new HashMap();
-		params.put("EQ|stockId", stock.getId());
-		params.put("SORT|date", "desc");
-		// 取得最近一份财务报告
-		reportDatas = this.reportDataService.getPage(params, 1, 1).getContent();
-		if (CollectionUtils.isNotEmpty(reportDatas)) {
-			ReportData reportData = reportDatas.get(0);
-			if (reportData.getType() == StockConstants.REPORT_TYPE_YEAR) {
-				dynamicPe = pe;
-			} else {
-				Double reportEps = reportData.getInComeSheet().getEle10().getMgsy_131();
-				if (reportEps != null && reportEps > 0 && shoupanjia != null) {
-					dynamicPe = reportData.getType() * shoupanjia / (4 * reportEps);
+		if (dailyData != null) {
+			Double shoupanjia = dailyData.getShoupanjia();
+			// 计算市盈率
+			Double pe = null;
+			params = new HashMap();
+			params.put("EQ|stockId", stock.getId());
+			params.put("EQ|type", StockConstants.REPORT_TYPE_YEAR);
+			params.put("SORT|date", "desc");
+			// 取得最近一份年报
+			List<ReportData> reportDatas = this.reportDataService.getPage(params, 1, 1).getContent();
+			// 取得每股盈利
+			Double yearEps = null;
+			if (CollectionUtils.isNotEmpty(reportDatas)) {
+				yearEps = reportDatas.get(0).getInComeSheet().getEle10().getMgsy_131();
+			}
+			if (yearEps != null && yearEps > 0 && shoupanjia != null) {
+				pe = shoupanjia / yearEps;
+			}
+			// 计算动态市盈率
+			Double dynamicPe = null;
+			params = new HashMap();
+			params.put("EQ|stockId", stock.getId());
+			params.put("SORT|date", "desc");
+			// 取得最近一份财务报告
+			reportDatas = this.reportDataService.getPage(params, 1, 1).getContent();
+			if (CollectionUtils.isNotEmpty(reportDatas)) {
+				ReportData reportData = reportDatas.get(0);
+				if (reportData.getType() == StockConstants.REPORT_TYPE_YEAR) {
+					dynamicPe = pe;
+				} else {
+					Double reportEps = reportData.getInComeSheet().getEle10().getMgsy_131();
+					if (reportEps != null && reportEps > 0 && shoupanjia != null) {
+						dynamicPe = reportData.getType() * shoupanjia / (4 * reportEps);
+					}
 				}
 			}
+			// 计算市净率
+			Double pb = null;
+			dailyStat.setPe(pe);
+			dailyStat.setDynamicPe(dynamicPe);
+			this.save(dailyStat);
 		}
-		//计算市净率 
-		Double pb=null;
-		dailyStat.setPe(pe);
-		dailyStat.setDynamicPe(dynamicPe);
-		this.save(dailyStat);
 	}
 
 }/** @generate-service-source@ **/

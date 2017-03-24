@@ -85,7 +85,7 @@
 								<td>${stock.category.name}</td>
 								<td><c:if test="${stock.market eq 'sz'}">深圳(SZ)</c:if> <c:if test="${stock.market eq 'sh'}">上海(SH)</c:if></td>
 								<!--@generate-entity-jsp-property-value@-->
-								<td><a href="<c:url value="/stock/dailyData/home?EQ|stock.$id=${stock.id}"/>"><fmt:message key="stock.dailyData" /></a></td>
+								<td><a href="<c:url value="/stock/dailyData/home?EQ|stockId=${stock.id}"/>"><fmt:message key="stock.dailyData" /></a></td>
 								<td><a href="<c:url value="/stock/reportData/report?stockId=${stock.id}"/>">财务报表</a></td>
 								<td><a href="<c:url value="/stock/stock/edit/${stock.id}"/>"> <fmt:message key="global.edit"></fmt:message></a></td>
 								<td><a href="<c:url value="/stock/stock/remove/${stock.id}"/>"> <fmt:message key="global.remove"></fmt:message></a></td>
