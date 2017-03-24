@@ -28,18 +28,14 @@
 				<table class="table table-bordered table-hover" style="font-size: 10px;">
 				<thead>
 					<tr>
-						<th><fmt:message key='stock.dailyData.stockName'></fmt:message></th>
 						<th><fmt:message key='stock.dailyData.date'></fmt:message></th>
 						<th><fmt:message key='stock.dailyData.kaipanjia'></fmt:message></th>
-
 						<th><fmt:message key='stock.dailyData.shoupanjia'></fmt:message></th>
 						<th><fmt:message key='stock.dailyData.dangqianjiage'></fmt:message></th>
 						<th><fmt:message key='stock.dailyData.jintianzuigaojia'></fmt:message></th>
 						<th><fmt:message key='stock.dailyData.jintianzuidijia'></fmt:message></th>
 						<th><fmt:message key='stock.dailyData.chengjiaogupiaoshu'></fmt:message></th>
 						<th><fmt:message key='stock.dailyData.chengjiaojine'></fmt:message></th>
-
-
 						<th><fmt:message key='stock.dailyData.avg5'></fmt:message></th>
 						<th><fmt:message key='stock.dailyData.avg10'></fmt:message></th>
 						<th><fmt:message key='stock.dailyData.avg20'></fmt:message></th>
@@ -54,7 +50,7 @@
 					</thead>
 					<c:forEach items="${page.content}" var="dailyData">
 						<tr>
-							<td>${dailyData.stockName}(${dailyData.stockCode})</td>
+							
 							<td><fmt:formatDate value="${dailyData.date}" pattern="yyyy-MM-dd"></fmt:formatDate></td>
 							<td><fmt:formatNumber value="${dailyData.kaipanjia}" pattern="#,#00.0#" /></td>
 							<td><fmt:formatNumber value="${dailyData.shoupanjia}" pattern="#,#00.0#" /></td>

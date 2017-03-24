@@ -9,8 +9,8 @@ import com.faceye.component.stock.service.wrapper.StatRecord;
 import com.faceye.feature.service.BaseService;
 
 /**
- * DataStat 服务接品<br>
- * 
+ * DataStat 服务接口<br>
+ * 对财报数据进行分析
  * @author @haipenge <br>
  *         haipenge@gmail.com<br>
  *         Create Date:2014年5月20日<br>

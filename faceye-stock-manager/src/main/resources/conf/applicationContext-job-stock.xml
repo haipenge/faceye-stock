@@ -26,11 +26,13 @@
 			<list>
 			     <ref bean="crawlFinancialDataJobTrigger"/>
 			     <ref bean="dataStatJobTrigger"/>
-			     <!--  按季度爬取数据 -->
-			     <ref bean="crawlStockMonthDataJobTrigger"/>
-			     <!-- 
-			     
 			     <ref bean="crawlStockDailyDataJobTrigger"/>
+			     <ref bean="dailyStatJobTrigger"/>
+			     
+			     <!--
+			      按季度爬取数据  
+			     <ref bean="crawlStockMonthDataJobTrigger"/>
+			     
 			     <ref bean="computeStockDailyDataAvgJobTrigger"/>
 			     
 			      -->
@@ -44,7 +46,7 @@
 			<ref bean="crawlStockDailyDataJobDetail" />
 		</property>
 		<property name="cronExpression">
-			<value>0 45 15 * * ?</value>
+			<value>0 15 15 * * ?</value>
 		</property>
 	</bean>
 	<bean id="crawlStockDailyDataJobDetail"
@@ -146,6 +148,30 @@
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject">
 			<ref bean="dataStatJob" />
+		</property>
+		<property name="targetMethod">
+			<value>doJob</value>
+		</property>
+		<property name="concurrent">
+			<value>false</value>
+		</property>
+	</bean>
+	
+	<!-- Daily Stock data stat -->
+	
+	<bean id="dailyStatJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="dailyStatJobDetail" />
+		</property>
+		<property name="cronExpression">
+			<value>0 45 16 * * ?</value>
+		</property>
+	</bean>
+	<bean id="dailyStatJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="dailyStatJob" />
 		</property>
 		<property name="targetMethod">
 			<value>doJob</value>
