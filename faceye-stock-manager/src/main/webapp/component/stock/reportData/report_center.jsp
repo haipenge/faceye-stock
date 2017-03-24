@@ -4,17 +4,23 @@
 <script type="text/javascript" src="<c:url value="/js/component/stock/reportData/reportData.js"/>"></script>
 <div class="page-head">
 	<div class="row">
-		<div class="col-sm-8">
+		<div class="col-sm-4">
 			<h2>
 				${stock.name} <small>(${stock.code})</small>&nbsp;&nbsp;财报<input type="hidden" name="stockId" value="${stock.id}" id="stock_id">
-				<small><c:if test="${not empty dailyStat }">
+			</h2>
+		</div>
+		<div class="col-sm-4 text-center">
+		   <c:if test="${not empty dailyStat }">
+				<c:set var="price-css" value="price-rise"/>
+				<c:if test="${dailyStat.topPriceDate lt dailyStat.lowPriceDate }">
+				   <c:set var="price-css" value="price-fall"/>
+				</c:if>
 				市盈率:<fmt:formatNumber value="${dailyStat.pe }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;
 				动态市盈率:<fmt:formatNumber value="${dailyStat.dynamicPe}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;
-				30天最高价:￥ <fmt:formatNumber value="${dailyStat.topPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;(<fmt:formatDate value="${dailyData.topPriceDate }" pattern="yyy-MM-dd"/>)&nbsp;&nbsp;
-				30天最低价:￥ <fmt:formatNumber value="${dailyStat.lowPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;(<fmt:formatDate value="${dailyData.lowPriceDate }" pattern="yyy-MM-dd"/>)&nbsp;&nbsp;
-				波动幅度: <c:if test="${dailyStat.topPriceDate lt dailyStat.lowPriceDate }">-</c:if>&nbsp;&nbsp;<fmt:formatNumber value="${100* ( dailyStat.topPriceOf30Day - dailyStat.lowPriceOf30Day )/dailyStat.lowPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%
-				</c:if></small>
-			</h2>
+				30天最高价:￥ <fmt:formatNumber value="${dailyStat.topPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;(<fmt:formatDate value="${dailyStat.topPriceDate }" pattern="yyy-MM-dd"/>)&nbsp;&nbsp;
+				30天最低价:￥ <fmt:formatNumber value="${dailyStat.lowPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;(<fmt:formatDate value="${dailyStat.lowPriceDate }" pattern="yyy-MM-dd"/>)&nbsp;&nbsp;
+				波动幅度: <span class="${price-css}"><c:if test="${dailyStat.topPriceDate lt dailyStat.lowPriceDate }">-</c:if>&nbsp;&nbsp;<fmt:formatNumber value="${100* ( dailyStat.topPriceOf30Day - dailyStat.lowPriceOf30Day )/dailyStat.lowPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</span>
+				</c:if>
 		</div>
 		<div class="col-sm-4 text-right">
 			<c:if test="${empty wrapReporter.records  }">
