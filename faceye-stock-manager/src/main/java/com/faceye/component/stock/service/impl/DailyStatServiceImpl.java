@@ -109,6 +109,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 			dailyStat = dailyStats.get(0);
 		} else {
 			dailyStat = new DailyStat();
+			dailyStat.setCategoryId(stock.getCategory().getId());
 		}
 		Map params = new HashMap();
 		Date now = new Date();
@@ -171,6 +172,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 			dailyStat = dailyStats.get(0);
 		} else {
 			dailyStat = new DailyStat();
+			dailyStat.setCategoryId(stock.getCategory().getId());
 		}
 		Map params = new HashMap();
 		params.put("EQ|stockId", stock.getId());
