@@ -8,9 +8,11 @@
 			<h2>
 				${stock.name} <small>(${stock.code})</small>&nbsp;&nbsp;财报<input type="hidden" name="stockId" value="${stock.id}" id="stock_id">
 				<small><c:if test="${not empty dailyStat }">
-				市盈率:${dailyStat.pe }&nbsp;&nbsp;动态市盈率:${dailyStat.dynamicPe}&nbsp;&nbsp;
+				市盈率:<fmt:formatNumber value="${dailyStat.pe }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;
+				动态市盈率:<fmt:formatNumber value="${dailyStat.dynamicPe}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;
 				30天最高价:￥ <fmt:formatNumber value="${dailyStat.topPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;(<fmt:formatDate value="${dailyData.topPriceDate }" pattern="yyy-MM-dd"/>)&nbsp;&nbsp;
-			
+				30天最低价:￥ <fmt:formatNumber value="${dailyStat.lowerPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;(<fmt:formatDate value="${dailyData.lowerPriceDate }" pattern="yyy-MM-dd"/>)&nbsp;&nbsp;
+				
 				</c:if></small>
 			</h2>
 		</div>
