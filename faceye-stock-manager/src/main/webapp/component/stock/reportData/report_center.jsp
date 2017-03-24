@@ -11,7 +11,7 @@
 				市盈率:${dailyStat.pe }&nbsp;&nbsp;动态市盈率:${dailyStat.dynamicPe}&nbsp;&nbsp;
 				30天最高价:￥ <fmt:formatNumber value="${dailyStat.topPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;(<fmt:formatDate value="${dailyData.topPriceDate }" pattern="yyy-MM-dd"/>)&nbsp;&nbsp;
 				30天最低价:￥ <fmt:formatNumber value="${dailyStat.lowerPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;(<fmt:formatDate value="${dailyData.lowerPriceDate }" pattern="yyy-MM-dd"/>)&nbsp;&nbsp;
-				波动幅度: <c:if test="${dailyStat.topPriceDate lt lowerPriceDate }">-</c:if>&nbsp;&nbsp;<fmt:formatNumber value="${100*(dailyStat.topPriceOf30Day-dailyStat.lowerPriceOf30Day)/dailyStat.lowerPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%
+				波动幅度: <c:if test="${dailyStat.topPriceDate lt lowerPriceDate }">-</c:if>&nbsp;&nbsp;<fmt:formatNumber value="${100* ( dailyStat.topPriceOf30Day - dailyStat.lowerPriceOf30Day )/dailyStat.lowerPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%
 				</c:if></small>
 			</h2>
 		</div>
