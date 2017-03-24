@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,12 @@ import org.springframework.util.StopWatch;
 import org.springframework.util.StopWatch.TaskInfo;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.faceye.component.stock.entity.DailyStat;
 import com.faceye.component.stock.entity.DataStat;
 import com.faceye.component.stock.entity.ReportCategory;
 import com.faceye.component.stock.entity.ReportData;
 import com.faceye.component.stock.entity.Stock;
+import com.faceye.component.stock.service.DailyStatService;
 import com.faceye.component.stock.service.DataStatService;
 import com.faceye.component.stock.service.ReportCategoryService;
 import com.faceye.component.stock.service.ReportDataService;
@@ -41,6 +44,8 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 	private StockService stockService = null;
 	@Autowired
 	private DataStatService dataStatService = null;
+	@Autowired
+	private DailyStatService dailyStatService=null;
 
 	public ReportDataController(ReportDataService service) {
 		super(service);
@@ -86,6 +91,12 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 			reportCategory = this.reportCategoryService.getReportCategoryByCode(StockConstants.REPORT_CATEOGRY_FINANCIAL_SUMMARY);
 		}
 		watch.stop();
+		//获取每日数据分析
+		Map dailyStatParams=new HashMap();
+		dailyStatParams.put("EQ|stockId", stockId);
+		List<DailyStat> dailyStats=this.dailyStatService.getPage(dailyStatParams, 0, 1).getContent();
+		DailyStat dailyStat=CollectionUtils.isNotEmpty(dailyStats)?dailyStats.get(0):null;
+		model.addAttribute("dailyStat", dailyStat);
 
 		if (StringUtils.equals(reportCategory.getCode(), StockConstants.REPORT_CATEOGRY_FINANCIAL_SUMMARY)) {
 			// 财务接要,获取财务分析数据
