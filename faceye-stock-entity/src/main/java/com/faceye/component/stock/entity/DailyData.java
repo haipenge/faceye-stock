@@ -3,12 +3,9 @@ package com.faceye.component.stock.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 /**
  * DailyData ORM 实体
@@ -184,7 +181,7 @@ public class DailyData implements Serializable {
     * 数据库字段:stockId
     * @author haipenge
     */
-    
+    @Indexed
 	private  Long stockId;
 	public Long getStockId() {
 		return stockId;
@@ -195,39 +192,39 @@ public class DailyData implements Serializable {
 	
 
 	
-   /**
-    * 说明:股票代码
-    * 属性名: stockCode
-    * 类型: String
-    * 数据库字段:stockCode
-    * @author haipenge
-    */
-    
-	private  String stockCode;
-	public String getStockCode() {
-		return stockCode;
-	}
-	public void setStockCode(String stockCode) {
-		this.stockCode = stockCode;
-	}
-	
-
-	
-   /**
-    * 说明:股票名称
-    * 属性名: stockName
-    * 类型: String
-    * 数据库字段:stockName
-    * @author haipenge
-    */
-    
-	private  String stockName;
-	public String getStockName() {
-		return stockName;
-	}
-	public void setStockName(String stockName) {
-		this.stockName = stockName;
-	}
+//   /**
+//    * 说明:股票代码
+//    * 属性名: stockCode
+//    * 类型: String
+//    * 数据库字段:stockCode
+//    * @author haipenge
+//    */
+//    
+//	private  String stockCode;
+//	public String getStockCode() {
+//		return stockCode;
+//	}
+//	public void setStockCode(String stockCode) {
+//		this.stockCode = stockCode;
+//	}
+//	
+//
+//	
+//   /**
+//    * 说明:股票名称
+//    * 属性名: stockName
+//    * 类型: String
+//    * 数据库字段:stockName
+//    * @author haipenge
+//    */
+//    
+//	private  String stockName;
+//	public String getStockName() {
+//		return stockName;
+//	}
+//	public void setStockName(String stockName) {
+//		this.stockName = stockName;
+//	}
 	
 	/**
 	 * 数据创建日期

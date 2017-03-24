@@ -44,7 +44,7 @@
 		<div id="msg"></div>
 		<c:forEach items="${statRecords}" var="statRecord">
 			<h4>${statRecord.stock.name}
-				<small>(${statRecord.stock.code })</small> <small><a href="<c:url value="/stock/reportData/erport?stockId=${statRecord.stock.id}"/>">财务报表</a></small>
+				<small>(${statRecord.stock.code })</small> <small><a href="<c:url value="/stock/reportData/report?stockId=${statRecord.stock.id}"/>">财务报表</a></small>
 			</h4>
 			<div classs="table-responsive">
 				<table class="table table-bordered">
@@ -71,35 +71,35 @@
 							<c:forEach items="${statRecord.dataStats}" var="dataStat">
 								<td><fmt:formatNumber value="${dataStat.roe *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
 							</c:forEach>
-							<td></td>
+							
 						</tr>
 						<tr>
 							<td>净利率</td>
 							<c:forEach items="${statRecord.dataStats}" var="dataStat">
 								<td><fmt:formatNumber value="${dataStat.netProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
 							</c:forEach>
-							<td></td>
+							
 						</tr>
 						<tr>
 							<td>毛利率</td>
 							<c:forEach items="${statRecord.dataStats}" var="dataStat">
 								<td><fmt:formatNumber value="${dataStat.grossProfitMargin  *100}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
 							</c:forEach>
-							<td></td>
+							
 						</tr>
 						<tr>
 							<td>资产负债率</td>
 							<c:forEach items="${statRecord.dataStats}" var="dataStat">
 								<td><fmt:formatNumber value="${dataStat.debtToAssetsRatio *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
 							</c:forEach>
-							<td></td>
+							
 						</tr>
 						<tr>
 							<td>资产周转率</td>
 							<c:forEach items="${statRecord.dataStats}" var="dataStat">
 								<td><fmt:formatNumber value="${dataStat.totalAssetsTurnover *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
 							</c:forEach>
-							<td></td>
+							
 						</tr>
 					</tbody>
 				</table>

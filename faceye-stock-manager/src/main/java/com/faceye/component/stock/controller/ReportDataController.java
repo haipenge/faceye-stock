@@ -74,9 +74,9 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 		model.addAttribute("stock", stock);
 		String date = MapUtils.getString(searchParams, "date");// Year
 		// 报表分类，年报，季报？0（年报），1（一季报），2，3
-		String type = MapUtils.getString(searchParams, "type");
-		if (StringUtils.isEmpty(type)) {
-			type = "0";
+		Integer type = MapUtils.getInteger(searchParams, "type");
+		if (type==null) {
+			type = 0;
 		}
 		ReportCategory reportCategory = null;
 		if (reportCategoryId != null) {

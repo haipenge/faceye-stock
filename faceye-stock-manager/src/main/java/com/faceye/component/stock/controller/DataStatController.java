@@ -138,8 +138,15 @@ public class DataStatController extends BaseController<DataStat, Long, DataStatS
 	public String stat(HttpServletRequest request){
 		Map params=HttpUtil.getRequestParams(request);
 		Long stockId=MapUtils.getLong(params, "stockId");
+		if(stockId!=null){
+			Map searchParams=new HashMap();
+			searchParams.put("EQ|stockId", stockId);
+			List<DataStat> dataStats=this.service.getPage(searchParams, 0, 0).getContent();
+			this.service.removeInBatch(dataStats);
+		}
 		Stock stock=this.stockService.get(stockId);
 		this.service.stat(stock);
+		
 		return AjaxResult.getInstance().buildDefaultResult(true);
 	}
 

@@ -194,7 +194,7 @@ public class ReportDataServiceImpl extends BaseMongoServiceImpl<ReportData, Long
 						break;
 					}
 				}
-				if (base > 0) {
+				if (base!=null &&base > 0) {
 					for (Data2Record data2Record : wrapRecords.getData2Record()) {
 						if (data2Record.getData() != null) {
 							Double commonSizeAnalysisResult = data2Record.getData() / base;

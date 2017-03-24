@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -82,7 +83,6 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 			if (currentMonth >= 10 && currentMonth <= 12) {
 				jidu = "4";
 			}
-
 			List<Map<String, String>> data = fetcher.getStockDataList(code, "" + year, jidu);
 			if (CollectionUtils.isNotEmpty(data)) {
 				List<DailyData> willSavedDailyData = new ArrayList<DailyData>(0);
@@ -102,13 +102,18 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 						String volume = map.get("volume");
 						// 成交金额(元)
 						String money = map.get("money");
+				        Date dDate=DateUtil.getDateFromString(date+" 00:00:00", "yyyy-MM-dd HH:mm:ss");
+				        //只存储最近30天的数据
+				        if(now.getTime()-dDate.getTime()>31*24*60*60*1000L){
+				        	continue;
+				        }
 						boolean isDailyDataExist = this.isDailyDataExist(code, date);
-						date += " 15:30:00";
+						date += " 15:00:00";
 						if (!isDailyDataExist) {
 							DailyData dailyData = new DailyData();
-							dailyData.setStockCode(stock.getCode());
+//							dailyData.setStockCode(stock.getCode());
 							dailyData.setStockId(stock.getId());
-							dailyData.setStockName(stock.getName());
+//							dailyData.setStockName(stock.getName());
 							dailyData.setChengjiaogupiaoshu(Double.parseDouble(volume));
 							dailyData.setChengjiaojine(Double.parseDouble(money));
 							dailyData.setDangqianjiage(Double.parseDouble(close));
@@ -363,9 +368,9 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 					dailyData.setJintianzuigaojia(Double.parseDouble(high));
 					dailyData.setKaipanjia(Double.parseDouble(open));
 					dailyData.setDate(DateUtil.getDateFromString(date + " " + time));
-					dailyData.setStockCode(stock.getCode());
+//					dailyData.setStockCode(stock.getCode());
 					dailyData.setStockId(stock.getId());
-					dailyData.setStockName(stock.getName());
+//					dailyData.setStockName(stock.getName());
 					this.save(dailyData);
 				}
 			}
