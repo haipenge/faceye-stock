@@ -122,6 +122,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 		Date topPriceDate = null;
 		Double lowerPriceOf30Days = 0.0D;
 		Date lowerPriceDate = null;
+		Double todayPrice=null;
 		if (dailyDatas != null) {
 			int index = 0;
 			for (DailyData dailyData : dailyDatas) {
@@ -130,7 +131,9 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 					topPriceDate = dailyData.getDate();
 					lowerPriceOf30Days = dailyData.getJintianzuidijia();
 					lowerPriceDate = dailyData.getDate();
+					todayPrice=dailyData.getShoupanjia();
 					index++;
+					
 				} else {
 					if (dailyData.getJintianzuigaojia().compareTo(topPriceOf30Days) > 0) {
 						topPriceOf30Days = dailyData.getJintianzuigaojia();

@@ -68,11 +68,16 @@
 		</listener-class>
 	</listener>
 	<jsp-config>
+		<jsp-property-group>
+			<url-pattern>*.jsp</url-pattern>
+			<trim-directive-whitespaces>true</trim-directive-whitespaces>
+		</jsp-property-group>
 		<taglib>
 			<taglib-uri>http://www.faceye.com/core</taglib-uri>
 			<taglib-location>/WEB-INF/tld/faceye.tld</taglib-location>
 		</taglib>
 	</jsp-config>
+
 	<!-- session超时定义,30分钟 -->
 	<session-config>
 		<session-timeout>30</session-timeout>

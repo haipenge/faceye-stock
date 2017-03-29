@@ -132,8 +132,6 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 			if(lastReportData.getDate()!=null &&now.getTime()-lastReportData.getDate().getTime()<3*30*60*60*1000L){
 				isCrawled=true;
 			}
-		}else{
-			isCrawled=false;
 		}
 		return isCrawled;
 	}

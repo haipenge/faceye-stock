@@ -49,7 +49,12 @@
 	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.dailyStat.pb"></fmt:message></td>
 	<td>${dailyStat.pb}</td>
 </tr>
+<tr>
+	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.dailyStat.todayPrice"></fmt:message></td>
+	<td>${dailyStat.todayPrice}</td>
+</tr>
 <!--@generate-entity-jsp-property-detail@-->
+
 
 
 
