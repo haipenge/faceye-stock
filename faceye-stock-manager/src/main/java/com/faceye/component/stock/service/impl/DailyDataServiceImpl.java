@@ -8,7 +8,6 @@ import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,6 +24,7 @@ import com.faceye.component.stock.entity.QDailyData;
 import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.repository.mongo.DailyDataRepository;
 import com.faceye.component.stock.repository.mongo.StockRepository;
+import com.faceye.component.stock.repository.mongo.customer.DailyDataCustomerRepository;
 import com.faceye.component.stock.service.DailyDataService;
 import com.faceye.component.stock.util.StockFetcher;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
@@ -48,6 +48,9 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 	@Autowired
 	@Qualifier("stockQueueServiceImpl")
 	private MultiQueueService<Stock> stockQueueService = null;
+	
+	@Autowired
+	private DailyDataCustomerRepository dailyDataCustomerRepository=null;
 
 	// 均线周期
 	private static Integer[] AVG_DAYS = new Integer[] { 5, 10, 20, 30, 60, 120, 250 };

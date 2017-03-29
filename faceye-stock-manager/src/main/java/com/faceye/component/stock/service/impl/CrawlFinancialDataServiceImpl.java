@@ -129,7 +129,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 		if(!isEmpty){
 			ReportData lastReportData=reportDatas.getContent().get(0);
 			Date now=new Date();
-			if(lastReportData.getDate()!=null &&now.getTime()-lastReportData.getDate().getTime()<3*30*60*60*1000L){
+			if(lastReportData.getDate()!=null &&now.getTime()-lastReportData.getDate().getTime()<3*30*24*60*60*1000L){
 				isCrawled=true;
 			}
 		}
