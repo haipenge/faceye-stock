@@ -116,14 +116,29 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 		Date now = new Date();
 		Date befor30Day = new Date(now.getTime() - 31 * 24 * 60 * 60 * 1000L);
 		params.put("EQ|stockId", stock.getId());
-		params.put("GTE|createDate", befor30Day);
+		params.put("GTE|date", befor30Day);
+		params.put("SORT|date", "desc");
 		List<DailyData> dailyDatas = this.dailyDataService.getPage(params, 0, 0).getContent();
+		// 设置昨天交易收盘价
+		if (CollectionUtils.isNotEmpty(dailyDatas)) {
+			int size = dailyDatas.size();
+			for (int i = 0; i < dailyDatas.size(); i++) {
+				DailyData dailyData = dailyDatas.get(i);
+				if (i < size - 1) {
+					DailyData yesterdayDailyData = dailyDatas.get(i + 1);
+					if (dailyData.getYesterdayPrice() == null) {
+						dailyData.setYesterdayPrice(yesterdayDailyData.getShoupanjia());
+						this.dailyDataService.save(dailyData);
+					}
+				}
+			}
+		}
 		Double topPriceOf30Days = 0.0D;
 		Date topPriceDate = null;
 		Double lowerPriceOf30Days = 0.0D;
 		Date lowerPriceDate = null;
-		Double todayPrice=null;
-		Double yesterdayPrice=null;
+		Double todayPrice = null;
+		Double yesterdayPrice = null;
 		if (dailyDatas != null) {
 			int index = 0;
 			for (DailyData dailyData : dailyDatas) {
@@ -132,10 +147,10 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 					topPriceDate = dailyData.getDate();
 					lowerPriceOf30Days = dailyData.getJintianzuidijia();
 					lowerPriceDate = dailyData.getDate();
-					todayPrice=dailyData.getShoupanjia();
-					yesterdayPrice=dailyData.getYesterdayPrice();
+					todayPrice = dailyData.getShoupanjia();
+					yesterdayPrice = dailyData.getYesterdayPrice();
 					index++;
-					
+
 				} else {
 					if (dailyData.getJintianzuigaojia().compareTo(topPriceOf30Days) > 0) {
 						topPriceOf30Days = dailyData.getJintianzuigaojia();
@@ -151,17 +166,17 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 			dailyStat.setLowPriceDate(lowerPriceDate);
 			dailyStat.setTopPriceOf30Day(topPriceOf30Days);
 			dailyStat.setTopPriceDate(topPriceDate);
-			//计算股价振幅
-			Double priceAmplitude=null;
-			Double priceChangeDeep=topPriceOf30Days-lowerPriceOf30Days;
-			if(lowerPriceDate.getTime()<topPriceDate.getTime()){
-				priceAmplitude=priceChangeDeep/lowerPriceOf30Days;
-			}else{
-				priceAmplitude=-priceChangeDeep/topPriceOf30Days;
+			// 计算股价振幅
+			Double priceAmplitude = null;
+			Double priceChangeDeep = topPriceOf30Days - lowerPriceOf30Days;
+			if (lowerPriceDate.getTime() < topPriceDate.getTime()) {
+				priceAmplitude = priceChangeDeep / lowerPriceOf30Days;
+			} else {
+				priceAmplitude = -priceChangeDeep / topPriceOf30Days;
 			}
 			dailyStat.setPriceAmplitude(priceAmplitude);
-			if(yesterdayPrice!=null&&yesterdayPrice>0){
-				Double increaseRate=(todayPrice-yesterdayPrice)/yesterdayPrice;
+			if (yesterdayPrice != null && yesterdayPrice > 0) {
+				Double increaseRate = (todayPrice - yesterdayPrice) / yesterdayPrice;
 				dailyStat.setTodayIncreaseRate(increaseRate);
 			}
 			this.save(dailyStat);
