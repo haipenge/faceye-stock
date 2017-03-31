@@ -88,6 +88,12 @@
 		placeholder="<fmt:message key="stock.dailyStat.todayPrice"></fmt:message>"
 		class="form-control input-sm">
 </div>
+
+<div class="col-md-1">
+	<input type="text" name="EQ|priceAmplitude" value="${searchParams.priceAmplitude}"
+		placeholder="<fmt:message key="stock.dailyStat.priceAmplitude"></fmt:message>"
+		class="form-control input-sm">
+</div>
 <!--@generate-entity-jsp-query-detail@-->
 						<div class="col-md-1">
 							<button type="submit" class="btn btn-sm btn-primary">
@@ -116,6 +122,7 @@
  <th><fmt:message key='stock.dailyStat.dynamicPe'></fmt:message></th>   
  <th><fmt:message key='stock.dailyStat.pb'></fmt:message></th>   
  <th><fmt:message key='stock.dailyStat.todayPrice'></fmt:message></th>   
+ <th><fmt:message key='stock.dailyStat.priceAmplitude'></fmt:message></th>   
  <!--@generate-entity-jsp-property-desc@-->
 							<th><fmt:message key="global.edit"></fmt:message></th>
 							<th><fmt:message key="global.remove"></fmt:message></th>
@@ -135,6 +142,7 @@
  <td>${dailyStat.dynamicPe}</td>   
  <td>${dailyStat.pb}</td>   
  <td>${dailyStat.todayPrice}</td>   
+ <td>${dailyStat.priceAmplitude}</td>   
  <!--@generate-entity-jsp-property-value@-->
 								<td><a href="<c:url value="/stock/dailyStat/edit/${dailyStat.id}"/>">
 										<fmt:message key="global.edit"></fmt:message>

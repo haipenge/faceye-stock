@@ -149,6 +149,15 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 			dailyStat.setLowPriceDate(lowerPriceDate);
 			dailyStat.setTopPriceOf30Day(topPriceOf30Days);
 			dailyStat.setTopPriceDate(topPriceDate);
+			//计算股价振幅
+			Double priceAmplitude=null;
+			Double priceChangeDeep=topPriceOf30Days-lowerPriceOf30Days;
+			if(lowerPriceDate.getTime()<topPriceDate.getTime()){
+				priceAmplitude=priceChangeDeep/lowerPriceOf30Days;
+			}else{
+				priceAmplitude=-priceChangeDeep/topPriceOf30Days;
+			}
+			dailyStat.setPriceAmplitude(priceAmplitude);
 			this.save(dailyStat);
 		}
 	}

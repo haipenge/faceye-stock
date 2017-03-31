@@ -324,7 +324,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 	 */
 	public void crawlDailyData() {
 		//清理历史数据
-		this.dailyDataCustomerRepository.clearHistoryDailyData();
+//		this.dailyDataCustomerRepository.clearHistoryDailyData();
 		List<Stock> stocks = (List) this.stockRepository.findAll();
 		if (CollectionUtils.isNotEmpty(stocks)) {
 			for (Stock stock : stocks) {

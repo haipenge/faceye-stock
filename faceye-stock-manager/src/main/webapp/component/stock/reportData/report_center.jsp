@@ -4,12 +4,12 @@
 <script type="text/javascript" src="<c:url value="/js/component/stock/reportData/reportData.js"/>"></script>
 <div class="page-head">
 	<div class="row">
-		<div class="col-sm-3">
+		<div class="col-sm-2">
 			<h2>
-				${stock.name} <small>(${stock.code})</small>&nbsp;&nbsp;财报<input type="hidden" name="stockId" value="${stock.id}" id="stock_id">
+				${stock.name} <small>(${stock.code})</small>&nbsp;&nbsp;<input type="hidden" name="stockId" value="${stock.id}" id="stock_id">
 			</h2>
 		</div>
-		<div class="col-sm-7 text-center">
+		<div class="col-sm-8 text-center">
 		   <c:if test="${not empty dailyStat }">
 				<c:set var="price-css" value="price-rise"/>
 				<c:if test="${dailyStat.topPriceDate lt dailyStat.lowPriceDate }">
@@ -19,8 +19,9 @@
 				动态市盈率:<fmt:formatNumber value="${dailyStat.dynamicPe}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;
 				30天最高价:￥ <fmt:formatNumber value="${dailyStat.topPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;(<fmt:formatDate value="${dailyStat.topPriceDate }" pattern="yyy-MM-dd"/>)&nbsp;&nbsp;
 				30天最低价:￥ <fmt:formatNumber value="${dailyStat.lowPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;(<fmt:formatDate value="${dailyStat.lowPriceDate }" pattern="yyy-MM-dd"/>)&nbsp;&nbsp;
-				波幅:<font class="${price-css}"><c:if test="${dailyStat.topPriceDate lt dailyStat.lowPriceDate }">-</c:if><fmt:formatNumber value="${100* ( dailyStat.topPriceOf30Day - dailyStat.lowPriceOf30Day )/dailyStat.lowPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</font>
+				波幅:<fmt:formatNumber value="${100* dailyStat.priceAmplitude}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%
 				</c:if>
+				当天价格: <fmt:formatNumber value="${dailyStat.todayPrice}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;
 		</div>
 		<div class="col-sm-2 text-right">
 			<c:if test="${empty wrapReporter.records  }">
