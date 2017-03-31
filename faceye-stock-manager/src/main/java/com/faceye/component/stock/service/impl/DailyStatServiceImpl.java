@@ -169,7 +169,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 			// 计算股价振幅
 			Double priceAmplitude = null;
 			Double priceChangeDeep = topPriceOf30Days - lowerPriceOf30Days;
-			if (lowerPriceDate.getTime() < topPriceDate.getTime()) {
+			if (lowerPriceDate!=null &&topPriceDate!=null&& lowerPriceDate.getTime() < topPriceDate.getTime()) {
 				priceAmplitude = priceChangeDeep / lowerPriceOf30Days;
 			} else {
 				priceAmplitude = -priceChangeDeep / topPriceOf30Days;
