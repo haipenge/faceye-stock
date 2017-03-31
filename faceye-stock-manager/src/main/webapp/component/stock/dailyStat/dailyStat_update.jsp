@@ -121,7 +121,17 @@
 		<form:errors path="priceAmplitude" cssClass="error"/>
 	</div>
 </div>
+<div class="form-group">
+	<label class="col-md-2 control-label" for="todayIncreaseRate"> <spring:message
+			code="stock.dailyStat.todayIncreaseRate"/>
+	</label>
+	<div class="col-md-6">
+		<form:input path="todayIncreaseRate" cssClass="form-control"/>
+		<form:errors path="todayIncreaseRate" cssClass="error"/>
+	</div>
+</div>
 <!--@generate-entity-jsp-property-update@-->
+
 
 
 

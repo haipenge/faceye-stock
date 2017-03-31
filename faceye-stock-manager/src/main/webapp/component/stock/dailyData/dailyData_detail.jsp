@@ -169,7 +169,12 @@
 						${dailyData.avg250}
 					</div>
 				</div>
-				<!--@generate-entity-jsp-property-detail@-->
+				<tr>
+	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.dailyData.yesterdayPrice"></fmt:message></td>
+	<td>${dailyData.yesterdayPrice}</td>
+</tr>
+<!--@generate-entity-jsp-property-detail@-->
+
 				
 				
 				

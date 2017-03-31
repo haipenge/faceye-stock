@@ -226,7 +226,7 @@ public class StockFetcher {
 
 	public List<Map<String, String>> getStockDailyData(String stockCode, String startDate, String endDate) {
 		List<Map<String,String>> res=new ArrayList<Map<String,String>>();
-		res=this.getStockDataList(stockCode, "2014", new String[]{"1","2","3","4"});
+		res=this.getStockDataList(stockCode, "2016", new String[]{"1","2","3","4"});
 		if(res==null){
 			res=new ArrayList<Map<String,String>>();
 		}
@@ -294,6 +294,7 @@ public class StockFetcher {
 				res.put("money", splitData[9]);
 				res.put("date", splitData[30]);
 				res.put("time", splitData[31]);
+				res.put("yesterdayPrice", splitData[2]);
 			} else {
 				logger.debug(">>FaceYe 数据可能存在异常，股票编码:" + code + "数据为:" + content);
 			}

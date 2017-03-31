@@ -367,5 +367,23 @@ public class DailyData implements Serializable {
 		this.avg250 = avg250;
 	}
 	
+
+	
+   /**
+    * 说明:昨日收盘价<br>
+    * 属性名: yesterdayPrice<br>
+    * 类型: Double<br>
+    * 数据库字段:yesterday_price<br>
+    * @author haipenge<br>
+    */
+    
+	private  Double yesterdayPrice;
+	public Double getYesterdayPrice() {
+		return yesterdayPrice;
+	}
+	public void setYesterdayPrice(Double yesterdayPrice) {
+		this.yesterdayPrice = yesterdayPrice;
+	}
+	
 }/**@generate-entity-source@**/
 	

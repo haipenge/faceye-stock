@@ -123,6 +123,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 		Double lowerPriceOf30Days = 0.0D;
 		Date lowerPriceDate = null;
 		Double todayPrice=null;
+		Double yesterdayPrice=null;
 		if (dailyDatas != null) {
 			int index = 0;
 			for (DailyData dailyData : dailyDatas) {
@@ -132,6 +133,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 					lowerPriceOf30Days = dailyData.getJintianzuidijia();
 					lowerPriceDate = dailyData.getDate();
 					todayPrice=dailyData.getShoupanjia();
+					yesterdayPrice=dailyData.getYesterdayPrice();
 					index++;
 					
 				} else {
@@ -158,6 +160,10 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 				priceAmplitude=-priceChangeDeep/topPriceOf30Days;
 			}
 			dailyStat.setPriceAmplitude(priceAmplitude);
+			if(yesterdayPrice!=null&&yesterdayPrice>0){
+				Double increaseRate=(todayPrice-yesterdayPrice)/yesterdayPrice;
+				dailyStat.setTodayIncreaseRate(increaseRate);
+			}
 			this.save(dailyStat);
 		}
 	}

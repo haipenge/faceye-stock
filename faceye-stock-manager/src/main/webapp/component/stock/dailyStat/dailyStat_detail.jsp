@@ -57,7 +57,12 @@
 	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.dailyStat.priceAmplitude"></fmt:message></td>
 	<td>${dailyStat.priceAmplitude}</td>
 </tr>
+<tr>
+	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.dailyStat.todayIncreaseRate"></fmt:message></td>
+	<td>${dailyStat.todayIncreaseRate}</td>
+</tr>
 <!--@generate-entity-jsp-property-detail@-->
+
 
 
 

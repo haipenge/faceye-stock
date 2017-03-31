@@ -43,7 +43,8 @@
 						<th><fmt:message key='stock.dailyData.avg60'></fmt:message></th>
 						<th><fmt:message key='stock.dailyData.avg120'></fmt:message></th>
 						<th><fmt:message key='stock.dailyData.avg250'></fmt:message></th>
-						<!--@generate-entity-jsp-property-desc@-->
+						<th><fmt:message key='stock.dailyData.yesterdayPrice'></fmt:message></th>   
+ <!--@generate-entity-jsp-property-desc@-->
 						<th><fmt:message key="global.edit"></fmt:message></th>
 						<th><fmt:message key="global.remove"></fmt:message></th>
 					</tr>
@@ -66,7 +67,8 @@
 							<td><fmt:formatNumber value="${dailyData.avg60}" pattern="#,#00.0#" /></td>
 							<td><fmt:formatNumber value="${dailyData.avg120}" pattern="#,#00.0#" /></td>
 							<td><fmt:formatNumber value="${dailyData.avg250}" pattern="#,#00.0#" /></td>
-							<!--@generate-entity-jsp-property-value@-->
+							<td>${dailyData.yesterdayPrice}</td>   
+ <!--@generate-entity-jsp-property-value@-->
 							<td><a href="<c:url value="/stock/dailyData/edit/${dailyData.id}"/>"> <fmt:message key="global.edit"></fmt:message>
 							</a></td>
 							<td><a href="<c:url value="/stock/dailyData/remove/${dailyData.id}"/>"> <fmt:message key="global.remove"></fmt:message>

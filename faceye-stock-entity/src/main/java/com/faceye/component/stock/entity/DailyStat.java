@@ -226,4 +226,57 @@ public class DailyStat implements Serializable {
 		this.pb = pb;
 	}
 
-}/** @generate-entity-source@ **/
+   /**
+    * 说明:今天收盘价<br>
+    * 属性名: todayPrice<br>
+    * 类型: Double<br>
+    * 数据库字段:today_price<br>
+    * @author haipenge<br>
+    */
+    
+	private  Double todayPrice;
+	public Double getTodayPrice() {
+		return todayPrice;
+	}
+	public void setTodayPrice(Double todayPrice) {
+		this.todayPrice = todayPrice;
+	}
+	
+
+	
+   /**
+    * 说明:股价振幅,指定周期内，默认30天<br>
+    * 属性名: priceAmplitude<br>
+    * 类型: Double<br>
+    * 数据库字段:price_amplitude<br>
+    * @author haipenge<br>
+    */
+    
+	private  Double priceAmplitude=null;
+	public Double getPriceAmplitude() {
+		return priceAmplitude;
+	}
+	public void setPriceAmplitude(Double priceAmplitude) {
+		this.priceAmplitude = priceAmplitude;
+	}
+	
+
+	
+   /**
+    * 说明:今日涨跌<br>
+    * 属性名: todayIncreaseRate<br>
+    * 类型: Double<br>
+    * 数据库字段:today_increase_rate<br>
+    * @author haipenge<br>
+    */
+    
+	private  Double todayIncreaseRate;
+	public Double getTodayIncreaseRate() {
+		return todayIncreaseRate;
+	}
+	public void setTodayIncreaseRate(Double todayIncreaseRate) {
+		this.todayIncreaseRate = todayIncreaseRate;
+	}
+	
+}/**@generate-entity-source@**/
+	

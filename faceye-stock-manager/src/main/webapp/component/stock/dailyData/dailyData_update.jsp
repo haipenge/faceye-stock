@@ -148,7 +148,17 @@
 						<input type="text" name="avg250" value="${dailyData.avg250}" class="form-control">
 					</div>
 				</div>
-				<!--@generate-entity-jsp-property-update@-->
+				<div class="form-group">
+	<label class="col-md-2 control-label" for="yesterdayPrice"> <spring:message
+			code="stock.dailyData.yesterdayPrice"/>
+	</label>
+	<div class="col-md-6">
+		<form:input path="yesterdayPrice" cssClass="form-control"/>
+		<form:errors path="yesterdayPrice" cssClass="error"/>
+	</div>
+</div>
+<!--@generate-entity-jsp-property-update@-->
+
 				<div class="form-group">
 					<div class="col-md-offset-2 col-md-10">
 						<button type="submit" class="btn btn-primary">
