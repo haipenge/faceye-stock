@@ -141,7 +141,7 @@
 			<ref bean="dataStatJobDetail" />
 		</property>
 		<property name="cronExpression">
-			<value>0 20 9 * * ?</value>
+			<value>0 20 3 * * ?</value>
 		</property>
 	</bean>
 	<bean id="dataStatJobDetail"
@@ -165,7 +165,7 @@
 			<ref bean="dailyStatJobDetail" />
 		</property>
 		<property name="cronExpression">
-			<value>0 30 18 * * ?</value>
+			<value>0 40 16 * * ?</value>
 		</property>
 	</bean>
 	<bean id="dailyStatJobDetail"
