@@ -122,14 +122,12 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 		// 设置昨天交易收盘价
 		if (CollectionUtils.isNotEmpty(dailyDatas)) {
 			int size = dailyDatas.size();
-			for (int i = 0; i < dailyDatas.size(); i++) {
+			for (int i = dailyDatas.size() - 1; i > 0; i--) {
 				DailyData dailyData = dailyDatas.get(i);
-				if (i < size - 1) {
-					DailyData yesterdayDailyData = dailyDatas.get(i + 1);
-					if (dailyData.getYesterdayPrice() == null) {
-						dailyData.setYesterdayPrice(yesterdayDailyData.getShoupanjia());
-						this.dailyDataService.save(dailyData);
-					}
+				if (i - 1 > 0) {
+					DailyData nextDayData = dailyDatas.get(i - 1);
+					nextDayData.setYesterdayPrice(dailyData.getShoupanjia());
+					this.dailyDataService.save(nextDayData);
 				}
 			}
 		}
