@@ -1,4 +1,5 @@
 <%@ include file="/component/core/taglib/taglib.jsp"%>
+<%@ page language="java" import="java.util.*,com.faceye.feature.util.*,com.faceye.feature.util.host.*" pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/component/stock/dailyData/dailyData.css"/>" />
 <script type="text/javascript" src="<c:url value="/js/component/stock/dailyData/dailyData.js"/>"></script>
 
@@ -31,6 +32,7 @@
 						<th><fmt:message key='stock.dailyData.date'></fmt:message></th>
 						<th><fmt:message key='stock.dailyData.kaipanjia'></fmt:message></th>
 						<th><fmt:message key='stock.dailyData.shoupanjia'></fmt:message></th>
+						<th>昨天收盘价</th>
 						<th><fmt:message key='stock.dailyData.dangqianjiage'></fmt:message></th>
 						<th><fmt:message key='stock.dailyData.jintianzuigaojia'></fmt:message></th>
 						<th><fmt:message key='stock.dailyData.jintianzuidijia'></fmt:message></th>
@@ -55,6 +57,7 @@
 							<td><fmt:formatDate value="${dailyData.date}" pattern="yyyy-MM-dd"></fmt:formatDate></td>
 							<td><fmt:formatNumber value="${dailyData.kaipanjia}" pattern="#,#00.0#" /></td>
 							<td><fmt:formatNumber value="${dailyData.shoupanjia}" pattern="#,#00.0#" /></td>
+							<td><fmt:formatNumber value-="${dailyData.yesterdayPrice }" pattern="#,#00.0#"/></td>
 							<td><fmt:formatNumber value="${dailyData.dangqianjiage}" pattern="#,#00.0#" /></td>
 							<td><fmt:formatNumber value="${dailyData.jintianzuigaojia}" pattern="#,#00.0#" /></td>
 							<td><fmt:formatNumber value="${dailyData.jintianzuidijia}" pattern="#,#00.0#" /></td>
