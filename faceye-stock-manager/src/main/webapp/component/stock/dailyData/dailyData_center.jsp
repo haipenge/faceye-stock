@@ -57,7 +57,7 @@
 							<td><fmt:formatDate value="${dailyData.date}" pattern="yyyy-MM-dd"></fmt:formatDate></td>
 							<td><fmt:formatNumber value="${dailyData.kaipanjia}" pattern="#,#00.0#" /></td>
 							<td><fmt:formatNumber value="${dailyData.shoupanjia}" pattern="#,#00.0#" /></td>
-							<td><fmt:formatNumber value-="${dailyData.yesterdayPrice }" pattern="#,#00.0#"/></td>
+							<td><fmt:formatNumber value="${dailyData.yesterdayPrice}" pattern="#,#00.0#"/></td>
 							<td><fmt:formatNumber value="${dailyData.dangqianjiage}" pattern="#,#00.0#" /></td>
 							<td><fmt:formatNumber value="${dailyData.jintianzuigaojia}" pattern="#,#00.0#" /></td>
 							<td><fmt:formatNumber value="${dailyData.jintianzuidijia}" pattern="#,#00.0#" /></td>
