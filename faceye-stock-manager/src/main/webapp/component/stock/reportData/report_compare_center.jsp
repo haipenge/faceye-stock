@@ -95,108 +95,108 @@
 				<div classs="table-responsive">
 					<table class="table table-bordered">
 						<tr>
-							<th colspan="2" class="text-center" style="border-bottom: 2px solid gray; font-size: 16px; font-weight: bold; vertical-align: middle;">${reportCategory.name }</th>
-							<c:if test="${not empty wrapCompareReporters}">
-								<c:forEach items="${wrapCompareReporters[0].wrapReporter.records}" var="record" begin="0" end="1" step="1">
-									<th style="border-bottom: 2px solid gray; padding-bottom: 0px; padding-top: 0px;" class="text-center"><p style="margin-bottom: 0px; border-bottom: 1px solid gray;">
-											<fmt:formatDate value="${record.date}" pattern="yyyy-MM-dd" />
-										</p>
-										<p style="margin-top: 0px; margin-bottom: 0px;">
-											<span class="small pull-left">同型</span><span class="small">金额(元)</span><span class="pull-right small">趋势</span>
-										</p></th>
-								</c:forEach>
-							</c:if>
-
-							<c:forEach var="wrapCompareReporter" items="${wrapCompareReporters}" varStatus="cStatus">
-
-								<!-- 财务接要-杜邦分析 -->
-								<c:if test="${not empty wrapCompareReporter.dataStats}" >
-									<c:forEach items="${wrapCompareReporter.dataStats}" var="dataStat" begin="0" end="1" step="1">
-										<th style="border-bottom: 2px solid gray;" class="text-center"><fmt:formatDate value="${dataStat.dateCycle}" pattern="yyyy-MM-dd" /></th>
+							<c:forEach var="wrapCompareReporter" items="${wrapCompareReporters}" varStatus="cxStatus">
+								<th colspan="2" class="text-center" style="border-bottom: 2px solid gray; font-size: 16px; font-weight: bold; vertical-align: middle;">${reportCategory.name }</th>
+								<c:if test="${not empty wrapCompareReporters}">
+									<c:forEach items="${wrapCompareReporter.wrapReporter.records}" var="record" begin="0" end="1" step="1">
+										<th style="border-bottom: 2px solid gray; padding-bottom: 0px; padding-top: 0px;" class="text-center"><p style="margin-bottom: 0px; border-bottom: 1px solid gray;">
+												${wrapCompareReporter.stock.name }:<fmt:formatDate value="${record.date}" pattern="yyyy-MM-dd" />
+											</p>
+											<p style="margin-top: 0px; margin-bottom: 0px;">
+												<span class="small pull-left">同型</span><span class="small">金额(元)</span><span class="pull-right small">趋势</span>
+											</p></th>
 									</c:forEach>
 								</c:if>
-						</tr>
-						<!-- 财务报表 -->
-						<c:if test="${not empty wrapCompareReporter.wrapReporter.titles && not empty wrapCompareReporter.wrapReporter.records}">
-							<c:forEach var="title" items="${wrapCompareReporter.wrapReporter.titles}">
-								<c:if test="${cStatus.index == 0 }">
-									<tr>
-										<th rowspan="${fn:length(title.accountingSubjects) + 1}" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">${title.accountingElement.name}</th>
-									</tr>
+								<!-- 财务接要-杜邦分析 -->
+								<c:if test="${not empty wrapCompareReporter.dataStats}">
+									<c:forEach items="${wrapCompareReporter.wrapCompareReporter.dataStats}" var="dataStat" begin="0" end="1" step="1">
+										<th style="border-bottom: 2px solid gray;" class="text-center">${wrapCompareReporter.stock.name }:<fmt:formatDate value="${dataStat.dateCycle}" pattern="yyyy-MM-dd" /></th>
+									</c:forEach>
 								</c:if>
-								<c:forEach items="${title.accountingSubjects}" var="accountingSubject" varStatus="status">
-									<tr>
-										<c:if test="${cStatus.index == 0 }">
-											<td width="160" <c:if test="${status.last}"> style="border-bottom:2px solid gray;"</c:if>>${accountingSubject.name}</td>
-										</c:if>
-										<c:forEach items="${wrapCompareReporter.wrapReporter.records}" var="record" begin="0" end="1" step="1">
-											<c:forEach items="${record.data2Record}" var="data2Record">
-												<c:if test="${accountingSubject.id eq data2Record.accountingSubjectId}">
-													<td <c:if test="${status.last}"> style="border-bottom:2px solid gray;"</c:if> class="text-center">
-														<p class="p-data">
-															<span class="small pull-left text-info"><c:if test="${data2Record.commonSizeAnalysisResult gt 0 }">
-																	<fmt:formatNumber value="${data2Record.commonSizeAnalysisResult *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</c:if></span> <span
-																class="span-data"><fmt:formatNumber value="${data2Record.data }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></span> <span
-																class="small pull-right text-info"><c:if test="${ data2Record.trendAnalysisResult lt 0 or data2Record.trendAnalysisResult gt 0 }">
-																	<fmt:formatNumber value="${data2Record.trendAnalysisResult *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</c:if></span>
-														</p>
-													</td>
-												</c:if>
-											</c:forEach>
-										</c:forEach>
-									</tr>
-								</c:forEach>
 							</c:forEach>
-						</c:if>
-						<!-- 财务接要 -杜邦分析 -->
-						<c:if test="${not empty dataStats}">
-							<!-- 总资产净利率 -->
-							<tr>
-								<th rowspan="6" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">杜邦分析</th>
-								<td>总资产净利率</td>
-								<c:forEach items="${dataStats}" var="dataStat">
-									<td class="text-right"><fmt:formatNumber value="${dataStat.totalAssetsNetProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2"
-											groupingUsed="true" />%</td>
+						</tr>
+						<c:forEach var="wrapCompareReporter" items="${wrapCompareReporters}" varStatus="cStatus">
+							<!-- 财务报表 -->
+							<c:if test="${not empty wrapCompareReporter.wrapReporter.titles && not empty wrapCompareReporter.wrapReporter.records}">
+								<c:forEach var="title" items="${wrapCompareReporter.wrapReporter.titles}">
+									<c:if test="${cStatus.index == 0 }">
+										<tr>
+											<th rowspan="${fn:length(title.accountingSubjects) + 1}" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">${title.accountingElement.name}</th>
+										</tr>
+									</c:if>
+									<c:forEach items="${title.accountingSubjects}" var="accountingSubject" varStatus="status">
+										<tr>
+											<c:if test="${cStatus.index == 0 }">
+												<td width="160" <c:if test="${status.last}"> style="border-bottom:2px solid gray;"</c:if>>${accountingSubject.name}</td>
+											</c:if>
+											<c:forEach items="${wrapCompareReporter.wrapReporter.records}" var="record" begin="0" end="1" step="1">
+												<c:forEach items="${record.data2Record}" var="data2Record">
+													<c:if test="${accountingSubject.id eq data2Record.accountingSubjectId}">
+														<td <c:if test="${status.last}"> style="border-bottom:2px solid gray;"</c:if> class="text-center">
+															<p class="p-data">
+																<span class="small pull-left text-info"><c:if test="${data2Record.commonSizeAnalysisResult gt 0 }">
+																		<fmt:formatNumber value="${data2Record.commonSizeAnalysisResult *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</c:if></span> <span
+																	class="span-data"><fmt:formatNumber value="${data2Record.data }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></span> <span
+																	class="small pull-right text-info"><c:if test="${ data2Record.trendAnalysisResult lt 0 or data2Record.trendAnalysisResult gt 0 }">
+																		<fmt:formatNumber value="${data2Record.trendAnalysisResult *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</c:if></span>
+															</p>
+														</td>
+													</c:if>
+												</c:forEach>
+											</c:forEach>
+										</tr>
+									</c:forEach>
 								</c:forEach>
-							</tr>
-							<!-- 净资产收益率 -->
-							<tr>
-								<td>净资产收益率</td>
-								<c:forEach items="${dataStats}" var="dataStat">
-									<td class="text-right"><fmt:formatNumber value="${dataStat.roe *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
-								</c:forEach>
-							</tr>
-							<!-- 毛利率 -->
-							<tr>
-								<td>毛利率</td>
-								<c:forEach items="${dataStats}" var="dataStat">
-									<td class="text-right"><fmt:formatNumber value="${dataStat.grossProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
-								</c:forEach>
-							</tr>
-							<!-- 净利率 -->
-							<tr>
-								<td>净利率</td>
-								<c:forEach items="${dataStats}" var="dataStat">
-									<td class="text-right"><fmt:formatNumber value="${dataStat.netProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
-								</c:forEach>
-							</tr>
-							<!-- 资产周转率 -->
-							<tr>
-								<td>资产周转率</td>
-								<c:forEach items="${dataStats}" var="dataStat">
-									<td class="text-right"><fmt:formatNumber value="${dataStat.totalAssetsTurnover *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
-								</c:forEach>
-							</tr>
-							<!-- 资产负债率 -->
-							<tr>
-								<td style="border-bottom: 2px solid gray;">资产负债率</td>
-								<c:forEach items="${dataStats}" var="dataStat">
-									<td class="text-right" style="border-bottom: 2px solid gray;"><fmt:formatNumber value="${dataStat.debtToAssetsRatio *100 }" type="number" pattern="#,##0.0#"
-											maxFractionDigits="2" groupingUsed="true" />%</td>
-								</c:forEach>
-							</tr>
-						</c:if>
-						<!-- 财务摘要-杜邦分析结束  -->
+							</c:if>
+							<!-- 财务接要 -杜邦分析 -->
+							<c:if test="${not empty dataStats}">
+								<!-- 总资产净利率 -->
+								<tr>
+									<th rowspan="6" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">杜邦分析</th>
+									<td>总资产净利率</td>
+									<c:forEach items="${dataStats}" var="dataStat">
+										<td class="text-right"><fmt:formatNumber value="${dataStat.totalAssetsNetProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2"
+												groupingUsed="true" />%</td>
+									</c:forEach>
+								</tr>
+								<!-- 净资产收益率 -->
+								<tr>
+									<td>净资产收益率</td>
+									<c:forEach items="${dataStats}" var="dataStat">
+										<td class="text-right"><fmt:formatNumber value="${dataStat.roe *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
+									</c:forEach>
+								</tr>
+								<!-- 毛利率 -->
+								<tr>
+									<td>毛利率</td>
+									<c:forEach items="${dataStats}" var="dataStat">
+										<td class="text-right"><fmt:formatNumber value="${dataStat.grossProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
+									</c:forEach>
+								</tr>
+								<!-- 净利率 -->
+								<tr>
+									<td>净利率</td>
+									<c:forEach items="${dataStats}" var="dataStat">
+										<td class="text-right"><fmt:formatNumber value="${dataStat.netProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
+									</c:forEach>
+								</tr>
+								<!-- 资产周转率 -->
+								<tr>
+									<td>资产周转率</td>
+									<c:forEach items="${dataStats}" var="dataStat">
+										<td class="text-right"><fmt:formatNumber value="${dataStat.totalAssetsTurnover *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
+									</c:forEach>
+								</tr>
+								<!-- 资产负债率 -->
+								<tr>
+									<td style="border-bottom: 2px solid gray;">资产负债率</td>
+									<c:forEach items="${dataStats}" var="dataStat">
+										<td class="text-right" style="border-bottom: 2px solid gray;"><fmt:formatNumber value="${dataStat.debtToAssetsRatio *100 }" type="number" pattern="#,##0.0#"
+												maxFractionDigits="2" groupingUsed="true" />%</td>
+									</c:forEach>
+								</tr>
+							</c:if>
+							<!-- 财务摘要-杜邦分析结束  -->
 						</c:forEach>
 					</table>
 				</div>
