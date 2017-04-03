@@ -130,7 +130,7 @@
 																class="small pull-right text-info">
 																<c:set var="trendAnalysisResultFontColor" value="red"/>
 																<c:if test="${ data2Record.trendAnalysisResult lt 0 }"><c:set var="trendAnalysisResultFontColor" value="green"/></c:if>
-																	<c:if test="${data2Record.trendAnalysisResult not eq 0}"><font color="${trendAnalysisResultFontColor}"><fmt:formatNumber value="${data2Record.trendAnalysisResult *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</font></c:if></span>
+																	<c:if test="${not data2Record.trendAnalysisResult  eq 0}"><font color="${trendAnalysisResultFontColor}"><fmt:formatNumber value="${data2Record.trendAnalysisResult *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</font></c:if></span>
 														</p>
 													</td>
 												</c:if>
