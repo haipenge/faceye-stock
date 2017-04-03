@@ -1,5 +1,6 @@
 package com.faceye.component.stock.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,6 +56,7 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 		String nameQueryKey = MapUtils.getString(searchParams, "like|name");
 		String codeQueryKey = MapUtils.getString(searchParams, "like|code");
 		Page<Stock> page = null;
+		List<Stock> items=new ArrayList<Stock>(0);
 		if (StringUtils.isNotEmpty(nameQueryKey)) {
 			nameQueryKey = StringUtils.replace(nameQueryKey, "，", ",");
 			String[] nameKeys = StringUtils.split(nameQueryKey, ",");
@@ -64,13 +67,7 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 					searchParams.put("like|name", name);
 					Page result = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
 					if (result != null && CollectionUtils.isNotEmpty(result.getContent())) {
-						if (page == null || CollectionUtils.isEmpty(page.getContent())) {
-							page = result;
-						} else {
-							if (CollectionUtils.isNotEmpty(result.getContent())) {
-								page.getContent().addAll(result.getContent());
-							}
-						}
+						items.addAll(result.getContent());
 					}
 				}
 			}
@@ -85,14 +82,13 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 					searchParams.put("like|code", code);
 					Page result = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
 					if (result != null && CollectionUtils.isNotEmpty(result.getContent())) {
-						if (page == null || CollectionUtils.isEmpty(page.getContent())) {
-							page = result;
-						} else {
-							page.getContent().addAll(result.getContent());
-						}
+						items.addAll(result.getContent());
 					}
 				}
 			}
+		}
+		if(CollectionUtils.isNotEmpty(items)){
+			page=new PageImpl(items);
 		}
 		if (page == null || CollectionUtils.isEmpty(page.getContent())) {
 			page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
