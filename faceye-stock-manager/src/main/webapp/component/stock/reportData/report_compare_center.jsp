@@ -69,7 +69,7 @@
 				</ul>
 			</div>
 			<div class="col-sm-2">
-				<c:if test="${not empty wrapReporter.records || not empty dataStats}">
+				<c:if test="${not empty wrapCompareReporters[0].wrapReporter.records || not empty wrapCompareReporters[0].dataStats}">
 					<c:choose>
 						<c:when test="${not empty wrapCompareReporters[0].wrapReporter.records }">
 							<c:set var="startDate" value="${wrapCompareReporters[0].wrapReporter.records[0].date.getTime() }" />
