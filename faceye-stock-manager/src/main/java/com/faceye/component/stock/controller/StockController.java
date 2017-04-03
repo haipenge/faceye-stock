@@ -62,7 +62,7 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 				name = StringUtils.trim(name);
 				if (StringUtils.isNotEmpty(name)) {
 					searchParams.put("like|name", name);
-					if (page == null) {
+					if (page == null||CollectionUtils.isEmpty(page.getContent())) {
 						page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
 					} else {
 						page.getContent().addAll(this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams)).getContent());
@@ -78,7 +78,7 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 				code = StringUtils.trim(code);
 				if (StringUtils.isNotEmpty(code)) {
 					searchParams.put("like|code", code);
-					if (page == null) {
+					if (page == null||CollectionUtils.isEmpty(page.getContent())) {
 						page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
 					} else {
 						page.getContent().addAll(this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams)).getContent());
