@@ -36,9 +36,11 @@
 				</ul>
 			</div>
 			<div class="col-sm-2">
+			  <!-- 
 				<ul class="nav nav-pills navbar-right bg-warning" style="margin-right: 5px;" role="tablist">
 					<li role="presentation"><a href="<c:url value="/stock/dataStat/home?EQ|stockId=${stock.id }"/>" class="stock-stat">杜邦分析</a></li>
 				</ul>
+				 -->
 			</div>
 			<div class="col-sm-2">
 				<c:if test="${not empty wrapCompareReporters[0].wrapReporter.records || not empty wrapCompareReporters[0].dataStats}">
