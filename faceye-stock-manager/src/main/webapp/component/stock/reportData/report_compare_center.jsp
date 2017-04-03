@@ -110,8 +110,8 @@
 							<c:forEach var="wrapCompareReporter" items="${wrapCompareReporters}" varStatus="cStatus">
 
 								<!-- 财务接要-杜邦分析 -->
-								<c:if test="${not empty wrapCompareReporter.dataStats}" begin="0" end="1" step="1">
-									<c:forEach items="${wrapCompareReporter.dataStats}" var="dataStat">
+								<c:if test="${not empty wrapCompareReporter.dataStats}" >
+									<c:forEach items="${wrapCompareReporter.dataStats}" var="dataStat" begin="0" end="1" step="1">
 										<th style="border-bottom: 2px solid gray;" class="text-center"><fmt:formatDate value="${dataStat.dateCycle}" pattern="yyyy-MM-dd" /></th>
 									</c:forEach>
 								</c:if>
