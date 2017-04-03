@@ -83,7 +83,7 @@
 								<!-- 财务接要-杜邦分析 -->
 								<c:if test="${not empty wrapCompareReporter.dataStats}">
 									<c:forEach items="${wrapCompareReporter.dataStats}" var="dataStat" begin="0" end="0" step="1">
-										<th style="border-bottom: 2px solid gray;" class="text-center">${wrapCompareReporter.stock.name }:<fmt:formatDate value="${dataStat.dateCycle}" pattern="yyyy-MM-dd" /></th>
+										<th style="border-bottom: 2px solid gray;" class="text-center">${wrapCompareReporter.stock.name }<span class="span-suffix"><fmt:formatDate value="${dataStat.dateCycle}" pattern="yyyy-MM-dd" /></span></th>
 									</c:forEach>
 								</c:if>
 							</c:forEach>
