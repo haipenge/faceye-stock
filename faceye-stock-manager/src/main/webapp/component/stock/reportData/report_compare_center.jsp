@@ -47,20 +47,20 @@
 				<ul class="nav nav-pills bg-success" role="tablist">
 					<c:forEach items="${reportCategories}" var="reportCategory">
 						<li role="presentation" <c:if test="${(param.reportCategoryId eq reportCategory.id) or (empty param.reportCategoryId and reportCategory.id eq  2) }"> class="active"</c:if>><a
-							href="<c:url value="/stock/reportData/report?reportCategoryId=${reportCategory.id}&stockId=${stock.id}&type=${param.type }"/>">${reportCategory.name }</a></li>
+							href="<c:url value="/stock/reportData/compare?reportCategoryId=${reportCategory.id}&stockId=${stock.id}&type=${param.type }&stockIds=${param.stockIds }"/>">${reportCategory.name }</a></li>
 					</c:forEach>
 				</ul>
 			</div>
 			<div class="col-sm-4">
 				<ul class="nav nav-pills navbar-right bg-info" style="margin-right: 5px;" role="tablist">
 					<li role="presentation" <c:if test="${param.type eq 0 or empty param.type }"> class="active"</c:if>><a
-						href="<c:url value="/stock/reportData/report?reportCategoryId=${param.reportCategoryId}&stockId=${param.stockId }&type=0"/>">年报</a></li>
+						href="<c:url value="/stock/reportData/compare?reportCategoryId=${param.reportCategoryId}&stockId=${param.stockId }&type=0&stockIds=${param.stockIds }"/>">年报</a></li>
 					<li role="presentation" <c:if test="${param.type eq 1}"> class="active"</c:if>><a
-						href="<c:url value="/stock/reportData/report?reportCategoryId=${param.reportCategoryId}&stockId=${param.stockId }&type=1"/>">一季报</a></li>
+						href="<c:url value="/stock/reportData/compare?reportCategoryId=${param.reportCategoryId}&stockId=${param.stockId }&type=1&stockIds=${param.stockIds }"/>">一季报</a></li>
 					<li role="presentation" <c:if test="${param.type eq 2}"> class="active"</c:if>><a
-						href="<c:url value="/stock/reportData/report?reportCategoryId=${param.reportCategoryId}&stockId=${param.stockId }&type=2"/>">中报</a></li>
+						href="<c:url value="/stock/reportData/compare?reportCategoryId=${param.reportCategoryId}&stockId=${param.stockId }&type=2&stockIds=${param.stockIds }"/>">中报</a></li>
 					<li role="presentation" <c:if test="${param.type eq 3}"> class="active"</c:if>><a
-						href="<c:url value="/stock/reportData/report?reportCategoryId=${param.reportCategoryId}&stockId=${param.stockId }&type=3"/>">三季报</a></li>
+						href="<c:url value="/stock/reportData/compare?reportCategoryId=${param.reportCategoryId}&stockId=${param.stockId }&type=3&stockIds=${param.stockIds }"/>">三季报</a></li>
 				</ul>
 			</div>
 			<div class="col-sm-2">
