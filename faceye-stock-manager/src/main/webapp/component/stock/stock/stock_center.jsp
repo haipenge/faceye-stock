@@ -65,7 +65,7 @@
 			</c:forEach>
 		</div>
 		<div class="content">
-		  <button type="button" class="btn btm-sm btm-primary" id="btn-multi-stock-compare">多股比对</button>
+		  <button type="button" class="btn btm-sm btn-primary" id="btn-multi-stock-compare">多股比对</button>
 		</div>
 		<div class="content">
 			<div classs="table-responsive">

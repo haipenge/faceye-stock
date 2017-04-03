@@ -28,14 +28,15 @@ var Stock = {
 	multiStockReportCompare:function(){
 		var checkedIds = Check.getCheckedIds($('input[name="check-single"]'));
 		var ids=checkedIds.split(',');
-		if(checkedIds!=''&& ids.length>1){
-			location.href='/stock/reportData/compare?stockIds='+checkedIds;
-		}else{
+		if(checkedIds=='' || ids.length>5){
 			var m = new Msg({
-				msg : '请选择比对的股票',
+				msg : '请选择5只以内股票进行比对',
 				type:'warning'
 			});
 			m.show();
+			
+		}else{
+			location.href='/stock/reportData/compare?stockIds='+checkedIds;
 		}
 	}
 };
