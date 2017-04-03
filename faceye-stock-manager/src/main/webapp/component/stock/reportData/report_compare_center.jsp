@@ -147,16 +147,14 @@
 													</c:if>
 												</c:forEach>
 											</c:forEach>
-											
-											
 										</tr>
 									</c:forEach>
 								</c:forEach>
 							</c:if>
 						</c:forEach>
-						<c:forEach var="wrapCompareReporter" items="${wrapCompareReporters}" varStatus="cStatus">
-							<!-- 财务接要 -杜邦分析 -->
-							<c:if test="${not empty wrapCompareReporter.dataStats}">
+						<!-- 财务接要 -杜邦分析 -->
+						<c:if test="${not empty wrapCompareReporters[0].dataStats}">
+							<c:forEach var="wrapCompareReporter" items="${wrapCompareReporters}" varStatus="cStatus">
 								<!-- 总资产净利率 -->
 								<c:if test="${cStatus.first }">
 									<tr>
@@ -168,7 +166,7 @@
 								<c:if test="${cStatus.last }">
 									</tr>
 								</c:if>
-							</c:if>
+						</c:if>
 						</c:forEach>
 						<!-- 净资产收益率 -->
 						<c:forEach var="wrapCompareReporter" items="${wrapCompareReporters}" varStatus="cStatus">
@@ -229,8 +227,8 @@
 									pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
 							<c:if test="${cStatus.last }">
 								</tr>
-							</c:if>
 						</c:forEach>
+						</c:if>
 						<!-- 财务摘要-杜邦分析结束  -->
 					</table>
 				</div>
