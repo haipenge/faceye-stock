@@ -4,7 +4,8 @@
 var Stock = {
 	init : function() {
 		$('#init-stock-category').click(function(){Stock.initStockCategory();return false;});
-		$('#toggle-category').click(function(){$('.category-container').toggle();return false;})
+		$('#toggle-category').click(function(){$('.category-container').toggle();return false;});
+		$('#btn-multi-stock-compare').click(function(){Stock.multiStockReportCompare();});
 	},
 	/**
 	 * 初始化股票分类
