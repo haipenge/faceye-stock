@@ -177,6 +177,7 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 				if (StringUtils.isEmpty(id)) {
 					continue;
 				}
+				WrapCompareReporter wrapCompareReporter=new WrapCompareReporter();
 				Long stockId = Long.parseLong(id);
 				if (reportCategoryId == null) {
 					reportCategoryId = 2L;// 财务摘要
@@ -203,7 +204,8 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 					}
 					dataStatParams.put("SORT|dateCycle", "desc");
 					List<DataStat> dataStats = this.dataStatService.getPage(dataStatParams, 1, 5).getContent();
-					model.addAttribute("dataStats", dataStats);
+//					model.addAttribute("dataStats", dataStats);
+					wrapCompareReporter.setDataStats(dataStats);
 				} else {
 					Map params = new HashMap();
 					params.put("EQ|stockId", stockId);
@@ -214,7 +216,7 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 					params.put("SORT|date", "desc");
 					List<ReportData> reportDatas = this.service.getPage(params, 1, 5).getContent();
 					wrapReporter = this.service.wrapReportData(reportDatas, reportCategory.getCode());
-					WrapCompareReporter wrapCompareReporter=new WrapCompareReporter();
+					
 					wrapCompareReporter.setStock(stock);
 					wrapCompareReporter.setWrapReporter(wrapReporter);
 					wrapCompareReporters.add(wrapCompareReporter);	
