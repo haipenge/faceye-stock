@@ -147,8 +147,9 @@
 													</c:if>
 												</c:forEach>
 											</c:forEach>
-											<c:forEach var="wrapCompareReporter" items="${wrapCompareReporters}" varStatus="cStatus" begin="1" step="1">
-												<c:forEach items="${wrapCompareReporter.wrapReporter.records}" var="record" begin="0" end="0" step="1">
+											
+											<c:forEach var="wrapCompareReporterInner" items="${wrapCompareReporters}" varStatus="cStatus" begin="1" step="1">
+												<c:forEach items="${wrapCompareReporterInner.wrapReporter.records}" var="record" begin="0" end="0" step="1">
 													<c:forEach items="${record.data2Record}" var="data2Record">
 														<c:if test="${accountingSubject.id eq data2Record.accountingSubjectId}">
 															<td <c:if test="${status.last}"> style="border-bottom:2px solid gray;"</c:if> class="text-center">
