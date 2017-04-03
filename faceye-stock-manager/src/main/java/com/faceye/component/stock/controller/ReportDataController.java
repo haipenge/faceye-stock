@@ -204,7 +204,9 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 					// 杜邦分析数据
 					Map dataStatParams = new HashMap();
 					dataStatParams.put("EQ|stockId", stockId);
+			        if(type!=null){
 					dataStatParams.put("EQ|type", type);
+			        }
 					if (startDate != null) {
 						dataStatParams.put("LT|dateCycle", new Date(startDate));
 					}
