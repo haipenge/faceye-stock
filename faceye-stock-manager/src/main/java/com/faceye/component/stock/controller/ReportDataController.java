@@ -85,6 +85,9 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 		if (type == null) {
 			type = 0;
 		}
+		if (type == 4) {
+			type = null;
+		}
 		ReportCategory reportCategory = null;
 		if (reportCategoryId != null) {
 			reportCategory = this.reportCategoryService.get(reportCategoryId);
@@ -105,7 +108,9 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 			// 杜邦分析数据
 			Map dataStatParams = new HashMap();
 			dataStatParams.put("EQ|stockId", stockId);
-			dataStatParams.put("EQ|type", type);
+			if (type != null) {
+				dataStatParams.put("EQ|type", type);
+			}
 			if (startDate != null) {
 				dataStatParams.put("LT|dateCycle", new Date(startDate));
 			}
@@ -115,7 +120,9 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 		} else {
 			Map params = new HashMap();
 			params.put("EQ|stockId", stockId);
-			params.put("EQ|type", type);
+			if (type != null) {
+				params.put("EQ|type", type);
+			}
 			if (startDate != null) {
 				params.put("LT|date", new Date(startDate));
 			}
@@ -170,14 +177,14 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 			List<ReportCategory> reportCategories = this.reportCategoryService.getPage(null, 0, 0).getContent();
 			model.addAttribute("reportCategory", reportCategory);
 			model.addAttribute("reportCategories", reportCategories);
-			
+
 			String[] ids = StringUtils.split(stockIds, ",");
-			List<WrapCompareReporter> wrapCompareReporters=new ArrayList<WrapCompareReporter>(0);
+			List<WrapCompareReporter> wrapCompareReporters = new ArrayList<WrapCompareReporter>(0);
 			for (String id : ids) {
 				if (StringUtils.isEmpty(id)) {
 					continue;
 				}
-				WrapCompareReporter wrapCompareReporter=new WrapCompareReporter();
+				WrapCompareReporter wrapCompareReporter = new WrapCompareReporter();
 				Long stockId = Long.parseLong(id);
 				if (reportCategoryId == null) {
 					reportCategoryId = 2L;// 财务摘要
@@ -185,13 +192,13 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 				Stock stock = this.stockService.get(stockId);
 				wrapCompareReporter.setStock(stock);
 				model.addAttribute("stock", stock);
-				
+
 				if (type == null) {
 					type = 0;
 				}
-				//如果报告类型为4,则为查询所有已发布报表数据 
-				if(type==4){
-					type=null;
+				// 如果报告类型为4,则为查询所有已发布报表数据
+				if (type == 4) {
+					type = null;
 				}
 				// 获取每日数据分析
 				Map dailyStatParams = new HashMap();
@@ -204,31 +211,33 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 					// 杜邦分析数据
 					Map dataStatParams = new HashMap();
 					dataStatParams.put("EQ|stockId", stockId);
-			        if(type!=null){
-					dataStatParams.put("EQ|type", type);
-			        }
+					if (type != null) {
+						dataStatParams.put("EQ|type", type);
+					}
 					if (startDate != null) {
 						dataStatParams.put("LT|dateCycle", new Date(startDate));
 					}
 					dataStatParams.put("SORT|dateCycle", "desc");
-					List<DataStat> dataStats = this.dataStatService.getPage(dataStatParams, 1, 5).getContent();
-//					model.addAttribute("dataStats", dataStats);
-					logger.debug(">>FaceYe data stats size is:"+dataStats.size());
+					List<DataStat> dataStats = this.dataStatService.getPage(dataStatParams, 1, 2).getContent();
+					// model.addAttribute("dataStats", dataStats);
+					logger.debug(">>FaceYe data stats size is:" + dataStats.size());
 					wrapCompareReporter.setDataStats(dataStats);
 				} else {
 					Map params = new HashMap();
 					params.put("EQ|stockId", stockId);
-					params.put("EQ|type", type);
+					if (type != null) {
+						params.put("EQ|type", type);
+					}
 					if (startDate != null) {
 						params.put("LT|date", new Date(startDate));
 					}
 					params.put("SORT|date", "desc");
-					List<ReportData> reportDatas = this.service.getPage(params, 1, 5).getContent();
+					List<ReportData> reportDatas = this.service.getPage(params, 1, 2).getContent();
 					wrapReporter = this.service.wrapReportData(reportDatas, reportCategory.getCode());
 					wrapCompareReporter.setStock(stock);
 					wrapCompareReporter.setWrapReporter(wrapReporter);
 				}
-				wrapCompareReporters.add(wrapCompareReporter);	
+				wrapCompareReporters.add(wrapCompareReporter);
 			}
 			model.addAttribute("wrapCompareReporters", wrapCompareReporters);
 		}
