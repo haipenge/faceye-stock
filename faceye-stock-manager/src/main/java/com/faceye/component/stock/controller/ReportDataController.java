@@ -185,8 +185,13 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 				Stock stock = this.stockService.get(stockId);
 				wrapCompareReporter.setStock(stock);
 				model.addAttribute("stock", stock);
+				
 				if (type == null) {
 					type = 0;
+				}
+				//如果报告类型为4,则为查询所有已发布报表数据 
+				if(type==4){
+					type=null;
 				}
 				// 获取每日数据分析
 				Map dailyStatParams = new HashMap();
