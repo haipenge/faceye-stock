@@ -165,9 +165,10 @@
 			<ref bean="dailyStatJobDetail" />
 		</property>
 		<property name="cronExpression">
-			<value>0 7 9 * * ?</value>
+			<value>0 9 9 * * ?</value>
 		</property>
 	</bean>
+	
 	<bean id="dailyStatJobDetail"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject">
