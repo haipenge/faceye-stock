@@ -123,7 +123,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 		if (CollectionUtils.isNotEmpty(dailyDatas)) {
 			int size = dailyDatas.size();
 			for (int i = 0; i < dailyDatas.size(); i++) {
-				if (i + 1 <= size) {
+				if (i + 1 < size) {
 					DailyData todayData = dailyDatas.get(i);
 					DailyData yesterdayData = dailyDatas.get(i + 1);
 					todayData.setYesterdayPrice(yesterdayData.getShoupanjia());
