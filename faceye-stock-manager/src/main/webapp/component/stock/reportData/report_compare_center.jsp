@@ -100,13 +100,13 @@
 									<th colspan="2" class="text-center" style="border-bottom: 2px solid gray; font-size: 16px; font-weight: bold; vertical-align: middle;">${reportCategory.name }</th>
 								</c:if>
 								<c:if test="${not empty wrapCompareReporters and empty wrapCompareReporter.dataStats}">
-										<th style="border-bottom: 2px solid gray; padding-bottom: 0px; padding-top: 0px;" class="text-center"><p style="margin-bottom: 0px; border-bottom: 1px solid gray;">
-												${wrapCompareReporter.stock.name }:
-												<fmt:formatDate value="${wrapCompareReporter.wrapReporter.records[0].date}" pattern="yyyy-MM-dd" />
-											</p>
-											<p style="margin-top: 0px; margin-bottom: 0px;">
-												<span class="small pull-left">同型</span><span class="small">金额(元)</span><span class="pull-right small">趋势</span>
-											</p></th>
+									<th style="border-bottom: 2px solid gray; padding-bottom: 0px; padding-top: 0px;" class="text-center"><p style="margin-bottom: 0px; border-bottom: 1px solid gray;">
+											${wrapCompareReporter.stock.name }:
+											<fmt:formatDate value="${wrapCompareReporter.wrapReporter.records[0].date}" pattern="yyyy-MM-dd" />
+										</p>
+										<p style="margin-top: 0px; margin-bottom: 0px;">
+											<span class="small pull-left">同型</span><span class="small">金额(元)</span><span class="pull-right small">趋势</span>
+										</p></th>
 								</c:if>
 								<!-- 财务接要-杜邦分析 -->
 								<c:if test="${not empty wrapCompareReporter.dataStats}">
@@ -143,6 +143,24 @@
 															</p>
 														</td>
 													</c:if>
+												</c:forEach>
+											</c:forEach>
+
+											<c:forEach var="iwrapCompareReporter" items="${wrapCompareReporters}" varStatus="ciStatus" begin="1" step="1">
+												<c:forEach items="${iwrapCompareReporter.wrapReporter.records}" var="record" begin="0" end="0" step="1">
+													<c:forEach items="${record.data2Record}" var="data2Record">
+														<c:if test="${accountingSubject.id eq data2Record.accountingSubjectId}">
+															<td <c:if test="${status.last}"> style="border-bottom:2px solid gray;"</c:if> class="text-center">
+																<p class="p-data">
+																	<span class="small pull-left text-info"><c:if test="${data2Record.commonSizeAnalysisResult gt 0 }">
+																			<fmt:formatNumber value="${data2Record.commonSizeAnalysisResult *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</c:if></span> <span
+																		class="span-data"><fmt:formatNumber value="${data2Record.data }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></span> <span
+																		class="small pull-right text-info"><c:if test="${ data2Record.trendAnalysisResult lt 0 or data2Record.trendAnalysisResult gt 0 }">
+																			<fmt:formatNumber value="${data2Record.trendAnalysisResult *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</c:if></span>
+																</p>
+															</td>
+														</c:if>
+													</c:forEach>
 												</c:forEach>
 											</c:forEach>
 										</tr>
