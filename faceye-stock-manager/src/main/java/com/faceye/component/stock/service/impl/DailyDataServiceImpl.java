@@ -453,8 +453,9 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 		if (predicate != null) {
 			logger.debug(">>FaceYe -->Query predicate is:" + predicate.toString());
 		}
-		Sort sort = new Sort(Direction.DESC, "date");
-		sort.and(new Sort(Direction.DESC, "id"));
+//		Sort sort = new Sort(Direction.DESC, "date");
+//		sort.and(new Sort(Direction.DESC, "id"));
+		Sort sort=this.buildSort(searchParams);
 		Page<DailyData> res = null;
 		if (size != 0) {
 			Pageable pageable = new PageRequest(page, size, sort);
@@ -462,7 +463,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 		} else {
 			// OrderSpecifier<Comparable> orderPOrderSpecifier=new OrderSpecifier<Comparable>(new Order(), new NumberExpression<T>("id") {
 			// })
-			List<DailyData> items = (List) this.dao.findAll(predicate);
+			List<DailyData> items = (List) this.dao.findAll(predicate, sort);
 			res = new PageImpl<DailyData>(items);
 		}
 		return res;
