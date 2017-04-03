@@ -93,6 +93,10 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 		if (page == null || CollectionUtils.isEmpty(page.getContent())) {
 			page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
 		}
+		searchParams.put("like|name", nameQueryKey);
+		searchParams.put("like|code", codeQueryKey);
+		this.resetSearchParams(searchParams);
+		
 		model.addAttribute("page", page);
 		List<Category> categories = this.categoryService.getAll();
 		model.addAttribute("categories", categories);
