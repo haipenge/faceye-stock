@@ -154,50 +154,74 @@
 							<!-- 财务接要 -杜邦分析 -->
 							<c:if test="${not empty wrapCompareReporter.dataStats}">
 								<!-- 总资产净利率 -->
-								<tr>
-									<th rowspan="6" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">杜邦分析</th>
-									<td>总资产净利率</td>
-									<c:forEach items="${wrapCompareReporter.dataStats}" var="dataStat" begin="0" end ="0" step="1">
-										<td class="text-right"><fmt:formatNumber value="${dataStat.totalAssetsNetProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2"
-												groupingUsed="true" />%</td>
-									</c:forEach>
-								</tr>
+								<c:if test="${cStatus.first }">
+									<tr>
+										<th rowspan="6" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">杜邦分析</th>
+										<td>总资产净利率</td>
+								</c:if>
+								<c:forEach items="${wrapCompareReporter.dataStats}" var="dataStat" begin="0" end="0" step="1">
+									<td class="text-right"><fmt:formatNumber value="${dataStat.totalAssetsNetProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2"
+											groupingUsed="true" />%</td>
+								</c:forEach>
+								<c:if test="${cStatus.last }">
+									</tr>
+								</c:if>
 								<!-- 净资产收益率 -->
-								<tr>
-									<td>净资产收益率</td>
-									<c:forEach items="${wrapCompareReporter.dataStats}" var="dataStat"  begin="0" end ="0" step="1">
-										<td class="text-right"><fmt:formatNumber value="${dataStat.roe *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
-									</c:forEach>
-								</tr>
+								<c:if test="${cStatus.first }">
+									<tr>
+										<td>净资产收益率</td>
+								</c:if>
+								<c:forEach items="${wrapCompareReporter.dataStats}" var="dataStat" begin="0" end="0" step="1">
+									<td class="text-right"><fmt:formatNumber value="${dataStat.roe *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
+								</c:forEach>
+								<c:if test="${cStatus.last }">
+									</tr>
+								</c:if>
 								<!-- 毛利率 -->
-								<tr>
-									<td>毛利率</td>
-									<c:forEach items="${wrapCompareReporter.dataStats}" var="dataStat" begin="0" end ="0" step="1">
-										<td class="text-right"><fmt:formatNumber value="${dataStat.grossProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
-									</c:forEach>
-								</tr>
+								<c:if test="${cStatus.first }">
+									<tr>
+										<td>毛利率</td>
+								</c:if>
+								<c:forEach items="${wrapCompareReporter.dataStats}" var="dataStat" begin="0" end="0" step="1">
+									<td class="text-right"><fmt:formatNumber value="${dataStat.grossProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
+								</c:forEach>
+								<c:if test="${cStatus.last }">
+									</tr>
+								</c:if>
 								<!-- 净利率 -->
-								<tr>
-									<td>净利率</td>
-									<c:forEach items="${wrapCompareReporter.dataStats}" var="dataStat" begin="0" end ="0" step="1">
-										<td class="text-right"><fmt:formatNumber value="${dataStat.netProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
-									</c:forEach>
-								</tr>
+								<c:if test="${cStatus.first }">
+									<tr>
+										<td>净利率</td>
+								</c:if>
+								<c:forEach items="${wrapCompareReporter.dataStats}" var="dataStat" begin="0" end="0" step="1">
+									<td class="text-right"><fmt:formatNumber value="${dataStat.netProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
+								</c:forEach>
+								<c:if test="${cStatus.last }">
+									</tr>
+								</c:if>
 								<!-- 资产周转率 -->
-								<tr>
-									<td>资产周转率</td>
-									<c:forEach items="${wrapCompareReporter.dataStats}" var="dataStat" begin="0" end ="0" step="1">
-										<td class="text-right"><fmt:formatNumber value="${dataStat.totalAssetsTurnover *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
-									</c:forEach>
-								</tr>
+								<c:if test="${cStatus.first }">
+									<tr>
+										<td>资产周转率</td>
+								</c:if>
+								<c:forEach items="${wrapCompareReporter.dataStats}" var="dataStat" begin="0" end="0" step="1">
+									<td class="text-right"><fmt:formatNumber value="${dataStat.totalAssetsTurnover *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
+								</c:forEach>
+								<c:if test="${cStatus.last }">
+									</tr>
+								</c:if>
 								<!-- 资产负债率 -->
-								<tr>
-									<td style="border-bottom: 2px solid gray;">资产负债率</td>
-									<c:forEach items="${wrapCompareReporter.dataStats}" var="dataStat" begin="0" end ="0" step="1">
-										<td class="text-right" style="border-bottom: 2px solid gray;"><fmt:formatNumber value="${dataStat.debtToAssetsRatio *100 }" type="number" pattern="#,##0.0#"
-												maxFractionDigits="2" groupingUsed="true" />%</td>
-									</c:forEach>
-								</tr>
+								<c:if test="${cStatus.first }">
+									<tr>
+										<td style="border-bottom: 2px solid gray;">资产负债率</td>
+								</c:if>
+								<c:forEach items="${wrapCompareReporter.dataStats}" var="dataStat" begin="0" end="0" step="1">
+									<td class="text-right" style="border-bottom: 2px solid gray;"><fmt:formatNumber value="${dataStat.debtToAssetsRatio *100 }" type="number" pattern="#,##0.0#"
+											maxFractionDigits="2" groupingUsed="true" />%</td>
+								</c:forEach>
+								<c:if test="${cStatus.last }">
+									</tr>
+								</c:if>
 							</c:if>
 							<!-- 财务摘要-杜邦分析结束  -->
 						</c:forEach>
