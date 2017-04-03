@@ -24,11 +24,11 @@
 					<form action="<c:url value="/stock/stock/home"/>" method="post" role="form" class="form-horizontal" style="margin-bottom: 0px;">
 						<fieldset>
 							<div class="form-group" style="margin-top: 0px; margin-bottom: 0px;">
-								<div class="col-md-2">
-									<input type="text" name="like|name" value="${searchParams.name}" placeholder="名称" class="form-control input-sm">
+								<div class="col-md-4">
+									<input type="text" name="like|name" value="${searchParams.name}" placeholder="多个名字间使用逗号分隔" class="form-control input-sm">
 								</div>
-								<div class="col-md-2">
-									<input type="text" name="like|code" value="${searchParams.code}" placeholder="股票代码" class="form-control input-sm">
+								<div class="col-md-4">
+									<input type="text" name="like|code" value="${searchParams.code}" placeholder="多个股票代码间使用逗号分隔" class="form-control input-sm">
 								</div>
 								<div class="col-md-1">
 									<button type="submit" class="btn btn-sm btn-primary">

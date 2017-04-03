@@ -5,6 +5,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
@@ -31,8 +34,8 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 	@Autowired
 	private CrawlFinancialDataService crawlFinancialDataService = null;
 	@Autowired
-	private CategoryService categoryService=null;
-	
+	private CategoryService categoryService = null;
+
 	@Autowired
 	public StockController(StockService service) {
 		super(service);
@@ -48,9 +51,46 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 	@RequestMapping("/home")
 	public String home(HttpServletRequest request, Model model) {
 		Map searchParams = HttpUtil.getRequestParams(request);
-		Page<Stock> page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
+		String nameQueryKey = MapUtils.getString(searchParams, "like|name");
+		String codeQueryKey = MapUtils.getString(searchParams, "like|code");
+		Page<Stock> page = null;
+		if (StringUtils.isNotEmpty(nameQueryKey)) {
+			nameQueryKey = StringUtils.replace(nameQueryKey, "，", ",");
+			String[] nameKeys = StringUtils.split(nameQueryKey, ",");
+			searchParams.remove("like|name");
+			for (String name : nameKeys) {
+				name = StringUtils.trim(name);
+				if (StringUtils.isNotEmpty(name)) {
+					searchParams.put("like|name", name);
+					if (page == null) {
+						page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
+					} else {
+						page.getContent().addAll(this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams)).getContent());
+					}
+				}
+			}
+		}
+		if (StringUtils.isNotEmpty(codeQueryKey)) {
+			codeQueryKey = StringUtils.replace(codeQueryKey, "，", ",");
+			String[] codeKeys = StringUtils.split(codeQueryKey, ",");
+			searchParams.remove("like|code");
+			for (String code : codeKeys) {
+				code = StringUtils.trim(code);
+				if (StringUtils.isNotEmpty(code)) {
+					searchParams.put("like|code", code);
+					if (page == null) {
+						page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
+					} else {
+						page.getContent().addAll(this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams)).getContent());
+					}
+				}
+			}
+		}
+		if (page == null || CollectionUtils.isEmpty(page.getContent())) {
+			page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
+		}
 		model.addAttribute("page", page);
-		List<Category> categories=this.categoryService.getAll();
+		List<Category> categories = this.categoryService.getAll();
 		model.addAttribute("categories", categories);
 		return "stock.stock.manager";
 	}
@@ -145,6 +185,7 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 
 	/**
 	 * 初始化股票所属分类
+	 * 
 	 * @return
 	 * @Desc:
 	 * @Author:haipenge
@@ -152,10 +193,9 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 	 */
 	@RequestMapping("/initStockCategory")
 	@ResponseBody
-	public String initStockCategory(){
-		boolean res=this.service.initStockCategory();
+	public String initStockCategory() {
+		boolean res = this.service.initStockCategory();
 		return AjaxResult.getInstance().buildDefaultResult(res);
 	}
-	
 
 }
