@@ -71,7 +71,9 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 					}
 				}
 			}
+			searchParams.remove("like|name");
 		}
+		
 		if (StringUtils.isNotEmpty(codeQueryKey)) {
 			codeQueryKey = StringUtils.replace(codeQueryKey, "，", ",");
 			String[] codeKeys = StringUtils.split(codeQueryKey, ",");
