@@ -96,7 +96,7 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 		searchParams.put("like|name", nameQueryKey);
 		searchParams.put("like|code", codeQueryKey);
 		this.resetSearchParams(searchParams);
-		
+		model.addAttribute("searchParams", searchParams);
 		model.addAttribute("page", page);
 		List<Category> categories = this.categoryService.getAll();
 		model.addAttribute("categories", categories);
