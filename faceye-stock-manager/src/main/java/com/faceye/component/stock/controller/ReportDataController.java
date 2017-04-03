@@ -216,11 +216,10 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 					params.put("SORT|date", "desc");
 					List<ReportData> reportDatas = this.service.getPage(params, 1, 5).getContent();
 					wrapReporter = this.service.wrapReportData(reportDatas, reportCategory.getCode());
-					
 					wrapCompareReporter.setStock(stock);
 					wrapCompareReporter.setWrapReporter(wrapReporter);
-					wrapCompareReporters.add(wrapCompareReporter);	
 				}
+				wrapCompareReporters.add(wrapCompareReporter);	
 			}
 			model.addAttribute("wrapCompareReporters", wrapCompareReporters);
 		}
