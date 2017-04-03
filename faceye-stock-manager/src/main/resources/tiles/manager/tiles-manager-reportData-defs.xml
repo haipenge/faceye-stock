@@ -16,6 +16,6 @@
 		<put-attribute name="default-center" value="stock.reportData.compare.center"></put-attribute>
 	</definition>
 	<definition name="stock.reportData.compare.center" extends="default.center">
-		<put-attribute name="default-center-right" value="/component/stock/reportData/report_center.jsp"></put-attribute>
+		<put-attribute name="default-center-right" value="/component/stock/reportData/report_compare_center.jsp"></put-attribute>
 	</definition>
 </tiles-definitions>
