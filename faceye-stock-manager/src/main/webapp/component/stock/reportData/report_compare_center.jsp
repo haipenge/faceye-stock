@@ -100,15 +100,13 @@
 									<th colspan="2" class="text-center" style="border-bottom: 2px solid gray; font-size: 16px; font-weight: bold; vertical-align: middle;">${reportCategory.name }</th>
 								</c:if>
 								<c:if test="${not empty wrapCompareReporters}">
-									<c:forEach items="${wrapCompareReporter.wrapReporter.records}" var="record" begin="0" end="0" step="1">
 										<th style="border-bottom: 2px solid gray; padding-bottom: 0px; padding-top: 0px;" class="text-center"><p style="margin-bottom: 0px; border-bottom: 1px solid gray;">
-												${wrapCompareReporter.stock.name }:
-												<fmt:formatDate value="${record.date}" pattern="yyyy-MM-dd" />
+												${wrapCompareReporters[0].stock.name }:
+												<fmt:formatDate value="${wrapCompareReporters[0].wrapRepoter.records[0].date}" pattern="yyyy-MM-dd" />
 											</p>
 											<p style="margin-top: 0px; margin-bottom: 0px;">
 												<span class="small pull-left">同型</span><span class="small">金额(元)</span><span class="pull-right small">趋势</span>
 											</p></th>
-									</c:forEach>
 								</c:if>
 								<!-- 财务接要-杜邦分析 -->
 								<c:if test="${not empty wrapCompareReporter.dataStats}">
