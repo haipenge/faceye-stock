@@ -166,6 +166,7 @@
 								<c:if test="${cStatus.last }">
 									</tr>
 								</c:if>
+								</c:if>
 						</c:forEach>
 						<!-- 净资产收益率 -->
 						<c:forEach var="wrapCompareReporter" items="${wrapCompareReporters}" varStatus="cStatus">
@@ -228,9 +229,7 @@
 								</tr>
 							</c:if>
 						</c:forEach>
-						</c:if>
 						<!-- 财务摘要-杜邦分析结束  -->
-
 					</table>
 				</div>
 			</div>
