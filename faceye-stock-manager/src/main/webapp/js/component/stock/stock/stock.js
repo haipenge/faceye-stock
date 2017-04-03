@@ -20,6 +20,22 @@ var Stock = {
 				m.show();
 			}
 		});
+	},
+	/**
+	 * 多只股票财报数据比对
+	 */
+	multiStockReportCompare:function(){
+		var checkedIds = Check.getCheckedIds($('input[name="check-single"]'));
+		var ids=checkedIds.split(',');
+		if(checkedIds!=''&& ids.length>1){
+			location.href='/stock/reportData/compare?stockIds='+checkedIds;
+		}else{
+			var m = new Msg({
+				msg : '请选择比对的股票',
+				type:'warning'
+			});
+			m.show();
+		}
 	}
 };
 $(document).ready(function(){Stock.init();});

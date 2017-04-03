@@ -1,5 +1,6 @@
 package com.faceye.component.stock.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +29,7 @@ import com.faceye.component.stock.service.DataStatService;
 import com.faceye.component.stock.service.ReportCategoryService;
 import com.faceye.component.stock.service.ReportDataService;
 import com.faceye.component.stock.service.StockService;
+import com.faceye.component.stock.service.wrapper.WrapCompareReporter;
 import com.faceye.component.stock.service.wrapper.WrapReporter;
 import com.faceye.component.stock.util.StockConstants;
 import com.faceye.feature.controller.BaseController;
@@ -45,7 +47,7 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 	@Autowired
 	private DataStatService dataStatService = null;
 	@Autowired
-	private DailyStatService dailyStatService=null;
+	private DailyStatService dailyStatService = null;
 
 	public ReportDataController(ReportDataService service) {
 		super(service);
@@ -80,7 +82,7 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 		String date = MapUtils.getString(searchParams, "date");// Year
 		// 报表分类，年报，季报？0（年报），1（一季报），2，3
 		Integer type = MapUtils.getInteger(searchParams, "type");
-		if (type==null) {
+		if (type == null) {
 			type = 0;
 		}
 		ReportCategory reportCategory = null;
@@ -91,11 +93,11 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 			reportCategory = this.reportCategoryService.getReportCategoryByCode(StockConstants.REPORT_CATEOGRY_FINANCIAL_SUMMARY);
 		}
 		watch.stop();
-		//获取每日数据分析
-		Map dailyStatParams=new HashMap();
+		// 获取每日数据分析
+		Map dailyStatParams = new HashMap();
 		dailyStatParams.put("EQ|stockId", stockId);
-		List<DailyStat> dailyStats=this.dailyStatService.getPage(dailyStatParams, 0, 1).getContent();
-		DailyStat dailyStat=CollectionUtils.isNotEmpty(dailyStats)?dailyStats.get(0):null;
+		List<DailyStat> dailyStats = this.dailyStatService.getPage(dailyStatParams, 0, 1).getContent();
+		DailyStat dailyStat = CollectionUtils.isNotEmpty(dailyStats) ? dailyStats.get(0) : null;
 		model.addAttribute("dailyStat", dailyStat);
 
 		if (StringUtils.equals(reportCategory.getCode(), StockConstants.REPORT_CATEOGRY_FINANCIAL_SUMMARY)) {
@@ -134,5 +136,92 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 			logger.error("View" + info.getTaskName() + " Cost :" + info.getTimeMillis());
 		}
 		return "stock.reportData.report";
+	}
+
+	/**
+	 * 多只股票数据比对
+	 * 
+	 * @param request
+	 * @param model
+	 * @return
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年4月3日 上午9:16:04
+	 */
+	@RequestMapping("/compare")
+	public String compare(HttpServletRequest request, Model model) {
+		WrapReporter wrapReporter = null;
+		Map searchParams = HttpUtil.getRequestParams(request);
+		Long reportCategoryId = MapUtils.getLong(searchParams, "reportCategoryId");
+		Long startDate = MapUtils.getLong(searchParams, "startDate");
+		// Long stockId = MapUtils.getLong(searchParams, "stockId");
+		String date = MapUtils.getString(searchParams, "date");// Year
+		// 报表分类，年报，季报？0（年报），1（一季报），2，3
+		Integer type = MapUtils.getInteger(searchParams, "type");
+		String stockIds = MapUtils.getString(searchParams, "stockIds");
+		if (StringUtils.isNotEmpty(stockIds)) {
+			ReportCategory reportCategory = null;
+			if (reportCategoryId != null) {
+				reportCategory = this.reportCategoryService.get(reportCategoryId);
+			} else {
+				// 财务摘要
+				reportCategory = this.reportCategoryService.getReportCategoryByCode(StockConstants.REPORT_CATEOGRY_FINANCIAL_SUMMARY);
+			}
+			List<ReportCategory> reportCategories = this.reportCategoryService.getPage(null, 0, 0).getContent();
+			model.addAttribute("reportCategory", reportCategory);
+			model.addAttribute("reportCategories", reportCategories);
+			
+			String[] ids = StringUtils.split(stockIds, ",");
+			List<WrapCompareReporter> wrapCompareReporters=new ArrayList<WrapCompareReporter>(0);
+			for (String id : ids) {
+				if (StringUtils.isEmpty(id)) {
+					continue;
+				}
+				Long stockId = Long.parseLong(id);
+				if (reportCategoryId == null) {
+					reportCategoryId = 2L;// 财务摘要
+				}
+				Stock stock = this.stockService.get(stockId);
+				model.addAttribute("stock", stock);
+				if (type == null) {
+					type = 0;
+				}
+				// 获取每日数据分析
+				Map dailyStatParams = new HashMap();
+				dailyStatParams.put("EQ|stockId", stockId);
+				List<DailyStat> dailyStats = this.dailyStatService.getPage(dailyStatParams, 0, 1).getContent();
+				DailyStat dailyStat = CollectionUtils.isNotEmpty(dailyStats) ? dailyStats.get(0) : null;
+				model.addAttribute("dailyStat", dailyStat);
+				if (StringUtils.equals(reportCategory.getCode(), StockConstants.REPORT_CATEOGRY_FINANCIAL_SUMMARY)) {
+					// 财务接要,获取财务分析数据
+					// 杜邦分析数据
+					Map dataStatParams = new HashMap();
+					dataStatParams.put("EQ|stockId", stockId);
+					dataStatParams.put("EQ|type", type);
+					if (startDate != null) {
+						dataStatParams.put("LT|dateCycle", new Date(startDate));
+					}
+					dataStatParams.put("SORT|dateCycle", "desc");
+					List<DataStat> dataStats = this.dataStatService.getPage(dataStatParams, 1, 5).getContent();
+					model.addAttribute("dataStats", dataStats);
+				} else {
+					Map params = new HashMap();
+					params.put("EQ|stockId", stockId);
+					params.put("EQ|type", type);
+					if (startDate != null) {
+						params.put("LT|date", new Date(startDate));
+					}
+					params.put("SORT|date", "desc");
+					List<ReportData> reportDatas = this.service.getPage(params, 1, 5).getContent();
+					wrapReporter = this.service.wrapReportData(reportDatas, reportCategory.getCode());
+					WrapCompareReporter wrapCompareReporter=new WrapCompareReporter();
+					wrapCompareReporter.setStock(stock);
+					wrapCompareReporter.setWrapReporter(wrapReporter);
+					wrapCompareReporters.add(wrapCompareReporter);	
+				}
+			}
+			model.addAttribute("wrapCompareReporters", wrapCompareReporters);
+		}
+		return "stock.reportData.compare";
 	}
 }

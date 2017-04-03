@@ -65,10 +65,14 @@
 			</c:forEach>
 		</div>
 		<div class="content">
+		  <button type="button" class="btn btm-sm btm-primary" id="btn-multi-stock-compare">多股比对</button>
+		</div>
+		<div class="content">
 			<div classs="table-responsive">
 				<table class="table table-bordered table-hover">
 					<thead>
 						<tr>
+						    <th><input type="checkbox" name="check-all"></th>
 							<th><fmt:message key='stock.stock.name'></fmt:message></th>
 							<th><fmt:message key='stock.stock.business'></fmt:message></th>
 							<th><fmt:message key='stock.stock.market'></fmt:message></th>
@@ -81,6 +85,7 @@
 					<tbody>
 						<c:forEach items="${page.content}" var="stock">
 							<tr>
+							    <td><input type="checkbox" name="check-single" value="${stock.id}"></td>
 								<td>${stock.name}&nbsp;&nbsp;<small>(<a href="<c:url value="/stock/stock/detail/${stock.id}"/>">${stock.code}</a>)</small></td>
 								<td>${stock.category.name}</td>
 								<td><c:if test="${stock.market eq 'sz'}">深圳(SZ)</c:if> <c:if test="${stock.market eq 'sh'}">上海(SH)</c:if></td>

@@ -21,4 +21,6 @@ public interface ReportDataService extends BaseService<ReportData,Long>{
 	 * @Date:2017年3月14日 下午5:46:39
 	 */
 	public WrapReporter wrapReportData(List<ReportData> reportDatas,String categoryName);
+	
+	
 }/**@generate-service-source@**/
