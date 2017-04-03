@@ -4,38 +4,10 @@
 <script type="text/javascript" src="<c:url value="/js/component/stock/reportData/reportData.js"/>"></script>
 <div class="page-head">
 	<div class="row">
-		<div class="col-sm-2">
+		<div class="col-sm-12">
 			<h2>
-				${stock.name} <small>(${stock.code})</small>&nbsp;&nbsp;<input type="hidden" name="stockId" value="${stock.id}" id="stock_id">
+				财报比对
 			</h2>
-		</div>
-		<div class="col-sm-8 text-center">
-			<c:if test="${not empty dailyStat }">
-				<c:set var="price-css" value="price-rise" />
-				<c:if test="${dailyStat.topPriceDate lt dailyStat.lowPriceDate }">
-					<c:set var="price-css" value="price-fall" />
-				</c:if>
-				市盈率:<fmt:formatNumber value="${dailyStat.pe }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;
-				动态市盈率:<fmt:formatNumber value="${dailyStat.dynamicPe}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;
-				30天最高价:￥ <fmt:formatNumber value="${dailyStat.topPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;(<fmt:formatDate
-					value="${dailyStat.topPriceDate }" pattern="MM-dd" />)&nbsp;&nbsp;
-				30天最低价:￥ <fmt:formatNumber value="${dailyStat.lowPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;(<fmt:formatDate
-					value="${dailyStat.lowPriceDate }" pattern="MM-dd" />)&nbsp;&nbsp;
-				30天波幅:<fmt:formatNumber value="${100* dailyStat.priceAmplitude}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%
-				</c:if>
-			当天价格:
-			<fmt:formatNumber value="${dailyStat.todayPrice}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />
-			&nbsp;&nbsp; 涨跌:
-			<fmt:formatNumber value="${dailyStat.todayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />
-			%&nbsp;&nbsp;
-		</div>
-		<div class="col-sm-2 text-right">
-			<c:if test="${empty wrapReporter.records  }">
-				<a href="#" class="btn btn-sm btn-warning start-crawl">爬取数据</a>
-			</c:if>
-			<c:if test="${ not empty wrapReporter.records  }">
-				<a href="#" class="btn btn-sm btn-warning start-crawl">重新爬取</a>
-			</c:if>
 		</div>
 	</div>
 </div>
