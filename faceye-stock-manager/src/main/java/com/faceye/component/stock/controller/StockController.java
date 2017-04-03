@@ -62,10 +62,15 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 				name = StringUtils.trim(name);
 				if (StringUtils.isNotEmpty(name)) {
 					searchParams.put("like|name", name);
-					if (page == null||CollectionUtils.isEmpty(page.getContent())) {
-						page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
-					} else {
-						page.getContent().addAll(this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams)).getContent());
+					Page result = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
+					if (result != null && CollectionUtils.isNotEmpty(result.getContent())) {
+						if (page == null || CollectionUtils.isEmpty(page.getContent())) {
+							page = result;
+						} else {
+							if (CollectionUtils.isNotEmpty(result.getContent())) {
+								page.getContent().addAll(result.getContent());
+							}
+						}
 					}
 				}
 			}
@@ -78,10 +83,13 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 				code = StringUtils.trim(code);
 				if (StringUtils.isNotEmpty(code)) {
 					searchParams.put("like|code", code);
-					if (page == null||CollectionUtils.isEmpty(page.getContent())) {
-						page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
-					} else {
-						page.getContent().addAll(this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams)).getContent());
+					Page result = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
+					if (result != null && CollectionUtils.isNotEmpty(result.getContent())) {
+						if (page == null || CollectionUtils.isEmpty(page.getContent())) {
+							page = result;
+						} else {
+							page.getContent().addAll(result.getContent());
+						}
 					}
 				}
 			}
