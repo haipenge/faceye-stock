@@ -56,6 +56,8 @@
 						href="<c:url value="/stock/reportData/report?reportCategoryId=${param.reportCategoryId}&stockId=${param.stockId }&type=2"/>">中报</a></li>
 					<li role="presentation" <c:if test="${param.type eq 3}"> class="active"</c:if>><a
 						href="<c:url value="/stock/reportData/report?reportCategoryId=${param.reportCategoryId}&stockId=${param.stockId }&type=3"/>">三季报</a></li>
+						<li role="presentation" <c:if test="${param.type eq 4}"> class="active"</c:if>><a
+						href="<c:url value="/stock/reportData/report?reportCategoryId=${param.reportCategoryId}&stockId=${param.stockId }&type=4"/>">全部</a></li>
 				</ul>
 			</div>
 			<div class="col-sm-2">
