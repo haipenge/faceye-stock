@@ -122,14 +122,23 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 		// 设置昨天交易收盘价
 		if (CollectionUtils.isNotEmpty(dailyDatas)) {
 			int size = dailyDatas.size();
-			for (int i = dailyDatas.size() - 1; i > 0; i--) {
-				DailyData dailyData = dailyDatas.get(i);
-				if (i - 1 > 0) {
-					DailyData nextDayData = dailyDatas.get(i - 1);
-					nextDayData.setYesterdayPrice(dailyData.getShoupanjia());
-					this.dailyDataService.save(nextDayData);
+			for (int i = 0; i < dailyDatas.size(); i++) {
+				if (i + 1 <= size) {
+					DailyData todayData = dailyDatas.get(i);
+					DailyData yesterdayData = dailyDatas.get(i + 1);
+					todayData.setYesterdayPrice(yesterdayData.getShoupanjia());
+					this.dailyDataService.save(todayData);
 				}
+
 			}
+			// for (int i = dailyDatas.size() - 1; i > 0; i--) {
+			// DailyData dailyData = dailyDatas.get(i);
+			// if (i - 1 > 0) {
+			// DailyData nextDayData = dailyDatas.get(i - 1);
+			// nextDayData.setYesterdayPrice(dailyData.getShoupanjia());
+			// this.dailyDataService.save(nextDayData);
+			// }
+			// }
 		}
 		Double topPriceOf30Days = 0.0D;
 		Date topPriceDate = null;
@@ -147,9 +156,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 					lowerPriceDate = dailyData.getDate();
 					todayPrice = dailyData.getShoupanjia();
 					yesterdayPrice = dailyData.getYesterdayPrice();
-
 					index++;
-
 				} else {
 					if (dailyData.getJintianzuigaojia().compareTo(topPriceOf30Days) > 0) {
 						topPriceOf30Days = dailyData.getJintianzuigaojia();
