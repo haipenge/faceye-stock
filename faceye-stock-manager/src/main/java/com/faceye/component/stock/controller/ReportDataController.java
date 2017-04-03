@@ -183,6 +183,7 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 					reportCategoryId = 2L;// 财务摘要
 				}
 				Stock stock = this.stockService.get(stockId);
+				wrapCompareReporter.setStock(stock);
 				model.addAttribute("stock", stock);
 				if (type == null) {
 					type = 0;
