@@ -132,7 +132,7 @@
 											<c:if test="${cStatus.index == 0 }">
 												<td width="160" <c:if test="${status.last}"> style="border-bottom:2px solid gray;"</c:if>>${accountingSubject.name}</td>
 											</c:if>
-											<c:forEach items="${wrapCompareReporter.wrapReporter.records}" var="record" begin="0" end="1" step="1">
+											<c:forEach items="${wrapCompareReporter.wrapReporter.records}" var="record" begin="0" end="0" step="1">
 												<c:forEach items="${record.data2Record}" var="data2Record">
 													<c:if test="${accountingSubject.id eq data2Record.accountingSubjectId}">
 														<td <c:if test="${status.last}"> style="border-bottom:2px solid gray;"</c:if> class="text-center">
