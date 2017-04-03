@@ -73,8 +73,8 @@
 								</c:if>
 								<c:if test="${not empty wrapCompareReporters and empty wrapCompareReporter.dataStats}">
 									<th style="border-bottom: 2px solid gray; padding-bottom: 0px; padding-top: 0px;" class="text-center"><p style="margin-bottom: 0px; border-bottom: 1px solid gray;">
-											${wrapCompareReporter.stock.name }:
-											<fmt:formatDate value="${wrapCompareReporter.wrapReporter.records[0].date}" pattern="yyyy-MM-dd" />
+											<a href="<c:url value="/stock/reportData/report?stockId=${wrapCompareReporter.stock.id}"/>">${wrapCompareReporter.stock.name}</a>
+											<span class="span-suffix"><fmt:formatDate value="${wrapCompareReporter.wrapReporter.records[0].date}" pattern="yyyy-MM-dd" /></span>
 										</p>
 										<p style="margin-top: 0px; margin-bottom: 0px;">
 											<span class="small pull-left">同型</span><span class="small">金额(元)</span><span class="pull-right small">趋势</span>
