@@ -206,6 +206,7 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 					dataStatParams.put("SORT|dateCycle", "desc");
 					List<DataStat> dataStats = this.dataStatService.getPage(dataStatParams, 1, 5).getContent();
 //					model.addAttribute("dataStats", dataStats);
+					logger.debug(">>FaceYe data stats size is:"+dataStats.size());
 					wrapCompareReporter.setDataStats(dataStats);
 				} else {
 					Map params = new HashMap();
