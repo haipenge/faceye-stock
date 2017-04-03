@@ -38,6 +38,7 @@ public class DailyDataController extends BaseController<DailyData, Long, DailyDa
 	@RequestMapping("/home")
 	public String home(HttpServletRequest request, Model model) {
 		Map searchParams=HttpUtil.getRequestParams(request);
+		searchParams.put("SORT|date", "desc");
 		Page<DailyData> page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
 		model.addAttribute("page", page);
 		return "stock.dailyData.manager";

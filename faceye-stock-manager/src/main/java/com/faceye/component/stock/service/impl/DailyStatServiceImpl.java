@@ -116,7 +116,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 		Date now = new Date();
 		Date befor30Day = new Date(now.getTime() - 31 * 24 * 60 * 60 * 1000L);
 		params.put("EQ|stockId", stock.getId());
-		params.put("GTE|date", befor30Day);
+//		params.put("GTE|date", befor30Day);
 		params.put("SORT|date", "desc");
 		List<DailyData> dailyDatas = this.dailyDataService.getPage(params, 0, 0).getContent();
 		// 设置昨天交易收盘价
