@@ -97,7 +97,7 @@
 						<tr>
 							<th colspan="2" class="text-center" style="border-bottom: 2px solid gray; font-size: 16px; font-weight: bold; vertical-align: middle;">${reportCategory.name }</th>
 							<c:if test="${not empty wrapCompareReporters}">
-								<c:forEach items="${wrapCompareReporters[0].wrapReporter.records}" var="record" begin="0" end="1">
+								<c:forEach items="${wrapCompareReporters[0].wrapReporter.records}" var="record" begin="0" end="1" step="1">
 									<th style="border-bottom: 2px solid gray; padding-bottom: 0px; padding-top: 0px;" class="text-center"><p style="margin-bottom: 0px; border-bottom: 1px solid gray;">
 											<fmt:formatDate value="${record.date}" pattern="yyyy-MM-dd" />
 										</p>
