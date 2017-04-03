@@ -230,7 +230,8 @@ public class ReportDataServiceImpl extends BaseMongoServiceImpl<ReportData, Long
 					lastYearData2Record=lastYearWrapRecord.getData2Record().get(j);
 				}
 				if(lastYearData2Record!=null && data2Record.getData()!=null && lastYearData2Record.getData()!=null){
-					Double trendAnalysisResult=(data2Record.getData()-lastYearData2Record.getData())/lastYearData2Record.getData();
+					Double trendAnalysisResult=0.0D;	
+					trendAnalysisResult=(data2Record.getData()-lastYearData2Record.getData())/Math.abs(lastYearData2Record.getData());
 					data2Record.setTrendAnalysisResult(trendAnalysisResult);
 				}
 			}
