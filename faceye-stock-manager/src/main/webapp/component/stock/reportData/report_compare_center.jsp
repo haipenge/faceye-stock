@@ -97,7 +97,7 @@
 						<tr>
 							<th colspan="2" class="text-center" style="border-bottom: 2px solid gray; font-size: 16px; font-weight: bold; vertical-align: middle;">${reportCategory.name }</th>
 							<c:if test="${not empty wrapCompareReporters}">
-								<c:forEach items="${wrapCompareReporters[0].wrapReporter.records}" var="record" begin=0 end=1>
+								<c:forEach items="${wrapCompareReporters[0].wrapReporter.records}" var="record" begin="0" end="1">
 									<th style="border-bottom: 2px solid gray; padding-bottom: 0px; padding-top: 0px;" class="text-center"><p style="margin-bottom: 0px; border-bottom: 1px solid gray;">
 											<fmt:formatDate value="${record.date}" pattern="yyyy-MM-dd" />
 										</p>
@@ -110,7 +110,7 @@
 							<c:forEach var="wrapCompareReporter" items="${wrapCompareReporters}" varStatus="cStatus">
 
 								<!-- 财务接要-杜邦分析 -->
-								<c:if test="${not empty wrapCompareReporter.dataStats}" begin=0 end=1>
+								<c:if test="${not empty wrapCompareReporter.dataStats}" begin="0" end="1">
 									<c:forEach items="${wrapCompareReporter.dataStats}" var="dataStat">
 										<th style="border-bottom: 2px solid gray;" class="text-center"><fmt:formatDate value="${dataStat.dateCycle}" pattern="yyyy-MM-dd" /></th>
 									</c:forEach>
@@ -129,7 +129,7 @@
 										<c:if test="${cStatus.index == 0 }">
 											<td width="160" <c:if test="${status.last}"> style="border-bottom:2px solid gray;"</c:if>>${accountingSubject.name}</td>
 										</c:if>
-										<c:forEach items="${wrapCompareReporter.wrapReporter.records}" var="record" begin=0 end=1>
+										<c:forEach items="${wrapCompareReporter.wrapReporter.records}" var="record" begin="0" end="1">
 											<c:forEach items="${record.data2Record}" var="data2Record">
 												<c:if test="${accountingSubject.id eq data2Record.accountingSubjectId}">
 													<td <c:if test="${status.last}"> style="border-bottom:2px solid gray;"</c:if> class="text-center">
