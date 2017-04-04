@@ -89,34 +89,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	public void crawlStock(Stock stock) {
 		boolean isStockCrawled = this.isStockFinancialDataCrawled(stock);
 //		boolean isStockCrawled=false;
-		if (!isStockCrawled) {
-			String code = stock.getCode();
-			String url = "";
-			if (accountingSubjects == null) {
-				accountingSubjects = this.getAccountingSubjects();
-			}
-			if (CollectionUtils.isNotEmpty(accountingSubjects)) {
-				for (AccountingSubject accountingSubject : accountingSubjects) {
-					url = accountingSubject.getSinaUrl();
-					url = StringUtils.replace(url, "000998", code);
-					logger.debug(">>FaceYe --> Crawl Financial Data Url is:" + url);
-					String content = Http.getInstance().get(url, "gb2312");
-					if (StringUtils.isNotEmpty(content)) {
-						this.parse(stock, accountingSubject, content);
-					} else {
-						logger.error(">>FaceYe have not got content of url: " + url);
-					}
-					url = "";
-					// try {
-					// Thread.sleep(1000L);
-					// } catch (InterruptedException e) {
-					// logger.error(">>FaceYe Throws Exception:", e);
-					// }
-				}
-			}
-		} else {
-			logger.debug(">>FaceYe --> stock:" + stock.getName() + "(" + stock.getCode() + ") 已爬取");
-		}
+		this.crawlStock(stock, isStockCrawled);
 	}
 
 	private boolean isStockFinancialDataCrawled(Stock stock) {
@@ -361,5 +334,37 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 			}
 		}
 		return struts;
+	}
+
+	@Override
+	public void crawlStock(Stock stock, boolean isCrawled) {
+		if (!isCrawled) {
+			String code = stock.getCode();
+			String url = "";
+			if (accountingSubjects == null) {
+				accountingSubjects = this.getAccountingSubjects();
+			}
+			if (CollectionUtils.isNotEmpty(accountingSubjects)) {
+				for (AccountingSubject accountingSubject : accountingSubjects) {
+					url = accountingSubject.getSinaUrl();
+					url = StringUtils.replace(url, "000998", code);
+					logger.debug(">>FaceYe --> Crawl Financial Data Url is:" + url);
+					String content = Http.getInstance().get(url, "gb2312");
+					if (StringUtils.isNotEmpty(content)) {
+						this.parse(stock, accountingSubject, content);
+					} else {
+						logger.error(">>FaceYe have not got content of url: " + url);
+					}
+					url = "";
+					// try {
+					// Thread.sleep(1000L);
+					// } catch (InterruptedException e) {
+					// logger.error(">>FaceYe Throws Exception:", e);
+					// }
+				}
+			}
+		} else {
+			logger.debug(">>FaceYe --> stock:" + stock.getName() + "(" + stock.getCode() + ") 已爬取");
+		}
 	}
 }
