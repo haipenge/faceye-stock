@@ -125,12 +125,12 @@
 													<td <c:if test="${status.last}"> style="border-bottom:2px solid gray;"</c:if> class="text-center">
 														<p class="p-data">
 															<span class="small pull-left text-info"><c:if test="${data2Record.commonSizeAnalysisResult gt 0 }">
-																	<fmt:formatNumber value="${data2Record.commonSizeAnalysisResult *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</c:if></span> <span
+																	<fmt:formatNumber value="${data2Record.commonSizeAnalysisResult *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</c:if></span> <span
 																class="span-data"><fmt:formatNumber value="${data2Record.data }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></span> <span
 																class="small pull-right text-info">
 																<c:set var="trendAnalysisResultFontColor" value="red"/>
 																<c:if test="${ data2Record.trendAnalysisResult lt 0 }"><c:set var="trendAnalysisResultFontColor" value="green"/></c:if>
-																	<c:if test="${data2Record.trendAnalysisResult  ne 0}"><font color="${trendAnalysisResultFontColor}"><fmt:formatNumber value="${data2Record.trendAnalysisResult *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</font></c:if></span>
+																	<c:if test="${data2Record.trendAnalysisResult  ne 0}"><font color="${trendAnalysisResultFontColor}"><fmt:formatNumber value="${data2Record.trendAnalysisResult *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</font></c:if></span>
 														</p>
 													</td>
 												</c:if>
