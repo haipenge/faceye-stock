@@ -108,13 +108,13 @@
 														<td <c:if test="${status.last}"> style="border-bottom:2px solid gray;"</c:if> class="text-center">
 															<p class="p-data">
 																<span class="small pull-left text-info"><c:if test="${data2Record.commonSizeAnalysisResult gt 0 }">
-																		<fmt:formatNumber value="${data2Record.commonSizeAnalysisResult *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</c:if></span> <span
+																		<fmt:formatNumber value="${data2Record.commonSizeAnalysisResult *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</c:if></span> <span
 																	class="span-data"><fmt:formatNumber value="${data2Record.data }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></span> <span
 																	class="small pull-right text-info"> <c:set var="trendAnalysisResultFontColor" value="red" /> <c:if test="${ data2Record.trendAnalysisResult lt 0 }">
 																		<c:set var="trendAnalysisResultFontColor" value="green" />
 																	</c:if> <c:if test="${data2Record.trendAnalysisResult  ne 0}">
 																		<font color="${trendAnalysisResultFontColor}"> <fmt:formatNumber value="${data2Record.trendAnalysisResult *100 }" type="number" pattern="#,##0.0#"
-																				maxFractionDigits="2" groupingUsed="true" />%
+																				maxFractionDigits="1" groupingUsed="true" />%
 																		</font>
 																	</c:if></span>
 															</p>
@@ -130,13 +130,13 @@
 															<td <c:if test="${status.last}"> style="border-bottom:2px solid gray;"</c:if> class="text-center">
 																<p class="p-data">
 																	<span class="small pull-left text-info"><c:if test="${data2Record.commonSizeAnalysisResult gt 0 }">
-																			<fmt:formatNumber value="${data2Record.commonSizeAnalysisResult *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</c:if></span> <span
+																			<fmt:formatNumber value="${data2Record.commonSizeAnalysisResult *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</c:if></span> <span
 																		class="span-data"><fmt:formatNumber value="${data2Record.data }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></span> <span
 																		class="small pull-right text-info"> <c:set var="trendAnalysisResultFontColor" value="red" /> <c:if test="${ data2Record.trendAnalysisResult lt 0 }">
 																			<c:set var="trendAnalysisResultFontColor" value="green" />
 																		</c:if> <c:if test="${data2Record.trendAnalysisResult  ne 0}">
 																			<font color="${trendAnalysisResultFontColor}"> <fmt:formatNumber value="${data2Record.trendAnalysisResult *100 }" type="number" pattern="#,##0.0#"
-																					maxFractionDigits="2" groupingUsed="true" />%
+																					maxFractionDigits="1" groupingUsed="true" />%
 																			</font>
 																		</c:if></span>
 																</p>
@@ -161,7 +161,7 @@
 											<td>总资产净利率</td>
 									</c:if>
 									<td class="text-right"><fmt:formatNumber value="${wrapCompareReporter.dataStats[0].totalAssetsNetProfitMargin *100 }" type="number" pattern="#,##0.0#"
-											maxFractionDigits="2" groupingUsed="true" />%</td>
+											maxFractionDigits="1" groupingUsed="true" />%</td>
 									<c:if test="${cStatus.last }">
 										</tr>
 									</c:if>
@@ -173,7 +173,7 @@
 									<tr>
 										<td>净资产收益率</td>
 								</c:if>
-								<td class="text-right"><fmt:formatNumber value="${wrapCompareReporter.dataStats[0].roe *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2"
+								<td class="text-right"><fmt:formatNumber value="${wrapCompareReporter.dataStats[0].roe *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="1"
 										groupingUsed="true" />%</td>
 								<c:if test="${cStatus.last }">
 									</tr>
@@ -185,7 +185,7 @@
 									<tr>
 										<td>毛利率</td>
 								</c:if>
-								<td class="text-right"><fmt:formatNumber value="${wrapCompareReporter.dataStats[0].grossProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2"
+								<td class="text-right"><fmt:formatNumber value="${wrapCompareReporter.dataStats[0].grossProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="1"
 										groupingUsed="true" />%</td>
 								<c:if test="${cStatus.last }">
 									</tr>
@@ -197,7 +197,7 @@
 									<tr>
 										<td>净利率</td>
 								</c:if>
-								<td class="text-right"><fmt:formatNumber value="${wrapCompareReporter.dataStats[0].netProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2"
+								<td class="text-right"><fmt:formatNumber value="${wrapCompareReporter.dataStats[0].netProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="1"
 										groupingUsed="true" />%</td>
 
 								<c:if test="${cStatus.last }">
@@ -210,7 +210,7 @@
 									<tr>
 										<td>资产周转率</td>
 								</c:if>
-								<td class="text-right"><fmt:formatNumber value="${wrapCompareReporter.dataStats[0].totalAssetsTurnover *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2"
+								<td class="text-right"><fmt:formatNumber value="${wrapCompareReporter.dataStats[0].totalAssetsTurnover *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="1"
 										groupingUsed="true" />%</td>
 								<c:if test="${cStatus.last }">
 									</tr>
@@ -223,7 +223,7 @@
 										<td style="border-bottom: 2px solid gray;">资产负债率</td>
 								</c:if>
 								<td class="text-right" style="border-bottom: 2px solid gray;"><fmt:formatNumber value="${wrapCompareReporter.dataStats[0].debtToAssetsRatio *100 }" type="number"
-										pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
+										pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
 								<c:if test="${cStatus.last }">
 									</tr>
 								</c:if>
