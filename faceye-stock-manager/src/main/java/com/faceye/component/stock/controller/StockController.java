@@ -55,6 +55,14 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 		Map searchParams = HttpUtil.getRequestParams(request);
 		String nameQueryKey = MapUtils.getString(searchParams, "like|name");
 		String codeQueryKey = MapUtils.getString(searchParams, "like|code");
+		Double minPe=MapUtils.getDouble(searchParams, "minPe");
+		Double maxPe=MapUtils.getDouble(searchParams, "maxPe");
+		if(minPe!=null){
+			searchParams.put("GTE|dailyStat.pe", minPe);
+		}
+		if(maxPe!=null){
+			searchParams.put("LTE|dailyStat.pe", maxPe);
+		}
 		Page<Stock> page = null;
 		List<Stock> items=new ArrayList<Stock>(0);
 		if (StringUtils.isNotEmpty(nameQueryKey)) {
@@ -95,8 +103,8 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 			page=new PageImpl(items);
 		}
 		if (page == null || CollectionUtils.isEmpty(page.getContent())) {
-			searchParams.put("SORT|dailyStat.pe", "asc");
-//			searchParams.put("SORT|dailyStat.priceAmplitude:1", "asc");
+//			searchParams.put("SORT|dailyStat.pe", "asc");
+			searchParams.put("SORT|dailyStat.priceAmplitude:1", "asc");
 			page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
 		}
 		searchParams.put("like|name", nameQueryKey);
