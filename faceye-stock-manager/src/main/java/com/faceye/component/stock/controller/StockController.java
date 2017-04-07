@@ -57,12 +57,12 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 		String codeQueryKey = MapUtils.getString(searchParams, "like|code");
 		Double minPe=MapUtils.getDouble(searchParams, "minPe");
 		Double maxPe=MapUtils.getDouble(searchParams, "maxPe");
-		if(minPe!=null){
-			searchParams.put("GTE|dailyStat.pe", minPe);
-		}
-		if(maxPe!=null){
-			searchParams.put("LTE|dailyStat.pe", maxPe);
-		}
+//		if(minPe!=null){
+//			searchParams.put("GTE|dailyStat.pe", minPe);
+//		}
+//		if(maxPe!=null){
+//			searchParams.put("LTE|dailyStat.pe", maxPe);
+//		}
 		Page<Stock> page = null;
 		List<Stock> items=new ArrayList<Stock>(0);
 		if (StringUtils.isNotEmpty(nameQueryKey)) {
