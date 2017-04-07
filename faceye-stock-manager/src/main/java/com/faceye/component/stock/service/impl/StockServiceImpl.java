@@ -162,10 +162,13 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 		// NumberPath numberPath = new NumberPath(Number.class, path, "age");
 		// predicates.add(numberPath.eq(15));
 		Predicate predicate = DynamicSpecifications.builder(searchParams, entityClass);
+		Sort sort = this.buildSort(searchParams);
 		if (predicate != null) {
 			logger.debug(">>FaceYe -->Query predicate is:" + predicate.toString());
 		}
-		Sort sort = this.buildSort(searchParams);
+		if(sort!=null){
+			logger.debug(">>FaceYe --> Query sort is:"+sort.toString());
+		}
 		Page<Stock> res = null;
 		if (size != 0) {
 			Pageable pageable = new PageRequest(page, size, sort);
