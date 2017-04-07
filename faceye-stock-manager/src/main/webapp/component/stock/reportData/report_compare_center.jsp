@@ -199,7 +199,6 @@
 								</c:if>
 								<td class="text-right"><fmt:formatNumber value="${wrapCompareReporter.dataStats[0].netProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="1"
 										groupingUsed="true" />%</td>
-
 								<c:if test="${cStatus.last }">
 									</tr>
 								</c:if>

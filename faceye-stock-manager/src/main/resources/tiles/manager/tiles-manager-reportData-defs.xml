@@ -18,4 +18,12 @@
 	<definition name="stock.reportData.compare.center" extends="default.center">
 		<put-attribute name="default-center-right" value="/component/stock/reportData/report_compare_center.jsp"></put-attribute>
 	</definition>
+	
+	<!-- 数据 报告首页 -->
+	<definition name="stock.reportData.home" extends="default.manager">
+	   <put-attribute name="default-center" value="stock.reportData.home.center"></put-attribute>
+	</definition>
+	<definition name="stock.reportData.home.center" extends="default.center">
+		<put-attribute name="default-center-right" value="/component/stock/reportData/report_home_center.jsp"></put-attribute>
+	</definition>
 </tiles-definitions>

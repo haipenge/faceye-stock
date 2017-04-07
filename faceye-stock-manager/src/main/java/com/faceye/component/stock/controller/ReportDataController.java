@@ -54,6 +54,21 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 		// TODO Auto-generated constructor stub
 	}
 
+	
+	/**
+	 * 报告首页
+	 * @param request
+	 * @param model
+	 * @return
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年4月7日 下午1:29:30
+	 */
+	public String home(HttpServletRequest request,Model model){
+		Map searchParams=HttpUtil.getRequestParams(request);
+		
+		return "stock.reportData.home";
+	}
 	/**
 	 * 财务报告
 	 * 

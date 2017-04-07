@@ -187,6 +187,8 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 				dailyStat.setTodayIncreaseRate(increaseRate);
 			}
 			this.save(dailyStat);
+			stock.setDailyStat(dailyStat);
+			this.stockService.save(stock);
 		}
 	}
 

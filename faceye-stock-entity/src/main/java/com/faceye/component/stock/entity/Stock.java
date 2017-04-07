@@ -104,5 +104,21 @@ public class Stock implements Serializable {
 	public void setCategory(Category category) {
 		this.category = category;
 	}
+	
+	/**
+	 * 每日数据分析
+	 */
+	private DailyStat dailyStat=null;
+
+	public DailyStat getDailyStat() {
+		return dailyStat;
+	}
+
+	public void setDailyStat(DailyStat dailyStat) {
+		this.dailyStat = dailyStat;
+	}
+	
+	
+	
 
 }/** @generate-entity-source@ **/
