@@ -19,10 +19,14 @@
 				动态市盈率:<fmt:formatNumber value="${dailyStat.dynamicPe}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;
 				30天最高价:￥ <fmt:formatNumber value="${dailyStat.topPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;(<fmt:formatDate value="${dailyStat.topPriceDate }" pattern="MM-dd"/>)&nbsp;&nbsp;
 				30天最低价:￥ <fmt:formatNumber value="${dailyStat.lowPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;(<fmt:formatDate value="${dailyStat.lowPriceDate }" pattern="MM-dd"/>)&nbsp;&nbsp;
-				30天波幅:<fmt:formatNumber value="${100* dailyStat.priceAmplitude}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%
+				<c:set var="priceAmplitudeColor" value="red"/>
+				<c:if test="${dailyStat.priceAmplitude lt 0 }"><c:set var="priceAmplitudeColor" value="green"/></c:if>
+				30天波幅:<font color="${priceAmplitudeColor}"><fmt:formatNumber value="${100* dailyStat.priceAmplitude}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</font>
 				</c:if>
 				当天价格: <fmt:formatNumber value="${dailyStat.todayPrice}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;
-				涨跌:<fmt:formatNumber value="${dailyStat.todayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%&nbsp;&nbsp;
+				<c:set var="todayIncreaseRateColor" value="red"/>
+				<c:if test="${dailyStat.todayIncreaseRate lt 0 }"><c:set var="todayIncreaseRate" value="green"/></c:if>
+				涨跌:<font color="${todayIncreaseRate}"><fmt:formatNumber value="${dailyStat.todayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</font>&nbsp;&nbsp;
 		</div>
 		<div class="col-sm-2 text-right">
 			<c:if test="${empty wrapReporter.records  }">

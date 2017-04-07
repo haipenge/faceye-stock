@@ -2,6 +2,14 @@
 <%@ page language="java" import="java.util.*,com.faceye.feature.util.*,com.faceye.feature.util.host.*" pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/component/stock/stock/stock.css"/>" />
 <script type="text/javascript" src="<c:url value="/js/component/stock/stock/stock.js"/>"></script>
+<style>
+.increase-color:{
+  color:red;
+}
+.decrease-color{
+   color:green;
+}
+</style>
 <div class="page-head">
 	<div class="row" style="margin-top: 0px; margin-bottom: 0px;">
 		<div class="col-sm-8">
@@ -47,7 +55,7 @@
 
 		<div class="content category-container" style="display: none;">
 			<c:forEach items="${categories}" var="category" varStatus="status">
-			<!-- 
+				<!-- 
 				<c:choose>
 					<c:when test="${status.first }">
 						<p>
@@ -61,21 +69,27 @@
 					</c:when>
 				</c:choose>
 				 -->
-				<span class="label label-info" style="margin-top:15px;margin-bottom:5px;margin-left:5px;margin-right:5p;;width:50px;"><a href="<c:url value="/stock/stock/home?EQ|category.$id=${category.id}"/>">${category.name }</a></span>
+				<span class="label label-info" style="margin-top: 15px; margin-bottom: 5px; margin-left: 5px; margin-right: 5p;; width: 50px;"><a
+					href="<c:url value="/stock/stock/home?EQ|category.$id=${category.id}"/>">${category.name }</a></span>
 			</c:forEach>
 		</div>
 		<div class="content">
-		  <button type="button" class="btn btm-sm btn-primary" id="btn-multi-stock-compare">多股比对</button>
+			<button type="button" class="btn btm-sm btn-primary" id="btn-multi-stock-compare">多股比对</button>
 		</div>
 		<div class="content">
 			<div classs="table-responsive">
 				<table class="table table-bordered table-hover">
 					<thead>
 						<tr>
-						    <th><input type="checkbox" name="check-all"></th>
+							<th><input type="checkbox" name="check-all"></th>
 							<th><fmt:message key='stock.stock.name'></fmt:message></th>
 							<th><fmt:message key='stock.stock.business'></fmt:message></th>
 							<th><fmt:message key='stock.stock.market'></fmt:message></th>
+							<th>当前股价</th>
+							<th>PE</th>
+							<th>PB</th>
+							<th>今日涨跌</th>
+							<th>30日波幅</th>
 							<th><fmt:message key="stock.dailyData" /></th>
 							<th>财务报表</th>
 							<th><fmt:message key="global.edit"></fmt:message></th>
@@ -85,10 +99,17 @@
 					<tbody>
 						<c:forEach items="${page.content}" var="stock">
 							<tr>
-							    <td><input type="checkbox" name="check-single" value="${stock.id}"></td>
-								<td>${stock.name}&nbsp;&nbsp;<small>(<a href="<c:url value="/stock/stock/detail/${stock.id}"/>">${stock.code}</a>)</small></td>
+								<td><input type="checkbox" name="check-single" value="${stock.id}"></td>
+								<td>${stock.name}&nbsp;&nbsp;<small>(<a href="<c:url value="/stock/stock/detail/${stock.id}"/>">${stock.code}</a>)
+								</small></td>
 								<td>${stock.category.name}</td>
 								<td><c:if test="${stock.market eq 'sz'}">深圳(SZ)</c:if> <c:if test="${stock.market eq 'sh'}">上海(SH)</c:if></td>
+								<td><fmt:formatNumber value="${stock.dailyStat.todayPrice }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
+								<td><fmt:formatNumber value="${stock.dailyStat.pe }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" /><span class="span-suffix"><fmt:formatNumber
+											value="${stock.dailyStat.dynamicPe }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" /> &nbsp;&nbsp;<font size="7px">TTM</font></span></td>
+								<td><fmt:formatNumber value="${stock.dailyStat.pb }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
+								<td class="text-right ${stock.dailyStat.todayIncreaseRate lt 0?'decrease-color':'increase-color}"><fmt:formatNumber value="${stock.dailyStat.todayIncreaseRate *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+								<td class="text-right ${stock.dailyStat.priceAmplitude lt 0?'decrease-color':'increase-color}"><fmt:formatNumber value="${stock.dailyStat.priceAmplitude *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
 								<!--@generate-entity-jsp-property-value@-->
 								<td><a href="<c:url value="/stock/dailyData/home?EQ|stockId=${stock.id}"/>"><fmt:message key="stock.dailyData" /></a></td>
 								<td><a href="<c:url value="/stock/reportData/report?stockId=${stock.id}"/>">财务报表</a></td>

@@ -13,6 +13,7 @@ import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StopWatch;
@@ -64,9 +65,19 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 	 * @Author:haipenge
 	 * @Date:2017年4月7日 下午1:29:30
 	 */
+	@RequestMapping("/home")
 	public String home(HttpServletRequest request,Model model){
 		Map searchParams=HttpUtil.getRequestParams(request);
-		
+		//涨幅前30名
+		searchParams.put("GTE|dailyData.todayIncreaseRate", 0.05);
+		searchParams.put("SORT|dailyData.todayIncreaseRate", "desc");
+		Page<Stock> topIncreaseStocks=this.stockService.getPage(searchParams, 1, 30);
+		model.addAttribute("topIncreaseStocks", topIncreaseStocks);
+		//跌幅前30名
+		searchParams.remove("GTE|dailyData.todayIncreaseRate");
+		searchParams.put("SORT|dailyData.todayIncreaseRate", "asc");
+		Page<Stock> footIncreaseStocks=this.stockService.getPage(searchParams, 1, 30);
+		model.addAttribute("footIncreaseStocks", footIncreaseStocks);
 		return "stock.reportData.home";
 	}
 	/**
