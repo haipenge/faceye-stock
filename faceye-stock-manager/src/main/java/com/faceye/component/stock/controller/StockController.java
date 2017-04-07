@@ -96,7 +96,7 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 		}
 		if (page == null || CollectionUtils.isEmpty(page.getContent())) {
 			searchParams.put("SORT|dailyStat.pe:0", "asc");
-			searchParams.put("SORT|dailyStat.todayIncreaseRate:1", "desc");
+			searchParams.put("SORT|dailyStat.priceAmplitude:1", "asc");
 			page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
 		}
 		searchParams.put("like|name", nameQueryKey);
