@@ -3,11 +3,12 @@
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/component/stock/stock/stock.css"/>" />
 <script type="text/javascript" src="<c:url value="/js/component/stock/stock/stock.js"/>"></script>
 <style>
-.increase-color{
-  color:red;
+.increase-color {
+	color: red;
 }
-.decrease-color{
-   color:green;
+
+.decrease-color {
+	color: green;
 }
 </style>
 <div class="page-head">
@@ -32,14 +33,23 @@
 					<form action="<c:url value="/stock/stock/home"/>" method="post" role="form" class="form-horizontal" style="margin-bottom: 0px;">
 						<fieldset>
 							<div class="form-group" style="margin-top: 0px; margin-bottom: 0px;">
-								<div class="col-md-3">
+								<div class="col-md-2">
+									<select name="EQ|category.$id" class="form-control input-sm">
+										<option>请选择股票分类</option>
+										<c:forEach var="category" items="${categories}">
+											<option value="${category.id}" ${searchParams.categoryid  eq category.id? "selected":""}>${category.name }</option>
+										</c:forEach>
+									</select>
+								</div>
+								<div class="col-md-2">
 									<input type="text" name="like|name" value="${searchParams.name}" placeholder="多个名字间使用逗号分隔" class="form-control input-sm">
 								</div>
-								<div class="col-md-3">
+								<div class="col-md-2">
 									<input type="text" name="like|code" value="${searchParams.code}" placeholder="多个股票代码间使用逗号分隔" class="form-control input-sm">
 								</div>
 								<div class="col-md-3">
-								  <input type="text" name="minPe" value="searchParams.minPe" placeholder="PE起始值" class="form-control input-sm">-<input type="text" name="maxPe" value="searchParams.maxPe" placeholder="PE最大值" class="form-control input-sm">
+									<input type="text" name="minPe" value="${searchParams.minPe}" style="width:30px;" placeholder="PE起始值" class="form-control input-sm">-<input type="text" name="maxPe"
+										value="${searchParams.maxPe}" style="width:30px;" placeholder="PE最大值" class="form-control input-sm">
 								</div>
 								<div class="col-md-1">
 									<button type="submit" class="btn btn-sm btn-primary">
@@ -108,11 +118,14 @@
 								<td>${stock.category.name}</td>
 								<td><c:if test="${stock.market eq 'sz'}">深圳(SZ)</c:if> <c:if test="${stock.market eq 'sh'}">上海(SH)</c:if></td>
 								<td><fmt:formatNumber value="${stock.dailyStat.todayPrice }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
-								<td class="text-right"><fmt:formatNumber value="${stock.dailyStat.pe }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" /><span class="span-suffix pull-right"><fmt:formatNumber
-											value="${stock.dailyStat.dynamicPe }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" /> TTM</span></td>
+								<td class="text-right"><fmt:formatNumber value="${stock.dailyStat.pe }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" /><span
+									class="span-suffix pull-right"><fmt:formatNumber value="${stock.dailyStat.dynamicPe }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />
+										TTM</span></td>
 								<td><fmt:formatNumber value="${stock.dailyStat.pb }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
-								<td class="text-right ${stock.dailyStat.todayIncreaseRate lt 0 ? "decrease-color":"increase-color"}"><fmt:formatNumber value="${stock.dailyStat.todayIncreaseRate *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
-								<td class="text-right ${stock.dailyStat.priceAmplitude lt 0 ? 'decrease-color':'increase-color'}"><fmt:formatNumber value="${stock.dailyStat.priceAmplitude *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+								<td class="text-right ${stock.dailyStat.todayIncreaseRate lt 0 ? "decrease-color":"increase-color"}"><fmt:formatNumber
+										value="${stock.dailyStat.todayIncreaseRate *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+								<td class="text-right ${stock.dailyStat.priceAmplitude lt 0 ? 'decrease-color':'increase-color'}"><fmt:formatNumber value="${stock.dailyStat.priceAmplitude *100 }"
+										type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
 								<!--@generate-entity-jsp-property-value@-->
 								<td><a href="<c:url value="/stock/dailyData/home?EQ|stockId=${stock.id}"/>"><fmt:message key="stock.dailyData" /></a></td>
 								<td><a href="<c:url value="/stock/reportData/report?stockId=${stock.id}"/>">财务报表</a></td>
