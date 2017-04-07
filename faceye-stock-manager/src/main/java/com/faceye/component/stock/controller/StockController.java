@@ -65,6 +65,7 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 				name = StringUtils.trim(name);
 				if (StringUtils.isNotEmpty(name)) {
 					searchParams.put("like|name", name);
+					searchParams.put("SORT|dailyStat.todayIncreaseRate", "desc");
 					Page result = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
 					if (result != null && CollectionUtils.isNotEmpty(result.getContent())) {
 						items.addAll(result.getContent());
@@ -82,6 +83,7 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 				code = StringUtils.trim(code);
 				if (StringUtils.isNotEmpty(code)) {
 					searchParams.put("like|code", code);
+					searchParams.put("SORT|dailyStat.todayIncreaseRate", "desc");
 					Page result = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
 					if (result != null && CollectionUtils.isNotEmpty(result.getContent())) {
 						items.addAll(result.getContent());
@@ -93,7 +95,8 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 			page=new PageImpl(items);
 		}
 		if (page == null || CollectionUtils.isEmpty(page.getContent())) {
-			searchParams.put("SORT|dailyStat.todayIncreaseRate", "desc");
+			searchParams.put("SORT|dailyStat.pe:0", "asc");
+			searchParams.put("SORT|dailyStat.todayIncreaseRate:1", "desc");
 			page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
 		}
 		searchParams.put("like|name", nameQueryKey);
