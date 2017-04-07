@@ -3,7 +3,7 @@
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/component/stock/stock/stock.css"/>" />
 <script type="text/javascript" src="<c:url value="/js/component/stock/stock/stock.js"/>"></script>
 <style>
-.increase-color:{
+.increase-color{
   color:red;
 }
 .decrease-color{
@@ -105,8 +105,8 @@
 								<td>${stock.category.name}</td>
 								<td><c:if test="${stock.market eq 'sz'}">深圳(SZ)</c:if> <c:if test="${stock.market eq 'sh'}">上海(SH)</c:if></td>
 								<td><fmt:formatNumber value="${stock.dailyStat.todayPrice }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
-								<td><fmt:formatNumber value="${stock.dailyStat.pe }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" /><span class="span-suffix"><fmt:formatNumber
-											value="${stock.dailyStat.dynamicPe }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" /> &nbsp;&nbsp;TTM</span></td>
+								<td class="text-right"><fmt:formatNumber value="${stock.dailyStat.pe }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" /><span class="span-suffix pull-right"><fmt:formatNumber
+											value="${stock.dailyStat.dynamicPe }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" /> TTM</span></td>
 								<td><fmt:formatNumber value="${stock.dailyStat.pb }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 								<td class="text-right ${stock.dailyStat.todayIncreaseRate lt 0 ? "decrease-color":"increase-color"}"><fmt:formatNumber value="${stock.dailyStat.todayIncreaseRate *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
 								<td class="text-right ${stock.dailyStat.priceAmplitude lt 0 ? 'decrease-color':'increase-color'}"><fmt:formatNumber value="${stock.dailyStat.priceAmplitude *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>

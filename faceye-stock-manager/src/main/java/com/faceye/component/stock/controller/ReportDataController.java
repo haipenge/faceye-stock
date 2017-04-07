@@ -69,13 +69,13 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 	public String home(HttpServletRequest request,Model model){
 		Map searchParams=HttpUtil.getRequestParams(request);
 		//涨幅前30名
-		searchParams.put("GTE|dailyData.todayIncreaseRate", 0.05);
-		searchParams.put("SORT|dailyData.todayIncreaseRate", "desc");
+		searchParams.put("GTE|dailyStat.todayIncreaseRate", 0.05);
+		searchParams.put("SORT|dailyStat.todayIncreaseRate", "desc");
 		Page<Stock> topIncreaseStocks=this.stockService.getPage(searchParams, 1, 30);
 		model.addAttribute("topIncreaseStocks", topIncreaseStocks);
 		//跌幅前30名
-		searchParams.remove("GTE|dailyData.todayIncreaseRate");
-		searchParams.put("SORT|dailyData.todayIncreaseRate", "asc");
+		searchParams.remove("GTE|dailyStat.todayIncreaseRate");
+		searchParams.put("SORT|dailyStat.todayIncreaseRate", "asc");
 		Page<Stock> footIncreaseStocks=this.stockService.getPage(searchParams, 1, 30);
 		model.addAttribute("footIncreaseStocks", footIncreaseStocks);
 		return "stock.reportData.home";
