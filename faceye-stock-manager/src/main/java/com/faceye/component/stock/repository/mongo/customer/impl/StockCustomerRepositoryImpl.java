@@ -1,8 +1,10 @@
 package com.faceye.component.stock.repository.mongo.customer.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -54,7 +56,6 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 			if (peCriteria == null) {
 				peCriteria = Criteria.where("dailyStat.pe").gte(minPe);
 			}
-			// query.addCriteria(Criteria.where("dailyStat.pe").gte(minPe));
 		}
 		if (maxPe != null) {
 			if (peCriteria == null) {
@@ -62,7 +63,6 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 			} else {
 				peCriteria.andOperator(Criteria.where("dailyStat.pe").lte(maxPe));
 			}
-			// query.addCriteria(Criteria.where("dailyStat.pe").lte(maxPe));
 		}
 		if (peCriteria != null) {
 			query.addCriteria(peCriteria);
@@ -73,16 +73,16 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 			likeName = StringUtils.replace(likeName, " ", ",");
 			String[] names = StringUtils.split(likeName, ",");
 			Criteria nameCriteria = null;
+			List<Criteria> nameCriterias = new ArrayList<Criteria>(0);
 			for (String name : names) {
+				name = StringUtils.trim(name);
 				if (StringUtils.isNotEmpty(name)) {
-					if (nameCriteria == null) {
-						nameCriteria = Criteria.where("name").regex(name);
-					} else {
-						nameCriteria.orOperator(Criteria.where("name").regex(name));
-					}
+					nameCriterias.add(Criteria.where("name").regex(name));
 				}
 			}
-			if (nameCriteria != null) {
+			if (CollectionUtils.isNotEmpty(nameCriterias)) {
+				nameCriteria = new Criteria();
+				nameCriteria.orOperator(nameCriterias.toArray(new Criteria[nameCriterias.size()]));
 				query.addCriteria(nameCriteria);
 			}
 		}
@@ -91,23 +91,24 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 			likeCode = StringUtils.replace(likeCode, " ", ",");
 			String codes[] = StringUtils.split(likeCode, ",");
 			Criteria codeCriteria = null;
+			List<Criteria> codeCriterias = new ArrayList<Criteria>(0);
 			for (String code : codes) {
+				code = StringUtils.trim(code);
 				if (StringUtils.isNotEmpty(code)) {
-					if (codeCriteria == null) {
-						codeCriteria = Criteria.where("code").regex(code);
-					} else {
-						codeCriteria.orOperator(Criteria.where("code").regex(code));
-					}
+					codeCriterias.add(Criteria.where("code").regex(code));
 				}
 			}
-			if (codeCriteria != null) {
+			if (CollectionUtils.isNotEmpty(codeCriterias)) {
+				codeCriteria = new Criteria();
+				codeCriteria.orOperator(codeCriterias.toArray(new Criteria[codeCriterias.size()]));
 				query.addCriteria(codeCriteria);
 			}
 		}
 
 		query.skip(page * size);
-		query.limit(size);
-
+		if (size > 0) {
+			query.limit(size);
+		}
 		// query.getSortObject().put("dailyStat.pe", Order.ASC);
 		Sort sort = new Sort(Direction.ASC, "dailyStat.pe");
 		query.with(sort);
