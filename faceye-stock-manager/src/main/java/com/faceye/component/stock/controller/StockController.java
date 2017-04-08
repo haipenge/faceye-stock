@@ -52,6 +52,7 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 	 */
 	@RequestMapping("/home")
 	public String home(HttpServletRequest request, Model model) {
+		Page page=null;
 		Map searchParams = HttpUtil.getRequestParams(request);
 		String nameQueryKey = MapUtils.getString(searchParams, "like|name");
 		String codeQueryKey = MapUtils.getString(searchParams, "like|code");
@@ -63,48 +64,47 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 //		if(maxPe!=null){
 //			searchParams.put("LTE|dailyStat.pe", maxPe);
 //		}
-		Page<Stock> page = null;
-		List<Stock> items=new ArrayList<Stock>(0);
-		if (StringUtils.isNotEmpty(nameQueryKey)) {
-			nameQueryKey = StringUtils.replace(nameQueryKey, "，", ",");
-			String[] nameKeys = StringUtils.split(nameQueryKey, ",");
-			searchParams.remove("like|name");
-			for (String name : nameKeys) {
-				name = StringUtils.trim(name);
-				if (StringUtils.isNotEmpty(name)) {
-					searchParams.put("like|name", name);
-					searchParams.put("SORT|dailyStat.todayIncreaseRate", "desc");
-					Page result = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
-					if (result != null && CollectionUtils.isNotEmpty(result.getContent())) {
-						items.addAll(result.getContent());
-					}
-				}
-			}
-			searchParams.remove("like|name");
-		}
-		
-		if (StringUtils.isNotEmpty(codeQueryKey)) {
-			codeQueryKey = StringUtils.replace(codeQueryKey, "，", ",");
-			String[] codeKeys = StringUtils.split(codeQueryKey, ",");
-			searchParams.remove("like|code");
-			for (String code : codeKeys) {
-				code = StringUtils.trim(code);
-				if (StringUtils.isNotEmpty(code)) {
-					searchParams.put("like|code", code);
-					searchParams.put("SORT|dailyStat.todayIncreaseRate", "desc");
-					Page result = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
-					if (result != null && CollectionUtils.isNotEmpty(result.getContent())) {
-						items.addAll(result.getContent());
-					}
-				}
-			}
-		}
-		if(CollectionUtils.isNotEmpty(items)){
-			page=new PageImpl(items);
-		}
+//		Page<Stock> page = null;
+//		List<Stock> items=new ArrayList<Stock>(0);
+//		if (StringUtils.isNotEmpty(nameQueryKey)) {
+//			nameQueryKey = StringUtils.replace(nameQueryKey, "，", ",");
+//			String[] nameKeys = StringUtils.split(nameQueryKey, ",");
+//			searchParams.remove("like|name");
+//			for (String name : nameKeys) {
+//				name = StringUtils.trim(name);
+//				if (StringUtils.isNotEmpty(name)) {
+//					searchParams.put("like|name", name);
+//					searchParams.put("SORT|dailyStat.todayIncreaseRate", "desc");
+//					Page result = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
+//					if (result != null && CollectionUtils.isNotEmpty(result.getContent())) {
+//						items.addAll(result.getContent());
+//					}
+//				}
+//			}
+//			searchParams.remove("like|name");
+//		}
+//		
+//		if (StringUtils.isNotEmpty(codeQueryKey)) {
+//			codeQueryKey = StringUtils.replace(codeQueryKey, "，", ",");
+//			String[] codeKeys = StringUtils.split(codeQueryKey, ",");
+//			searchParams.remove("like|code");
+//			for (String code : codeKeys) {
+//				code = StringUtils.trim(code);
+//				if (StringUtils.isNotEmpty(code)) {
+//					searchParams.put("like|code", code);
+//					searchParams.put("SORT|dailyStat.todayIncreaseRate", "desc");
+//					Page result = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
+//					if (result != null && CollectionUtils.isNotEmpty(result.getContent())) {
+//						items.addAll(result.getContent());
+//					}
+//				}
+//			}
+//		}
+//		if(CollectionUtils.isNotEmpty(items)){
+//			page=new PageImpl(items);
+//		}
 		if (page == null || CollectionUtils.isEmpty(page.getContent())) {
-//			searchParams.put("SORT|dailyStat.pe", "asc");
-			searchParams.put("SORT|dailyStat.priceAmplitude:1", "asc");
+//			searchParams.put("SORT|dailyStat.priceAmplitude:1", "asc");
 			page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
 		}
 		searchParams.put("like|name", nameQueryKey);
