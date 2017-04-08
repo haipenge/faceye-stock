@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -19,7 +21,6 @@ import org.springframework.stereotype.Repository;
 
 import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.repository.mongo.customer.StockCustomerRepository;
-import com.querydsl.core.types.Order;
 
 /**
  * AccountingElement 实体DAO<br>
@@ -90,9 +91,13 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 				query.addCriteria(codeCriteria);
 			}
 		}
+		
 		query.skip(page * size);
 		query.limit(size);
-		query.getSortObject().put("dailyStat.pe", Order.ASC);
+		
+//		query.getSortObject().put("dailyStat.pe", Order.ASC);
+		Sort sort=new Sort(Direction.ASC,"dailyStat.pe");
+		query.with(sort);
 		logger.debug(">>FaceYe query object is:"+query.toString());
 		List<Stock> stocks = this.mongoOperations.find(query, Stock.class);
 		long count = this.mongoOperations.count(query, Stock.class);
