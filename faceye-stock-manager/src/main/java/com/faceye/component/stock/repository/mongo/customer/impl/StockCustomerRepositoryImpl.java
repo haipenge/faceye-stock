@@ -49,12 +49,25 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 		if (categoryId != null) {
 			query.addCriteria(Criteria.where("category.$id").is(categoryId));
 		}
+		Criteria peCriteria = null;
 		if (minPe != null) {
-			query.addCriteria(Criteria.where("dailyStat.pe").gte(minPe));
+			if (peCriteria == null) {
+				peCriteria = Criteria.where("dailyStat.pe").gte(minPe);
+			}
+			// query.addCriteria(Criteria.where("dailyStat.pe").gte(minPe));
 		}
 		if (maxPe != null) {
-			query.addCriteria(Criteria.where("dailyStat.pe").lte(maxPe));
+			if (peCriteria == null) {
+				peCriteria = Criteria.where("dailyStat.pe").lte(maxPe);
+			} else {
+				peCriteria.andOperator(Criteria.where("dailyStat.pe").lte(maxPe));
+			}
+			// query.addCriteria(Criteria.where("dailyStat.pe").lte(maxPe));
 		}
+		if (peCriteria != null) {
+			query.addCriteria(peCriteria);
+		}
+
 		if (StringUtils.isNotEmpty(likeName)) {
 			likeName = StringUtils.replace(likeName, "，", ",");
 			likeName = StringUtils.replace(likeName, " ", ",");
@@ -91,14 +104,14 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 				query.addCriteria(codeCriteria);
 			}
 		}
-		
+
 		query.skip(page * size);
 		query.limit(size);
-		
-//		query.getSortObject().put("dailyStat.pe", Order.ASC);
-		Sort sort=new Sort(Direction.ASC,"dailyStat.pe");
+
+		// query.getSortObject().put("dailyStat.pe", Order.ASC);
+		Sort sort = new Sort(Direction.ASC, "dailyStat.pe");
 		query.with(sort);
-		logger.debug(">>FaceYe query object is:"+query.toString());
+		logger.debug(">>FaceYe query object is:" + query.toString());
 		List<Stock> stocks = this.mongoOperations.find(query, Stock.class);
 		long count = this.mongoOperations.count(query, Stock.class);
 		Pageable pageable = new PageRequest(page, size);

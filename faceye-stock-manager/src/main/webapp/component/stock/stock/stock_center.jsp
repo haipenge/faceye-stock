@@ -48,8 +48,8 @@
 									<input type="text" name="like|code" value="${searchParams.code}" placeholder="多个股票代码间使用逗号分隔" class="form-control input-sm">
 								</div>
 								<div class="col-md-3">
-									<input type="text" name="GTE|dailyStat.pe" value="${searchParams.minPe}" style="width:30px;" placeholder="PE起始值" class="form-control input-sm">-<input type="text" name="LTE|dailyStat.pe"
-										value="${searchParams.maxPe}" style="width:30px;" placeholder="PE最大值" class="form-control input-sm">
+									<input type="text" name="GTE|dailyStat.pe" value="${searchParams.minPe}" style="width: 50px;" placeholder="PE起始值" class="form-control input-sm">-<input type="text"
+										name="LTE|dailyStat.pe" value="${searchParams.maxPe}" style="width: 50px;" placeholder="PE最大值" class="form-control input-sm">
 								</div>
 								<div class="col-md-1">
 									<button type="submit" class="btn btn-sm btn-primary">
