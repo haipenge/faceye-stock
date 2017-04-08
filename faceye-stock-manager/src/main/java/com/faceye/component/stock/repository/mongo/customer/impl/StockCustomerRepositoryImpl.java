@@ -93,6 +93,7 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 		query.skip(page * size);
 		query.limit(size);
 		query.getSortObject().put("dailyStat.pe", Order.ASC);
+		logger.debug(">>FaceYe query object is:"+query.toString());
 		List<Stock> stocks = this.mongoOperations.find(query, Stock.class);
 		long count = this.mongoOperations.count(query, Stock.class);
 		Pageable pageable = new PageRequest(page, size);
