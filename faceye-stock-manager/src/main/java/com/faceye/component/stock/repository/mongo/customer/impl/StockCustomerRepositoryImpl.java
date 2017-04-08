@@ -67,47 +67,36 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 		if (peCriteria != null) {
 			query.addCriteria(peCriteria);
 		}
-		Criteria orCriteria=null;
+		Criteria orCriteria = null;
+		List<Criteria> criterias = new ArrayList<Criteria>(0);
 		if (StringUtils.isNotEmpty(likeName)) {
 			likeName = StringUtils.replace(likeName, "，", ",");
 			likeName = StringUtils.replace(likeName, " ", ",");
 			String[] names = StringUtils.split(likeName, ",");
-			List<Criteria> nameCriterias = new ArrayList<Criteria>(0);
 			for (String name : names) {
 				name = StringUtils.trim(name);
 				if (StringUtils.isNotEmpty(name)) {
-					nameCriterias.add(Criteria.where("name").regex(name));
+					criterias.add(Criteria.where("name").regex(name));
 				}
-			}
-			if (CollectionUtils.isNotEmpty(nameCriterias)) {
-				if(orCriteria==null){
-				orCriteria = new Criteria();
-				}
-				orCriteria.orOperator(nameCriterias.toArray(new Criteria[nameCriterias.size()]));
 			}
 		}
 		if (StringUtils.isNotEmpty(likeCode)) {
 			likeCode = StringUtils.replace(likeCode, "，", ",");
 			likeCode = StringUtils.replace(likeCode, " ", ",");
 			String codes[] = StringUtils.split(likeCode, ",");
-//			Criteria codeCriteria = null;
-			List<Criteria> codeCriterias = new ArrayList<Criteria>(0);
 			for (String code : codes) {
 				code = StringUtils.trim(code);
 				if (StringUtils.isNotEmpty(code)) {
-					codeCriterias.add(Criteria.where("code").regex(code));
+					criterias.add(Criteria.where("code").regex(code));
 				}
-			}
-			if (CollectionUtils.isNotEmpty(codeCriterias)) {
-				if(orCriteria==null){
-				orCriteria = new Criteria();
-				}
-				orCriteria.orOperator(codeCriterias.toArray(new Criteria[codeCriterias.size()]));
 			}
 		}
-		
-		if(orCriteria!=null){
-			query.addCriteria(orCriteria);
+		if (CollectionUtils.isNotEmpty(criterias)) {
+			orCriteria = new Criteria();
+			orCriteria.orOperator(criterias.toArray(new Criteria[criterias.size()]));
+			if (orCriteria != null) {
+				query.addCriteria(orCriteria);
+			}
 		}
 
 		query.skip(page * size);
