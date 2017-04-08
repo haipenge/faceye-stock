@@ -56,8 +56,10 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 		Map searchParams = HttpUtil.getRequestParams(request);
 		String nameQueryKey = MapUtils.getString(searchParams, "like|name");
 		String codeQueryKey = MapUtils.getString(searchParams, "like|code");
-//		Double minPe=MapUtils.getDouble(searchParams, "minPe");
-//		Double maxPe=MapUtils.getDouble(searchParams, "maxPe");
+		Double minPe=MapUtils.getDouble(searchParams, "GTE|dailyStat.pe");
+		Double maxPe=MapUtils.getDouble(searchParams, "LTE|dailyStat.pe");
+		searchParams.put("minPe", minPe);
+		searchParams.put("maxPe", maxPe);
 //		if(minPe!=null){
 //			searchParams.put("GTE|dailyStat.pe", minPe);
 //		}
