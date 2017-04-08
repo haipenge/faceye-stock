@@ -67,12 +67,11 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 		if (peCriteria != null) {
 			query.addCriteria(peCriteria);
 		}
-
+		Criteria orCriteria=null;
 		if (StringUtils.isNotEmpty(likeName)) {
 			likeName = StringUtils.replace(likeName, "，", ",");
 			likeName = StringUtils.replace(likeName, " ", ",");
 			String[] names = StringUtils.split(likeName, ",");
-			Criteria nameCriteria = null;
 			List<Criteria> nameCriterias = new ArrayList<Criteria>(0);
 			for (String name : names) {
 				name = StringUtils.trim(name);
@@ -81,16 +80,17 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 				}
 			}
 			if (CollectionUtils.isNotEmpty(nameCriterias)) {
-				nameCriteria = new Criteria();
-				nameCriteria.orOperator(nameCriterias.toArray(new Criteria[nameCriterias.size()]));
-				query.addCriteria(nameCriteria);
+				if(orCriteria==null){
+				orCriteria = new Criteria();
+				}
+				orCriteria.orOperator(nameCriterias.toArray(new Criteria[nameCriterias.size()]));
 			}
 		}
 		if (StringUtils.isNotEmpty(likeCode)) {
 			likeCode = StringUtils.replace(likeCode, "，", ",");
 			likeCode = StringUtils.replace(likeCode, " ", ",");
 			String codes[] = StringUtils.split(likeCode, ",");
-			Criteria codeCriteria = null;
+//			Criteria codeCriteria = null;
 			List<Criteria> codeCriterias = new ArrayList<Criteria>(0);
 			for (String code : codes) {
 				code = StringUtils.trim(code);
@@ -99,10 +99,15 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 				}
 			}
 			if (CollectionUtils.isNotEmpty(codeCriterias)) {
-				codeCriteria = new Criteria();
-				codeCriteria.orOperator(codeCriterias.toArray(new Criteria[codeCriterias.size()]));
-				query.addCriteria(codeCriteria);
+				if(orCriteria==null){
+				orCriteria = new Criteria();
+				}
+				orCriteria.orOperator(codeCriterias.toArray(new Criteria[codeCriterias.size()]));
 			}
+		}
+		
+		if(orCriteria!=null){
+			query.addCriteria(orCriteria);
 		}
 
 		query.skip(page * size);
