@@ -252,7 +252,7 @@ public class DailyStat implements Serializable {
     * @author haipenge<br>
     */
     
-	private  Double priceAmplitude=null;
+	private  Double priceAmplitude=0D;
 	public Double getPriceAmplitude() {
 		return priceAmplitude;
 	}

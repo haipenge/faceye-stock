@@ -65,27 +65,47 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 	 */
 	@Override
 	public void initDailyData(String code) {
+
+		// List<Map<String, String>> data = fetcher.getStockDailyData(code, "", "");
+		Calendar calendar = Calendar.getInstance();
+		Date now = new Date();
+		int year = calendar.get(Calendar.YEAR);
+		// int [] years=new int[]{year,year-1};
+		int currentMonth = calendar.get(Calendar.MONTH) + 1;
+		String jidu = "1";
+		if (currentMonth >= 1 && currentMonth <= 3) {
+			jidu = "1";
+		}
+		if (currentMonth >= 4 && currentMonth <= 6) {
+			jidu = "2";
+		}
+		if (currentMonth >= 7 && currentMonth <= 9) {
+			jidu = "3";
+		}
+		if (currentMonth >= 10 && currentMonth <= 12) {
+			jidu = "4";
+		}
+		String jidus[] = new String[] { "1", "2", "3", "4" };
+		this.fetchHistoryData(code, "" + year, jidu);
+		for (String jd : jidus) {
+			this.fetchHistoryData(code, "" + (year - 1), jd);
+		}
+
+	}
+
+	/**
+	 * 抓取历史数据
+	 * 
+	 * @param year
+	 * @param jidu
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年4月9日 上午11:42:59
+	 */
+	private void fetchHistoryData(String code, String year, String jidu) {
 		Stock stock = this.stockRepository.getStockByCode(code);
 		if (stock != null) {
 			StockFetcher fetcher = new StockFetcher();
-			// List<Map<String, String>> data = fetcher.getStockDailyData(code, "", "");
-			Calendar calendar = Calendar.getInstance();
-			Date now = new Date();
-			int year = calendar.get(Calendar.YEAR);
-			int currentMonth = calendar.get(Calendar.MONTH) + 1;
-			String jidu = "1";
-			if (currentMonth >= 1 && currentMonth <= 3) {
-				jidu = "1";
-			}
-			if (currentMonth >= 4 && currentMonth <= 6) {
-				jidu = "2";
-			}
-			if (currentMonth >= 7 && currentMonth <= 9) {
-				jidu = "3";
-			}
-			if (currentMonth >= 10 && currentMonth <= 12) {
-				jidu = "4";
-			}
 			List<Map<String, String>> data = fetcher.getStockDataList(code, "" + year, jidu);
 			if (CollectionUtils.isNotEmpty(data)) {
 				List<DailyData> willSavedDailyData = new ArrayList<DailyData>(0);
@@ -107,9 +127,9 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 						String money = map.get("money");
 						Date dDate = DateUtil.getDateFromString(date + " 00:00:00", "yyyy-MM-dd HH:mm:ss");
 						// 只存储最近30天的数据
-						if (now.getTime() - dDate.getTime() > 31 * 24 * 60 * 60 * 1000L) {
-							continue;
-						}
+						// if (now.getTime() - dDate.getTime() > 31 * 24 * 60 * 60 * 1000L) {
+						// continue;
+						// }
 						boolean isDailyDataExist = this.isDailyDataExist(code, date);
 						date += " 15:00:00";
 						if (!isDailyDataExist) {
@@ -134,9 +154,6 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 				}
 				// this.save(willSavedDailyData);
 			}
-
-		} else {
-			logger.debug(">>FaceYe --> Stock is empty,code is:" + code);
 		}
 	}
 
@@ -453,9 +470,9 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 		if (predicate != null) {
 			logger.debug(">>FaceYe -->Query predicate is:" + predicate.toString());
 		}
-//		Sort sort = new Sort(Direction.DESC, "date");
-//		sort.and(new Sort(Direction.DESC, "id"));
-		Sort sort=this.buildSort(searchParams);
+		// Sort sort = new Sort(Direction.DESC, "date");
+		// sort.and(new Sort(Direction.DESC, "id"));
+		Sort sort = this.buildSort(searchParams);
 		Page<DailyData> res = null;
 		if (size != 0) {
 			Pageable pageable = new PageRequest(page, size, sort);

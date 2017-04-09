@@ -39,6 +39,9 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 
 	@Override
 	public Page<Stock> getPage(Map searchParams, int page, int size) {
+		if(page<=0){
+			page=1;
+		}
 		Long categoryId = MapUtils.getLong(searchParams, "EQ|category.$id");
 		String likeName = MapUtils.getString(searchParams, "like|name");
 		String likeCode = MapUtils.getString(searchParams, "like|code");
@@ -107,7 +110,6 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 		if (orCriterias != null) {
 			query.addCriteria(orCriterias);
 		}
-
 		query.skip(page * size);
 		if (size > 0) {
 			query.limit(size);
@@ -143,7 +145,6 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 				}
 			}
 		}
-		// query.getSortObject().put("dailyStat.pe", Order.ASC);
 		if (StringUtils.isNotEmpty(sortDailyStatPe)) {
 			if (StringUtils.equalsIgnoreCase(sortDailyStatPe, "asc")) {
 				if (sort == null) {
@@ -161,7 +162,8 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 		} else {
 			//默认按pe从小到大排序
 			if (sort == null) {
-				sort = new Sort(Direction.ASC, "dailyStat.pe");
+//				sort = new Sort(Direction.ASC, "dailyStat.pe");
+				sort=new Sort(Direction.DESC,"dailyStat.todayIncreaseRate");
 			}
 		}
 		query.with(sort);

@@ -6,7 +6,6 @@
 .increase-color {
 	color: red;
 }
-
 .decrease-color {
 	color: green;
 }
@@ -100,13 +99,13 @@
 							<th>市场</th>
 							<th>当前股价</th>
 							<th><a
-								href="<c:url value="/stock/stock/home?EQ|category.$id=${searchparams.categoryid}&GTE|dailyStat.pe=${searchParams.minPe }&LTE|dailyStat.pe=${searchParams.maxPe}&like|name=${searchParams.name }&like|code=${searchParams.code}&SORT|dailyStat.pe=${empty searchParams.sortPe or searchParams.sortPe eq 'asc' ? 'desc':'asc' }"/>">PE
+								href="<c:url value="/stock/stock/home?EQ|category.$id=${searchParams.categoryid}&GTE|dailyStat.pe=${searchParams.minPe }&LTE|dailyStat.pe=${searchParams.maxPe}&like|name=${searchParams.name }&like|code=${searchParams.code}&SORT|dailyStat.pe=${empty searchParams.sortPe or searchParams.sortPe eq 'asc' ? 'desc':'asc' }"/>">PE
 									${empty searchParams.sortPe or searchParams.sortPe eq 'asc' ? '<i class="fa fa-chevron-circle-up"></i>':'<i class="fa fa-chevron-circle-down"></i>' }</a></th>
 							<th>PB</th>
 							<th><a
-								href="<c:url value="/stock/stock/home?EQ|category.$id=${searchparams.categoryid}&GTE|dailyStat.pe=${searchParams.minPe }&LTE|dailyStat.pe=${searchParams.maxPe}&like|name=${searchParams.name }&like|code=${searchParams.code}&SORT|dailyStat.todayIncreaseRate=${empty searchParams.sortTodayIncreaseRate or searchParams.sortTodayIncreaseRate eq 'asc' ? 'desc':'asc' }"/>">今日涨跌${empty searchParams.sortTodayIncreaseRate or searchParams.sortTodayIncreaseRate eq 'asc' ? '<i class="fa fa-chevron-circle-up"></i>':'<i class="fa fa-chevron-circle-down"></i>' }</a></th>
+								href="<c:url value="/stock/stock/home?EQ|category.$id=${searchParams.categoryid}&GTE|dailyStat.pe=${searchParams.minPe }&LTE|dailyStat.pe=${searchParams.maxPe}&like|name=${searchParams.name }&like|code=${searchParams.code}&SORT|dailyStat.todayIncreaseRate=${empty searchParams.sortTodayIncreaseRate or searchParams.sortTodayIncreaseRate eq 'asc' ? 'desc':'asc' }"/>">今日涨跌${empty searchParams.sortTodayIncreaseRate or searchParams.sortTodayIncreaseRate eq 'asc' ? '<i class="fa fa-chevron-circle-up"></i>':'<i class="fa fa-chevron-circle-down"></i>' }</a></th>
 							<th><a
-								href="<c:url value="/stock/stock/home?EQ|category.$id=${searchparams.categoryid}&GTE|dailyStat.pe=${searchParams.minPe }&LTE|dailyStat.pe=${searchParams.maxPe}&like|name=${searchParams.name }&like|code=${searchParams.code}&SORT|dailyStat.priceAmplitude=${empty searchParams.sortPriceAmplitude or searchParams.sortPriceAmplitude eq 'asc'? 'desc':'asc' }"/>">30日波幅${empty searchParams.sortPriceAmplitude or searchParams.sortPriceAmplitude eq 'asc' ? '<i class="fa fa-chevron-circle-up"></i>':'<i class="fa fa-chevron-circle-down"></i>' }</a></th>
+								href="<c:url value="/stock/stock/home?EQ|category.$id=${searchParams.categoryid}&GTE|dailyStat.pe=${searchParams.minPe }&LTE|dailyStat.pe=${searchParams.maxPe}&like|name=${searchParams.name }&like|code=${searchParams.code}&SORT|dailyStat.priceAmplitude=${empty searchParams.sortPriceAmplitude or searchParams.sortPriceAmplitude eq 'asc'? 'desc':'asc' }"/>">30日波幅${empty searchParams.sortPriceAmplitude or searchParams.sortPriceAmplitude eq 'asc' ? '<i class="fa fa-chevron-circle-up"></i>':'<i class="fa fa-chevron-circle-down"></i>' }</a></th>
 							<th><fmt:message key="stock.dailyData" /></th>
 							<th>财务报表</th>
 							<th><fmt:message key="global.edit"></fmt:message></th>
@@ -121,7 +120,7 @@
 								</small></td>
 								<td><a href="<c:url value="/stock/stock/home?EQ|category.$id=${stock.category.id}"/>">${stock.category.name}</a></td>
 								<td><c:if test="${stock.market eq 'sz'}">深圳(SZ)</c:if> <c:if test="${stock.market eq 'sh'}">上海(SH)</c:if></td>
-								<td><fmt:formatNumber value="${stock.dailyStat.todayPrice }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
+								<td class="text-right"><fmt:formatNumber value="${stock.dailyStat.todayPrice }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 								<td><span class="pull-left"><fmt:formatNumber value="${stock.dailyStat.pe }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" /></span><span
 									class="span-suffix pull-right"><fmt:formatNumber value="${stock.dailyStat.dynamicPe }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />
 										TTM</span></td>

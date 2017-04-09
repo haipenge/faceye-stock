@@ -129,7 +129,6 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 					todayData.setYesterdayPrice(yesterdayData.getShoupanjia());
 					this.dailyDataService.save(todayData);
 				}
-
 			}
 			// for (int i = dailyDatas.size() - 1; i > 0; i--) {
 			// DailyData dailyData = dailyDatas.get(i);
@@ -176,10 +175,12 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 			// 计算股价振幅
 			Double priceAmplitude = null;
 			Double priceChangeDeep = topPriceOf30Days - lowerPriceOf30Days;
-			if (lowerPriceDate != null && topPriceDate != null && lowerPriceDate.getTime() < topPriceDate.getTime()) {
+			if (lowerPriceDate != null && topPriceDate != null && lowerPriceDate.getTime() < topPriceDate.getTime() && lowerPriceOf30Days>0) {
 				priceAmplitude = priceChangeDeep / lowerPriceOf30Days;
 			} else {
+				if(topPriceOf30Days>0){
 				priceAmplitude = -priceChangeDeep / topPriceOf30Days;
+				}
 			}
 			dailyStat.setPriceAmplitude(priceAmplitude);
 			if (yesterdayPrice != null && yesterdayPrice > 0) {
