@@ -66,6 +66,7 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 		searchParams.put("sortTodayIncreaseRate", sortTodayIncreaseRate);
 		String sortPriceAmplitude=MapUtils.getString(searchParams, "SORT|dailyStat.priceAmplitude");
 		searchParams.put("sortPriceAmplitude", sortPriceAmplitude);
+		logger.debug(">>FaceYe page in url is:"+getPage(searchParams));
 		page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
 		this.resetSearchParams(searchParams);
 		model.addAttribute("searchParams", searchParams);
