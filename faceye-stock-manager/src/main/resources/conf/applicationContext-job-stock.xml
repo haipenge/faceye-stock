@@ -28,11 +28,11 @@
 			     <ref bean="dataStatJobTrigger"/>
 			     <ref bean="crawlStockDailyDataJobTrigger"/>
 			     <ref bean="dailyStatJobTrigger"/>
-			     <ref bean="crawlStockMonthDataJobTrigger"/>
+			     
 			     <!--
 			      按季度爬取数据  
 			     <ref bean="crawlStockMonthDataJobTrigger"/>
-			     
+			     <ref bean="crawlStockMonthDataJobTrigger"/>
 			     <ref bean="computeStockDailyDataAvgJobTrigger"/>
 			     
 			      -->
