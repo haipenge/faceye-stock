@@ -39,8 +39,8 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 
 	@Override
 	public Page<Stock> getPage(Map searchParams, int page, int size) {
-		if(page>0){
-			page--;
+		if(page<=0){
+			page=1;
 		}
 		Long categoryId = MapUtils.getLong(searchParams, "EQ|category.$id");
 		String likeName = MapUtils.getString(searchParams, "like|name");
@@ -114,7 +114,7 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 		if (orCriterias != null) {
 			query.addCriteria(orCriterias);
 		}
-		query.skip(page * size);
+		query.skip((page-1) * size);
 		if (size > 0) {
 			query.limit(size);
 		}
