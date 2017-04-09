@@ -29,7 +29,7 @@
 		<div class="row" style="margin-top: 0px; margin-bottom: 0px;">
 			<div class="col-sm-8">
 				<div class="content">
-					<form action="<c:url value="/stock/stock/home"/>" method="post" role="form" class="form-horizontal" style="margin-bottom: 0px;">
+					<form action="<c:url value="/stock/stock/home"/>" method="post" role="form" class="form-inline" style="margin-bottom: 0px;">
 						<fieldset>
 							<div class="form-group" style="margin-top: 0px; margin-bottom: 0px;">
 								<div class="col-md-2">
