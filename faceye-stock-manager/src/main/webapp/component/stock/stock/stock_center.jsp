@@ -99,10 +99,14 @@
 							<th><fmt:message key='stock.stock.business'></fmt:message></th>
 							<th><fmt:message key='stock.stock.market'></fmt:message></th>
 							<th>当前股价</th>
-							<th><a href="<c:url value="/stock/stock/home?EQ|category.$id=${searchparams.categoryid}&GTE|dailyStat.pe=${searchParams.minPe }&LTE|dailyStat.pe=${searchParams.maxPe}&like|name=${searchParams.name }&like|code=${searchParams.code}&SORT|dailyStat.pe=${empty sortPe or sortPe eq 'asc' ? 'desc':'asc' }"/>">PE ${empty sortPe or sortPe eq 'asc' ? '<i class="fa fa-chevron-circle-up"></i>':'<i class="fa fa-chevron-circle-down"></i>' }${sortPe }</a></th>
+							<th><a
+								href="<c:url value="/stock/stock/home?EQ|category.$id=${searchparams.categoryid}&GTE|dailyStat.pe=${searchParams.minPe }&LTE|dailyStat.pe=${searchParams.maxPe}&like|name=${searchParams.name }&like|code=${searchParams.code}&SORT|dailyStat.pe=${empty searchParams.sortPe or searchParams.sortPe eq 'asc' ? 'desc':'asc' }"/>">PE
+									${empty searchParams.sortPe or searchParams.sortPe eq 'asc' ? '<i class="fa fa-chevron-circle-up"></i>':'<i class="fa fa-chevron-circle-down"></i>' }</a></th>
 							<th>PB</th>
-							<th><a href="<c:url value="/stock/stock/home?EQ|category.$id=${searchparams.categoryid}&GTE|dailyStat.pe=${searchParams.minPe }&LTE|dailyStat.pe=${searchParams.maxPe}&like|name=${searchParams.name }&like|code=${searchParams.code}&SORT|dailyStat.todayIncreasePrice=${empty sortTodayIncreasePrice or sortTodayIncreasePrice eq 'asc' ? 'desc':'asc' }"/>">今日涨跌<i class="fa fa-chevron-circle-down"></a></th>
-							<th><a href="<c:url value="/stock/stock/home?EQ|category.$id=${searchparams.categoryid}&GTE|dailyStat.pe=${searchParams.minPe }&LTE|dailyStat.pe=${searchParams.maxPe}&like|name=${searchParams.name }&like|code=${searchParams.code}&SORT|dailyStat.sortPriceAmplitude=${empty sortPriceAmplitude or sortPriceAmplitude eq 'asc'? 'desc':'asc' }"/>">30日波幅</a></th>
+							<th><a
+								href="<c:url value="/stock/stock/home?EQ|category.$id=${searchparams.categoryid}&GTE|dailyStat.pe=${searchParams.minPe }&LTE|dailyStat.pe=${searchParams.maxPe}&like|name=${searchParams.name }&like|code=${searchParams.code}&SORT|dailyStat.todayIncreasePrice=${empty searchParams.sortTodayIncreasePrice or searchParams.sortTodayIncreasePrice eq 'asc' ? 'desc':'asc' }"/>">今日涨跌${empty searchParams.sortTodayIncreasePrice or searchParams.sortTodayIncreasePrice eq 'asc' ? '<i class="fa fa-chevron-circle-up"></i>':'<i class="fa fa-chevron-circle-down"></i>' }</a></th>
+							<th><a
+								href="<c:url value="/stock/stock/home?EQ|category.$id=${searchparams.categoryid}&GTE|dailyStat.pe=${searchParams.minPe }&LTE|dailyStat.pe=${searchParams.maxPe}&like|name=${searchParams.name }&like|code=${searchParams.code}&SORT|dailyStat.sortPriceAmplitude=${empty searchParams.sortPriceAmplitude or searchParams.sortPriceAmplitude eq 'asc'? 'desc':'asc' }"/>">30日波幅${empty searchParams.sortPriceAmplitude or searchParams.sortPriceAmplitude eq 'asc' ? '<i class="fa fa-chevron-circle-up"></i>':'<i class="fa fa-chevron-circle-down"></i>' }</a></th>
 							<th><fmt:message key="stock.dailyData" /></th>
 							<th>财务报表</th>
 							<th><fmt:message key="global.edit"></fmt:message></th>
