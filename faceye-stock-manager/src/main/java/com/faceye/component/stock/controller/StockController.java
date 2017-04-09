@@ -62,8 +62,8 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 		searchParams.put("maxPe", maxPe);
 		String sortPe=MapUtils.getString(searchParams, "SORT|dailyStat.pe");
 		searchParams.put("sortPe", sortPe);
-		String sortTodayIncreasePrice=MapUtils.getString(searchParams, "SORT|dailyStat.todayIncreasePrice");
-		searchParams.put("sortTodayIncreasePrice", sortTodayIncreasePrice);
+		String sortTodayIncreaseRate=MapUtils.getString(searchParams, "SORT|dailyStat.todayIncreaseRate");
+		searchParams.put("sortTodayIncreaseRate", sortTodayIncreaseRate);
 		String sortPriceAmplitude=MapUtils.getString(searchParams, "SORT|dailyStat.priceAmplitude");
 		searchParams.put("sortPriceAmplitude", sortPriceAmplitude);
 //		if(minPe!=null){
