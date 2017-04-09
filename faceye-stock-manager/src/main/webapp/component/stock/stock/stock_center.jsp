@@ -97,7 +97,7 @@
 							<th><input type="checkbox" name="check-all"></th>
 							<th><fmt:message key='stock.stock.name'></fmt:message></th>
 							<th><fmt:message key='stock.stock.business'></fmt:message></th>
-							<th><fmt:message key='stock.stock.market'></fmt:message></th>
+							<th>市场</th>
 							<th>当前股价</th>
 							<th><a
 								href="<c:url value="/stock/stock/home?EQ|category.$id=${searchparams.categoryid}&GTE|dailyStat.pe=${searchParams.minPe }&LTE|dailyStat.pe=${searchParams.maxPe}&like|name=${searchParams.name }&like|code=${searchParams.code}&SORT|dailyStat.pe=${empty searchParams.sortPe or searchParams.sortPe eq 'asc' ? 'desc':'asc' }"/>">PE
@@ -119,10 +119,10 @@
 								<td><input type="checkbox" name="check-single" value="${stock.id}"></td>
 								<td>${stock.name}&nbsp;&nbsp;<small>(<a href="<c:url value="/stock/stock/detail/${stock.id}"/>">${stock.code}</a>)
 								</small></td>
-								<td>${stock.category.name}</td>
+								<td><a href="<c:url value="/stock/stock/home?EQ|category.$id=${stock.category.id}"/>">${stock.category.name}</a></td>
 								<td><c:if test="${stock.market eq 'sz'}">深圳(SZ)</c:if> <c:if test="${stock.market eq 'sh'}">上海(SH)</c:if></td>
 								<td><fmt:formatNumber value="${stock.dailyStat.todayPrice }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
-								<td class="text-right"><fmt:formatNumber value="${stock.dailyStat.pe }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" /><span
+								<td><span class="pull-left"><fmt:formatNumber value="${stock.dailyStat.pe }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" /></span><span
 									class="span-suffix pull-right"><fmt:formatNumber value="${stock.dailyStat.dynamicPe }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />
 										TTM</span></td>
 								<td><fmt:formatNumber value="${stock.dailyStat.pb }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
