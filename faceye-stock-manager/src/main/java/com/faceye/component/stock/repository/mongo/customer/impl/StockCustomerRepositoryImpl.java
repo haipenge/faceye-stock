@@ -108,7 +108,7 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 			query.addCriteria(orCriterias);
 		}
 
-		query.skip((page - 1) * size);
+		query.skip(page * size);
 		if (size > 0) {
 			query.limit(size);
 		}
