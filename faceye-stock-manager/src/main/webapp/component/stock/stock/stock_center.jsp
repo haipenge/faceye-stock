@@ -6,6 +6,7 @@
 .increase-color {
 	color: red;
 }
+
 .decrease-color {
 	color: green;
 }
@@ -32,29 +33,29 @@
 					<form action="<c:url value="/stock/stock/home"/>" method="post" role="form" class="form-inline" style="margin-bottom: 0px;">
 						<fieldset>
 							<div class="form-group" style="margin-top: 0px; margin-bottom: 0px;">
-								<div class="col-md-2">
-									<select name="EQ|category.$id" class="form-control input-sm">
-										<option value="">择股票分类</option>
-										<c:forEach var="category" items="${categories}">
-											<option value="${category.id}" ${searchParams.categoryid  eq category.id? "selected":""}>${category.name }</option>
-										</c:forEach>
-									</select>
-								</div>
-								<div class="col-md-2">
-									<input type="text" name="like|name" value="${searchParams.name}" placeholder="多个名字间使用逗号分隔" class="form-control input-sm">
-								</div>
-								<div class="col-md-2">
-									<input type="text" name="like|code" value="${searchParams.code}" placeholder="多个股票代码间使用逗号分隔" class="form-control input-sm">
-								</div>
-								<div class="col-md-3">
-									<input type="text" name="GTE|dailyStat.pe" value="${searchParams.minPe}" style="width: 50px;" placeholder="PE起始值" class="form-control input-sm"><input type="text"
-										name="LTE|dailyStat.pe" value="${searchParams.maxPe}" style="width: 50px;" placeholder="PE最大值" class="form-control input-sm">
-								</div>
-								<div class="col-md-1">
-									<button type="submit" class="btn btn-sm btn-primary">
-										<fmt:message key="global.search"></fmt:message>
-									</button>
-								</div>
+
+								<select name="EQ|category.$id" class="form-control input-sm">
+									<option value="">择股票分类</option>
+									<c:forEach var="category" items="${categories}">
+										<option value="${category.id}" ${searchParams.categoryid  eq category.id? "selected":""}>${category.name }</option>
+									</c:forEach>
+								</select>
+							</div>
+
+							<div class="form-group">
+								<input type="text" name="like|name" value="${searchParams.name}" placeholder="多个名字间使用逗号分隔" class="form-control input-sm">
+							</div>
+							<div class="form-group">
+								<input type="text" name="like|code" value="${searchParams.code}" placeholder="多个股票代码间使用逗号分隔" class="form-control input-sm">
+							</div>
+							<div class="form-group">
+								<input type="text" name="GTE|dailyStat.pe" value="${searchParams.minPe}" style="width: 100px;" placeholder="PE起始值" class="form-control input-sm"><input type="text"
+									name="LTE|dailyStat.pe" value="${searchParams.maxPe}" style="width: 100px;" placeholder="PE最大值" class="form-control input-sm">
+							</div>
+							<div class="form-group">
+								<button type="submit" class="btn btn-sm btn-primary">
+									<fmt:message key="global.search"></fmt:message>
+								</button>
 							</div>
 						</fieldset>
 					</form>
