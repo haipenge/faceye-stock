@@ -204,25 +204,26 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 		List<Stock> stocks = this.stockRepository.findAll();
 		if (CollectionUtils.isNotEmpty(stocks)) {
 			this.stockQueueService.addAll(stocks);
-			// for (int i=0;i<stocks.size();i++) {
-			// Stock stock=stocks.get(i);
-			// logger.debug(">>FaceYe --> stock index is:"+stock.getName()+"("+stock.getCode()+"),index is:"+i+",total size is:"+stocks.size());
-			// // this.computeDailyDataAvg(stock.getCode());
-			// }
-			List<Runnable> runnables = new ArrayList<Runnable>();
-			for (int i = 0; i < 5; i++) {
-				Runnable runnable = new ComputeThread();
-				ThreadPoolController.getINSTANCE().execute("Compute-Thread", runnable, 5);
-				// runnables.add(runnable);
+			for (int i = 0; i < stocks.size(); i++) {
+				Stock stock = stocks.get(i);
+				logger.debug(">>FaceYe --> stock index is:" + stock.getName() + "(" + stock.getCode() + "),index is:" + i + ",total size is:" + stocks.size());
+				 this.initDailyDataAvg(stock);
 			}
-			while (!ThreadPoolController.getINSTANCE().isShutdonw("Compute-Thread")) {
-				try {
-					logger.debug(">>FaceYe sleep 1 minute.");
-					Thread.sleep(60000L);
-				} catch (InterruptedException e) {
-					logger.error(">>FaceYe throws Exception: --->" + e.toString());
-				}
-			}
+//			List<Runnable> runnables = new ArrayList<Runnable>();
+//			for (int i = 0; i < 5; i++) {
+//				Runnable runnable = new ComputeThread();
+//				
+//				 runnables.add(runnable);
+//			}
+//			ThreadPoolController.getINSTANCE().execute("Compute-Thread", runnables, 5);
+//			while (!ThreadPoolController.getINSTANCE().isShutdonw("Compute-Thread")) {
+//				try {
+//					logger.debug(">>FaceYe sleep 1 minute.");
+//					Thread.sleep(60000L);
+//				} catch (InterruptedException e) {
+//					logger.error(">>FaceYe throws Exception: --->" + e.toString());
+//				}
+//			}
 			logger.debug(">>FaceYe --> compute finish.");
 		}
 	}

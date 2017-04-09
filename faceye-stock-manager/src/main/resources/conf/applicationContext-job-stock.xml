@@ -70,7 +70,7 @@
 			<ref bean="computeStockDailyDataAvgJobDetail" />
 		</property>
 		<property name="cronExpression">
-			<value>0 55 20 * * ?</value>
+			<value>0 15 21 * * ?</value>
 		</property>
 	</bean>
 	<bean id="computeStockDailyDataAvgJobDetail"
