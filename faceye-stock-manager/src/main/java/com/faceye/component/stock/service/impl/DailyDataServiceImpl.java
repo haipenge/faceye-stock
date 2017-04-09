@@ -210,9 +210,9 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 			// // this.computeDailyDataAvg(stock.getCode());
 			// }
 			List<Runnable> runnables = new ArrayList<Runnable>();
-			for (int i = 0; i < 20; i++) {
+			for (int i = 0; i < 5; i++) {
 				Runnable runnable = new ComputeThread();
-				ThreadPoolController.getINSTANCE().execute("Compute-Thread", runnable, 20);
+				ThreadPoolController.getINSTANCE().execute("Compute-Thread", runnable, 5);
 				// runnables.add(runnable);
 			}
 			while (!ThreadPoolController.getINSTANCE().isShutdonw("Compute-Thread")) {

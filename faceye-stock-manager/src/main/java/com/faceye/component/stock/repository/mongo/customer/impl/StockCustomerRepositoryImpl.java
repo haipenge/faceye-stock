@@ -54,17 +54,21 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 		Query query = new Query();
 		Criteria criteria=Criteria.where("_id").gt(0L);
 		if(StringUtils.isNotEmpty(sortDailyStatPe)){
-			criteria.andOperator(Criteria.where("dailyStat.pe").gt(0D));
+			criteria.and("dailyStat.pe").gt(0D);
+//			criteria.andOperator(Criteria.where("dailyStat.pe").gt(0D));
 		}
 		if (categoryId != null) {
-			criteria.andOperator(Criteria.where("category.$id").is(categoryId));
+			criteria.and("category.$id").is(categoryId);
+//			criteria.andOperator(Criteria.where("category.$id").is(categoryId));
 		}
 		Criteria peCriteria = null;
 		if (minPe != null) {
-			criteria.andOperator(Criteria.where("dailyStat.pe").gte(minPe));
+			criteria.and("dailyStat.pe").gte(minPe);
+//			criteria.andOperator(Criteria.where("dailyStat.pe").gte(minPe));
 		}
 		if (maxPe != null) {
-			criteria.andOperator(Criteria.where("dailyStat.pe").lte(maxPe));
+			criteria.and("dailyStat.pe").lte(maxPe);
+//			criteria.andOperator(Criteria.where("dailyStat.pe").lte(maxPe));
 		}
 		
 		Criteria orCriterias = null;
