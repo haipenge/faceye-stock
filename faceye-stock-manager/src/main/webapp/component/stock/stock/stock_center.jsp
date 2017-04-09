@@ -99,10 +99,10 @@
 							<th><fmt:message key='stock.stock.business'></fmt:message></th>
 							<th><fmt:message key='stock.stock.market'></fmt:message></th>
 							<th>当前股价</th>
-							<th>PE</th>
+							<th><a href="<c:url value="/stock/stock/home?EQ|category.$id=${searchparams.categoryid}&GTE|dailyStat.pe=${searchParams.minPe }&LTE|dailyStat.pe=${searchParams.maxPe}&like|name=${searchParams.name }&like|code=${searchParams.code}&SORT|dailyStat.pe=${empty sortPe? 'asc':'desc' }"/>">PE ${empty sortPe or sortPe eq 'asc'? '<i class="fa fa-chevron-circle-up"></i>':'<i class="fa fa-chevron-circle-down"></i>' }</a></th>
 							<th>PB</th>
-							<th>今日涨跌</th>
-							<th>30日波幅</th>
+							<th><a href="<c:url value="/stock/stock/home?EQ|category.$id=${searchparams.categoryid}&GTE|dailyStat.pe=${searchParams.minPe }&LTE|dailyStat.pe=${searchParams.maxPe}&like|name=${searchParams.name }&like|code=${searchParams.code}&SORT|dailyStat.todayIncreasePrice=${empty sortTodayIncreasePrice? 'asc':'desc' }"/>">今日涨跌</a></th>
+							<th><a href="<c:url value="/stock/stock/home?EQ|category.$id=${searchparams.categoryid}&GTE|dailyStat.pe=${searchParams.minPe }&LTE|dailyStat.pe=${searchParams.maxPe}&like|name=${searchParams.name }&like|code=${searchParams.code}&SORT|dailyStat.sortPriceAmplitude=${empty sortPriceAmplitude? 'asc':'desc' }"/>">30日波幅</a></th>
 							<th><fmt:message key="stock.dailyData" /></th>
 							<th>财务报表</th>
 							<th><fmt:message key="global.edit"></fmt:message></th>

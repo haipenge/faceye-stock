@@ -39,14 +39,15 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 
 	@Override
 	public Page<Stock> getPage(Map searchParams, int page, int size) {
-//		if (page != 0) {
-//			page = page - 1;
-//		}
 		Long categoryId = MapUtils.getLong(searchParams, "EQ|category.$id");
 		String likeName = MapUtils.getString(searchParams, "like|name");
 		String likeCode = MapUtils.getString(searchParams, "like|code");
 		Double minPe = MapUtils.getDouble(searchParams, "GTE|dailyStat.pe");
 		Double maxPe = MapUtils.getDouble(searchParams, "LTE|dailyStat.pe");
+		String sortDailyStatPe = MapUtils.getString(searchParams, "SORT|dailyStat.pe");
+		String sortPriceAmplitude = MapUtils.getString(searchParams, "SORT|dailyStat.priceAmplitude");
+		String sortTodayIncreaseRate=MapUtils.getString(searchParams, "SORT|dailyStat.todayIncreaseRate");
+		Sort sort = null;
 		Query query = new Query();
 		if (categoryId != null) {
 			query.addCriteria(Criteria.where("category.$id").is(categoryId));
@@ -110,12 +111,62 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 			query.addCriteria(orCriterias);
 		}
 
-		query.skip((page-1) * size);
+		query.skip((page - 1) * size);
 		if (size > 0) {
 			query.limit(size);
 		}
+		//进行排序处理
+		if (StringUtils.isNotEmpty(sortPriceAmplitude)) {
+           if(StringUtils.equalsIgnoreCase(sortPriceAmplitude, "asc")){
+        	   if(sort==null){
+        		   sort=new Sort(Direction.ASC,"dailyStat.priceAmplitude");
+        	   }else{
+        		   sort.and(new Sort(Direction.ASC,"dailyStat.priceAmplitude"));
+        	   }
+           }else{
+        	   if(sort==null){
+        		   sort=new Sort(Direction.DESC,"dailyStat.priceAmplitude");
+        	   }else{
+        		   sort.and(new Sort(Direction.DESC,"dailyStat.priceAmplitude"));
+        	   }
+           }
+		}
+		if(StringUtils.isNotEmpty(sortTodayIncreaseRate)){
+			if(StringUtils.equalsIgnoreCase(sortTodayIncreaseRate, "asc")){
+				if(sort==null){
+					sort=new Sort(Direction.ASC,"dailyStat.todayIncreaseRate");
+				}else{
+					sort.and(new Sort(Direction.ASC,"dailyStat.todayIncreaseRate"));
+				}
+			}else{
+				if(sort==null){
+					sort=new Sort(Direction.DESC,"dailyStat.todayIncreaseRate");
+				}else{
+					sort.and(new Sort(Direction.DESC,"dailyStat.todayIncreaseRate"));
+				}
+			}
+		}
 		// query.getSortObject().put("dailyStat.pe", Order.ASC);
-		Sort sort = new Sort(Direction.ASC, "dailyStat.pe");
+		if (StringUtils.isNotEmpty(sortDailyStatPe)) {
+			if (StringUtils.equalsIgnoreCase(sortDailyStatPe, "asc")) {
+				if (sort == null) {
+					sort = new Sort(Direction.ASC, "dailyStat.pe");
+				} else {
+					sort.and(new Sort(Direction.ASC, "dailyStat.pe"));
+				}
+			} else {
+				if (sort == null) {
+					sort = new Sort(Direction.DESC, "dailyStat.pe");
+				} else {
+					sort.and(new Sort(Direction.DESC, "dailyStat.pe"));
+				}
+			}
+		} else {
+			//默认按pe从小到大排序
+			if (sort == null) {
+				sort = new Sort(Direction.ASC, "dailyStat.pe");
+			}
+		}
 		query.with(sort);
 		logger.debug(">>FaceYe query object is:" + query.toString());
 		List<Stock> stocks = this.mongoOperations.find(query, Stock.class);
