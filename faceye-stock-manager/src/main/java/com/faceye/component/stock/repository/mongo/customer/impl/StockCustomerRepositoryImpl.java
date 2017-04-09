@@ -49,25 +49,21 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 		String sortTodayIncreaseRate=MapUtils.getString(searchParams, "SORT|dailyStat.todayIncreaseRate");
 		Sort sort = null;
 		Query query = new Query();
+		Criteria criteria=Criteria.where("_id").gt(0L);
+		if(StringUtils.isNotEmpty(sortDailyStatPe)){
+			criteria.andOperator(Criteria.where("dailyStat.pe").gt(0D));
+		}
 		if (categoryId != null) {
-			query.addCriteria(Criteria.where("category.$id").is(categoryId));
+			criteria.andOperator(Criteria.where("category.$id").is(categoryId));
 		}
 		Criteria peCriteria = null;
 		if (minPe != null) {
-			if (peCriteria == null) {
-				peCriteria = Criteria.where("dailyStat.pe").gte(minPe);
-			}
+			criteria.andOperator(Criteria.where("dailyStat.pe").gte(minPe));
 		}
 		if (maxPe != null) {
-			if (peCriteria == null) {
-				peCriteria = Criteria.where("dailyStat.pe").lte(maxPe);
-			} else {
-				peCriteria.andOperator(Criteria.where("dailyStat.pe").lte(maxPe));
-			}
+			criteria.andOperator(Criteria.where("dailyStat.pe").lte(maxPe));
 		}
-		if (peCriteria != null) {
-			query.addCriteria(peCriteria);
-		}
+		
 		Criteria orCriterias = null;
 		List<Criteria> nameCriterias = new ArrayList<Criteria>(0);
 		List<Criteria> codeCriterias = new ArrayList<Criteria>(0);
@@ -107,6 +103,7 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 				orCriterias.andOperator(codeCriterias.toArray(new Criteria[codeCriterias.size()]));
 			}
 		}
+		query.addCriteria(criteria);
 		if (orCriterias != null) {
 			query.addCriteria(orCriterias);
 		}
