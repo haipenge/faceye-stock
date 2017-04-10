@@ -209,8 +209,8 @@
 						<c:if test="${not empty dataStats}">
 						<!-- 核心利润率 -->
 							<tr>
-								<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">杜邦分析</th>
-								<td>核心利润率</td>
+								<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">其它分析</th>
+								<td style="border-bottom: 2px solid gray;">核心利润率</td>
 								<c:forEach items="${dataStats}" var="dataStat">
 									<td class="text-right" style="border-bottom: 2px solid gray;"><fmt:formatNumber value="${dataStat.coreProfitMargin *100 }" type="number" pattern="#,##0.0#"
 											maxFractionDigits="1" groupingUsed="true" />%</td>
