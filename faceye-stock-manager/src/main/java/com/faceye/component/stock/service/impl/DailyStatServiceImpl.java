@@ -116,7 +116,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 		Date now = new Date();
 		Date befor30Day = new Date(now.getTime() - 31 * 24 * 60 * 60 * 1000L);
 		params.put("EQ|stockId", stock.getId());
-//		params.put("GTE|date", befor30Day);
+		// params.put("GTE|date", befor30Day);
 		params.put("SORT|date", "desc");
 		List<DailyData> dailyDatas = this.dailyDataService.getPage(params, 0, 0).getContent();
 		// 设置昨天交易收盘价
@@ -175,12 +175,16 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 			// 计算股价振幅
 			Double priceAmplitude = null;
 			Double priceChangeDeep = topPriceOf30Days - lowerPriceOf30Days;
-			if (lowerPriceDate != null && topPriceDate != null && lowerPriceDate.getTime() < topPriceDate.getTime() && lowerPriceOf30Days>0) {
-				priceAmplitude = priceChangeDeep / lowerPriceOf30Days;
-			} else {
-				if(topPriceOf30Days>0){
-				priceAmplitude = -priceChangeDeep / topPriceOf30Days;
+			if (lowerPriceDate != null && topPriceDate != null) {
+				if (lowerPriceDate.getTime() < topPriceDate.getTime() && lowerPriceOf30Days > 0) {
+					priceAmplitude = priceChangeDeep / lowerPriceOf30Days;
+				} else {
+					if (topPriceOf30Days > 0) {
+						priceAmplitude = -priceChangeDeep / topPriceOf30Days;
+					}
 				}
+			} else {
+				logger.debug(">>FaceYe --> topPriceDate or lowerPriceDate is null.");
 			}
 			dailyStat.setPriceAmplitude(priceAmplitude);
 			if (yesterdayPrice != null && yesterdayPrice > 0) {
