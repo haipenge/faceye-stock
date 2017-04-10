@@ -233,4 +233,21 @@ public class DataStat implements Serializable {
 		this.roe = roe;
 	}
 
-}/** @generate-entity-source@ **/
+   /**
+    * 说明:核心利润率<br>
+    * 属性名: coreProfitMargin<br>
+    * 类型: Double<br>
+    * 数据库字段:core_profit_margin<br>
+    * @author haipenge<br>
+    */
+    
+	private  Double coreProfitMargin=0D;
+	public Double getCoreProfitMargin() {
+		return coreProfitMargin;
+	}
+	public void setCoreProfitMargin(Double coreProfitMargin) {
+		this.coreProfitMargin = coreProfitMargin;
+	}
+	
+}/**@generate-entity-source@**/
+	

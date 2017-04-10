@@ -10,23 +10,33 @@
 			</h2>
 		</div>
 		<div class="col-sm-8 text-center">
-		   <c:if test="${not empty dailyStat }">
-				<c:set var="price-css" value="price-rise"/>
+			<c:if test="${not empty dailyStat }">
+				<c:set var="price-css" value="price-rise" />
 				<c:if test="${dailyStat.topPriceDate lt dailyStat.lowPriceDate }">
-				   <c:set var="price-css" value="price-fall"/>
+					<c:set var="price-css" value="price-fall" />
 				</c:if>
 				市盈率:<fmt:formatNumber value="${dailyStat.pe }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;
 				动态市盈率:<fmt:formatNumber value="${dailyStat.dynamicPe}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;
-				30天最高价:￥ <fmt:formatNumber value="${dailyStat.topPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;(<fmt:formatDate value="${dailyStat.topPriceDate }" pattern="MM-dd"/>)&nbsp;&nbsp;
-				30天最低价:￥ <fmt:formatNumber value="${dailyStat.lowPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;(<fmt:formatDate value="${dailyStat.lowPriceDate }" pattern="MM-dd"/>)&nbsp;&nbsp;
-				<c:set var="priceAmplitudeColor" value="red"/>
-				<c:if test="${dailyStat.priceAmplitude lt 0 }"><c:set var="priceAmplitudeColor" value="green"/></c:if>
-				30天波幅:<font color="${priceAmplitudeColor}"><fmt:formatNumber value="${100* dailyStat.priceAmplitude}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</font>
+				30天最高价:￥ <fmt:formatNumber value="${dailyStat.topPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;(<fmt:formatDate
+					value="${dailyStat.topPriceDate }" pattern="MM-dd" />)&nbsp;&nbsp;
+				30天最低价:￥ <fmt:formatNumber value="${dailyStat.lowPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;(<fmt:formatDate
+					value="${dailyStat.lowPriceDate }" pattern="MM-dd" />)&nbsp;&nbsp;
+				<c:set var="priceAmplitudeColor" value="red" />
+				<c:if test="${dailyStat.priceAmplitude lt 0 }">
+					<c:set var="priceAmplitudeColor" value="green" />
 				</c:if>
-				当天价格: <fmt:formatNumber value="${dailyStat.todayPrice}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;
-				<c:set var="todayIncreaseRateColor" value="red"/>
-				<c:if test="${dailyStat.todayIncreaseRate lt 0 }"><c:set var="todayIncreaseRate" value="green"/></c:if>
-				涨跌:<font color="${todayIncreaseRate}"><fmt:formatNumber value="${dailyStat.todayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</font>&nbsp;&nbsp;
+				30天波幅:<font color="${priceAmplitudeColor}"><fmt:formatNumber value="${100* dailyStat.priceAmplitude}" type="number" pattern="#,##0.0#" maxFractionDigits="2"
+						groupingUsed="true" />%</font>
+			</c:if>
+			当天价格:
+			<fmt:formatNumber value="${dailyStat.todayPrice}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />
+			&nbsp;&nbsp;
+			<c:set var="todayIncreaseRateColor" value="red" />
+			<c:if test="${dailyStat.todayIncreaseRate lt 0 }">
+				<c:set var="todayIncreaseRate" value="green" />
+			</c:if>
+			涨跌:<font color="${todayIncreaseRate}"><fmt:formatNumber value="${dailyStat.todayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="2"
+					groupingUsed="true" />%</font>&nbsp;&nbsp;
 		</div>
 		<div class="col-sm-2 text-right">
 			<c:if test="${empty wrapReporter.records  }">
@@ -40,7 +50,7 @@
 </div>
 <div class="cl-mcont">
 	<div class="block-flat">
-	   <div id="msg"></div>
+		<div id="msg"></div>
 		<div class="row" style="margin-top: 0px; margin-bottom: 0px;">
 			<div class="col-sm-4">
 				<ul class="nav nav-pills bg-success" role="tablist">
@@ -60,7 +70,7 @@
 						href="<c:url value="/stock/reportData/report?reportCategoryId=${param.reportCategoryId}&stockId=${param.stockId }&type=2"/>">中报</a></li>
 					<li role="presentation" <c:if test="${param.type eq 3}"> class="active"</c:if>><a
 						href="<c:url value="/stock/reportData/report?reportCategoryId=${param.reportCategoryId}&stockId=${param.stockId }&type=3"/>">三季报</a></li>
-						<li role="presentation" <c:if test="${param.type eq 4}"> class="active"</c:if>><a
+					<li role="presentation" <c:if test="${param.type eq 4}"> class="active"</c:if>><a
 						href="<c:url value="/stock/reportData/report?reportCategoryId=${param.reportCategoryId}&stockId=${param.stockId }&type=4"/>">全部</a></li>
 				</ul>
 			</div>
@@ -131,10 +141,12 @@
 															<span class="small pull-left text-info"><c:if test="${data2Record.commonSizeAnalysisResult gt 0 }">
 																	<fmt:formatNumber value="${data2Record.commonSizeAnalysisResult *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</c:if></span> <span
 																class="span-data"><fmt:formatNumber value="${data2Record.data }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></span> <span
-																class="small pull-right text-info">
-																<c:set var="trendAnalysisResultFontColor" value="red"/>
-																<c:if test="${ data2Record.trendAnalysisResult lt 0 }"><c:set var="trendAnalysisResultFontColor" value="green"/></c:if>
-																	<c:if test="${data2Record.trendAnalysisResult  ne 0}"><font color="${trendAnalysisResultFontColor}"><fmt:formatNumber value="${data2Record.trendAnalysisResult *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</font></c:if></span>
+																class="small pull-right text-info"> <c:set var="trendAnalysisResultFontColor" value="red" /> <c:if test="${ data2Record.trendAnalysisResult lt 0 }">
+																	<c:set var="trendAnalysisResultFontColor" value="green" />
+																</c:if> <c:if test="${data2Record.trendAnalysisResult  ne 0}">
+																	<font color="${trendAnalysisResultFontColor}"><fmt:formatNumber value="${data2Record.trendAnalysisResult *100 }" type="number" pattern="#,##0.0#"
+																			maxFractionDigits="1" groupingUsed="true" />%</font>
+																</c:if></span>
 														</p>
 													</td>
 												</c:if>
@@ -193,6 +205,18 @@
 							</tr>
 						</c:if>
 						<!-- 财务摘要-杜邦分析结束  -->
+						<!-- 其它财务指标分析 -->
+						<c:if test="${not empty dataStats}">
+						<!-- 核心利润率 -->
+							<tr>
+								<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">杜邦分析</th>
+								<td>核心利润率</td>
+								<c:forEach items="${dataStats}" var="dataStat">
+									<td class="text-right" style="border-bottom: 2px solid gray;"><fmt:formatNumber value="${dataStat.coreProfitMargin *100 }" type="number" pattern="#,##0.0#"
+											maxFractionDigits="1" groupingUsed="true" />%</td>
+								</c:forEach>
+							</tr>
+						</c:if>
 					</table>
 				</div>
 			</div>

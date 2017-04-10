@@ -257,6 +257,59 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		}
 		return dataStat;
 	}
+	
+	/**
+	 * 计算核心利润率
+	 * 核心利润率=（毛利-营业税金及附加-三项费用）/营业收入
+	 * @param stock
+	 * @param dataStat
+	 * @return
+	 * @throws Exception
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年4月10日 下午6:57:12
+	 */
+	private DataStat statCoreProfitMargin(Stock stock, ReportData reportData,DataStat dataStat) throws Exception{
+		
+		Double coreProfitMargin=0D;
+		//营业收入
+		Double operateIncome=reportData.getInComeSheet().getEle6().getCinst1_90();
+		//营业成本
+		Double operateCost=reportData.getInComeSheet().getEle7().getCinst3_97();
+		//营业税金及附加
+		Double operateShui=reportData.getInComeSheet().getEle7().getCinst4_108();
+		//管理费用
+		Double manageCost=reportData.getInComeSheet().getEle7().getCinst9_110();
+		//销售费用
+		Double saleCost=reportData.getInComeSheet().getEle7().getCinst8_109();
+		//财务费用
+		Double caiwuCost=reportData.getInComeSheet().getEle7().getCinst10_111();
+		Double fenzi=0D;
+		if(operateIncome!=null){
+			fenzi+=operateIncome;
+		}
+		if(operateCost!=null){
+			fenzi-=operateCost;
+		}
+		if(operateShui!=null){
+			fenzi-=operateShui;
+		}
+		if(manageCost!=null){
+			fenzi-=manageCost;
+		}
+		if(saleCost!=null){
+			fenzi-=saleCost;
+		}
+		if(caiwuCost!=null){
+			fenzi-=caiwuCost;
+		}
+		
+		if(operateIncome!=null && operateIncome >0){
+			coreProfitMargin=fenzi/operateIncome;
+		}
+		dataStat.setCoreProfitMargin(coreProfitMargin);
+		return dataStat;
+	}
 
 	/**
 	 * 数据分析结果是否存在
@@ -281,6 +334,8 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		}
 		return dataStat;
 	}
+	
+	
 
 	boolean isStated = false;
 

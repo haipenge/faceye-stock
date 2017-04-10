@@ -148,7 +148,8 @@
 							<th><fmt:message key='stock.dataStat.totalAssetsNetProfitMargin'></fmt:message></th>
 							<th><fmt:message key='stock.dataStat.debtToAssetsRatio'></fmt:message></th>
 							<th><fmt:message key='stock.dataStat.roe'></fmt:message></th>
-							<!--@generate-entity-jsp-property-desc@-->
+							<th><fmt:message key='stock.dataStat.coreProfitMargin'></fmt:message></th>   
+ <!--@generate-entity-jsp-property-desc@-->
 						</tr>
 					</thead>
 					<tbody>
@@ -161,7 +162,8 @@
 								<td><fmt:formatNumber value="${dataStat.totalAssetsNetProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
 								<td><fmt:formatNumber value="${dataStat.debtToAssetsRatio *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
 								<td><fmt:formatNumber value="${dataStat.roe *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
-								<!--@generate-entity-jsp-property-value@-->
+								<td>${dataStat.coreProfitMargin}</td>   
+ <!--@generate-entity-jsp-property-value@-->
 								
 							<tr>
 						</c:forEach>

@@ -49,7 +49,12 @@
 	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.dataStat.roe"></fmt:message></td>
 	<td>${dataStat.roe}</td>
 </tr>
+<tr>
+	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.dataStat.coreProfitMargin"></fmt:message></td>
+	<td>${dataStat.coreProfitMargin}</td>
+</tr>
 <!--@generate-entity-jsp-property-detail@-->
+
 
 
 
