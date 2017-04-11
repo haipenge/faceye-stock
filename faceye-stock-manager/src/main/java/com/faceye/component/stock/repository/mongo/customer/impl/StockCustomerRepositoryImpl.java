@@ -39,7 +39,7 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 
 	@Override
 	public Page<Stock> getPage(Map searchParams, int page, int size) {
-		logger.debug(">>FaceYe -- Page/size is:"+page+"/"+size);
+		logger.debug(">>FaceYe -- Page/size is:" + page + "/" + size);
 		Long categoryId = MapUtils.getLong(searchParams, "EQ|category.$id");
 		String likeName = MapUtils.getString(searchParams, "like|name");
 		String likeCode = MapUtils.getString(searchParams, "like|code");
@@ -47,28 +47,32 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 		Double maxPe = MapUtils.getDouble(searchParams, "LTE|dailyStat.pe");
 		String sortDailyStatPe = MapUtils.getString(searchParams, "SORT|dailyStat.pe");
 		String sortPriceAmplitude = MapUtils.getString(searchParams, "SORT|dailyStat.priceAmplitude");
-		String sortTodayIncreaseRate=MapUtils.getString(searchParams, "SORT|dailyStat.todayIncreaseRate");
+		String sortTodayIncreaseRate = MapUtils.getString(searchParams, "SORT|dailyStat.todayIncreaseRate");
+		List<Long> inIds = (List) MapUtils.getObject(searchParams, "IN|id");
 		Sort sort = null;
 		Query query = new Query();
-		Criteria criteria=Criteria.where("_id").gt(0L);
-		if(StringUtils.isNotEmpty(sortDailyStatPe)){
+		Criteria criteria = Criteria.where("_id").gt(0L);
+		if (StringUtils.isNotEmpty(sortDailyStatPe)) {
 			criteria.and("dailyStat.pe").gt(0D);
-//			criteria.andOperator(Criteria.where("dailyStat.pe").gt(0D));
+			// criteria.andOperator(Criteria.where("dailyStat.pe").gt(0D));
 		}
 		if (categoryId != null) {
 			criteria.and("category.$id").is(categoryId);
-//			criteria.andOperator(Criteria.where("category.$id").is(categoryId));
+			// criteria.andOperator(Criteria.where("category.$id").is(categoryId));
 		}
 		Criteria peCriteria = null;
 		if (minPe != null) {
 			criteria.and("dailyStat.pe").gte(minPe);
-//			criteria.andOperator(Criteria.where("dailyStat.pe").gte(minPe));
+			// criteria.andOperator(Criteria.where("dailyStat.pe").gte(minPe));
 		}
 		if (maxPe != null) {
 			criteria.and("dailyStat.pe").lte(maxPe);
-//			criteria.andOperator(Criteria.where("dailyStat.pe").lte(maxPe));
+			// criteria.andOperator(Criteria.where("dailyStat.pe").lte(maxPe));
 		}
-		
+		if (CollectionUtils.isNotEmpty(inIds)) {
+			criteria.and("id").in(inIds);
+		}
+
 		Criteria orCriterias = null;
 		List<Criteria> nameCriterias = new ArrayList<Criteria>(0);
 		List<Criteria> codeCriterias = new ArrayList<Criteria>(0);
@@ -112,38 +116,39 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 		if (orCriterias != null) {
 			query.addCriteria(orCriterias);
 		}
+
 		query.skip((page) * size);
 		if (size > 0) {
 			query.limit(size);
 		}
-		//进行排序处理
+		// 进行排序处理
 		if (StringUtils.isNotEmpty(sortPriceAmplitude)) {
-           if(StringUtils.equalsIgnoreCase(sortPriceAmplitude, "asc")){
-        	   if(sort==null){
-        		   sort=new Sort(Direction.ASC,"dailyStat.priceAmplitude");
-        	   }else{
-        		   sort.and(new Sort(Direction.ASC,"dailyStat.priceAmplitude"));
-        	   }
-           }else{
-        	   if(sort==null){
-        		   sort=new Sort(Direction.DESC,"dailyStat.priceAmplitude");
-        	   }else{
-        		   sort.and(new Sort(Direction.DESC,"dailyStat.priceAmplitude"));
-        	   }
-           }
-		}
-		if(StringUtils.isNotEmpty(sortTodayIncreaseRate)){
-			if(StringUtils.equalsIgnoreCase(sortTodayIncreaseRate, "asc")){
-				if(sort==null){
-					sort=new Sort(Direction.ASC,"dailyStat.todayIncreaseRate");
-				}else{
-					sort.and(new Sort(Direction.ASC,"dailyStat.todayIncreaseRate"));
+			if (StringUtils.equalsIgnoreCase(sortPriceAmplitude, "asc")) {
+				if (sort == null) {
+					sort = new Sort(Direction.ASC, "dailyStat.priceAmplitude");
+				} else {
+					sort.and(new Sort(Direction.ASC, "dailyStat.priceAmplitude"));
 				}
-			}else{
-				if(sort==null){
-					sort=new Sort(Direction.DESC,"dailyStat.todayIncreaseRate");
-				}else{
-					sort.and(new Sort(Direction.DESC,"dailyStat.todayIncreaseRate"));
+			} else {
+				if (sort == null) {
+					sort = new Sort(Direction.DESC, "dailyStat.priceAmplitude");
+				} else {
+					sort.and(new Sort(Direction.DESC, "dailyStat.priceAmplitude"));
+				}
+			}
+		}
+		if (StringUtils.isNotEmpty(sortTodayIncreaseRate)) {
+			if (StringUtils.equalsIgnoreCase(sortTodayIncreaseRate, "asc")) {
+				if (sort == null) {
+					sort = new Sort(Direction.ASC, "dailyStat.todayIncreaseRate");
+				} else {
+					sort.and(new Sort(Direction.ASC, "dailyStat.todayIncreaseRate"));
+				}
+			} else {
+				if (sort == null) {
+					sort = new Sort(Direction.DESC, "dailyStat.todayIncreaseRate");
+				} else {
+					sort.and(new Sort(Direction.DESC, "dailyStat.todayIncreaseRate"));
 				}
 			}
 		}
@@ -162,10 +167,10 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 				}
 			}
 		} else {
-			//默认按pe从小到大排序
+			// 默认按pe从小到大排序
 			if (sort == null) {
-//				sort = new Sort(Direction.ASC, "dailyStat.pe");
-				sort=new Sort(Direction.DESC,"dailyStat.todayIncreaseRate");
+				// sort = new Sort(Direction.ASC, "dailyStat.pe");
+				sort = new Sort(Direction.DESC, "dailyStat.todayIncreaseRate");
 			}
 		}
 		query.with(sort);
