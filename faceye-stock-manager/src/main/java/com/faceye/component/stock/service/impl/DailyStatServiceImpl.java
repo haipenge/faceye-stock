@@ -313,6 +313,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 									isStarData = false;
 									count=0;
 									signIndex=0;
+									starDailyData=null;
 								}
 							}
 						}
