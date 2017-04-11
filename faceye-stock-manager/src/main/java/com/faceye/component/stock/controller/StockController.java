@@ -1,6 +1,5 @@
 package com.faceye.component.stock.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +22,7 @@ import com.faceye.component.stock.entity.Category;
 import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.service.CategoryService;
 import com.faceye.component.stock.service.CrawlFinancialDataService;
+import com.faceye.component.stock.service.StarDataStatService;
 import com.faceye.component.stock.service.StockService;
 import com.faceye.feature.controller.BaseController;
 import com.faceye.feature.util.AjaxResult;
@@ -37,6 +36,8 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 	private CrawlFinancialDataService crawlFinancialDataService = null;
 	@Autowired
 	private CategoryService categoryService = null;
+	@Autowired
+	private StarDataStatService starDataStatService=null;
 
 	@Autowired
 	public StockController(StockService service) {
@@ -58,6 +59,14 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 		String codeQueryKey = MapUtils.getString(searchParams, "like|code");
 		Double minPe=MapUtils.getDouble(searchParams, "GTE|dailyStat.pe");
 		Double maxPe=MapUtils.getDouble(searchParams, "LTE|dailyStat.pe");
+		String trace=MapUtils.getString(searchParams, "trace");
+		if(StringUtils.equals(trace, "star")){
+			//如果是星标追踪
+			List<Long> traceStockIds=this.starDataStatService.getStarStockIds();
+			if(CollectionUtils.isNotEmpty(traceStockIds)){
+				searchParams.put("IN|id", traceStockIds);
+			}
+		}
 		searchParams.put("minPe", minPe);
 		searchParams.put("maxPe", maxPe);
 		String sortPe=MapUtils.getString(searchParams, "SORT|dailyStat.pe");
@@ -66,7 +75,6 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 		searchParams.put("sortTodayIncreaseRate", sortTodayIncreaseRate);
 		String sortPriceAmplitude=MapUtils.getString(searchParams, "SORT|dailyStat.priceAmplitude");
 		searchParams.put("sortPriceAmplitude", sortPriceAmplitude);
-		logger.debug(">>FaceYe page in url is:"+getPage(searchParams));
 		page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
 		this.resetSearchParams(searchParams);
 		model.addAttribute("searchParams", searchParams);
@@ -178,5 +186,6 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 		boolean res = this.service.initStockCategory();
 		return AjaxResult.getInstance().buildDefaultResult(res);
 	}
+	
 
 }

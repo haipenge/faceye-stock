@@ -9,7 +9,7 @@
 	<div class="row" style="margin-top: 0px; margin-bottom: 0px;">
 		<div class="col-sm-8">
 			<h2>
-				<fmt:message key="stock.stock.manager"></fmt:message>
+				<fmt:message key="stock.stock.manager"></fmt:message>  <a href="<c:url value="/stock/stock/home?trace=star"/>" class="btn btn-success">星标追踪</a>
 			</h2>
 		</div>
 		<div class="col-sm-4 text-right">

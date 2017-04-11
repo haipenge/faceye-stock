@@ -51,7 +51,7 @@
 							<input type="text" name="EQ|max60DayIncreaseRate" value="${searchParams.max60DayIncreaseRate}"
 								placeholder="<fmt:message key="stock.starDataStat.max60DayIncreaseRate"></fmt:message>" class="form-control input-sm">
 						</div>
-
+						
 						<div class="col-md-1">
 							<input type="text" name="EQ|starDataDate" value="${searchParams.starDataDate}" placeholder="<fmt:message key="stock.starDataStat.starDataDate"></fmt:message>"
 								class="form-control input-sm">

@@ -1,8 +1,11 @@
 package com.faceye.component.stock.service.impl;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -13,32 +16,33 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.faceye.component.stock.entity.StarDataStat;
-
 import com.faceye.component.stock.repository.mongo.StarDataStatRepository;
 import com.faceye.component.stock.repository.mongo.customer.StarDataStatCustomerRepository;
 import com.faceye.component.stock.service.StarDataStatService;
-
-import com.faceye.feature.util.ServiceException;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
+import com.faceye.feature.util.ServiceException;
+import com.google.common.collect.Lists;
 import com.querydsl.core.types.Predicate;
+
 /**
  * StarDataStat 服务实现类<br>
+ * 
  * @author @haipenge <br>
- * haipenge@gmail.com<br>
-*  Create Date:2014年5月20日<br>
+ *         haipenge@gmail.com<br>
+ *         Create Date:2014年5月20日<br>
  */
 
 @Service
 public class StarDataStatServiceImpl extends BaseMongoServiceImpl<StarDataStat, Long, StarDataStatRepository> implements StarDataStatService {
 	@Autowired
-	private StarDataStatCustomerRepository starDataStatCustomerRepository=null;
+	private StarDataStatCustomerRepository starDataStatCustomerRepository = null;
+
 	@Autowired
 	public StarDataStatServiceImpl(StarDataStatRepository dao) {
 		super(dao);
 	}
-	
-	
+
 	@Override
 	public Page<StarDataStat> getPage(Map<String, Object> searchParams, int page, int size) throws ServiceException {
 		if (page != 0) {
@@ -70,5 +74,25 @@ public class StarDataStatServiceImpl extends BaseMongoServiceImpl<StarDataStat, 
 		}
 		return res;
 	}
-	
-}/**@generate-service-source@**/
+
+	@Override
+	public List<Long> getStarStockIds() {
+		Map params = new HashMap();
+		List<Long> ids = Lists.newArrayList();
+		
+		Date now = new Date();
+		Date before15Days = new Date(now.getTime() - 15 * 24 * 60 * 60 * 1000L);
+		params.put("SORT|starDataDate", "desc");
+		params.put("GTE|starDataDate", before15Days);
+		List<StarDataStat> starDataStats = this.getPage(params, 1, 0).getContent();
+		if (CollectionUtils.isNotEmpty(starDataStats)) {
+			for (StarDataStat starDataStat : starDataStats) {
+				if (!ids.contains(starDataStat.getStockId())) {
+					ids.add(starDataStat.getStockId());
+				}
+			}
+		}
+		return ids;
+	}
+
+}/** @generate-service-source@ **/
