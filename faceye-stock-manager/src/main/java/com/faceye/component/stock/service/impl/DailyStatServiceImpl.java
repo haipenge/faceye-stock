@@ -307,6 +307,10 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 									if (index - signIndex == count) {
 										count++;
 									}
+								}else{
+									count=0;
+									signIndex=0;
+									starDailyData=null;
 								}
 							} else {
 								if (dailyData.getAvg5() < dailyData.getAvg10() || dailyData.getAvg10() < dailyData.getAvg20() || dailyData.getAvg5() < dailyData.getAvg20()) {
@@ -319,7 +323,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 						}
 						// 连续三天正排列，则列为星标数据
 						// 目的，过滤杂音
-						if (count >= 3) {
+						if (count >= 3&& !isStarData) {
 							isStarData = true;
 							count = 0;
 							signIndex = 0;
