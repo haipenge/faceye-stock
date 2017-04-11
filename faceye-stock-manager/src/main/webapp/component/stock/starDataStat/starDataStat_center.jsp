@@ -1,6 +1,7 @@
 <%@ include file="/component/core/taglib/taglib.jsp"%>
 <%@ page language="java" import="java.util.*,com.faceye.feature.util.*,com.faceye.feature.util.host.*" pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/component/stock/starDataStat/starDataStat.css"/>" />
+<link rel="stylesheet" type="text/css" href="<c:url value="/css/component/stock/stock/stock.css"/>" />
 <script type="text/javascript" src="<c:url value="/js/component/stock/starDataStat/starDataStat.js"/>"></script>
 <div class="page-head">
 	<h2>
@@ -83,19 +84,23 @@
 							<th><fmt:message key='stock.starDataStat.max30DayIncreaseRate'></fmt:message></th>
 							<th><fmt:message key='stock.starDataStat.max60DayIncreaseRate'></fmt:message></th>
 							<th><fmt:message key='stock.starDataStat.starDataDate'></fmt:message></th>
-							<th><fmt:message key='stock.starDataStat.starDailyDataId'></fmt:message></th>
 							<!--@generate-entity-jsp-property-desc@-->
 						</tr>
 					</thead>
 					<tbody>
 						<c:forEach items="${page.content}" var="starDataStat">
 							<tr>
-								<td><fmt:formatNumber value="${starDataStat.max5DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
-								<td><fmt:formatNumber value="${starDataStat.max10DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
-								<td><fmt:formatNumber value="${starDataStat.max20DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
-								<td><fmt:formatNumber value="${starDataStat.max30DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
-								<td><fmt:formatNumber value="${starDataStat.max60DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
-								<td><fmt:formatDate pattern="yyyy-MM-dd" value="${starDataStat.starDataDate}" /></td>
+								<td class="text-right ${starDataStat.max5DayIncreaseRate lt 0 ? "decrease-color":"increase-color"}"><fmt:formatNumber value="${starDataStat.max5DayIncreaseRate *100}"
+										type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+								<td class="text-right ${starDataStat.max10DayIncreaseRate lt 0 ? "decrease-color":"increase-color"}"><fmt:formatNumber
+										value="${starDataStat.max10DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+								<td class="text-right ${starDataStat.max20DayIncreaseRate lt 0 ? "decrease-color":"increase-color"}"><fmt:formatNumber
+										value="${starDataStat.max20DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+								<td class="text-right ${starDataStat.max30DayIncreaseRate lt 0 ? "decrease-color":"increase-color"}"><fmt:formatNumber
+										value="${starDataStat.max30DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+								<td class="text-right ${starDataStat.max60DayIncreaseRate lt 0 ? "decrease-color":"increase-color"}"><fmt:formatNumber
+										value="${starDataStat.max60DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+								<td class="text-right"><fmt:formatDate pattern="yyyy-MM-dd" value="${starDataStat.starDataDate}" /></td>
 								<!--@generate-entity-jsp-property-value@-->
 							<tr>
 						</c:forEach>

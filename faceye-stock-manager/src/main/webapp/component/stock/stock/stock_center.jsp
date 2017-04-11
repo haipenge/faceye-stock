@@ -3,13 +3,7 @@
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/component/stock/stock/stock.css"/>" />
 <script type="text/javascript" src="<c:url value="/js/component/stock/stock/stock.js"/>"></script>
 <style>
-.increase-color {
-	color: red;
-}
 
-.decrease-color {
-	color: green;
-}
 </style>
 <div class="page-head">
 	<div class="row" style="margin-top: 0px; margin-bottom: 0px;">
