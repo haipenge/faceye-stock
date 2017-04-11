@@ -15,7 +15,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  * haipenge@gmail.com<br>
 *  Create Date:2014年5月21日<br>
  */
-@Document(collection="stock_starDataStat")
+@Document(collection="stock_star_data_stat")
 public class StarDataStat implements Serializable {
 	private static final long serialVersionUID = 8926119711730830203L;
 	@Id
@@ -62,38 +62,132 @@ public class StarDataStat implements Serializable {
 	
 
 	
+   
+	
+
+	
    /**
-    * 说明:均线数据分析<br>
-    * 属性名: avgDataStat<br>
-    * 类型: Integer<br>
-    * 数据库字段:avg_data_stat<br>
+    * 说明:5日涨幅<br>
+    * 属性名: max5DayIncreaseRate<br>
+    * 类型: Double<br>
+    * 数据库字段:max_5_day_increase_rate<br>
     * @author haipenge<br>
     */
     
-	private  Integer avgDataStat=0;
-	public Integer getAvgDataStat() {
-		return avgDataStat;
+	private  Double max5DayIncreaseRate;
+	public Double getMax5DayIncreaseRate() {
+		return max5DayIncreaseRate;
 	}
-	public void setAvgDataStat(Integer avgDataStat) {
-		this.avgDataStat = avgDataStat;
+	public void setMax5DayIncreaseRate(Double max5DayIncreaseRate) {
+		this.max5DayIncreaseRate = max5DayIncreaseRate;
+	}
+	
+
+	
+   /**
+    * 说明:10日涨幅<br>
+    * 属性名: max10DayIncreaseRate<br>
+    * 类型: Double<br>
+    * 数据库字段:max_10_day_increase_rate<br>
+    * @author haipenge<br>
+    */
+    
+	private  Double max10DayIncreaseRate;
+	public Double getMax10DayIncreaseRate() {
+		return max10DayIncreaseRate;
+	}
+	public void setMax10DayIncreaseRate(Double max10DayIncreaseRate) {
+		this.max10DayIncreaseRate = max10DayIncreaseRate;
+	}
+	
+
+	
+   /**
+    * 说明:20日涨幅<br>
+    * 属性名: max20DayIncreaseRate<br>
+    * 类型: Double<br>
+    * 数据库字段:max_20_day_increase_rate<br>
+    * @author haipenge<br>
+    */
+    
+	private  Double max20DayIncreaseRate;
+	public Double getMax20DayIncreaseRate() {
+		return max20DayIncreaseRate;
+	}
+	public void setMax20DayIncreaseRate(Double max20DayIncreaseRate) {
+		this.max20DayIncreaseRate = max20DayIncreaseRate;
+	}
+	
+
+	
+   /**
+    * 说明:30日涨幅<br>
+    * 属性名: max30DayIncreaseRate<br>
+    * 类型: Double<br>
+    * 数据库字段:max_30_day_increase_rate<br>
+    * @author haipenge<br>
+    */
+    
+	private  Double max30DayIncreaseRate;
+	public Double getMax30DayIncreaseRate() {
+		return max30DayIncreaseRate;
+	}
+	public void setMax30DayIncreaseRate(Double max30DayIncreaseRate) {
+		this.max30DayIncreaseRate = max30DayIncreaseRate;
+	}
+	
+
+	
+   /**
+    * 说明:60日涨幅<br>
+    * 属性名: max60DayIncreaseRate<br>
+    * 类型: Double<br>
+    * 数据库字段:max_60_day_increase_rate<br>
+    * @author haipenge<br>
+    */
+    
+	private  Double max60DayIncreaseRate;
+	public Double getMax60DayIncreaseRate() {
+		return max60DayIncreaseRate;
+	}
+	public void setMax60DayIncreaseRate(Double max60DayIncreaseRate) {
+		this.max60DayIncreaseRate = max60DayIncreaseRate;
 	}
 	
 
 	
    /**
     * 说明:星标数据日期<br>
-    * 属性名: avgDataStatDate<br>
+    * 属性名: starDataDate<br>
     * 类型: Date<br>
-    * 数据库字段:avg_data_stat_date<br>
+    * 数据库字段:star_data_date<br>
     * @author haipenge<br>
     */
     
-	private  Date avgDataStatDate=null;
-	public Date getAvgDataStatDate() {
-		return avgDataStatDate;
+	private  Date starDataDate=null;
+	public Date getStarDataDate() {
+		return starDataDate;
 	}
-	public void setAvgDataStatDate(Date avgDataStatDate) {
-		this.avgDataStatDate = avgDataStatDate;
+	public void setStarDataDate(Date starDataDate) {
+		this.starDataDate = starDataDate;
+	}
+	
+
+	
+   /**
+    * 说明:星标数据ID<br>
+    * 属性名: starDailyDataId<br>
+    * 类型: Long<br>
+    * 数据库字段:star_daily_data_id<br>
+    * @author haipenge<br>
+    */
+    
+	private  Long starDailyDataId;
+	public Long getStarDailyDataId() {
+		return starDailyDataId;
+	}
+	public void setStarDailyDataId(Long starDailyDataId) {
+		this.starDailyDataId = starDailyDataId;
 	}
 	
 }/**@generate-entity-source@**/
