@@ -58,8 +58,8 @@
 							<td><fmt:formatNumber value="${dailyData.dangqianjiage}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 							<td><fmt:formatNumber value="${dailyData.jintianzuigaojia}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 							<td><fmt:formatNumber value="${dailyData.jintianzuidijia}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
-							<td><fmt:formatNumber value="${dailyData.chengjiaogupiaoshu/1000}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" " />K</td>
-							<td><fmt:formatNumber value="${dailyData.chengjiaojine/1000}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" " />K</td>
+							<td><fmt:formatNumber value="${dailyData.chengjiaogupiaoshu/1000}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />K</td>
+							<td><fmt:formatNumber value="${dailyData.chengjiaojine/1000}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />K</td>
 							<td><fmt:formatNumber value="${dailyData.avg5}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 							<td><fmt:formatNumber value="${dailyData.avg10}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 							<td><fmt:formatNumber value="${dailyData.avg20}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
