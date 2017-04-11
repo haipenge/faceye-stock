@@ -72,16 +72,11 @@
 		</div>
 		<div class="content">
 			<div id="msg"></div>
-			<button class="btn btn-primary btn-sm multi-remove">
-				<fmt:message key="global.remove"></fmt:message>
-			</button>
+
 			<div classs="table-responsive">
 				<table class="table table-bordered">
 					<thead>
 						<tr>
-							<th><input type="checkbox" name="check-all"></th>
-							<th><fmt:message key='stock.starDataStat.stockId'></fmt:message></th>
-
 							<th><fmt:message key='stock.starDataStat.max5DayIncreaseRate'></fmt:message></th>
 							<th><fmt:message key='stock.starDataStat.max10DayIncreaseRate'></fmt:message></th>
 							<th><fmt:message key='stock.starDataStat.max20DayIncreaseRate'></fmt:message></th>
@@ -90,27 +85,18 @@
 							<th><fmt:message key='stock.starDataStat.starDataDate'></fmt:message></th>
 							<th><fmt:message key='stock.starDataStat.starDailyDataId'></fmt:message></th>
 							<!--@generate-entity-jsp-property-desc@-->
-							<th><fmt:message key="global.edit"></fmt:message></th>
-							<th><fmt:message key="global.remove"></fmt:message></th>
 						</tr>
 					</thead>
 					<tbody>
 						<c:forEach items="${page.content}" var="starDataStat">
 							<tr>
-								<td><input type="checkbox" name="check-single" value="${starDataStat.id}"></td>
-								<td>${starDataStat.stockId}</td>
-								<td>${starDataStat.max5DayIncreaseRate}</td>
-								<td>${starDataStat.max10DayIncreaseRate}</td>
-								<td>${starDataStat.max20DayIncreaseRate}</td>
-								<td>${starDataStat.max30DayIncreaseRate}</td>
-								<td>${starDataStat.max60DayIncreaseRate}</td>
-								<td>${starDataStat.starDataDate}</td>
-								<td>${starDataStat.starDailyDataId}</td>
+								<td><fmt:formatNumber value="${starDataStat.max5DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+								<td><fmt:formatNumber value="${starDataStat.max10DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+								<td><fmt:formatNumber value="${starDataStat.max20DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+								<td><fmt:formatNumber value="${starDataStat.max30DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+								<td><fmt:formatNumber value="${starDataStat.max60DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+								<td><fmt:formatDate pattern="yyyy-MM-dd" value="${starDataStat.starDataDate}" /></td>
 								<!--@generate-entity-jsp-property-value@-->
-								<td><a href="<c:url value="/stock/starDataStat/edit/${starDataStat.id}"/>"> <fmt:message key="global.edit"></fmt:message>
-								</a></td>
-								<td><a href="<c:url value="/stock/starDataStat/remove/${starDataStat.id}"/>"> <fmt:message key="global.remove"></fmt:message>
-								</a></td>
 							<tr>
 						</c:forEach>
 					</tbody>

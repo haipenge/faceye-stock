@@ -412,6 +412,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 								max30DayIncreaseRate = (max30DayPrice - start2BuyPrice) / start2BuyPrice;
 								max60DayIncreaseRate = (max60DayPrice - start2BuyPrice) / start2BuyPrice;
 							}
+							starDataStat.setMax5DayIncreaseRate(max5DayIncreaseRate);
 							starDataStat.setMax10DayIncreaseRate(max10DayIncreaseRate);
 							starDataStat.setMax20DayIncreaseRate(max20DayIncreaseRate);
 							starDataStat.setMax30DayIncreaseRate(max30DayIncreaseRate);
