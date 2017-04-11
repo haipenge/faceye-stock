@@ -25,7 +25,42 @@
 	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.starDataStat.avgDataStatDate"></fmt:message></td>
 	<td>${starDataStat.avgDataStatDate}</td>
 </tr>
+<tr>
+	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.starDataStat.max5DayIncreaseRate"></fmt:message></td>
+	<td>${starDataStat.max5DayIncreaseRate}</td>
+</tr>
+<tr>
+	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.starDataStat.max10DayIncreaseRate"></fmt:message></td>
+	<td>${starDataStat.max10DayIncreaseRate}</td>
+</tr>
+<tr>
+	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.starDataStat.max20DayIncreaseRate"></fmt:message></td>
+	<td>${starDataStat.max20DayIncreaseRate}</td>
+</tr>
+<tr>
+	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.starDataStat.max30DayIncreaseRate"></fmt:message></td>
+	<td>${starDataStat.max30DayIncreaseRate}</td>
+</tr>
+<tr>
+	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.starDataStat.max60DayIncreaseRate"></fmt:message></td>
+	<td>${starDataStat.max60DayIncreaseRate}</td>
+</tr>
+<tr>
+	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.starDataStat.starDataDate"></fmt:message></td>
+	<td>${starDataStat.starDataDate}</td>
+</tr>
+<tr>
+	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.starDataStat.starDailyDataId"></fmt:message></td>
+	<td>${starDataStat.starDailyDataId}</td>
+</tr>
 <!--@generate-entity-jsp-property-detail@-->
+
+
+
+
+
+
+
 
 
 

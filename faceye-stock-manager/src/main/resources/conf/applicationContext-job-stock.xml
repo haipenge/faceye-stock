@@ -46,7 +46,7 @@
 			<ref bean="crawlStockDailyDataJobDetail" />
 		</property>
 		<property name="cronExpression">
-			<value>0 43 16 * * ?</value>
+			<value>0 10 15 * * ?</value>
 		</property>
 	</bean>
 	<bean id="crawlStockDailyDataJobDetail"
@@ -70,7 +70,7 @@
 			<ref bean="computeStockDailyDataAvgJobDetail" />
 		</property>
 		<property name="cronExpression">
-			<value>0 15 15 * * ?</value>
+			<value>0 30 15 * * ?</value>
 		</property>
 	</bean>
 	<bean id="computeStockDailyDataAvgJobDetail"
@@ -165,7 +165,7 @@
 			<ref bean="dailyStatJobDetail" />
 		</property>
 		<property name="cronExpression">
-			<value>0 32 16 * * ?</value>
+			<value>0 42 17 * * ?</value>
 		</property>
 	</bean>
 	

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.faceye.component.stock.entity.DailyData;
 import com.faceye.component.stock.entity.DailyStat;
 import com.faceye.component.stock.entity.ReportData;
+import com.faceye.component.stock.entity.StarDataStat;
 import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.repository.mongo.DailyStatRepository;
 import com.faceye.component.stock.repository.mongo.customer.DailyStatCustomerRepository;
@@ -279,7 +280,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 	 * 分析星标数据并存储
 	 */
 	@Override
-	public void starDataStat() {
+	public void statDailyData2FindStar() {
 		List<Stock> stocks = this.stockService.getAll();
 		if (CollectionUtils.isNotEmpty(stocks)) {
 			for (Stock stock : stocks) {
@@ -307,28 +308,115 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 									if (index - signIndex == count) {
 										count++;
 									}
-								}else{
-									count=0;
-									signIndex=0;
-									starDailyData=null;
+								} else {
+									count = 0;
+									signIndex = 0;
+									starDailyData = null;
 								}
 							} else {
 								if (dailyData.getAvg5() < dailyData.getAvg10() || dailyData.getAvg10() < dailyData.getAvg20() || dailyData.getAvg5() < dailyData.getAvg20()) {
 									isStarData = false;
-									count=0;
-									signIndex=0;
-									starDailyData=null;
+									count = 0;
+									signIndex = 0;
+									starDailyData = null;
 								}
 							}
 						}
 						// 连续三天正排列，则列为星标数据
 						// 目的，过滤杂音
-						if (count >= 3&& !isStarData) {
+						if (count >= 3 && !isStarData) {
 							isStarData = true;
 							count = 0;
 							signIndex = 0;
 							starDailyData.setStarDataType(1);
 							this.dailyDataService.save(starDailyData);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	@Override
+	public void statStarData() {
+		List<Stock> stocks = this.stockService.getAll();
+		if (CollectionUtils.isNotEmpty(stocks)) {
+			for (Stock stock : stocks) {
+				Map starParams = new HashMap();
+				starParams.put("EQ|stockId", stock.getId());
+				starParams.put("EQ|starDataType", 1);
+				starParams.put("SORT|date", "asc");
+				List<DailyData> starDailyDatas = this.dailyDataService.getPage(starParams, 1, 0).getContent();
+				if (CollectionUtils.isNotEmpty(starDailyDatas)) {
+					for (DailyData starDailyData : starDailyDatas) {
+						Map dailyParams = new HashMap();
+						dailyParams.put("EQ|stockId", stock.getId());
+						dailyParams.put("GTE|date", starDailyData.getDate());
+						dailyParams.put("SORT|date", "asc");
+						List<DailyData> dailyDatas = this.dailyDataService.getPage(dailyParams, 1, 64).getContent();
+						Map starDataStatParams = new HashMap();
+						starDataStatParams.put("EQ|startDailyDataId", starDailyData.getId());
+						List<StarDataStat> starDataStats = this.starDataStatService.getPage(starDataStatParams, 1, 0).getContent();
+						StarDataStat starDataStat = CollectionUtils.isNotEmpty(starDataStats) ? starDataStats.get(0) : new StarDataStat();
+						starDataStat.setStarDailyDataId(starDailyData.getId());
+						starDataStat.setStarDataDate(starDailyData.getDate());
+						starDataStat.setStockId(stock.getId());
+						if (CollectionUtils.isNotEmpty(dailyDatas) && dailyDatas.size() > 3) {
+							Double max5DayIncreaseRate = 0D;// 5日最大涨幅
+							Double max10DayIncreaseRate = 0D;// 10日最大涨幅
+							Double max20DayIncreaseRate = 0D;// 20日最大涨幅
+							Double max30DayIncreaseRate = 0D;// 30日最大涨
+							Double max60DayIncreaseRate = 0D;// 60日最大涨幅
+							Double start2BuyPrice = 0.0D;
+							Double max5DayPrice = 0D;// 5日最高价
+							Double max10DayPrice = 0D;// 10日最高价
+							Double max20DayPrice = 0D;// 20日最高价
+							Double max30DayPrice = 0D;// 30日最高价
+							Double max60DayPrice = 0D;// 60日最高价
+							for (int i = 3; i < dailyDatas.size(); i++) {
+								DailyData data = dailyDatas.get(i);
+								if (i == 3) {
+									// 以第四天开盘价买入
+									start2BuyPrice = data.getKaipanjia();
+								}
+								if (i <= 7) {
+									max5DayPrice = (data.getShoupanjia() > max5DayPrice) ? data.getShoupanjia() : max5DayPrice;
+									max10DayPrice = (data.getShoupanjia() > max10DayPrice) ? data.getShoupanjia() : max10DayPrice;
+									max20DayPrice = (data.getShoupanjia() > max20DayPrice) ? data.getShoupanjia() : max20DayPrice;
+									max30DayPrice = (data.getShoupanjia() > max30DayPrice) ? data.getShoupanjia() : max30DayPrice;
+									max60DayPrice = (data.getShoupanjia() > max60DayPrice) ? data.getShoupanjia() : max60DayPrice;
+								}
+								if (i > 7 && i <= 12) {
+									max10DayPrice = (data.getShoupanjia() > max10DayPrice) ? data.getShoupanjia() : max10DayPrice;
+									max20DayPrice = (data.getShoupanjia() > max20DayPrice) ? data.getShoupanjia() : max20DayPrice;
+									max30DayPrice = (data.getShoupanjia() > max30DayPrice) ? data.getShoupanjia() : max30DayPrice;
+									max60DayPrice = (data.getShoupanjia() > max60DayPrice) ? data.getShoupanjia() : max60DayPrice;
+								}
+								if (i > 12 && i <= 22) {
+									max20DayPrice = (data.getShoupanjia() > max20DayPrice) ? data.getShoupanjia() : max20DayPrice;
+									max30DayPrice = (data.getShoupanjia() > max30DayPrice) ? data.getShoupanjia() : max30DayPrice;
+									max60DayPrice = (data.getShoupanjia() > max60DayPrice) ? data.getShoupanjia() : max60DayPrice;
+								}
+								if (i > 22 && i <= 32) {
+									max30DayPrice = (data.getShoupanjia() > max30DayPrice) ? data.getShoupanjia() : max30DayPrice;
+									max60DayPrice = (data.getShoupanjia() > max60DayPrice) ? data.getShoupanjia() : max60DayPrice;
+								}
+								if (i > 32 && i <= 62) {
+									max60DayPrice = (data.getShoupanjia() > max60DayPrice) ? data.getShoupanjia() : max60DayPrice;
+								}
+							}
+							if (start2BuyPrice > 0) {
+								max5DayIncreaseRate = (max5DayPrice - start2BuyPrice) / start2BuyPrice;
+								max10DayIncreaseRate = (max10DayPrice - start2BuyPrice) / start2BuyPrice;
+								max20DayIncreaseRate = (max20DayPrice - start2BuyPrice) / start2BuyPrice;
+								max30DayIncreaseRate = (max30DayPrice - start2BuyPrice) / start2BuyPrice;
+								max60DayIncreaseRate = (max60DayPrice - start2BuyPrice) / start2BuyPrice;
+							}
+							starDataStat.setMax10DayIncreaseRate(max10DayIncreaseRate);
+							starDataStat.setMax20DayIncreaseRate(max20DayIncreaseRate);
+							starDataStat.setMax30DayIncreaseRate(max30DayIncreaseRate);
+							starDataStat.setMax60DayIncreaseRate(max60DayIncreaseRate);
+							this.starDataStatService.save(starDataStat);
 						}
 					}
 				}

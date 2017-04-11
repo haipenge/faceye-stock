@@ -49,7 +49,77 @@
 		<form:errors path="avgDataStatDate" cssClass="error"/>
 	</div>
 </div>
+<div class="form-group">
+	<label class="col-md-2 control-label" for="max5DayIncreaseRate"> <spring:message
+			code="stock.starDataStat.max5DayIncreaseRate"/>
+	</label>
+	<div class="col-md-6">
+		<form:input path="max5DayIncreaseRate" cssClass="form-control"/>
+		<form:errors path="max5DayIncreaseRate" cssClass="error"/>
+	</div>
+</div>
+<div class="form-group">
+	<label class="col-md-2 control-label" for="max10DayIncreaseRate"> <spring:message
+			code="stock.starDataStat.max10DayIncreaseRate"/>
+	</label>
+	<div class="col-md-6">
+		<form:input path="max10DayIncreaseRate" cssClass="form-control"/>
+		<form:errors path="max10DayIncreaseRate" cssClass="error"/>
+	</div>
+</div>
+<div class="form-group">
+	<label class="col-md-2 control-label" for="max20DayIncreaseRate"> <spring:message
+			code="stock.starDataStat.max20DayIncreaseRate"/>
+	</label>
+	<div class="col-md-6">
+		<form:input path="max20DayIncreaseRate" cssClass="form-control"/>
+		<form:errors path="max20DayIncreaseRate" cssClass="error"/>
+	</div>
+</div>
+<div class="form-group">
+	<label class="col-md-2 control-label" for="max30DayIncreaseRate"> <spring:message
+			code="stock.starDataStat.max30DayIncreaseRate"/>
+	</label>
+	<div class="col-md-6">
+		<form:input path="max30DayIncreaseRate" cssClass="form-control"/>
+		<form:errors path="max30DayIncreaseRate" cssClass="error"/>
+	</div>
+</div>
+<div class="form-group">
+	<label class="col-md-2 control-label" for="max60DayIncreaseRate"> <spring:message
+			code="stock.starDataStat.max60DayIncreaseRate"/>
+	</label>
+	<div class="col-md-6">
+		<form:input path="max60DayIncreaseRate" cssClass="form-control"/>
+		<form:errors path="max60DayIncreaseRate" cssClass="error"/>
+	</div>
+</div>
+<div class="form-group">
+	<label class="col-md-2 control-label" for="starDataDate"> <spring:message
+			code="stock.starDataStat.starDataDate"/>
+	</label>
+	<div class="col-md-6">
+		<form:input path="starDataDate" cssClass="form-control"/>
+		<form:errors path="starDataDate" cssClass="error"/>
+	</div>
+</div>
+<div class="form-group">
+	<label class="col-md-2 control-label" for="starDailyDataId"> <spring:message
+			code="stock.starDataStat.starDailyDataId"/>
+	</label>
+	<div class="col-md-6">
+		<form:input path="starDailyDataId" cssClass="form-control"/>
+		<form:errors path="starDailyDataId" cssClass="error"/>
+	</div>
+</div>
 <!--@generate-entity-jsp-property-update@-->
+
+
+
+
+
+
+
 
 
 

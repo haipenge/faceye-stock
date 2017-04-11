@@ -46,6 +46,48 @@
 		placeholder="<fmt:message key="stock.starDataStat.avgDataStatDate"></fmt:message>"
 		class="form-control input-sm">
 </div>
+
+<div class="col-md-1">
+	<input type="text" name="EQ|max5DayIncreaseRate" value="${searchParams.max5DayIncreaseRate}"
+		placeholder="<fmt:message key="stock.starDataStat.max5DayIncreaseRate"></fmt:message>"
+		class="form-control input-sm">
+</div>
+
+<div class="col-md-1">
+	<input type="text" name="EQ|max10DayIncreaseRate" value="${searchParams.max10DayIncreaseRate}"
+		placeholder="<fmt:message key="stock.starDataStat.max10DayIncreaseRate"></fmt:message>"
+		class="form-control input-sm">
+</div>
+
+<div class="col-md-1">
+	<input type="text" name="EQ|max20DayIncreaseRate" value="${searchParams.max20DayIncreaseRate}"
+		placeholder="<fmt:message key="stock.starDataStat.max20DayIncreaseRate"></fmt:message>"
+		class="form-control input-sm">
+</div>
+
+<div class="col-md-1">
+	<input type="text" name="EQ|max30DayIncreaseRate" value="${searchParams.max30DayIncreaseRate}"
+		placeholder="<fmt:message key="stock.starDataStat.max30DayIncreaseRate"></fmt:message>"
+		class="form-control input-sm">
+</div>
+
+<div class="col-md-1">
+	<input type="text" name="EQ|max60DayIncreaseRate" value="${searchParams.max60DayIncreaseRate}"
+		placeholder="<fmt:message key="stock.starDataStat.max60DayIncreaseRate"></fmt:message>"
+		class="form-control input-sm">
+</div>
+
+<div class="col-md-1">
+	<input type="text" name="EQ|starDataDate" value="${searchParams.starDataDate}"
+		placeholder="<fmt:message key="stock.starDataStat.starDataDate"></fmt:message>"
+		class="form-control input-sm">
+</div>
+
+<div class="col-md-1">
+	<input type="text" name="EQ|starDailyDataId" value="${searchParams.starDailyDataId}"
+		placeholder="<fmt:message key="stock.starDataStat.starDailyDataId"></fmt:message>"
+		class="form-control input-sm">
+</div>
 <!--@generate-entity-jsp-query-detail@-->
 						<div class="col-md-1">
 							<button type="submit" class="btn btn-sm btn-primary">
@@ -65,8 +107,14 @@
 						<tr>
 						   <th><input type="checkbox" name="check-all"></th>
 							<th><fmt:message key='stock.starDataStat.stockId'></fmt:message></th>   
- <th><fmt:message key='stock.starDataStat.avgDataStat'></fmt:message></th>   
- <th><fmt:message key='stock.starDataStat.avgDataStatDate'></fmt:message></th>   
+
+ <th><fmt:message key='stock.starDataStat.max5DayIncreaseRate'></fmt:message></th>   
+ <th><fmt:message key='stock.starDataStat.max10DayIncreaseRate'></fmt:message></th>   
+ <th><fmt:message key='stock.starDataStat.max20DayIncreaseRate'></fmt:message></th>   
+ <th><fmt:message key='stock.starDataStat.max30DayIncreaseRate'></fmt:message></th>   
+ <th><fmt:message key='stock.starDataStat.max60DayIncreaseRate'></fmt:message></th>   
+ <th><fmt:message key='stock.starDataStat.starDataDate'></fmt:message></th>   
+ <th><fmt:message key='stock.starDataStat.starDailyDataId'></fmt:message></th>   
  <!--@generate-entity-jsp-property-desc@-->
 							<th><fmt:message key="global.edit"></fmt:message></th>
 							<th><fmt:message key="global.remove"></fmt:message></th>
@@ -76,9 +124,14 @@
 						<c:forEach items="${page.content}" var="starDataStat">
 							<tr>
 							   <td><input type="checkbox" name="check-single" value="${starDataStat.id}"></td>
-								<td>${starDataStat.stockId}</td>   
- <td>${starDataStat.avgDataStat}</td>   
- <td>${starDataStat.avgDataStatDate}</td>   
+								<td>${starDataStat.stockId}</td>    
+ <td>${starDataStat.max5DayIncreaseRate}</td>   
+ <td>${starDataStat.max10DayIncreaseRate}</td>   
+ <td>${starDataStat.max20DayIncreaseRate}</td>   
+ <td>${starDataStat.max30DayIncreaseRate}</td>   
+ <td>${starDataStat.max60DayIncreaseRate}</td>   
+ <td>${starDataStat.starDataDate}</td>   
+ <td>${starDataStat.starDailyDataId}</td>   
  <!--@generate-entity-jsp-property-value@-->
 								<td><a href="<c:url value="/stock/starDataStat/edit/${starDataStat.id}"/>">
 										<fmt:message key="global.edit"></fmt:message>
