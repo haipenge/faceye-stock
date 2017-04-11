@@ -20,6 +20,7 @@ public class DailyStatJob  extends BaseJob {
 	@Override
 	public void run() {
 		this.dailyStatService.statPriceIn30Days();
+		this.dailyStatService.starDataStat();
 	}
 
 }

@@ -229,6 +229,19 @@
 							</c:forEach>
 						</c:if>
 						<!-- 财务摘要-杜邦分析结束  -->
+						<!-- 其它财务指标分析 -->
+						<c:if test="${not empty dataStats}">
+						<!-- 核心利润率 -->
+							<tr>
+								<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">其它分析</th>
+								<td style="border-bottom: 2px solid gray;">核心利润率</td>
+								<c:forEach items="${dataStats}" var="dataStat">
+									<td class="text-right" style="border-bottom: 2px solid gray;"><fmt:formatNumber value="${dataStat.coreProfitMargin *100 }" type="number" pattern="#,##0.0#"
+											maxFractionDigits="1" groupingUsed="true" />%</td>
+								</c:forEach>
+							</tr>
+						</c:if>
+						<!-- 其它 财务指标结束 -->
 					</table>
 				</div>
 			</div>

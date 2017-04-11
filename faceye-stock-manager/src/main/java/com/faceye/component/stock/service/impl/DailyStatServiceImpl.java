@@ -23,6 +23,7 @@ import com.faceye.component.stock.repository.mongo.customer.DailyStatCustomerRep
 import com.faceye.component.stock.service.DailyDataService;
 import com.faceye.component.stock.service.DailyStatService;
 import com.faceye.component.stock.service.ReportDataService;
+import com.faceye.component.stock.service.StarDataStatService;
 import com.faceye.component.stock.service.StockService;
 import com.faceye.component.stock.util.StockConstants;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
@@ -48,6 +49,8 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 	private StockService stockService = null;
 	@Autowired
 	private ReportDataService reportDataService = null;
+	@Autowired
+	private StarDataStatService starDataStatService = null;
 
 	@Autowired
 	public DailyStatServiceImpl(DailyStatRepository dao) {
@@ -269,6 +272,62 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 			dailyStat.setPe(pe);
 			dailyStat.setDynamicPe(dynamicPe);
 			this.save(dailyStat);
+		}
+	}
+
+	/**
+	 * 分析星标数据并存储
+	 */
+	@Override
+	public void starDataStat() {
+		List<Stock> stocks = this.stockService.getAll();
+		if (CollectionUtils.isNotEmpty(stocks)) {
+			for (Stock stock : stocks) {
+				Map params = new HashMap();
+				params.put("EQ|stockId", stock.getId());
+				params.put("SORT|date", "asc");
+				List<DailyData> dailyDatas = this.dailyDataService.getPage(params, 0, 0).getContent();
+				if (CollectionUtils.isNotEmpty(dailyDatas)) {
+					boolean isStarData = false;
+					DailyData starDailyData = null;
+					int count = 0;
+					int index = 0;
+					int signIndex = 0;
+					for (DailyData dailyData : dailyDatas) {
+						index++;
+						if (dailyData.getAvg5() != null && dailyData.getAvg10() != null && dailyData.getAvg20() != null) {
+							if (!isStarData) {
+								if (dailyData.getAvg5() > dailyData.getAvg10() && dailyData.getAvg10() > dailyData.getAvg20()) {
+									if (starDailyData == null) {
+										starDailyData = dailyData;
+									}
+									if (count == 0) {
+										signIndex = index;
+									}
+									if (index - signIndex == count) {
+										count++;
+									}
+								}
+							} else {
+								if (dailyData.getAvg5() < dailyData.getAvg10() || dailyData.getAvg10() < dailyData.getAvg20() || dailyData.getAvg5() < dailyData.getAvg20()) {
+									isStarData = false;
+									count=0;
+									signIndex=0;
+								}
+							}
+						}
+						// 连续三天正排列，则列为星标数据
+						// 目的，过滤杂音
+						if (count >= 3) {
+							isStarData = true;
+							count = 0;
+							signIndex = 0;
+							starDailyData.setStarDataType(1);
+							this.dailyDataService.save(starDailyData);
+						}
+					}
+				}
+			}
 		}
 	}
 

@@ -385,5 +385,16 @@ public class DailyData implements Serializable {
 		this.yesterdayPrice = yesterdayPrice;
 	}
 	
+	/**
+	 * 星标数据类型
+	 */
+	private Integer starDataType=0;
+	public Integer getStarDataType() {
+		return starDataType;
+	}
+	public void setStarDataType(Integer starDataType) {
+		this.starDataType = starDataType;
+	}
+	
 }/**@generate-entity-source@**/
 	
