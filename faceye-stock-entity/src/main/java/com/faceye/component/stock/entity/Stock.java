@@ -1,6 +1,7 @@
 package com.faceye.component.stock.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Id;
 
@@ -116,6 +117,18 @@ public class Stock implements Serializable {
 
 	public void setDailyStat(DailyStat dailyStat) {
 		this.dailyStat = dailyStat;
+	}
+	/**
+	 * 最后一个星标出现的时间（依据均线）
+	 */
+	private Date lastStarAppearDate=null;
+
+	public Date getLastStarAppearDate() {
+		return lastStarAppearDate;
+	}
+
+	public void setLastStarAppearDate(Date lastStarAppearDate) {
+		this.lastStarAppearDate = lastStarAppearDate;
 	}
 	
 	

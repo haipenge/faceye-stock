@@ -71,6 +71,9 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 		}
 		if (CollectionUtils.isNotEmpty(inIds)) {
 			criteria.and("id").in(inIds);
+			if(sort==null){
+				sort=new Sort(Direction.DESC,"lastStarAppearDate");
+			}
 		}
 
 		Criteria orCriterias = null;

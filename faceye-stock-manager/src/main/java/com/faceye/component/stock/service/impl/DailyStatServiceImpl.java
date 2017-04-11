@@ -284,6 +284,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 		List<Stock> stocks = this.stockService.getAll();
 		if (CollectionUtils.isNotEmpty(stocks)) {
 			for (Stock stock : stocks) {
+				Date lastStarAppearDate = null;
 				Map params = new HashMap();
 				params.put("EQ|stockId", stock.getId());
 				params.put("SORT|date", "asc");
@@ -330,8 +331,14 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 							signIndex = 0;
 							starDailyData.setStarDataType(1);
 							this.dailyDataService.save(starDailyData);
+							lastStarAppearDate = starDailyData.getDate();
 						}
 					}
+				}
+				//保存星标最后生成时间
+				if (lastStarAppearDate != null) {
+					stock.setLastStarAppearDate(lastStarAppearDate);
+					this.stockService.save(stock);
 				}
 			}
 		}
