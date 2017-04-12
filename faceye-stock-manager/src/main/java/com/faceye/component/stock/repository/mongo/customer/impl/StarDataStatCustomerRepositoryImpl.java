@@ -58,8 +58,8 @@ public class StarDataStatCustomerRepositoryImpl implements StarDataStatCustomerR
 			criteria.and("max60DayIncreaseRate").gte(max60DayIncreaseRate);
 		}
 		query.addCriteria(criteria);
-		logger.debug(">>FaceYe count Query is:"+query.toString());
 		count = this.mongoOperations.count(query, StarDataStat.class);
+		logger.debug(">>FaceYe count Query is:" + query.toString() + ",Query Result is:" + count);
 		return count;
 	}
 
