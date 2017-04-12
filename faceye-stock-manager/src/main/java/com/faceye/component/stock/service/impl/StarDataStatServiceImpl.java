@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -19,6 +20,7 @@ import com.faceye.component.stock.entity.StarDataStat;
 import com.faceye.component.stock.repository.mongo.StarDataStatRepository;
 import com.faceye.component.stock.repository.mongo.customer.StarDataStatCustomerRepository;
 import com.faceye.component.stock.service.StarDataStatService;
+import com.faceye.component.stock.service.wrapper.WrapStarDataStat;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.faceye.feature.util.ServiceException;
@@ -79,7 +81,7 @@ public class StarDataStatServiceImpl extends BaseMongoServiceImpl<StarDataStat, 
 	public List<Long> getStarStockIds() {
 		Map params = new HashMap();
 		List<Long> ids = Lists.newArrayList();
-		
+
 		Date now = new Date();
 		Date before15Days = new Date(now.getTime() - 15 * 24 * 60 * 60 * 1000L);
 		params.put("SORT|starDataDate", "desc");
@@ -93,6 +95,43 @@ public class StarDataStatServiceImpl extends BaseMongoServiceImpl<StarDataStat, 
 			}
 		}
 		return ids;
+	}
+
+	@Override
+	public WrapStarDataStat wrapStarDataStat(Map params, int page, int size) {
+		WrapStarDataStat wrapStarDataStat = new WrapStarDataStat();
+		Page<StarDataStat> starDataStats = this.getPage(params, page, size);
+		wrapStarDataStat.setStarDataStats(starDataStats);
+		if (starDataStats != null && starDataStats.getTotalElements() > 0) {
+			Map countSearchParams = new HashMap();
+			long total=starDataStats.getTotalElements();
+			countSearchParams.putAll(params);
+			countSearchParams.put("GTE|max5DayIncreaseRate", 0.03);
+			long max5DayIncreaseCount = this.starDataStatCustomerRepository.getStarDataStatCount(countSearchParams);
+			countSearchParams.remove("GTE|max5DayIncreaseRate");
+			wrapStarDataStat.setMax5DayIncreaseSuccessRate(new Double(max5DayIncreaseCount)/total);
+			// 10
+			countSearchParams.put("GTE|max10DayIncreaseRate", 0.05);
+			long max10DayIncreaseCount = this.starDataStatCustomerRepository.getStarDataStatCount(countSearchParams);
+			countSearchParams.remove("GTE|max10DayIncreaseRate");
+			wrapStarDataStat.setMax10DayIncreaseSuccessRate(new Double(max10DayIncreaseCount)/total);
+			// 20
+			countSearchParams.put("GTE|max20DayIncreaseRate", 0.05);
+			long max20DayIncreaseCount = this.starDataStatCustomerRepository.getStarDataStatCount(countSearchParams);
+			countSearchParams.remove("GTE|max20DayIncreaseRate");
+			wrapStarDataStat.setMax20DayIncreaseSuccessRate(new Double(max20DayIncreaseCount)/total);
+			// 30
+			countSearchParams.put("GTE|max30DayIncreaseRate", 0.05);
+			long max30DayIncreaseCount = this.starDataStatCustomerRepository.getStarDataStatCount(countSearchParams);
+			countSearchParams.remove("GTE|max30DayIncreaseRate");
+			wrapStarDataStat.setMax30DayIncreaseSuccessRate(new Double(max30DayIncreaseCount)/total);
+			// 60
+			countSearchParams.put("GTE|max60DayIncreaseRate", 0.010);
+			long max60DayIncreaseCount = this.starDataStatCustomerRepository.getStarDataStatCount(countSearchParams);
+			countSearchParams.remove("GTE|max60DayIncreaseRate");
+			wrapStarDataStat.setMax60DayIncreaseSuccessRate(new Double(max60DayIncreaseCount)/total);
+		}
+		return null;
 	}
 
 }/** @generate-service-source@ **/

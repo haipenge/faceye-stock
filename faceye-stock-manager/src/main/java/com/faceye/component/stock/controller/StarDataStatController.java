@@ -3,6 +3,7 @@ package com.faceye.component.stock.controller;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,23 +11,19 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.validation.BindingResult;
-import javax.validation.Valid;
 
 import com.faceye.component.stock.entity.StarDataStat;
 import com.faceye.component.stock.service.StarDataStatService;
-
-import com.faceye.feature.util.AjaxResult;
-import com.faceye.feature.util.MathUtil;
-import com.faceye.feature.util.http.HttpUtil;
-import com.faceye.feature.util.regexp.RegexpUtil;
-import com.faceye.feature.util.AjaxResult;
+import com.faceye.component.stock.service.wrapper.WrapStarDataStat;
 import com.faceye.feature.controller.BaseController;
+import com.faceye.feature.util.AjaxResult;
+import com.faceye.feature.util.http.HttpUtil;
 
 /**
  * 模块:stock<br>
@@ -55,9 +52,11 @@ public class StarDataStatController extends BaseController<StarDataStat, Long, S
 	@RequestMapping("/home")
 	public String home(HttpServletRequest request, Model model) {
 		Map searchParams=HttpUtil.getRequestParams(request);
-		Page<StarDataStat> page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
-		model.addAttribute("page", page);
+//		Page<StarDataStat> page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
+//		model.addAttribute("page", page);
 		resetSearchParams(searchParams);
+		WrapStarDataStat wrapStarDataStat=this.service.wrapStarDataStat(searchParams,  getPage(searchParams), getSize(searchParams));
+		model.addAttribute("wrapStarDataStat", wrapStarDataStat);
 		model.addAttribute("searchParams", searchParams);
 		return "stock.starDataStat.manager";
 	}

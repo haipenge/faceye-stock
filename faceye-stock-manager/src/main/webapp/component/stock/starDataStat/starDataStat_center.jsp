@@ -51,7 +51,7 @@
 							<input type="text" name="EQ|max60DayIncreaseRate" value="${searchParams.max60DayIncreaseRate}"
 								placeholder="<fmt:message key="stock.starDataStat.max60DayIncreaseRate"></fmt:message>" class="form-control input-sm">
 						</div>
-						
+
 						<div class="col-md-1">
 							<input type="text" name="EQ|starDataDate" value="${searchParams.starDataDate}" placeholder="<fmt:message key="stock.starDataStat.starDataDate"></fmt:message>"
 								class="form-control input-sm">
@@ -88,7 +88,20 @@
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${page.content}" var="starDataStat">
+						<tr>
+							<td class="text-right" style="border-bottom:1px solid blue;"><fmt:formatNumber value="${wrapStarDataStat.max5DayIncreaseSuccessRate *100}"
+										type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+							<td class="text-right" style="border-bottom:1px solid blue;"><fmt:formatNumber value="${wrapStarDataStat.max5DayIncreaseSuccessRate *100}"
+										type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+							<td class="text-right" style="border-bottom:1px solid blue;"><fmt:formatNumber value="${wrapStarDataStat.max5DayIncreaseSuccessRate *100}"
+										type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+							<td class="text-right" style="border-bottom:1px solid blue;"><fmt:formatNumber value="${wrapStarDataStat.max5DayIncreaseSuccessRate *100}"
+										type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+							<td class="text-right" style="border-bottom:1px solid blue;"><fmt:formatNumber value="${wrapStarDataStat.max5DayIncreaseSuccessRate *100}"
+										type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+							<td></td>
+						</tr>
+						<c:forEach items="${wrapStarDataStat.starDataStats.content}" var="starDataStat">
 							<tr>
 								<td class="text-right ${starDataStat.max5DayIncreaseRate lt 0 ? "decrease-color":"increase-color"}"><fmt:formatNumber value="${starDataStat.max5DayIncreaseRate *100}"
 										type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>

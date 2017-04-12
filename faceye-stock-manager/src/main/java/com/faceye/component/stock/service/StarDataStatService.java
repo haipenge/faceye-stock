@@ -1,8 +1,10 @@
 package com.faceye.component.stock.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.faceye.component.stock.entity.StarDataStat;
+import com.faceye.component.stock.service.wrapper.WrapStarDataStat;
 import com.faceye.feature.service.BaseService;
 
 /**
@@ -22,4 +24,14 @@ public interface StarDataStatService extends BaseService<StarDataStat, Long> {
 	 * @Date:2017年4月11日 下午6:32:54
 	 */
 	public List<Long>getStarStockIds();
+	
+	/**
+	 * 包装星标数据，并加入分析结果
+	 * @param params
+	 * @return
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年4月12日 上午8:16:42
+	 */
+	public WrapStarDataStat wrapStarDataStat(Map params,int page,int size);
 }/** @generate-service-source@ **/
