@@ -5,10 +5,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.faceye.component.stock.entity.StarDataStat;
+import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.service.StarDataStatService;
+import com.faceye.component.stock.service.StockService;
 import com.faceye.component.stock.service.wrapper.WrapStarDataStat;
 import com.faceye.feature.controller.BaseController;
 import com.faceye.feature.util.AjaxResult;
@@ -36,7 +38,8 @@ import com.faceye.feature.util.http.HttpUtil;
 @Scope("prototype")
 @RequestMapping("/stock/starDataStat")
 public class StarDataStatController extends BaseController<StarDataStat, Long, StarDataStatService> {
-
+   @Autowired
+	private StockService stockServie=null;
 	@Autowired
 	public StarDataStatController(StarDataStatService service) {
 		super(service);
@@ -54,6 +57,11 @@ public class StarDataStatController extends BaseController<StarDataStat, Long, S
 		Map searchParams=HttpUtil.getRequestParams(request);
 //		Page<StarDataStat> page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
 //		model.addAttribute("page", page);
+		Long stockId=MapUtils.getLong(searchParams, "EQ|stockId");
+		if(stockId!=null){
+			Stock stock=this.stockServie.get(stockId);
+			model.addAttribute("stock",stock);
+		}
 		WrapStarDataStat wrapStarDataStat=this.service.wrapStarDataStat(searchParams,  getPage(searchParams), getSize(searchParams));
 		model.addAttribute("wrapStarDataStat", wrapStarDataStat);
 		resetSearchParams(searchParams);

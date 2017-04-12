@@ -5,7 +5,7 @@
 <script type="text/javascript" src="<c:url value="/js/component/stock/starDataStat/starDataStat.js"/>"></script>
 <div class="page-head">
 	<h2>
-		<fmt:message key="stock.starDataStat.manager"></fmt:message>
+		${stock.name}<small>${stock.code}</small>星标分析
 	</h2>
 </div>
 <div class="cl-mcont">
