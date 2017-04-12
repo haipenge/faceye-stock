@@ -131,7 +131,7 @@ public class StarDataStatServiceImpl extends BaseMongoServiceImpl<StarDataStat, 
 			countSearchParams.remove("GTE|max60DayIncreaseRate");
 			wrapStarDataStat.setMax60DayIncreaseSuccessRate(new Double(max60DayIncreaseCount)/total);
 		}
-		return null;
+		return wrapStarDataStat;
 	}
 
 }/** @generate-service-source@ **/

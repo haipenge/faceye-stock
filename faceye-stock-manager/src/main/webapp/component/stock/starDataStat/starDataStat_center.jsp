@@ -99,7 +99,7 @@
 										type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
 							<td class="text-right" style="border-bottom:1px solid blue;"><fmt:formatNumber value="${wrapStarDataStat.max5DayIncreaseSuccessRate *100}"
 										type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
-							<td></td>
+							<td class="text-right" style="border-bottom:1px solid blue;"></td>
 						</tr>
 						<c:forEach items="${wrapStarDataStat.starDataStats.content}" var="starDataStat">
 							<tr>
