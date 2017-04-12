@@ -120,7 +120,7 @@
 					</tbody>
 				</table>
 			</div>
-			<f:page page="${page}" url="/stock/starDataStat/home" params="<%=request.getParameterMap()%>" />
+			<f:page page="${wrapStarDataStat.starDataStats}" url="/stock/starDataStat/home" params="<%=request.getParameterMap()%>" />
 		</div>
 	</div>
 </div>

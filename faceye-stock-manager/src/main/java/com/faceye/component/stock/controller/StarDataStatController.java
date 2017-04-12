@@ -54,10 +54,11 @@ public class StarDataStatController extends BaseController<StarDataStat, Long, S
 		Map searchParams=HttpUtil.getRequestParams(request);
 //		Page<StarDataStat> page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
 //		model.addAttribute("page", page);
-		resetSearchParams(searchParams);
 		WrapStarDataStat wrapStarDataStat=this.service.wrapStarDataStat(searchParams,  getPage(searchParams), getSize(searchParams));
 		model.addAttribute("wrapStarDataStat", wrapStarDataStat);
+		resetSearchParams(searchParams);
 		model.addAttribute("searchParams", searchParams);
+		
 		return "stock.starDataStat.manager";
 	}
 
