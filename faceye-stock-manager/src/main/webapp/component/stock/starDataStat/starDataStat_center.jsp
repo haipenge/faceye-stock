@@ -91,13 +91,13 @@
 						<tr>
 							<td class="text-right" style="border-bottom:1px solid blue;"><fmt:formatNumber value="${wrapStarDataStat.max5DayIncreaseSuccessRate *100}"
 										type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
-							<td class="text-right" style="border-bottom:1px solid blue;"><fmt:formatNumber value="${wrapStarDataStat.max5DayIncreaseSuccessRate *100}"
+							<td class="text-right" style="border-bottom:1px solid blue;"><fmt:formatNumber value="${wrapStarDataStat.max10DayIncreaseSuccessRate *100}"
 										type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
-							<td class="text-right" style="border-bottom:1px solid blue;"><fmt:formatNumber value="${wrapStarDataStat.max5DayIncreaseSuccessRate *100}"
+							<td class="text-right" style="border-bottom:1px solid blue;"><fmt:formatNumber value="${wrapStarDataStat.max20DayIncreaseSuccessRate *100}"
 										type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
-							<td class="text-right" style="border-bottom:1px solid blue;"><fmt:formatNumber value="${wrapStarDataStat.max5DayIncreaseSuccessRate *100}"
+							<td class="text-right" style="border-bottom:1px solid blue;"><fmt:formatNumber value="${wrapStarDataStat.max30DayIncreaseSuccessRate *100}"
 										type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
-							<td class="text-right" style="border-bottom:1px solid blue;"><fmt:formatNumber value="${wrapStarDataStat.max5DayIncreaseSuccessRate *100}"
+							<td class="text-right" style="border-bottom:1px solid blue;"><fmt:formatNumber value="${wrapStarDataStat.max60DayIncreaseSuccessRate *100}"
 										type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
 							<td class="text-right" style="border-bottom:1px solid blue;"></td>
 						</tr>
