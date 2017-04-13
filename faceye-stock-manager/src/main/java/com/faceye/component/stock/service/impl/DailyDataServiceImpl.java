@@ -87,8 +87,9 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 		String jidus[] = new String[] { "1", "2", "3", "4" };
 		this.fetchHistoryData(code, "" + year, jidu);
 		for (String jd : jidus) {
-			this.fetchHistoryData(code, "" + (year - 1), jd);
+//			this.fetchHistoryData(code, "" + (year - 1), jd);
 		}
+		
 
 	}
 

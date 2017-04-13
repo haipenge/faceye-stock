@@ -2,13 +2,18 @@
 <%@ page language="java" import="java.util.*,com.faceye.feature.util.*,com.faceye.feature.util.host.*" pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/component/stock/dailyData/dailyData.css"/>" />
 <script type="text/javascript" src="<c:url value="/js/component/stock/dailyData/dailyData.js"/>"></script>
-
 <div class="page-head">
-	<h2>
-		<fmt:message key="stock.dailyData.manager"></fmt:message>
-		<a class="btn btn-primary" href="<c:url value="/stock/dailyData/input"/>"> <fmt:message key="stock.dailyData.add"></fmt:message>
-		</a>
-	</h2>
+	<div class="row">
+		<div class="col-sm-8">
+			<h2>
+				${stock.name}<small>&nbsp;&nbsp;(${stock.code })</small>&nbsp;&nbsp;每日数据
+			</h2>
+		</div>
+		<div class="col-sm-4">
+			<a class="btn btn-primary pull-right" href="#" id="crawl-history">补全数据 </a>
+		</div>
+	</div>
+
 </div>
 <div class="cl-mcont">
 	<div class="block-flat">
@@ -73,7 +78,7 @@
 							<td><fmt:formatNumber value="${dailyData.avg120}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 							<td><fmt:formatNumber value="${dailyData.avg250}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 							<td><f:boolean value="${dailyData.starDataType eq 1 }" /></td>
-							<td><fmt:formatNumber value="${dailyData.ema12}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /> </td>
+							<td><fmt:formatNumber value="${dailyData.ema12}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 							<td><fmt:formatNumber value="${dailyData.ema26}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 							<td><fmt:formatNumber value="${dailyData.dif}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 							<td><fmt:formatNumber value="${dailyData.dea}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
