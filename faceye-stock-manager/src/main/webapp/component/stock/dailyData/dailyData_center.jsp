@@ -6,7 +6,7 @@
 	<div class="row">
 		<div class="col-sm-8">
 			<h2>
-				${stock.name}<small>&nbsp;&nbsp;(${stock.code })</small>&nbsp;&nbsp;每日数据
+				${stock.name}<small>&nbsp;&nbsp;(${stock.code })</small>&nbsp;&nbsp;每日数据<input type="hidden" name="stockId" value="${stock.id }">
 			</h2>
 		</div>
 		<div class="col-sm-4">
