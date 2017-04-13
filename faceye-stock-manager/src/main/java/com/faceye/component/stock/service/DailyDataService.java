@@ -45,7 +45,7 @@ public interface DailyDataService extends BaseService<DailyData,Long>{
 	 * haipenge@gmail.com
 	 * 2015年2月17日
 	 */
-	public void initDailyDataAvg();
+	public void computeDailyDataLines();
 	
 	/**
 	 * 从新浪数据接口爬取每日数据

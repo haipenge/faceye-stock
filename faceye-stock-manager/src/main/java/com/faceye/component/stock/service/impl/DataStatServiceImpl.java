@@ -379,6 +379,8 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 					this.statROE(stock, dataStat);
 					// 毛利率
 					this.statGrossProfitMargin(stock, reportData, dataStat);
+					//计算核心利润率
+					this.statCoreProfitMargin(stock, reportData, dataStat);
 					this.save(dataStat);
 				}
 			}

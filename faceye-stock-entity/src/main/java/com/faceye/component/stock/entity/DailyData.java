@@ -396,5 +396,95 @@ public class DailyData implements Serializable {
 		this.starDataType = starDataType;
 	}
 	
+
+	
+   /**
+    * 说明:EMA12<br>
+    * 属性名: ema12<br>
+    * 类型: Double<br>
+    * 数据库字段:ema_12<br>
+    * @author haipenge<br>
+    */
+    
+	private  Double ema12=null;
+	public Double getEma12() {
+		return ema12;
+	}
+	public void setEma12(Double ema12) {
+		this.ema12 = ema12;
+	}
+	
+
+	
+   /**
+    * 说明:EMA26<br>
+    * 属性名: ema26<br>
+    * 类型: Double<br>
+    * 数据库字段:ema_26<br>
+    * @author haipenge<br>
+    */
+    
+	private  Double ema26=null;
+	public Double getEma26() {
+		return ema26;
+	}
+	public void setEma26(Double ema26) {
+		this.ema26 = ema26;
+	}
+	
+
+	
+   /**
+    * 说明:差离值<br>
+    * 属性名: dif<br>
+    * 类型: Double<br>
+    * 数据库字段:dif<br>
+    * @author haipenge<br>
+    */
+    
+	private  Double dif;
+	public Double getDif() {
+		return dif;
+	}
+	public void setDif(Double dif) {
+		this.dif = dif;
+	}
+	
+
+	
+   /**
+    * 说明:DEA<br>
+    * 属性名: dea<br>
+    * 类型: Double<br>
+    * 数据库字段:dea<br>
+    * @author haipenge<br>
+    */
+    
+	private  Double dea;
+	public Double getDea() {
+		return dea;
+	}
+	public void setDea(Double dea) {
+		this.dea = dea;
+	}
+	
+
+	
+   /**
+    * 说明:MACD<br>
+    * 属性名: macd<br>
+    * 类型: Double<br>
+    * 数据库字段:macd<br>
+    * @author haipenge<br>
+    */
+    
+	private  Double macd;
+	public Double getMacd() {
+		return macd;
+	}
+	public void setMacd(Double macd) {
+		this.macd = macd;
+	}
+	
 }/**@generate-entity-source@**/
 	

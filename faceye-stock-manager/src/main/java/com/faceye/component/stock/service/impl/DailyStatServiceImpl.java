@@ -335,7 +335,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 						}
 					}
 				}
-				//保存星标最后生成时间
+				// 保存星标最后生成时间
 				if (lastStarAppearDate != null) {
 					stock.setLastStarAppearDate(lastStarAppearDate);
 					this.stockService.save(stock);
@@ -344,6 +344,9 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 		}
 	}
 
+	/**
+	 * 分析星标数据
+	 */
 	@Override
 	public void statStarData() {
 		List<Stock> stocks = this.stockService.getAll();

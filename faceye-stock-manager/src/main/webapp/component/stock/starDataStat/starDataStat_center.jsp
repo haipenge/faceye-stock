@@ -23,7 +23,6 @@
 			<form action="<c:url value="/stock/starDataStat/home"/>" method="post" role="form" class="form-horizontal">
 				<fieldset>
 					<div class="form-group">
-
 						<div class="col-md-1">
 							<input type="text" name="EQ|stockId" value="${searchParams.stockId}" placeholder="<fmt:message key="stock.starDataStat.stockId"></fmt:message>" class="form-control input-sm">
 						</div>

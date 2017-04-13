@@ -46,7 +46,12 @@
 							<th><fmt:message key='stock.dailyData.avg120'></fmt:message></th>
 							<th><fmt:message key='stock.dailyData.avg250'></fmt:message></th>
 							<th>是否星标</th>
-							<!--@generate-entity-jsp-property-desc@-->
+							<th><fmt:message key='stock.dailyData.ema12'></fmt:message></th>   
+ <th><fmt:message key='stock.dailyData.ema26'></fmt:message></th>   
+ <th><fmt:message key='stock.dailyData.dif'></fmt:message></th>   
+ <th><fmt:message key='stock.dailyData.dea'></fmt:message></th>   
+ <th><fmt:message key='stock.dailyData.macd'></fmt:message></th>   
+ <!--@generate-entity-jsp-property-desc@-->
 						</tr>
 					</thead>
 					<c:forEach items="${page.content}" var="dailyData">
@@ -68,7 +73,12 @@
 							<td><fmt:formatNumber value="${dailyData.avg120}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 							<td><fmt:formatNumber value="${dailyData.avg250}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 							<td><f:boolean value="${dailyData.starDataType eq 1 }" /></td>
-							<!--@generate-entity-jsp-property-value@-->
+							<td>${dailyData.ema12}</td>   
+ <td>${dailyData.ema26}</td>   
+ <td>${dailyData.dif}</td>   
+ <td>${dailyData.dea}</td>   
+ <td>${dailyData.macd}</td>   
+ <!--@generate-entity-jsp-property-value@-->
 						<tr>
 					</c:forEach>
 				</table>

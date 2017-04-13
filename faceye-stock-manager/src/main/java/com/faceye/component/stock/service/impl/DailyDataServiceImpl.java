@@ -3,6 +3,7 @@ package com.faceye.component.stock.service.impl;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +17,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.faceye.component.stock.entity.DailyData;
@@ -31,7 +31,6 @@ import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.MultiQueueService;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.faceye.feature.service.job.thread.BaseThread;
-import com.faceye.feature.service.job.thread.ThreadPoolController;
 import com.faceye.feature.util.DateUtil;
 import com.faceye.feature.util.MathUtil;
 import com.faceye.feature.util.ServiceException;
@@ -200,30 +199,32 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 	}
 
 	@Override
-	public void initDailyDataAvg() {
+	public void computeDailyDataLines() {
 		List<Stock> stocks = this.stockRepository.findAll();
 		if (CollectionUtils.isNotEmpty(stocks)) {
-			this.stockQueueService.addAll(stocks);
+			// this.stockQueueService.addAll(stocks);
 			for (int i = 0; i < stocks.size(); i++) {
 				Stock stock = stocks.get(i);
 				logger.debug(">>FaceYe --> stock index is:" + stock.getName() + "(" + stock.getCode() + "),index is:" + i + ",total size is:" + stocks.size());
-				 this.initDailyDataAvg(stock);
+				// 初始化均线
+				this.initDailyDataAvg(stock);
+				// 初始化EMA12/26
+				this.initEMA(stock);
 			}
-//			List<Runnable> runnables = new ArrayList<Runnable>();
-//			for (int i = 0; i < 5; i++) {
-//				Runnable runnable = new ComputeThread();
-//				
-//				 runnables.add(runnable);
-//			}
-//			ThreadPoolController.getINSTANCE().execute("Compute-Thread", runnables, 5);
-//			while (!ThreadPoolController.getINSTANCE().isShutdonw("Compute-Thread")) {
-//				try {
-//					logger.debug(">>FaceYe sleep 1 minute.");
-//					Thread.sleep(60000L);
-//				} catch (InterruptedException e) {
-//					logger.error(">>FaceYe throws Exception: --->" + e.toString());
-//				}
-//			}
+			// List<Runnable> runnables = new ArrayList<Runnable>();
+			// for (int i = 0; i < 5; i++) {
+			// Runnable runnable = new ComputeThread();
+			// runnables.add(runnable);
+			// }
+			// ThreadPoolController.getINSTANCE().execute("Compute-Thread", runnables, 5);
+			// while (!ThreadPoolController.getINSTANCE().isShutdonw("Compute-Thread")) {
+			// try {
+			// logger.debug(">>FaceYe sleep 1 minute.");
+			// Thread.sleep(60000L);
+			// } catch (InterruptedException e) {
+			// logger.error(">>FaceYe throws Exception: --->" + e.toString());
+			// }
+			// }
 			logger.debug(">>FaceYe --> compute finish.");
 		}
 	}
@@ -301,6 +302,57 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 		}
 		if (CollectionUtils.isNotEmpty(willSaveDailyDatas)) {
 			save(willSaveDailyDatas);
+		}
+	}
+
+	/**
+	 * 计算每天的EMA,(EMA12,EMA26) EMAtoday=α * ( Pricetoday - EMAyesterday ) + EMAyesterday;
+	 * 
+	 * @param stock
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年4月12日 下午2:18:36
+	 */
+	private void initEMA(Stock stock) {
+		// 平滑系数
+		Double e12 = 2D / 13D;
+		Double e26 = 2D / 27D;
+		// 1.EMA1=第一天的价格（当前计算采用）
+		// 2.EMA1=开始4-5天价格的平均数
+		Double ema1 = null;
+		Map searchParams = new HashMap();
+		searchParams.put("EQ|stockId", stock.getId());
+		searchParams.put("SORT|date", "asc");
+		List<DailyData> dailyDatas = this.getPage(searchParams, 1, 0).getContent();
+		if (CollectionUtils.isNotEmpty(dailyDatas)) {
+			for (int i = 0; i < dailyDatas.size(); i++) {
+				DailyData dailyData = dailyDatas.get(i);
+				if (i == 0) {
+					ema1 = dailyData.getShoupanjia();
+					dailyData.setEma12(ema1);
+					dailyData.setEma26(ema1);
+					dailyData.setDif(0D);
+					dailyData.setDea(0D);
+					dailyData.setMacd(0D);
+					this.save(dailyData);
+				} else {
+					Double ema12Yesterday = dailyDatas.get(i - 1).getEma12();
+					Double ema26Yesterday = dailyDatas.get(i - 1).getEma26();
+					Double ema12Today = e12 * (dailyData.getShoupanjia() - ema12Yesterday) + ema12Yesterday;
+					Double ema26Today = e26 * (dailyData.getShoupanjia() - ema26Yesterday) + ema26Yesterday;
+					// 差离值 DIF = EMA（12） - EMA（26）
+					Double dif = ema12Today - ema26Today;
+					dailyData.setEma12(ema12Today);
+					dailyData.setEma26(ema26Today);
+					dailyData.setDif(dif);
+					// DEA = （前一日DEA X 8/10 + 今日DIF X 2/10）
+					Double deaYesterDay = dailyDatas.get(i - 1).getDea();
+					Double dea = 8 * deaYesterDay / 10 + 2 * dif / 10;
+					dailyData.setDea(dea);
+					dailyData.setMacd((dif - dea) * 2);
+					this.save(dailyData);
+				}
+			}
 		}
 	}
 

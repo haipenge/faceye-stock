@@ -157,7 +157,57 @@
 		<form:errors path="yesterdayPrice" cssClass="error"/>
 	</div>
 </div>
+<div class="form-group">
+	<label class="col-md-2 control-label" for="ema12"> <spring:message
+			code="stock.dailyData.ema12"/>
+	</label>
+	<div class="col-md-6">
+		<form:input path="ema12" cssClass="form-control"/>
+		<form:errors path="ema12" cssClass="error"/>
+	</div>
+</div>
+<div class="form-group">
+	<label class="col-md-2 control-label" for="ema26"> <spring:message
+			code="stock.dailyData.ema26"/>
+	</label>
+	<div class="col-md-6">
+		<form:input path="ema26" cssClass="form-control"/>
+		<form:errors path="ema26" cssClass="error"/>
+	</div>
+</div>
+<div class="form-group">
+	<label class="col-md-2 control-label" for="dif"> <spring:message
+			code="stock.dailyData.dif"/>
+	</label>
+	<div class="col-md-6">
+		<form:input path="dif" cssClass="form-control"/>
+		<form:errors path="dif" cssClass="error"/>
+	</div>
+</div>
+<div class="form-group">
+	<label class="col-md-2 control-label" for="dea"> <spring:message
+			code="stock.dailyData.dea"/>
+	</label>
+	<div class="col-md-6">
+		<form:input path="dea" cssClass="form-control"/>
+		<form:errors path="dea" cssClass="error"/>
+	</div>
+</div>
+<div class="form-group">
+	<label class="col-md-2 control-label" for="macd"> <spring:message
+			code="stock.dailyData.macd"/>
+	</label>
+	<div class="col-md-6">
+		<form:input path="macd" cssClass="form-control"/>
+		<form:errors path="macd" cssClass="error"/>
+	</div>
+</div>
 <!--@generate-entity-jsp-property-update@-->
+
+
+
+
+
 
 				<div class="form-group">
 					<div class="col-md-offset-2 col-md-10">

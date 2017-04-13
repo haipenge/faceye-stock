@@ -173,7 +173,32 @@
 	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.dailyData.yesterdayPrice"></fmt:message></td>
 	<td>${dailyData.yesterdayPrice}</td>
 </tr>
+<tr>
+	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.dailyData.ema12"></fmt:message></td>
+	<td>${dailyData.ema12}</td>
+</tr>
+<tr>
+	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.dailyData.ema26"></fmt:message></td>
+	<td>${dailyData.ema26}</td>
+</tr>
+<tr>
+	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.dailyData.dif"></fmt:message></td>
+	<td>${dailyData.dif}</td>
+</tr>
+<tr>
+	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.dailyData.dea"></fmt:message></td>
+	<td>${dailyData.dea}</td>
+</tr>
+<tr>
+	<td class＝"bg-title-col width-p-20"><fmt:message key="stock.dailyData.macd"></fmt:message></td>
+	<td>${dailyData.macd}</td>
+</tr>
 <!--@generate-entity-jsp-property-detail@-->
+
+
+
+
+
 
 				
 				

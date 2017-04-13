@@ -22,7 +22,7 @@ public class ComputeStockDailyDataAvgJob extends BaseJob {
 	
 	@Override
 	public void run() {
-		this.dailyDataService.initDailyDataAvg();
+		this.dailyDataService.computeDailyDataLines();;
 	}
 
 }
