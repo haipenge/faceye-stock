@@ -18,4 +18,4 @@ var DailyData = {
 		});
 	}
 };
-$(document).ready(function(){DailyDat.init();});
+$(document).ready(function(){DailyData.init();});
