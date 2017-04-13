@@ -278,6 +278,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 
 	/**
 	 * 分析星标数据并存储
+	 * 分析avg数据，是否为多头排列
 	 */
 	@Override
 	public void statDailyData2FindStar() {
@@ -343,6 +344,33 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 			}
 		}
 	}
+	
+	/**
+	 * 分析每日数据，寻找macd+avg星标数据，标记type=2<br>
+	 * 判断依据：<br>
+	 * 1.最近10个交易日，是多头市场（多头占比超过50%）<br>
+	 * 2.最近10个交易日，最低价触及avg20附近，差距在(+-)5%以内<br>
+	 * @param stock
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年4月13日 下午12:01:01
+	 */
+	public void statDailyData2FindMacdAndAvgStar(){
+		List<Stock> stocks=this.stockService.getAll();
+		if(CollectionUtils.isNotEmpty(stocks)){
+			for(Stock stock:stocks){
+				Map dailyDataParams=new HashMap();
+				dailyDataParams.put("EQ|stockId", stock.getId());
+				dailyDataParams.put("SORT|date", "asc");
+				List<DailyData> dailyDatas=this.dailyDataService.getPage(dailyDataParams, 1, 0).getContent();
+			    int count=0;
+				for(DailyData dailyData:dailyDatas){
+				    
+				}
+			}
+		}
+	}
+	
 
 	/**
 	 * 分析星标数据
