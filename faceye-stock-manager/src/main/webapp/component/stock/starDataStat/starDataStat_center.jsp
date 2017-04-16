@@ -18,7 +18,7 @@
 		</a>
 	</div>
 	 -->
-	<div class="block-flat" style="border:1px solid blue;">
+	<div class="block-flat">
 		<!-- 
 		<div class="content">
 			<form action="<c:url value="/stock/starDataStat/home"/>" method="post" role="form" class="form-horizontal">
@@ -72,7 +72,7 @@
 			</form>
 		</div>
 		 -->
-		<div class="row" style="margin-top:0px;border:1px solid red;">
+		<div class="row" style="margin-top:0px;">
 			<div class="col-md-6">
 				<div class="page-head">
 					<h4>均线表现分析</h4>
