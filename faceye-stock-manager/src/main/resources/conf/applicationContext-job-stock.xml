@@ -94,7 +94,7 @@
 			<ref bean="crawlStockMonthDataJobDetail" />
 		</property>
 		<property name="cronExpression">
-			<value>0 12 20 * * ?</value>
+			<value>0 50 20 * * ?</value>
 		</property>
 	</bean>
 	<bean id="crawlStockMonthDataJobDetail"

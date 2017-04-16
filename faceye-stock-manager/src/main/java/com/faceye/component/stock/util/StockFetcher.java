@@ -60,6 +60,7 @@ public class StockFetcher {
 		while (matcher.find()) {
 			String code = matcher.group(1);
 			String name = matcher.group(2);
+			logger.debug(">>FaceYe -- fetch from hexun is:"+name+"("+code+")");
 			Map map = new HashMap();
 			map.put(code, name);
 			codeAndNames.add(map);
