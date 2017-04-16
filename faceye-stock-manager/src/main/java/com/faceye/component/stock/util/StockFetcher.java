@@ -57,10 +57,13 @@ public class StockFetcher {
 		regexp = "<a target=\"_blank\" href=\"http://quote.eastmoney.com/([0-9a-z]{8}).html\">([\\(\\)a-z0-9A-Z\\*\u4E00-\u9FFF]+)</a>";
 		Pattern pattern = Pattern.compile(regexp, Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
 		Matcher matcher = pattern.matcher(content);
+		int count=0;
 		while (matcher.find()) {
 			String code = matcher.group(1);
 			String name = matcher.group(2);
-			logger.debug(">>FaceYe -- fetch from hexun is:"+name+"--("+code+")");
+			if(StringUtils.startsWith(code, "sz0")||StringUtils.startsWith(code, "sz3")||StringUtils.startsWith(code, "sh6")){
+			logger.debug(">>FaceYe -- fetch from hexun is:"+name+"--("+code+")"+(++count));
+			}
 			Map map = new HashMap();
 			map.put(code, name);
 			codeAndNames.add(map);
@@ -289,6 +292,7 @@ public class StockFetcher {
 		String content=fetcher.getContent("http://quote.eastmoney.com/stocklist.html");
 		System.out.print(content);
 		List<Map<String, String>> codesAndName = fetcher.distillStockNameAndCode(content);
+		
 		// System.out.println(content);
 	}
 }

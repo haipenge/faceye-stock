@@ -148,6 +148,7 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 					category.setCode("default");
 					this.categoryService.save(category);
 				}
+				int count=0;
 				if (CollectionUtils.isNotEmpty(codeNames)) {
 					for (Map<String, String> map : codeNames) {
 						String market = "";
@@ -162,6 +163,7 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 						logger.debug(">>FaceYe check code is:"+code);
 						if (StringUtils.isNotEmpty(code) && (StringUtils.startsWith(code, "6") || StringUtils.startsWith(code, "0") || StringUtils.startsWith(code, "3"))) {
 							Stock stock = this.getStockByCode(code);
+							count++;
 							if (stock == null) {
 //								if (StringUtils.startsWith(code, "0") || StringUtils.startsWith(code, "3")) {
 //									market = "SZ";
@@ -177,6 +179,8 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 						}
 					}
 				}
+				logger.debug(">>FaceYe --> stock count:"+count);
+				logger.debug(">>FaceYe stock size is:"+this.getPage(null, 1, 1).getTotalElements());
 			} catch (Exception e) {
 				logger.error(">>FaceYe Throws Exception:", e);
 			}
