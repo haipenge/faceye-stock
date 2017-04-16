@@ -19,6 +19,7 @@ import com.faceye.feature.service.job.impl.BaseJob;
 public class CrawlStockMonthDataJob extends BaseJob {
 	@Autowired
     private DailyDataService dailyDataService=null;
+	@Autowired
 	private StockService stockService=null;
 	@Override
 	public void run() {
