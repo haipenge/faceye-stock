@@ -40,43 +40,42 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 
 	@Override
 	public void initStocks() {
-//		try {
-			// String path="/work/Work/FeatureWorkSpace/feature/faceye-stock/faceye-stock-manager/src/main/resources/stock/sz-sh-a-stocks.txt";
-			// BufferedReader in = new BufferedReader(new FileReader(path));
-			// List<String> lines = IOUtils.readLines(in);
-			// if (CollectionUtils.isNotEmpty(lines)) {
-			// for (String line : lines) {
-			// this.initOneLinn(line, "");
-			// }
-			// }
-//			String path = "/work/Work/FeatureWorkSpace/feature/faceye-stock/faceye-stock-manager/src/main/resources/stock/sz-a-stocks.txt";
-//			BufferedReader in = new BufferedReader(new FileReader(path));
-//			List<String> lines = IOUtils.readLines(in);
-//			if (CollectionUtils.isNotEmpty(lines)) {
-//				for (String line : lines) {
-//					this.initOneLinn(line, "sz");
-//				}
-//			}
-//			path = "/work/Work/FeatureWorkSpace/feature/faceye-stock/faceye-stock-manager/src/main/resources/stock/sh-a-stocks.txt";
-//			in = new BufferedReader(new FileReader(path));
-//			lines = IOUtils.readLines(in);
-//			if (CollectionUtils.isNotEmpty(lines)) {
-//				for (String line : lines) {
-//					this.initOneLinn(line, "sh");
-//				}
-//			}
+		// try {
+		// String path="/work/Work/FeatureWorkSpace/feature/faceye-stock/faceye-stock-manager/src/main/resources/stock/sz-sh-a-stocks.txt";
+		// BufferedReader in = new BufferedReader(new FileReader(path));
+		// List<String> lines = IOUtils.readLines(in);
+		// if (CollectionUtils.isNotEmpty(lines)) {
+		// for (String line : lines) {
+		// this.initOneLinn(line, "");
+		// }
+		// }
+		// String path = "/work/Work/FeatureWorkSpace/feature/faceye-stock/faceye-stock-manager/src/main/resources/stock/sz-a-stocks.txt";
+		// BufferedReader in = new BufferedReader(new FileReader(path));
+		// List<String> lines = IOUtils.readLines(in);
+		// if (CollectionUtils.isNotEmpty(lines)) {
+		// for (String line : lines) {
+		// this.initOneLinn(line, "sz");
+		// }
+		// }
+		// path = "/work/Work/FeatureWorkSpace/feature/faceye-stock/faceye-stock-manager/src/main/resources/stock/sh-a-stocks.txt";
+		// in = new BufferedReader(new FileReader(path));
+		// lines = IOUtils.readLines(in);
+		// if (CollectionUtils.isNotEmpty(lines)) {
+		// for (String line : lines) {
+		// this.initOneLinn(line, "sh");
+		// }
+		// }
 
-//		} catch (FileNotFoundException e) {
-//			logger.error(">>FaceYe throws Exception: --->" + e.toString());
-//		} catch (IOException e) {
-//			logger.error(">>FaceYe throws Exception: --->" + e.toString());
-//		}
+		// } catch (FileNotFoundException e) {
+		// logger.error(">>FaceYe throws Exception: --->" + e.toString());
+		// } catch (IOException e) {
+		// logger.error(">>FaceYe throws Exception: --->" + e.toString());
+		// }
 		this.checkStockFromHexun();
 	}
 
 	private void initOneLinn(String line, String market) {
 		if (StringUtils.isNotEmpty(line)) {
-
 			String[] stockInfo = line.split("	");
 			if (null != stockInfo && stockInfo.length == 4) {
 				String code = stockInfo[1];
@@ -144,15 +143,21 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 				}
 				if (CollectionUtils.isNotEmpty(codeNames)) {
 					for (Map<String, String> map : codeNames) {
+						String market = "";
 						String code = map.keySet().iterator().next();
+						market = StringUtils.substring(code, 0, 2);
+						market=StringUtils.upperCase(market);
+						code = StringUtils.substring(code, 2);
 						String name = map.values().iterator().next();
+						name = StringUtils.replace(name, "(", "");
+						name = StringUtils.replace(name, ")", "");
+						name = StringUtils.replace(name, code, "");
 						if (StringUtils.isNotEmpty(code) && (StringUtils.startsWith(code, "6") || StringUtils.startsWith(code, "0") || StringUtils.startsWith(code, "3"))) {
 							Stock stock = this.getStockByCode(code);
 							if (stock == null) {
-								String market="SH";
-								if(StringUtils.startsWith(code, "0") || StringUtils.startsWith(code, "3")){
-									market="SZ";
-								}
+//								if (StringUtils.startsWith(code, "0") || StringUtils.startsWith(code, "3")) {
+//									market = "SZ";
+//								}
 								stock = new Stock();
 								stock.setName(name);
 								stock.setCategory(category);

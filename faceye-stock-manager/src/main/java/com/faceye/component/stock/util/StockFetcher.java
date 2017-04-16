@@ -60,7 +60,7 @@ public class StockFetcher {
 		while (matcher.find()) {
 			String code = matcher.group(1);
 			String name = matcher.group(2);
-			logger.debug(">>FaceYe -- fetch from hexun is:"+name+"("+code+")");
+			logger.debug(">>FaceYe -- fetch from hexun is:"+name+"--("+code+")");
 			Map map = new HashMap();
 			map.put(code, name);
 			codeAndNames.add(map);
@@ -281,11 +281,13 @@ public class StockFetcher {
 		StockFetcher fetcher = new StockFetcher();
 		// System.out.println(fetcher.fetchSinaStockData("sh603766"));
 
-		List data = fetcher.getStockDailyData("sz500002", "", "");
-		Reporter report = new PrintReporter();
-		report.reporter(data);
+//		List data = fetcher.getStockDailyData("sz500002", "", "");
+//		Reporter report = new PrintReporter();
+//		report.reporter(data);
 
-		String content = fetcher.getContent("http://vip.stock.finance.sina.com.cn/q/go.php/vIR_RatingNewest/index.phtml?num=60&p=2");
+//		String content = fetcher.getContent("http://vip.stock.finance.sina.com.cn/q/go.php/vIR_RatingNewest/index.phtml?num=60&p=2");
+		String content=fetcher.getContent("http://quote.eastmoney.com/stocklist.html");
+		System.out.print(content);
 		List<Map<String, String>> codesAndName = fetcher.distillStockNameAndCode(content);
 		// System.out.println(content);
 	}
