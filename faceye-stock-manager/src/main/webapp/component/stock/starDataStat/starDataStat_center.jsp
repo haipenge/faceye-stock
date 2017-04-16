@@ -72,9 +72,9 @@
 			</form>
 		</div>
 		 -->
-		<div class="row" style="border:1px solid red;">
+		<div class="row" style="margin-top:0px;border:1px solid red;">
 			<div class="col-md-6">
-				<div class="page-header">
+				<div class="page-head">
 					<h4>均线表现分析</h4>
 				</div>
 				<div class="content">
@@ -131,7 +131,7 @@
 			</div>
 
 			<div class="col-md-6">
-				<div class="page-header">
+				<div class="page-head">
 					<h4>MACD表现分析</h4>
 				</div>
 				<div class="content">
