@@ -130,7 +130,14 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 	private void checkStockFromHexun() {
 		StockFetcher fetcher = new StockFetcher();
 		String url = "http://quote.eastmoney.com/stocklist.html";
-		String content = Http.getInstance().get(url, "gb2312");
+//		String content = Http.getInstance().get(url, "gb2312");
+		String content="";
+		try {
+			content = fetcher.getContent("http://quote.eastmoney.com/stocklist.html");
+			logger.debug(">>FaceYe --> fetch hexun stock content is:"+content);
+		} catch (Exception e1) {
+			logger.error(">>FaceYe Throws Exception:",e1);
+		}
 		if (StringUtils.isNotEmpty(content)) {
 			try {
 				List<Map<String, String>> codeNames = fetcher.distillStockNameAndCode(content);
