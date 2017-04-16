@@ -1,5 +1,6 @@
 package com.faceye.component.stock.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +25,7 @@ import com.faceye.component.stock.service.CategoryService;
 import com.faceye.component.stock.service.CrawlFinancialDataService;
 import com.faceye.component.stock.service.StarDataStatService;
 import com.faceye.component.stock.service.StockService;
+import com.faceye.component.stock.util.StockConstants;
 import com.faceye.feature.controller.BaseController;
 import com.faceye.feature.util.AjaxResult;
 import com.faceye.feature.util.http.HttpUtil;
@@ -37,7 +39,7 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 	@Autowired
 	private CategoryService categoryService = null;
 	@Autowired
-	private StarDataStatService starDataStatService=null;
+	private StarDataStatService starDataStatService = null;
 
 	@Autowired
 	public StockController(StockService service) {
@@ -53,27 +55,37 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 	 */
 	@RequestMapping("/home")
 	public String home(HttpServletRequest request, Model model) {
-		Page page=null;
+		Page page = null;
 		Map searchParams = HttpUtil.getRequestParams(request);
 		String nameQueryKey = MapUtils.getString(searchParams, "like|name");
 		String codeQueryKey = MapUtils.getString(searchParams, "like|code");
-		Double minPe=MapUtils.getDouble(searchParams, "GTE|dailyStat.pe");
-		Double maxPe=MapUtils.getDouble(searchParams, "LTE|dailyStat.pe");
-		String trace=MapUtils.getString(searchParams, "trace");
-		if(StringUtils.equals(trace, "star")){
-			//如果是星标追踪
-			List<Long> traceStockIds=this.starDataStatService.getStarStockIds();
-			if(CollectionUtils.isNotEmpty(traceStockIds)){
+		Double minPe = MapUtils.getDouble(searchParams, "GTE|dailyStat.pe");
+		Double maxPe = MapUtils.getDouble(searchParams, "LTE|dailyStat.pe");
+		String trace = MapUtils.getString(searchParams, "trace");
+		
+		if (StringUtils.isNotEmpty(trace)) {
+			Map starParams = new HashMap();
+//			starParams.put("EQ|stockId", value)
+			List<Long> traceStockIds = null;
+			if (StringUtils.equals(trace, "avg")) {
+				// 如果是星标追踪
+				starParams.put("EQ|starType", StockConstants.STOCK_STAR_TYPE_1);
+				traceStockIds = this.starDataStatService.getStarStockIds(starParams);
+			} else if (StringUtils.equals(trace, "macd")) {
+				starParams.put("EQ|starType", StockConstants.STOCK_STAR_TYPE_2);
+				traceStockIds = this.starDataStatService.getStarStockIds(starParams);
+			}
+			if (CollectionUtils.isNotEmpty(traceStockIds)) {
 				searchParams.put("IN|id", traceStockIds);
 			}
 		}
 		searchParams.put("minPe", minPe);
 		searchParams.put("maxPe", maxPe);
-		String sortPe=MapUtils.getString(searchParams, "SORT|dailyStat.pe");
+		String sortPe = MapUtils.getString(searchParams, "SORT|dailyStat.pe");
 		searchParams.put("sortPe", sortPe);
-		String sortTodayIncreaseRate=MapUtils.getString(searchParams, "SORT|dailyStat.todayIncreaseRate");
+		String sortTodayIncreaseRate = MapUtils.getString(searchParams, "SORT|dailyStat.todayIncreaseRate");
 		searchParams.put("sortTodayIncreaseRate", sortTodayIncreaseRate);
-		String sortPriceAmplitude=MapUtils.getString(searchParams, "SORT|dailyStat.priceAmplitude");
+		String sortPriceAmplitude = MapUtils.getString(searchParams, "SORT|dailyStat.priceAmplitude");
 		searchParams.put("sortPriceAmplitude", sortPriceAmplitude);
 		page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
 		this.resetSearchParams(searchParams);
@@ -186,6 +198,5 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 		boolean res = this.service.initStockCategory();
 		return AjaxResult.getInstance().buildDefaultResult(res);
 	}
-	
 
 }

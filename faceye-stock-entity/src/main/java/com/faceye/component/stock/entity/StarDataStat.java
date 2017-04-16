@@ -189,6 +189,17 @@ public class StarDataStat implements Serializable {
 	public void setStarDailyDataId(Long starDailyDataId) {
 		this.starDailyDataId = starDailyDataId;
 	}
+	/**
+	 * 星标类型
+	 */
+	private Integer starType=1;
+	public Integer getStarType() {
+		return starType;
+	}
+	public void setStarType(Integer starType) {
+		this.starType = starType;
+	}
+	
 	
 }/**@generate-entity-source@**/
 	

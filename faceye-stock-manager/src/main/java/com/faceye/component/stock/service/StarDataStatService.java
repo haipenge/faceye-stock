@@ -23,7 +23,7 @@ public interface StarDataStatService extends BaseService<StarDataStat, Long> {
 	 * @Author:haipenge
 	 * @Date:2017年4月11日 下午6:32:54
 	 */
-	public List<Long>getStarStockIds();
+	public List<Long>getStarStockIds(Map params);
 	
 	/**
 	 * 包装星标数据，并加入分析结果

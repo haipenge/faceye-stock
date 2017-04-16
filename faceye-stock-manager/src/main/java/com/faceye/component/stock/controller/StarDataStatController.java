@@ -23,6 +23,7 @@ import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.service.StarDataStatService;
 import com.faceye.component.stock.service.StockService;
 import com.faceye.component.stock.service.wrapper.WrapStarDataStat;
+import com.faceye.component.stock.util.StockConstants;
 import com.faceye.feature.controller.BaseController;
 import com.faceye.feature.util.AjaxResult;
 import com.faceye.feature.util.http.HttpUtil;
@@ -62,11 +63,14 @@ public class StarDataStatController extends BaseController<StarDataStat, Long, S
 			Stock stock=this.stockServie.get(stockId);
 			model.addAttribute("stock",stock);
 		}
-		WrapStarDataStat wrapStarDataStat=this.service.wrapStarDataStat(searchParams,  getPage(searchParams), getSize(searchParams));
-		model.addAttribute("wrapStarDataStat", wrapStarDataStat);
+		searchParams.put("EQ|starType", StockConstants.STOCK_STAR_TYPE_1);
+		WrapStarDataStat wrapAvgStarDataStat=this.service.wrapStarDataStat(searchParams,  getPage(searchParams), getSize(searchParams));
+		model.addAttribute("wrapAvgStarDataStat", wrapAvgStarDataStat);
+		searchParams.put("EQ|starType", StockConstants.STOCK_STAR_TYPE_2);
+		WrapStarDataStat wrapMACDStarDataStat=this.service.wrapStarDataStat(searchParams,  getPage(searchParams), getSize(searchParams));
+		model.addAttribute("wrapMACDStarDataStat", wrapMACDStarDataStat);
 		resetSearchParams(searchParams);
 		model.addAttribute("searchParams", searchParams);
-		
 		return "stock.starDataStat.manager";
 	}
 

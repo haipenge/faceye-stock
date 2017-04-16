@@ -78,10 +78,8 @@ public class StarDataStatServiceImpl extends BaseMongoServiceImpl<StarDataStat, 
 	}
 
 	@Override
-	public List<Long> getStarStockIds() {
-		Map params = new HashMap();
+	public List<Long> getStarStockIds(Map params) {
 		List<Long> ids = Lists.newArrayList();
-
 		Date now = new Date();
 		Date before15Days = new Date(now.getTime() - 15 * 24 * 60 * 60 * 1000L);
 		params.put("SORT|starDataDate", "desc");
@@ -126,7 +124,7 @@ public class StarDataStatServiceImpl extends BaseMongoServiceImpl<StarDataStat, 
 			countSearchParams.remove("GTE|max30DayIncreaseRate");
 			wrapStarDataStat.setMax30DayIncreaseSuccessRate(new Double(max30DayIncreaseCount)/total);
 			// 60
-			countSearchParams.put("GTE|max60DayIncreaseRate", 0.010);
+			countSearchParams.put("GTE|max60DayIncreaseRate", 0.10);
 			long max60DayIncreaseCount = this.starDataStatCustomerRepository.getStarDataStatCount(countSearchParams);
 			countSearchParams.remove("GTE|max60DayIncreaseRate");
 			wrapStarDataStat.setMax60DayIncreaseSuccessRate(new Double(max60DayIncreaseCount)/total);

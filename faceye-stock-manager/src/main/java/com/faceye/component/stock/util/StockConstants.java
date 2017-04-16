@@ -35,4 +35,11 @@ public class StockConstants {
 	//负债合计 liabilities
 	public static final Long TOTAL_LIABILITIES=230L;
 	
+	
+	///////////////////////////星标类型////////////////////////////////////////
+	//avg 5，10，20多头排列
+	public static final Integer STOCK_STAR_TYPE_1=1;
+	//avg(5.10.20）多头，之后五个交易日，macd(dif>dea) 快线在慢线之上。
+	public static final Integer STOCK_STAR_TYPE_2=2;
+	
 }

@@ -351,6 +351,9 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 
 	}
 
+	/**
+	 * 对财务报表进行比率分析
+	 */
 	@Override
 	public void stat(Stock stock) {
 		try {

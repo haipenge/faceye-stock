@@ -83,7 +83,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 		} else {
 			// OrderSpecifier<Comparable> orderPOrderSpecifier=new OrderSpecifier<Comparable>(new Order(), new NumberExpression<DailyStat>("id") {
 			// })
-			List<DailyStat> items = (List) this.dao.findAll(predicate);
+			List<DailyStat> items = (List) this.dao.findAll(predicate, sort);
 			res = new PageImpl<DailyStat>(items);
 
 		}
@@ -122,6 +122,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 		params.put("EQ|stockId", stock.getId());
 		params.put("GTE|date", befor30Day);
 		params.put("SORT|date", "desc");
+		params.put("GT|kaipanjia", 0D);
 		List<DailyData> dailyDatas = this.dailyDataService.getPage(params, 0, 0).getContent();
 		// 设置昨天交易收盘价
 		if (CollectionUtils.isNotEmpty(dailyDatas)) {
@@ -153,19 +154,21 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 			int index = 0;
 			for (DailyData dailyData : dailyDatas) {
 				if (index == 0) {
-					topPriceOf30Days = dailyData.getJintianzuigaojia();
-					topPriceDate = dailyData.getDate();
-					lowerPriceOf30Days = dailyData.getJintianzuidijia();
-					lowerPriceDate = dailyData.getDate();
-					todayPrice = dailyData.getShoupanjia();
-					yesterdayPrice = dailyData.getYesterdayPrice();
-					index++;
+					if (dailyData.getKaipanjia() > 0) {
+						topPriceOf30Days = dailyData.getJintianzuigaojia();
+						topPriceDate = dailyData.getDate();
+						lowerPriceOf30Days = dailyData.getJintianzuidijia();
+						lowerPriceDate = dailyData.getDate();
+						todayPrice = dailyData.getShoupanjia();
+						yesterdayPrice = dailyData.getYesterdayPrice();
+						index++;
+					}
 				} else {
-					if (dailyData.getJintianzuigaojia().compareTo(topPriceOf30Days) > 0) {
+					if (dailyData.getJintianzuigaojia().compareTo(topPriceOf30Days) > 0 && topPriceOf30Days > 0) {
 						topPriceOf30Days = dailyData.getJintianzuigaojia();
 						topPriceDate = dailyData.getDate();
 					}
-					if (dailyData.getJintianzuidijia().compareTo(lowerPriceOf30Days) < 0) {
+					if (dailyData.getJintianzuidijia().compareTo(lowerPriceOf30Days) < 0 && lowerPriceOf30Days > 0) {
 						lowerPriceOf30Days = dailyData.getJintianzuidijia();
 						lowerPriceDate = dailyData.getDate();
 					}
@@ -240,6 +243,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 			params.put("EQ|stockId", stock.getId());
 			params.put("EQ|type", StockConstants.REPORT_TYPE_YEAR);
 			params.put("SORT|date", "desc");
+
 			// 取得最近一份年报
 			List<ReportData> reportDatas = this.reportDataService.getPage(params, 1, 1).getContent();
 			// 取得每股盈利
@@ -277,100 +281,136 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 	}
 
 	/**
-	 * 分析星标数据并存储
-	 * 分析avg数据，是否为多头排列
+	 * 分析星标数据并存储 分析avg数据，是否为多头排列
 	 */
 	@Override
 	public void statDailyData2FindStar() {
 		List<Stock> stocks = this.stockService.getAll();
 		if (CollectionUtils.isNotEmpty(stocks)) {
 			for (Stock stock : stocks) {
-				Date lastStarAppearDate = null;
-				Map params = new HashMap();
-				params.put("EQ|stockId", stock.getId());
-				params.put("SORT|date", "asc");
-				List<DailyData> dailyDatas = this.dailyDataService.getPage(params, 0, 0).getContent();
-				if (CollectionUtils.isNotEmpty(dailyDatas)) {
-					boolean isStarData = false;
-					DailyData starDailyData = null;
-					int count = 0;
-					int index = 0;
-					int signIndex = 0;
-					for (DailyData dailyData : dailyDatas) {
-						index++;
-						if (dailyData.getAvg5() != null && dailyData.getAvg10() != null && dailyData.getAvg20() != null) {
-							if (!isStarData) {
-								if (dailyData.getAvg5() > dailyData.getAvg10() && dailyData.getAvg10() > dailyData.getAvg20()) {
-									if (starDailyData == null) {
-										starDailyData = dailyData;
-									}
-									if (count == 0) {
-										signIndex = index;
-									}
-									if (index - signIndex == count) {
-										count++;
-									}
-								} else {
-									count = 0;
-									signIndex = 0;
-									starDailyData = null;
-								}
-							} else {
-								if (dailyData.getAvg5() < dailyData.getAvg10() || dailyData.getAvg10() < dailyData.getAvg20() || dailyData.getAvg5() < dailyData.getAvg20()) {
-									isStarData = false;
-									count = 0;
-									signIndex = 0;
-									starDailyData = null;
-								}
-							}
-						}
-						// 连续三天正排列，则列为星标数据
-						// 目的，过滤杂音
-						if (count >= 3 && !isStarData) {
-							isStarData = true;
-							count = 0;
-							signIndex = 0;
-							starDailyData.setStarDataType(1);
-							this.dailyDataService.save(starDailyData);
-							lastStarAppearDate = starDailyData.getDate();
-						}
-					}
-				}
-				// 保存星标最后生成时间
-				if (lastStarAppearDate != null) {
-					stock.setLastStarAppearDate(lastStarAppearDate);
-					this.stockService.save(stock);
-				}
+				this.statDailyData2FindAvgStar(stock);
+				this.statDailyData2FindMacdAndAvgStar(stock);
 			}
 		}
 	}
-	
+
+	/**
+	 * 发现均线多头排列<br>
+	 * 条件：avg5>avg10>avg20,并且连续三天<br>
+	 * 
+	 * @param stock
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年4月16日 上午10:53:42
+	 */
+	private void statDailyData2FindAvgStar(Stock stock) {
+		int type=0;
+		Date lastStarAppearDate = null;
+		Map params = new HashMap();
+		params.put("EQ|stockId", stock.getId());
+		params.put("SORT|date", "asc");
+		params.put("GT|kaipanjia", 0D);
+		List<DailyData> dailyDatas = this.dailyDataService.getPage(params, 0, 0).getContent();
+		if (CollectionUtils.isNotEmpty(dailyDatas)) {
+			boolean isStarData = false;
+			DailyData starDailyData = null;
+			int count = 0;
+			int index = 0;
+			int signIndex = 0;
+			for (DailyData dailyData : dailyDatas) {
+				index++;
+				if (dailyData.getAvg5() != null && dailyData.getAvg10() != null && dailyData.getAvg20() != null) {
+					if (!isStarData) {
+						if (dailyData.getAvg5() > dailyData.getAvg10() && dailyData.getAvg10() > dailyData.getAvg20()) {
+							if (starDailyData == null) {
+								starDailyData = dailyData;
+							}
+							if (count == 0) {
+								signIndex = index;
+							}
+							if (index - signIndex == count) {
+								count++;
+							}
+						} else {
+							count = 0;
+							signIndex = 0;
+							starDailyData = null;
+						}
+					} else {
+						if (dailyData.getAvg5() < dailyData.getAvg10() || dailyData.getAvg10() < dailyData.getAvg20() || dailyData.getAvg5() < dailyData.getAvg20()) {
+							isStarData = false;
+							count = 0;
+							signIndex = 0;
+							starDailyData = null;
+						}
+					}
+				}
+				// 连续三天正排列，则列为星标数据
+				// 目的，过滤杂音
+				if (count >= 3 && !isStarData) {
+					isStarData = true;
+					count = 0;
+					signIndex = 0;
+					 type=StockConstants.STOCK_STAR_TYPE_1;
+					starDailyData.setStarDataType(type);
+					this.dailyDataService.save(starDailyData);
+					lastStarAppearDate = starDailyData.getDate();
+					
+				}
+			}
+		}
+		// 保存星标最后生成时间
+		if (lastStarAppearDate != null) {
+			stock.setLastStarAppearDate(lastStarAppearDate);
+			this.stockService.save(stock);
+		}
+		
+	}
+
 	/**
 	 * 分析每日数据，寻找macd+avg星标数据，标记type=2<br>
 	 * 判断依据：<br>
-	 * 1.最近10个交易日，是多头市场（多头占比超过50%）<br>
+	 * 1.在avg3日多头后，5日内出现 dif > dea 快线上穿慢线<br>
+	 * -----以下目前未实现.<br>
 	 * 2.最近10个交易日，最低价触及avg20附近，差距在(+-)5%以内<br>
+	 * 3.MACD dif 上传dea dif<0,dea<0
+	 * 
 	 * @param stock
 	 * @Desc:
 	 * @Author:haipenge
 	 * @Date:2017年4月13日 下午12:01:01
 	 */
-	public void statDailyData2FindMacdAndAvgStar(){
-		List<Stock> stocks=this.stockService.getAll();
-		if(CollectionUtils.isNotEmpty(stocks)){
-			for(Stock stock:stocks){
-				Map dailyDataParams=new HashMap();
-				dailyDataParams.put("EQ|stockId", stock.getId());
-				dailyDataParams.put("SORT|date", "asc");
-				List<DailyData> dailyDatas=this.dailyDataService.getPage(dailyDataParams, 1, 0).getContent();
-			    int count=0;
-				for(DailyData dailyData:dailyDatas){
-				    
+	private void statDailyData2FindMacdAndAvgStar(Stock stock) {
+		Map dailyDataParams = new HashMap();
+		dailyDataParams.put("EQ|stockId", stock.getId());
+		dailyDataParams.put("SORT|date", "asc");
+		dailyDataParams.put("GTE|kaipanjia", 0D);
+		dailyDataParams.put("EQ|starDataType", 1);
+		// 获取均线连续三日排列整齐的股票(starDataType=1)
+		List<DailyData> dailyDatas = this.dailyDataService.getPage(dailyDataParams, 1, 0).getContent();
+		for (DailyData dailyData : dailyDatas) {
+			Map macdParams = new HashMap();
+			macdParams.put("EQ|stockId", stock.getId());
+			macdParams.put("GTE|date", dailyData.getDate());
+			macdParams.put("GT|kaipanjia", 0D);
+			macdParams.put("SORT|date", "asc");
+			// 五个交易日内快线上穿慢线
+			List<DailyData> macdDailyDatas = this.dailyDataService.getPage(macdParams, 1, 5).getContent();
+			if (CollectionUtils.isNotEmpty(macdDailyDatas)) {
+				int count = 0;
+				for (int i = 0; i < macdDailyDatas.size(); i++) {
+					DailyData macdDailyData = macdDailyDatas.get(i);
+					// DIF > DEA ,快线上穿慢线
+					if (macdDailyData.getDif() > macdDailyData.getDea()) {
+						macdDailyData.setStarDataType(StockConstants.STOCK_STAR_TYPE_2);
+						this.dailyDataService.save(macdDailyData);
+						break;
+					}
 				}
 			}
 		}
+
 	}
-	
 
 	/**
 	 * 分析星标数据
@@ -382,8 +422,9 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 			for (Stock stock : stocks) {
 				Map starParams = new HashMap();
 				starParams.put("EQ|stockId", stock.getId());
-				starParams.put("EQ|starDataType", 1);
+				starParams.put("GT|starDataType", 0);
 				starParams.put("SORT|date", "asc");
+
 				List<DailyData> starDailyDatas = this.dailyDataService.getPage(starParams, 1, 0).getContent();
 				if (CollectionUtils.isNotEmpty(starDailyDatas)) {
 					for (DailyData starDailyData : starDailyDatas) {
@@ -391,6 +432,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 						dailyParams.put("EQ|stockId", stock.getId());
 						dailyParams.put("GTE|date", starDailyData.getDate());
 						dailyParams.put("SORT|date", "asc");
+						dailyParams.put("GT|kaipanjia", 0D);
 						List<DailyData> dailyDatas = this.dailyDataService.getPage(dailyParams, 1, 64).getContent();
 						Map starDataStatParams = new HashMap();
 						starDataStatParams.put("EQ|starDailyDataId", starDailyData.getId());
@@ -399,6 +441,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 						starDataStat.setStarDailyDataId(starDailyData.getId());
 						starDataStat.setStarDataDate(starDailyData.getDate());
 						starDataStat.setStockId(stock.getId());
+						starDataStat.setStarType(starDailyData.getStarDataType());
 						if (CollectionUtils.isNotEmpty(dailyDatas) && dailyDatas.size() > 3) {
 							Double max5DayIncreaseRate = 0D;// 5日最大涨幅
 							Double max10DayIncreaseRate = 0D;// 10日最大涨幅

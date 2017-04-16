@@ -33,6 +33,7 @@ public class StarDataStatCustomerRepositoryImpl implements StarDataStatCustomerR
 		Query query = new Query();
 		Criteria criteria = Criteria.where("id").gt(0L);
 		Long stockId = MapUtils.getLong(params, "EQ|stockId");
+		Integer starType=MapUtils.getInteger(params, "EQ|starType");
 		Double max5DayIncreaseRate = MapUtils.getDouble(params, "GTE|max5DayIncreaseRate");
 		Double max10DayIncreaseRate = MapUtils.getDouble(params, "GTE|max10DayIncreaseRate");
 		Double max20DayIncreaseRate = MapUtils.getDouble(params, "GTE|max20DayIncreaseRate");
@@ -41,6 +42,7 @@ public class StarDataStatCustomerRepositoryImpl implements StarDataStatCustomerR
 		if (null != stockId) {
 			criteria.and("stockId").is(stockId);
 		}
+		criteria.and("starType").is(starType);
 		// (max5DayIncreaseRate>0) ? criteria.and("max5DayIncreaseRate").gte(max5DayIncreaseRate):null;
 		if (max5DayIncreaseRate != null) {
 			criteria.and("max5DayIncreaseRate").gte(max5DayIncreaseRate);

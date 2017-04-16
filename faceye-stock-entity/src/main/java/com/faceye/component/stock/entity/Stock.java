@@ -131,7 +131,5 @@ public class Stock implements Serializable {
 		this.lastStarAppearDate = lastStarAppearDate;
 	}
 	
-	
-	
 
 }/** @generate-entity-source@ **/

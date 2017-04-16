@@ -85,11 +85,15 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 			jidu = "4";
 		}
 		String jidus[] = new String[] { "1", "2", "3", "4" };
-		this.fetchHistoryData(code, "" + year, jidu);
-		for (String jd : jidus) {
-//			this.fetchHistoryData(code, "" + (year - 1), jd);
+		if (Integer.parseInt(jidu) > 0) {
+			for (int i = Integer.parseInt(jidu); i > 0; i--) {
+				this.fetchHistoryData(code, "" + year, "" + i);
+			}
 		}
-		
+		//取过去一年数据
+		for (String jd : jidus) {
+			this.fetchHistoryData(code, "" + (year - 1), jd);
+		}
 
 	}
 
@@ -424,7 +428,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 			String volume = MapUtils.getString(data, "volume");
 			String money = MapUtils.getString(data, "money");
 			String yesterdayPrice = MapUtils.getString(data, "yesterdayPrice");
-			if (!StringUtils.equals(open, "0.00") && !StringUtils.equals(close, "0.00")) {
+			if (StringUtils.isNotEmpty(open)&&Double.parseDouble(open)>0&&!StringUtils.equals(open, "0.00") && !StringUtils.equals(close, "0.00")) {
 				String date = MapUtils.getString(data, "date");
 				String time = MapUtils.getString(data, "time");
 				boolean isDailyDataExist = this.isDailyDataExist(stock.getCode(), date);

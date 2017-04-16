@@ -3,13 +3,13 @@
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/component/stock/stock/stock.css"/>" />
 <script type="text/javascript" src="<c:url value="/js/component/stock/stock/stock.js"/>"></script>
 <style>
-
 </style>
 <div class="page-head">
 	<div class="row" style="margin-top: 0px; margin-bottom: 0px;">
 		<div class="col-sm-8">
 			<h2>
-				<fmt:message key="stock.stock.manager"></fmt:message>  <a href="<c:url value="/stock/stock/home?trace=star"/>" class="btn btn-success">星标追踪</a>
+				<fmt:message key="stock.stock.manager"></fmt:message>
+				<a href="<c:url value="/stock/stock/home?trace=star"/>" class="btn btn-success">星标追踪</a>
 			</h2>
 		</div>
 		<div class="col-sm-4 text-right">
@@ -45,6 +45,13 @@
 							<div class="form-group">
 								<input type="text" name="GTE|dailyStat.pe" value="${searchParams.minPe}" style="width: 90px;" placeholder="PE起始值" class="form-control input-sm">-<input type="text"
 									name="LTE|dailyStat.pe" value="${searchParams.maxPe}" style="width: 90px;" placeholder="PE最大值" class="form-control input-sm">
+							</div>
+							<div class="form-group">
+								<select name="trace" class="form-control">
+									<option value="">数据追踪</option>
+									<option value="1">AVG</option>
+									<option value="2">MACD</option>
+								</select>
 							</div>
 							<div class="form-group">
 								<button type="submit" class="btn btn-sm btn-primary">

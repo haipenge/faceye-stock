@@ -70,56 +70,119 @@
 				</fieldset>
 			</form>
 		</div>
-		<div class="content">
-			<div id="msg"></div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="page-header">
+					<h3>AVG Stat</h3>
+				</div>
+				<div class="content">
+					<div id="msg"></div>
 
-			<div classs="table-responsive">
-				<table class="table table-bordered">
-					<thead>
-						<tr>
-							<th><fmt:message key='stock.starDataStat.max5DayIncreaseRate'></fmt:message></th>
-							<th><fmt:message key='stock.starDataStat.max10DayIncreaseRate'></fmt:message></th>
-							<th><fmt:message key='stock.starDataStat.max20DayIncreaseRate'></fmt:message></th>
-							<th><fmt:message key='stock.starDataStat.max30DayIncreaseRate'></fmt:message></th>
-							<th><fmt:message key='stock.starDataStat.max60DayIncreaseRate'></fmt:message></th>
-							<th><fmt:message key='stock.starDataStat.starDataDate'></fmt:message></th>
-							<!--@generate-entity-jsp-property-desc@-->
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td class="text-right" style="border-bottom:1px solid blue;"><fmt:formatNumber value="${wrapStarDataStat.max5DayIncreaseSuccessRate *100}"
-										type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
-							<td class="text-right" style="border-bottom:1px solid blue;"><fmt:formatNumber value="${wrapStarDataStat.max10DayIncreaseSuccessRate *100}"
-										type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
-							<td class="text-right" style="border-bottom:1px solid blue;"><fmt:formatNumber value="${wrapStarDataStat.max20DayIncreaseSuccessRate *100}"
-										type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
-							<td class="text-right" style="border-bottom:1px solid blue;"><fmt:formatNumber value="${wrapStarDataStat.max30DayIncreaseSuccessRate *100}"
-										type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
-							<td class="text-right" style="border-bottom:1px solid blue;"><fmt:formatNumber value="${wrapStarDataStat.max60DayIncreaseSuccessRate *100}"
-										type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
-							<td class="text-right" style="border-bottom:1px solid blue;"></td>
-						</tr>
-						<c:forEach items="${wrapStarDataStat.starDataStats.content}" var="starDataStat">
-							<tr>
-								<td class="text-right ${starDataStat.max5DayIncreaseRate lt 0 ? "decrease-color":"increase-color"}"><fmt:formatNumber value="${starDataStat.max5DayIncreaseRate *100}"
-										type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
-								<td class="text-right ${starDataStat.max10DayIncreaseRate lt 0 ? "decrease-color":"increase-color"}"><fmt:formatNumber
-										value="${starDataStat.max10DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
-								<td class="text-right ${starDataStat.max20DayIncreaseRate lt 0 ? "decrease-color":"increase-color"}"><fmt:formatNumber
-										value="${starDataStat.max20DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
-								<td class="text-right ${starDataStat.max30DayIncreaseRate lt 0 ? "decrease-color":"increase-color"}"><fmt:formatNumber
-										value="${starDataStat.max30DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
-								<td class="text-right ${starDataStat.max60DayIncreaseRate lt 0 ? "decrease-color":"increase-color"}"><fmt:formatNumber
-										value="${starDataStat.max60DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
-								<td class="text-right"><fmt:formatDate pattern="yyyy-MM-dd" value="${starDataStat.starDataDate}" /></td>
-								<!--@generate-entity-jsp-property-value@-->
-							<tr>
-						</c:forEach>
-					</tbody>
-				</table>
+					<div classs="table-responsive">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th><fmt:message key='stock.starDataStat.max5DayIncreaseRate'></fmt:message></th>
+									<th><fmt:message key='stock.starDataStat.max10DayIncreaseRate'></fmt:message></th>
+									<th><fmt:message key='stock.starDataStat.max20DayIncreaseRate'></fmt:message></th>
+									<th><fmt:message key='stock.starDataStat.max30DayIncreaseRate'></fmt:message></th>
+									<th><fmt:message key='stock.starDataStat.max60DayIncreaseRate'></fmt:message></th>
+									<th><fmt:message key='stock.starDataStat.starDataDate'></fmt:message></th>
+									<!--@generate-entity-jsp-property-desc@-->
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td class="text-right" style="border-bottom: 1px solid blue;"><fmt:formatNumber value="${wrapAvgStarDataStat.max5DayIncreaseSuccessRate *100}" type="number"
+											pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+									<td class="text-right" style="border-bottom: 1px solid blue;"><fmt:formatNumber value="${wrapAvgStarDataStat.max10DayIncreaseSuccessRate *100}" type="number"
+											pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+									<td class="text-right" style="border-bottom: 1px solid blue;"><fmt:formatNumber value="${wrapAvgStarDataStat.max20DayIncreaseSuccessRate *100}" type="number"
+											pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+									<td class="text-right" style="border-bottom: 1px solid blue;"><fmt:formatNumber value="${wrapAvgStarDataStat.max30DayIncreaseSuccessRate *100}" type="number"
+											pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+									<td class="text-right" style="border-bottom: 1px solid blue;"><fmt:formatNumber value="${wrapAvgStarDataStat.max60DayIncreaseSuccessRate *100}" type="number"
+											pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+									<td class="text-right" style="border-bottom: 1px solid blue;"></td>
+								</tr>
+								<c:forEach items="${wrapAvgStarDataStat.starDataStats.content}" var="starDataStat">
+									<tr>
+										<td class="text-right ${starDataStat.max5DayIncreaseRate lt 0 ? "decrease-color":"increase-color"}"><fmt:formatNumber
+												value="${starDataStat.max5DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+										<td class="text-right ${starDataStat.max10DayIncreaseRate lt 0 ? "decrease-color":"increase-color"}"><fmt:formatNumber
+												value="${starDataStat.max10DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+										<td class="text-right ${starDataStat.max20DayIncreaseRate lt 0 ? "decrease-color":"increase-color"}"><fmt:formatNumber
+												value="${starDataStat.max20DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+										<td class="text-right ${starDataStat.max30DayIncreaseRate lt 0 ? "decrease-color":"increase-color"}"><fmt:formatNumber
+												value="${starDataStat.max30DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+										<td class="text-right ${starDataStat.max60DayIncreaseRate lt 0 ? "decrease-color":"increase-color"}"><fmt:formatNumber
+												value="${starDataStat.max60DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+										<td class="text-right"><fmt:formatDate pattern="yyyy-MM-dd" value="${starDataStat.starDataDate}" /></td>
+										<!--@generate-entity-jsp-property-value@-->
+									<tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</div>
+					<f:page page="${wrapAvgStarDataStat.starDataStats}" url="/stock/starDataStat/home" params="<%=request.getParameterMap()%>" />
+				</div>
 			</div>
-			<f:page page="${wrapStarDataStat.starDataStats}" url="/stock/starDataStat/home" params="<%=request.getParameterMap()%>" />
+
+			<div class="col-md-6">
+				<div class="page-header">
+					<h3>MACD Stat</h3>
+				</div>
+				<div class="content">
+					<div classs="table-responsive">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th><fmt:message key='stock.starDataStat.max5DayIncreaseRate'></fmt:message></th>
+									<th><fmt:message key='stock.starDataStat.max10DayIncreaseRate'></fmt:message></th>
+									<th><fmt:message key='stock.starDataStat.max20DayIncreaseRate'></fmt:message></th>
+									<th><fmt:message key='stock.starDataStat.max30DayIncreaseRate'></fmt:message></th>
+									<th><fmt:message key='stock.starDataStat.max60DayIncreaseRate'></fmt:message></th>
+									<th><fmt:message key='stock.starDataStat.starDataDate'></fmt:message></th>
+									<!--@generate-entity-jsp-property-desc@-->
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td class="text-right" style="border-bottom: 1px solid blue;"><fmt:formatNumber value="${wrapMACDStarDataStat.max5DayIncreaseSuccessRate *100}" type="number"
+											pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+									<td class="text-right" style="border-bottom: 1px solid blue;"><fmt:formatNumber value="${wrapMACDStarDataStat.max10DayIncreaseSuccessRate *100}" type="number"
+											pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+									<td class="text-right" style="border-bottom: 1px solid blue;"><fmt:formatNumber value="${wrapMACDStarDataStat.max20DayIncreaseSuccessRate *100}" type="number"
+											pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+									<td class="text-right" style="border-bottom: 1px solid blue;"><fmt:formatNumber value="${wrapMACDStarDataStat.max30DayIncreaseSuccessRate *100}" type="number"
+											pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+									<td class="text-right" style="border-bottom: 1px solid blue;"><fmt:formatNumber value="${wrapMACDStarDataStat.max60DayIncreaseSuccessRate *100}" type="number"
+											pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+									<td class="text-right" style="border-bottom: 1px solid blue;"></td>
+								</tr>
+								<c:forEach items="${wrapMACDStarDataStat.starDataStats.content}" var="starDataStat">
+									<tr>
+										<td class="text-right ${starDataStat.max5DayIncreaseRate lt 0 ? "decrease-color":"increase-color"}"><fmt:formatNumber
+												value="${starDataStat.max5DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+										<td class="text-right ${starDataStat.max10DayIncreaseRate lt 0 ? "decrease-color":"increase-color"}"><fmt:formatNumber
+												value="${starDataStat.max10DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+										<td class="text-right ${starDataStat.max20DayIncreaseRate lt 0 ? "decrease-color":"increase-color"}"><fmt:formatNumber
+												value="${starDataStat.max20DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+										<td class="text-right ${starDataStat.max30DayIncreaseRate lt 0 ? "decrease-color":"increase-color"}"><fmt:formatNumber
+												value="${starDataStat.max30DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+										<td class="text-right ${starDataStat.max60DayIncreaseRate lt 0 ? "decrease-color":"increase-color"}"><fmt:formatNumber
+												value="${starDataStat.max60DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+										<td class="text-right"><fmt:formatDate pattern="yyyy-MM-dd" value="${starDataStat.starDataDate}" /></td>
+										<!--@generate-entity-jsp-property-value@-->
+									<tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</div>
+					<f:page page="${wrapMACDStarDataStat.starDataStats}" url="/stock/starDataStat/home" params="<%=request.getParameterMap()%>" />
+				</div>
+			</div>
 		</div>
+
 	</div>
 </div>
