@@ -391,7 +391,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 		for (DailyData dailyData : dailyDatas) {
 			Map macdParams = new HashMap();
 			macdParams.put("EQ|stockId", stock.getId());
-			macdParams.put("GTE|date", dailyData.getDate());
+			macdParams.put("GT|date", dailyData.getDate());
 			macdParams.put("GT|kaipanjia", 0D);
 			macdParams.put("SORT|date", "asc");
 			// 五个交易日内快线上穿慢线

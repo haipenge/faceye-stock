@@ -165,7 +165,7 @@
 			<ref bean="dailyStatJobDetail" />
 		</property>
 		<property name="cronExpression">
-			<value>0 17 19 * * ?</value>
+			<value>0 43 19 * * ?</value>
 		</property>
 	</bean>
 	
