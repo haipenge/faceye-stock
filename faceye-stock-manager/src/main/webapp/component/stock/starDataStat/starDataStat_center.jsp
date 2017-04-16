@@ -18,7 +18,7 @@
 		</a>
 	</div>
 	 -->
-	<div class="block-flat">
+	<div class="block-flat" style="border:1px solid blue;">
 		<!-- 
 		<div class="content">
 			<form action="<c:url value="/stock/starDataStat/home"/>" method="post" role="form" class="form-horizontal">
