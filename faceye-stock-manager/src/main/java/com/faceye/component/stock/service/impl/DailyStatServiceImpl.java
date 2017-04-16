@@ -424,18 +424,19 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 				starParams.put("EQ|stockId", stock.getId());
 				starParams.put("GT|starDataType", 0);
 				starParams.put("SORT|date", "asc");
-
 				List<DailyData> starDailyDatas = this.dailyDataService.getPage(starParams, 1, 0).getContent();
 				if (CollectionUtils.isNotEmpty(starDailyDatas)) {
 					for (DailyData starDailyData : starDailyDatas) {
 						Map dailyParams = new HashMap();
 						dailyParams.put("EQ|stockId", stock.getId());
 						dailyParams.put("GTE|date", starDailyData.getDate());
+						
 						dailyParams.put("SORT|date", "asc");
 						dailyParams.put("GT|kaipanjia", 0D);
 						List<DailyData> dailyDatas = this.dailyDataService.getPage(dailyParams, 1, 64).getContent();
 						Map starDataStatParams = new HashMap();
 						starDataStatParams.put("EQ|starDailyDataId", starDailyData.getId());
+						starDataStatParams.put("EQ|starType", starDailyData.getStarDataType());
 						List<StarDataStat> starDataStats = this.starDataStatService.getPage(starDataStatParams, 1, 0).getContent();
 						StarDataStat starDataStat = CollectionUtils.isNotEmpty(starDataStats) ? starDataStats.get(0) : new StarDataStat();
 						starDataStat.setStarDailyDataId(starDailyData.getId());

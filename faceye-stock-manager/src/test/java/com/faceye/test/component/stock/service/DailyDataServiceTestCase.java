@@ -216,7 +216,7 @@ public class DailyDataServiceTestCase extends BaseServiceTestCase {
 	@Test
 	public void testInitAvgDailyData() throws Exception{
 //		this.dailyDataService.computeDailyDataAvg("000099", 5);
-		this.dailyDataService.initDailyDataAvg();
+		//this.dailyDataService.initDailyDataAvg();
 	}
 	
 	@Test

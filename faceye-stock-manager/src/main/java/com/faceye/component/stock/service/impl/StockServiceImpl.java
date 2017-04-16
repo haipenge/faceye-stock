@@ -20,6 +20,7 @@ import com.faceye.component.stock.repository.mongo.StockRepository;
 import com.faceye.component.stock.repository.mongo.customer.StockCustomerRepository;
 import com.faceye.component.stock.service.CategoryService;
 import com.faceye.component.stock.service.StockService;
+import com.faceye.component.stock.util.StockFetcher;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.faceye.feature.util.ServiceException;
 import com.faceye.feature.util.http.Http;
@@ -30,7 +31,7 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 	@Autowired
 	private CategoryService categoryService = null;
 	@Autowired
-	private StockCustomerRepository stockCustomerRepository=null;
+	private StockCustomerRepository stockCustomerRepository = null;
 
 	@Autowired
 	public StockServiceImpl(StockRepository dao) {
@@ -99,6 +100,28 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 	}
 
 	/**
+	 * 分sina初始化股票<br>
+	 * url:http://vip.stock.finance.sina.com.cn/q/go.php/vIR_RatingNewest/index.phtml?num=60&p=218<br>
+	 * 
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年4月16日 下午12:06:23
+	 */
+	private void initStockInfoBySina() {
+		int page = 60;
+		int index = 1;
+		StockFetcher fetcher = new StockFetcher();
+		for (int i = 1; i < 300; i++) {
+			String url = "http://vip.stock.finance.sina.com.cn/q/go.php/vIR_RatingNewest/index.phtml?num=60&p=" + i;
+			try {
+				String content = fetcher.getContent(url);
+			} catch (Exception e) {
+				logger.error(">>FaceYe Throws Exception:", e);
+			}
+		}
+	}
+
+	/**
 	 * 从和讯财经检查初始化股票 http://quote.eastmoney.com/stocklist.html
 	 * 
 	 * @todo
@@ -157,26 +180,26 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 		// Predicate predicate=DynamicSpecifications.builder(predicates);
 		// NumberPath numberPath = new NumberPath(Number.class, path, "age");
 		// predicates.add(numberPath.eq(15));
-//		Predicate predicate = DynamicSpecifications.builder(searchParams, entityClass);
-//		Sort sort = this.buildSort(searchParams);
-//		if (predicate != null) {
-//			logger.debug(">>FaceYe -->Query predicate is:" + predicate.toString());
-//		}
-//		if(sort!=null){
-//			logger.debug(">>FaceYe --> Query sort is:"+sort.toString());
-//		}
-//		Page<Stock> res = null;
-//		if (size != 0) {
-//			Pageable pageable = new PageRequest(page, size, sort);
-//			res = this.dao.findAll(predicate, pageable);
-//		} else {
-//			// OrderSpecifier<Comparable> orderPOrderSpecifier=new OrderSpecifier<Comparable>(new Order(), new NumberExpression<T>("id") {
-//			// })
-//			List<Stock> items = (List) this.dao.findAll(predicate, sort);
-//			res = new PageImpl<Stock>(items);
-//		}
-//		return res;
-		Page<Stock> res=this.stockCustomerRepository.getPage(searchParams, page, size);
+		// Predicate predicate = DynamicSpecifications.builder(searchParams, entityClass);
+		// Sort sort = this.buildSort(searchParams);
+		// if (predicate != null) {
+		// logger.debug(">>FaceYe -->Query predicate is:" + predicate.toString());
+		// }
+		// if(sort!=null){
+		// logger.debug(">>FaceYe --> Query sort is:"+sort.toString());
+		// }
+		// Page<Stock> res = null;
+		// if (size != 0) {
+		// Pageable pageable = new PageRequest(page, size, sort);
+		// res = this.dao.findAll(predicate, pageable);
+		// } else {
+		// // OrderSpecifier<Comparable> orderPOrderSpecifier=new OrderSpecifier<Comparable>(new Order(), new NumberExpression<T>("id") {
+		// // })
+		// List<Stock> items = (List) this.dao.findAll(predicate, sort);
+		// res = new PageImpl<Stock>(items);
+		// }
+		// return res;
+		Page<Stock> res = this.stockCustomerRepository.getPage(searchParams, page, size);
 		return res;
 	}
 

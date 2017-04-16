@@ -284,9 +284,8 @@ public class StockFetcher {
 		Reporter report = new PrintReporter();
 		report.reporter(data);
 
-		// String content = fetcher
-		// .getContent("http://vip.stock.finance.sina.com.cn/q/go.php/vIR_RatingNewest/index.phtml?num=60&p=2");
-		// List<Map<String, String>> codesAndName = fetcher.distillStockNameAndCode(content);
+		String content = fetcher.getContent("http://vip.stock.finance.sina.com.cn/q/go.php/vIR_RatingNewest/index.phtml?num=60&p=2");
+		List<Map<String, String>> codesAndName = fetcher.distillStockNameAndCode(content);
 		// System.out.println(content);
 	}
 }
