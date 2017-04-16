@@ -64,7 +64,6 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 	 */
 	@Override
 	public void initDailyData(String code) {
-
 		// List<Map<String, String>> data = fetcher.getStockDailyData(code, "", "");
 		Calendar calendar = Calendar.getInstance();
 		Date now = new Date();
@@ -90,7 +89,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 				this.fetchHistoryData(code, "" + year, "" + i);
 			}
 		}
-		//取过去一年数据
+		// 取过去一年数据
 		for (String jd : jidus) {
 			this.fetchHistoryData(code, "" + (year - 1), jd);
 		}
@@ -166,7 +165,12 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 		List<Stock> stocks = this.stockRepository.findAll();
 		if (CollectionUtils.isNotEmpty(stocks)) {
 			for (Stock stock : stocks) {
-				this.initDailyData(stock.getCode());
+				Map params = new HashMap();
+				params.put("EQ|stockId", stock.getId());
+				long count = this.dailyDataCustomerRepository.getCount(params);
+				if (count < 30) {
+					this.initDailyData(stock.getCode());
+				}
 			}
 		}
 	}
@@ -428,7 +432,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 			String volume = MapUtils.getString(data, "volume");
 			String money = MapUtils.getString(data, "money");
 			String yesterdayPrice = MapUtils.getString(data, "yesterdayPrice");
-			if (StringUtils.isNotEmpty(open)&&Double.parseDouble(open)>0&&!StringUtils.equals(open, "0.00") && !StringUtils.equals(close, "0.00")) {
+			if (StringUtils.isNotEmpty(open) && Double.parseDouble(open) > 0 && !StringUtils.equals(open, "0.00") && !StringUtils.equals(close, "0.00")) {
 				String date = MapUtils.getString(data, "date");
 				String time = MapUtils.getString(data, "time");
 				boolean isDailyDataExist = this.isDailyDataExist(stock.getCode(), date);

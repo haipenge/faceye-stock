@@ -1,10 +1,6 @@
 package com.faceye.component.stock.repository.mongo.customer;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.querydsl.QueryDslPredicateExecutor;
-
-import com.faceye.component.stock.entity.DailyStat;
-import com.faceye.feature.repository.mongo.BaseMongoRepository;
+import java.util.Map;
 /**
  * DailyStat 实体DAO<br>
  * @author @haipenge <br>
@@ -14,4 +10,7 @@ import com.faceye.feature.repository.mongo.BaseMongoRepository;
 public interface DailyDataCustomerRepository {
 	
 	public void clearHistoryDailyData();
+	
+	
+	public long getCount(Map params);
 }/**@generate-repository-source@**/

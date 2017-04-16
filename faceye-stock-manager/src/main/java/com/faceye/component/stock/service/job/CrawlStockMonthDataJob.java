@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.faceye.component.stock.service.DailyDataService;
+import com.faceye.component.stock.service.StockService;
 import com.faceye.feature.service.job.impl.BaseJob;
 
 /**
@@ -18,8 +19,10 @@ import com.faceye.feature.service.job.impl.BaseJob;
 public class CrawlStockMonthDataJob extends BaseJob {
 	@Autowired
     private DailyDataService dailyDataService=null;
+	private StockService stockService=null;
 	@Override
 	public void run() {
+		this.stockService.initStocks();
 		this.dailyDataService.initDailyData();
 	}
 	
