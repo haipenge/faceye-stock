@@ -72,7 +72,7 @@
 			</form>
 		</div>
 		 -->
-		<div class="row">
+		<div class="row" style="broder:1px solid red;">
 			<div class="col-md-6">
 				<div class="page-header">
 					<h4>均线表现分析</h4>
