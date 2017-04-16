@@ -159,12 +159,14 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 						name = StringUtils.replace(name, "(", "");
 						name = StringUtils.replace(name, ")", "");
 						name = StringUtils.replace(name, code, "");
+						logger.debug(">>FaceYe check code is:"+code);
 						if (StringUtils.isNotEmpty(code) && (StringUtils.startsWith(code, "6") || StringUtils.startsWith(code, "0") || StringUtils.startsWith(code, "3"))) {
 							Stock stock = this.getStockByCode(code);
 							if (stock == null) {
 //								if (StringUtils.startsWith(code, "0") || StringUtils.startsWith(code, "3")) {
 //									market = "SZ";
 //								}
+								logger.debug(">>FaceYe will add stock is:"+code);
 								stock = new Stock();
 								stock.setName(name);
 								stock.setCategory(category);
