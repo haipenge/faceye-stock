@@ -19,6 +19,7 @@
 	</div>
 	 -->
 	<div class="block-flat">
+		<!-- 
 		<div class="content">
 			<form action="<c:url value="/stock/starDataStat/home"/>" method="post" role="form" class="form-horizontal">
 				<fieldset>
@@ -60,7 +61,7 @@
 							<input type="text" name="EQ|starDailyDataId" value="${searchParams.starDailyDataId}" placeholder="<fmt:message key="stock.starDataStat.starDailyDataId"></fmt:message>"
 								class="form-control input-sm">
 						</div>
-						<!--@generate-entity-jsp-query-detail@-->
+						
 						<div class="col-md-1">
 							<button type="submit" class="btn btn-sm btn-primary">
 								<fmt:message key="global.search"></fmt:message>
@@ -70,10 +71,11 @@
 				</fieldset>
 			</form>
 		</div>
+		 -->
 		<div class="row">
 			<div class="col-md-6">
 				<div class="page-header">
-					<h3>AVG Stat</h3>
+					<h4>均线表现分析</h4>
 				</div>
 				<div class="content">
 					<div id="msg"></div>
@@ -130,7 +132,7 @@
 
 			<div class="col-md-6">
 				<div class="page-header">
-					<h3>MACD Stat</h3>
+					<h4>MACD表现分析</h4>
 				</div>
 				<div class="content">
 					<div classs="table-responsive">
