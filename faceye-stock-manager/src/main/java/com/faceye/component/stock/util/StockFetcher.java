@@ -16,6 +16,7 @@ import com.faceye.feature.service.Reporter;
 import com.faceye.feature.service.impl.PrintReporter;
 import com.faceye.feature.util.FileUtil;
 import com.faceye.feature.util.http.Http;
+import com.google.common.collect.Lists;
 
 /**
  * 股票数据抓取
@@ -280,6 +281,44 @@ public class StockFetcher {
 		return res;
 	}
 
+	
+	/**
+	 * 获取股票所属行业信息<br>
+	 * URL:http://vip.stock.finance.sina.com.cn/corp/go.php/vCI_CorpOtherInfo/stockid/600009/menu_num/2.phtml<br>
+	 * @param code
+	 * @return
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年4月17日 上午8:27:29
+	 */
+	public List<String> getStockBusiness(String code){
+		List<String> res=Lists.newArrayList();
+		String business="默认";
+		String url="http://vip.stock.finance.sina.com.cn/corp/go.php/vCI_CorpOtherInfo/stockid/"+code+"/menu_num/2.phtml";
+		try {
+			String content=this.getContent(url);
+			if(StringUtils.isNotEmpty(content)){
+				//		<td class="ct" align="center">交通运输辅助业</td>
+				String regexp="<td class=\"ct\" align=\"center\">([\\s\\S].+?)<\\/td>";
+				Pattern pattern = Pattern.compile(regexp, Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
+				Matcher matcher = pattern.matcher(content);
+				while(matcher.find()){
+					String group=matcher.group(1);
+					logger.debug(">>FaceYe matcher group is:"+group);
+					if(!StringUtils.contains(group, "<")){
+						res.add(group);
+					}
+				}
+			}
+		} catch (Exception e) {
+			logger.error(">>FaceYe Throws Exception:",e);
+		}
+		for(String str:res){
+			logger.debug(">>FaceYe --分类:"+str+"  |");
+		}
+		return res;
+		
+	}
 	public static void main(String args[]) throws Exception {
 		StockFetcher fetcher = new StockFetcher();
 		// System.out.println(fetcher.fetchSinaStockData("sh603766"));
@@ -289,10 +328,10 @@ public class StockFetcher {
 //		report.reporter(data);
 
 //		String content = fetcher.getContent("http://vip.stock.finance.sina.com.cn/q/go.php/vIR_RatingNewest/index.phtml?num=60&p=2");
-		String content=fetcher.getContent("http://quote.eastmoney.com/stocklist.html");
-		System.out.print(content);
-		List<Map<String, String>> codesAndName = fetcher.distillStockNameAndCode(content);
-		
+//		String content=fetcher.getContent("http://quote.eastmoney.com/stocklist.html");
+//		System.out.print(content);
+//		List<Map<String, String>> codesAndName = fetcher.distillStockNameAndCode(content);
+		List<String> cs=fetcher.getStockBusiness("5000052");
 		// System.out.println(content);
 	}
 }

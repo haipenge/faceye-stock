@@ -204,4 +204,10 @@ public class StockServiceTestCase extends BaseServiceTestCase {
         Page<Stock> stocks=this.stockService.getPage(null, 1, 2141);
         Assert.isTrue(stocks!=null && stocks.getContent().size()==2141);
 	}
+	@Test
+	public void testTimeTip() throws Exception{
+		long time=System.currentTimeMillis();
+		logger.debug("Time is:"+time+",length is:"+(""+time).length());
+		Assert.isTrue(true);
+	}
 }
