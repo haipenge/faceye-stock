@@ -50,4 +50,12 @@ public class DailyDataCustomerRepositoryImpl implements DailyDataCustomerReposit
 		return count;
 	}
 
+	@Override
+	public void removeStockHistoryDailyData(Long stockId) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("stockId").is(stockId));
+		// query.addCriteria(Criteria.where("id").is(id));
+		this.mongoOperations.remove(query, DailyData.class);
+	}
+
 }/** @generate-repository-source@ **/

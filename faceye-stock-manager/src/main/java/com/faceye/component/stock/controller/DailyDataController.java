@@ -27,8 +27,9 @@ import com.faceye.feature.util.http.HttpUtil;
 @Scope("prototype")
 @RequestMapping("/stock/dailyData")
 public class DailyDataController extends BaseController<DailyData, Long, DailyDataService> {
-@Autowired
-	private StockService stockService=null;
+	@Autowired
+	private StockService stockService = null;
+
 	@Autowired
 	public DailyDataController(DailyDataService service) {
 		super(service);
@@ -44,9 +45,9 @@ public class DailyDataController extends BaseController<DailyData, Long, DailyDa
 	@RequestMapping("/home")
 	public String home(HttpServletRequest request, Model model) {
 		Map searchParams = HttpUtil.getRequestParams(request);
-		Long stockId=MapUtils.getLong(searchParams, "EQ|stockId");
-		if(null!=stockId){
-			Stock stock=this.stockService.get(stockId);
+		Long stockId = MapUtils.getLong(searchParams, "EQ|stockId");
+		if (null != stockId) {
+			Stock stock = this.stockService.get(stockId);
 			model.addAttribute("stock", stock);
 		}
 		searchParams.put("SORT|date", "desc");
@@ -100,12 +101,15 @@ public class DailyDataController extends BaseController<DailyData, Long, DailyDa
 	 * @return
 	 * @author:@haipenge haipenge@gmail.com 2014年5月24日
 	 */
-	@RequestMapping("/remove/{id}")
-	public String remove(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
-		if (id != null) {
-			this.service.remove(id);
+	@RequestMapping("/remove")
+	@ResponseBody
+	public String remove(HttpServletRequest request) {
+		Map params = HttpUtil.getRequestParams(request);
+		Long stockId = MapUtils.getLong(params, "stockId");
+		if (stockId != null) {
+			this.service.remove(stockId);
 		}
-		return "redirect:/stock/dailyData/home";
+		return AjaxResult.getInstance().buildDefaultResult(true);
 	}
 
 	/**

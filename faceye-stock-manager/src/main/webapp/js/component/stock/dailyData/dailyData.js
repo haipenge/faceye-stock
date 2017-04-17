@@ -11,6 +11,10 @@ var DailyData = {
 			DailyData.statDailyData2FindStar();
 			return false;
 		});
+		$('#remove-history').click(function(){
+			DailyData.remove();
+			return false;
+		});
 	},
 	crawl : function() {
 		var stockId=$('input[name="stockId"]').val();
@@ -38,6 +42,25 @@ var DailyData = {
 			},
 			success:function(data,textStatus,xhr){
 				
+			}
+		});
+	},
+	/**
+	 * 清空历史数据 
+	 */
+	remove:function(){
+		var stockId=$('input[name="stockId"]').val();
+		$.ajax({
+			url:"/stock/dailyData/remove",
+			type:'post',
+			data:{
+				stockId:stockId
+			},
+			success:function(data,status,xhr){
+				if(data.result){
+					var msg=new Msg({msg:'数据已清空.'});
+					msg.show();
+				}
 			}
 		});
 	}

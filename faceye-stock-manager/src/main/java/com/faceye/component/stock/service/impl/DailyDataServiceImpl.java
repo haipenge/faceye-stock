@@ -84,15 +84,17 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 			jidu = "4";
 		}
 		String jidus[] = new String[] { "1", "2", "3", "4" };
-		logger.debug(">>FaceYe current jidu is:"+jidu+",year is:"+year);
+		logger.debug(">>FaceYe current jidu is:" + jidu + ",year is:" + year);
 		if (Integer.parseInt(jidu) > 0) {
-			for (int i = 1; i <Integer.parseInt(jidu); i++) {
+			for (int i = 1; i < Integer.parseInt(jidu); i++) {
 				this.fetchHistoryData(code, "" + year, "" + i);
 			}
 		}
-		// 取过去一年数据
-		for (String jd : jidus) {
-			this.fetchHistoryData(code, "" + (year - 1), jd);
+		// 取过去三年数据
+		for (int i = 1; i < 3; i++) {
+			for (String jd : jidus) {
+				this.fetchHistoryData(code, "" + (year - i), jd);
+			}
 		}
 
 	}
@@ -220,6 +222,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 			}
 		}
 	}
+
 	/**
 	 * 初始化一只股票的均线
 	 */
@@ -228,9 +231,8 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 		this.initDailyDataAvg(stock);
 		// 初始化EMA12/26
 		this.initEMA(stock);
-	 
+
 	}
-	
 
 	/**
 	 * 初始化一只股票的均线
@@ -540,6 +542,10 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 			res = new PageImpl<DailyData>(items);
 		}
 		return res;
+	}
+	@Override
+	public void remove(Long stockId){
+		this.dailyDataCustomerRepository.removeStockHistoryDailyData(stockId);
 	}
 
 }
