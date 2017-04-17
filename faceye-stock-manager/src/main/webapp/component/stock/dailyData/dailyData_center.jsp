@@ -78,15 +78,15 @@
 							<td><fmt:formatNumber value="${dailyData.avg120}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 							<td><fmt:formatNumber value="${dailyData.avg250}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 							<td><c:choose>
-									<c:when test=" ${dailyData.starDataType eq 1 }">
+									<c:when test="${dailyData.starDataType eq 1 }">
 										<b>AVG</b>
 									</c:when>
-									<c:when test=" ${dailyData.starDataType eq 2 }">
+									<c:when test="${dailyData.starDataType eq 2 }">
 										<b>MACD</b>
 									</c:when>
 									<c:otherwise>
 									</c:otherwise>
-								</c:choose></td>
+								</c:choose>--${dailyData.starDataType eq 2 }</td>
 							<td><fmt:formatNumber value="${dailyData.ema12}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 							<td><fmt:formatNumber value="${dailyData.ema26}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 							<td><fmt:formatNumber value="${dailyData.dif}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
