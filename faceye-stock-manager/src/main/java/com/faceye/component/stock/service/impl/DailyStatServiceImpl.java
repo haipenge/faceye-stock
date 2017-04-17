@@ -288,10 +288,15 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 		List<Stock> stocks = this.stockService.getAll();
 		if (CollectionUtils.isNotEmpty(stocks)) {
 			for (Stock stock : stocks) {
-				this.statDailyData2FindAvgStar(stock);
-				this.statDailyData2FindMacdAndAvgStar(stock);
+				this.statDailyData2FindStar(stock);
 			}
 		}
+	}
+
+	@Override
+	public void statDailyData2FindStar(Stock stock) {
+		this.statDailyData2FindAvgStar(stock);
+		this.statDailyData2FindMacdAndAvgStar(stock);
 	}
 
 	/**
@@ -304,7 +309,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 	 * @Date:2017年4月16日 上午10:53:42
 	 */
 	private void statDailyData2FindAvgStar(Stock stock) {
-		int type=0;
+		int type = 0;
 		Date lastStarAppearDate = null;
 		Map params = new HashMap();
 		params.put("EQ|stockId", stock.getId());
@@ -351,11 +356,11 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 					isStarData = true;
 					count = 0;
 					signIndex = 0;
-					 type=StockConstants.STOCK_STAR_TYPE_1;
+					type = StockConstants.STOCK_STAR_TYPE_1;
 					starDailyData.setStarDataType(type);
 					this.dailyDataService.save(starDailyData);
 					lastStarAppearDate = starDailyData.getDate();
-					
+
 				}
 			}
 		}
@@ -364,7 +369,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 			stock.setLastStarAppearDate(lastStarAppearDate);
 			this.stockService.save(stock);
 		}
-		
+
 	}
 
 	/**
@@ -380,7 +385,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 	 * @Author:haipenge
 	 * @Date:2017年4月13日 下午12:01:01
 	 */
-	private void statDailyData2FindMacdAndAvgStar(Stock stock) {
+	public void statDailyData2FindMacdAndAvgStar(Stock stock) {
 		Map dailyDataParams = new HashMap();
 		dailyDataParams.put("EQ|stockId", stock.getId());
 		dailyDataParams.put("SORT|date", "asc");
@@ -420,88 +425,94 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 		List<Stock> stocks = this.stockService.getAll();
 		if (CollectionUtils.isNotEmpty(stocks)) {
 			for (Stock stock : stocks) {
-				Map starParams = new HashMap();
-				starParams.put("EQ|stockId", stock.getId());
-				starParams.put("GT|starDataType", 0);
-				starParams.put("SORT|date", "asc");
-				List<DailyData> starDailyDatas = this.dailyDataService.getPage(starParams, 1, 0).getContent();
-				if (CollectionUtils.isNotEmpty(starDailyDatas)) {
-					for (DailyData starDailyData : starDailyDatas) {
-						Map dailyParams = new HashMap();
-						dailyParams.put("EQ|stockId", stock.getId());
-						dailyParams.put("GTE|date", starDailyData.getDate());
-						
-						dailyParams.put("SORT|date", "asc");
-						dailyParams.put("GT|kaipanjia", 0D);
-						List<DailyData> dailyDatas = this.dailyDataService.getPage(dailyParams, 1, 64).getContent();
-						Map starDataStatParams = new HashMap();
-						starDataStatParams.put("EQ|starDailyDataId", starDailyData.getId());
-						starDataStatParams.put("EQ|starType", starDailyData.getStarDataType());
-						List<StarDataStat> starDataStats = this.starDataStatService.getPage(starDataStatParams, 1, 0).getContent();
-						StarDataStat starDataStat = CollectionUtils.isNotEmpty(starDataStats) ? starDataStats.get(0) : new StarDataStat();
-						starDataStat.setStarDailyDataId(starDailyData.getId());
-						starDataStat.setStarDataDate(starDailyData.getDate());
-						starDataStat.setStockId(stock.getId());
-						starDataStat.setStarType(starDailyData.getStarDataType());
-						if (CollectionUtils.isNotEmpty(dailyDatas) && dailyDatas.size() > 3) {
-							Double max5DayIncreaseRate = 0D;// 5日最大涨幅
-							Double max10DayIncreaseRate = 0D;// 10日最大涨幅
-							Double max20DayIncreaseRate = 0D;// 20日最大涨幅
-							Double max30DayIncreaseRate = 0D;// 30日最大涨
-							Double max60DayIncreaseRate = 0D;// 60日最大涨幅
-							Double start2BuyPrice = 0.0D;
-							Double max5DayPrice = 0D;// 5日最高价
-							Double max10DayPrice = 0D;// 10日最高价
-							Double max20DayPrice = 0D;// 20日最高价
-							Double max30DayPrice = 0D;// 30日最高价
-							Double max60DayPrice = 0D;// 60日最高价
-							for (int i = 3; i < dailyDatas.size(); i++) {
-								DailyData data = dailyDatas.get(i);
-								if (i == 3) {
-									// 以第四天开盘价买入
-									start2BuyPrice = data.getKaipanjia();
-								}
-								if (i <= 7) {
-									max5DayPrice = (data.getShoupanjia() > max5DayPrice) ? data.getShoupanjia() : max5DayPrice;
-									max10DayPrice = (data.getShoupanjia() > max10DayPrice) ? data.getShoupanjia() : max10DayPrice;
-									max20DayPrice = (data.getShoupanjia() > max20DayPrice) ? data.getShoupanjia() : max20DayPrice;
-									max30DayPrice = (data.getShoupanjia() > max30DayPrice) ? data.getShoupanjia() : max30DayPrice;
-									max60DayPrice = (data.getShoupanjia() > max60DayPrice) ? data.getShoupanjia() : max60DayPrice;
-								}
-								if (i > 7 && i <= 12) {
-									max10DayPrice = (data.getShoupanjia() > max10DayPrice) ? data.getShoupanjia() : max10DayPrice;
-									max20DayPrice = (data.getShoupanjia() > max20DayPrice) ? data.getShoupanjia() : max20DayPrice;
-									max30DayPrice = (data.getShoupanjia() > max30DayPrice) ? data.getShoupanjia() : max30DayPrice;
-									max60DayPrice = (data.getShoupanjia() > max60DayPrice) ? data.getShoupanjia() : max60DayPrice;
-								}
-								if (i > 12 && i <= 22) {
-									max20DayPrice = (data.getShoupanjia() > max20DayPrice) ? data.getShoupanjia() : max20DayPrice;
-									max30DayPrice = (data.getShoupanjia() > max30DayPrice) ? data.getShoupanjia() : max30DayPrice;
-									max60DayPrice = (data.getShoupanjia() > max60DayPrice) ? data.getShoupanjia() : max60DayPrice;
-								}
-								if (i > 22 && i <= 32) {
-									max30DayPrice = (data.getShoupanjia() > max30DayPrice) ? data.getShoupanjia() : max30DayPrice;
-									max60DayPrice = (data.getShoupanjia() > max60DayPrice) ? data.getShoupanjia() : max60DayPrice;
-								}
-								if (i > 32 && i <= 62) {
-									max60DayPrice = (data.getShoupanjia() > max60DayPrice) ? data.getShoupanjia() : max60DayPrice;
-								}
-							}
-							if (start2BuyPrice > 0) {
-								max5DayIncreaseRate = (max5DayPrice - start2BuyPrice) / start2BuyPrice;
-								max10DayIncreaseRate = (max10DayPrice - start2BuyPrice) / start2BuyPrice;
-								max20DayIncreaseRate = (max20DayPrice - start2BuyPrice) / start2BuyPrice;
-								max30DayIncreaseRate = (max30DayPrice - start2BuyPrice) / start2BuyPrice;
-								max60DayIncreaseRate = (max60DayPrice - start2BuyPrice) / start2BuyPrice;
-							}
-							starDataStat.setMax5DayIncreaseRate(max5DayIncreaseRate);
-							starDataStat.setMax10DayIncreaseRate(max10DayIncreaseRate);
-							starDataStat.setMax20DayIncreaseRate(max20DayIncreaseRate);
-							starDataStat.setMax30DayIncreaseRate(max30DayIncreaseRate);
-							starDataStat.setMax60DayIncreaseRate(max60DayIncreaseRate);
-							this.starDataStatService.save(starDataStat);
+				this.statStarData(stock);
+			}
+		}
+	}
+
+	/**
+	 * 分析单只股票的星标
+	 */
+	public void statStarData(Stock stock) {
+		Map starParams = new HashMap();
+		starParams.put("EQ|stockId", stock.getId());
+		starParams.put("GT|starDataType", 0);
+		starParams.put("SORT|date", "asc");
+		List<DailyData> starDailyDatas = this.dailyDataService.getPage(starParams, 1, 0).getContent();
+		if (CollectionUtils.isNotEmpty(starDailyDatas)) {
+			for (DailyData starDailyData : starDailyDatas) {
+				Map dailyParams = new HashMap();
+				dailyParams.put("EQ|stockId", stock.getId());
+				dailyParams.put("GTE|date", starDailyData.getDate());
+				dailyParams.put("SORT|date", "asc");
+				dailyParams.put("GT|kaipanjia", 0D);
+				List<DailyData> dailyDatas = this.dailyDataService.getPage(dailyParams, 1, 64).getContent();
+				Map starDataStatParams = new HashMap();
+				starDataStatParams.put("EQ|starDailyDataId", starDailyData.getId());
+				starDataStatParams.put("EQ|starType", starDailyData.getStarDataType());
+				List<StarDataStat> starDataStats = this.starDataStatService.getPage(starDataStatParams, 1, 0).getContent();
+				StarDataStat starDataStat = CollectionUtils.isNotEmpty(starDataStats) ? starDataStats.get(0) : new StarDataStat();
+				starDataStat.setStarDailyDataId(starDailyData.getId());
+				starDataStat.setStarDataDate(starDailyData.getDate());
+				starDataStat.setStockId(stock.getId());
+				starDataStat.setStarType(starDailyData.getStarDataType());
+				if (CollectionUtils.isNotEmpty(dailyDatas) && dailyDatas.size() > 3) {
+					Double max5DayIncreaseRate = 0D;// 5日最大涨幅
+					Double max10DayIncreaseRate = 0D;// 10日最大涨幅
+					Double max20DayIncreaseRate = 0D;// 20日最大涨幅
+					Double max30DayIncreaseRate = 0D;// 30日最大涨
+					Double max60DayIncreaseRate = 0D;// 60日最大涨幅
+					Double start2BuyPrice = 0.0D;
+					Double max5DayPrice = 0D;// 5日最高价
+					Double max10DayPrice = 0D;// 10日最高价
+					Double max20DayPrice = 0D;// 20日最高价
+					Double max30DayPrice = 0D;// 30日最高价
+					Double max60DayPrice = 0D;// 60日最高价
+					for (int i = 3; i < dailyDatas.size(); i++) {
+						DailyData data = dailyDatas.get(i);
+						if (i == 3) {
+							// 以第四天开盘价买入
+							start2BuyPrice = data.getKaipanjia();
+						}
+						if (i <= 7) {
+							max5DayPrice = (data.getShoupanjia() > max5DayPrice) ? data.getShoupanjia() : max5DayPrice;
+							max10DayPrice = (data.getShoupanjia() > max10DayPrice) ? data.getShoupanjia() : max10DayPrice;
+							max20DayPrice = (data.getShoupanjia() > max20DayPrice) ? data.getShoupanjia() : max20DayPrice;
+							max30DayPrice = (data.getShoupanjia() > max30DayPrice) ? data.getShoupanjia() : max30DayPrice;
+							max60DayPrice = (data.getShoupanjia() > max60DayPrice) ? data.getShoupanjia() : max60DayPrice;
+						}
+						if (i > 7 && i <= 12) {
+							max10DayPrice = (data.getShoupanjia() > max10DayPrice) ? data.getShoupanjia() : max10DayPrice;
+							max20DayPrice = (data.getShoupanjia() > max20DayPrice) ? data.getShoupanjia() : max20DayPrice;
+							max30DayPrice = (data.getShoupanjia() > max30DayPrice) ? data.getShoupanjia() : max30DayPrice;
+							max60DayPrice = (data.getShoupanjia() > max60DayPrice) ? data.getShoupanjia() : max60DayPrice;
+						}
+						if (i > 12 && i <= 22) {
+							max20DayPrice = (data.getShoupanjia() > max20DayPrice) ? data.getShoupanjia() : max20DayPrice;
+							max30DayPrice = (data.getShoupanjia() > max30DayPrice) ? data.getShoupanjia() : max30DayPrice;
+							max60DayPrice = (data.getShoupanjia() > max60DayPrice) ? data.getShoupanjia() : max60DayPrice;
+						}
+						if (i > 22 && i <= 32) {
+							max30DayPrice = (data.getShoupanjia() > max30DayPrice) ? data.getShoupanjia() : max30DayPrice;
+							max60DayPrice = (data.getShoupanjia() > max60DayPrice) ? data.getShoupanjia() : max60DayPrice;
+						}
+						if (i > 32 && i <= 62) {
+							max60DayPrice = (data.getShoupanjia() > max60DayPrice) ? data.getShoupanjia() : max60DayPrice;
 						}
 					}
+					if (start2BuyPrice > 0) {
+						max5DayIncreaseRate = (max5DayPrice - start2BuyPrice) / start2BuyPrice;
+						max10DayIncreaseRate = (max10DayPrice - start2BuyPrice) / start2BuyPrice;
+						max20DayIncreaseRate = (max20DayPrice - start2BuyPrice) / start2BuyPrice;
+						max30DayIncreaseRate = (max30DayPrice - start2BuyPrice) / start2BuyPrice;
+						max60DayIncreaseRate = (max60DayPrice - start2BuyPrice) / start2BuyPrice;
+					}
+					starDataStat.setMax5DayIncreaseRate(max5DayIncreaseRate);
+					starDataStat.setMax10DayIncreaseRate(max10DayIncreaseRate);
+					starDataStat.setMax20DayIncreaseRate(max20DayIncreaseRate);
+					starDataStat.setMax30DayIncreaseRate(max30DayIncreaseRate);
+					starDataStat.setMax60DayIncreaseRate(max60DayIncreaseRate);
+					this.starDataStatService.save(starDataStat);
 				}
 			}
 		}
