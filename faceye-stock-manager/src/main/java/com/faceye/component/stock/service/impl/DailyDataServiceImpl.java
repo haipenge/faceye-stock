@@ -216,28 +216,21 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 			for (int i = 0; i < stocks.size(); i++) {
 				Stock stock = stocks.get(i);
 				logger.debug(">>FaceYe --> stock index is:" + stock.getName() + "(" + stock.getCode() + "),index is:" + i + ",total size is:" + stocks.size());
-				// 初始化均线
-				this.initDailyDataAvg(stock);
-				// 初始化EMA12/26
-				this.initEMA(stock);
+				this.computeDailyDataLines(stock);
 			}
-			// List<Runnable> runnables = new ArrayList<Runnable>();
-			// for (int i = 0; i < 5; i++) {
-			// Runnable runnable = new ComputeThread();
-			// runnables.add(runnable);
-			// }
-			// ThreadPoolController.getINSTANCE().execute("Compute-Thread", runnables, 5);
-			// while (!ThreadPoolController.getINSTANCE().isShutdonw("Compute-Thread")) {
-			// try {
-			// logger.debug(">>FaceYe sleep 1 minute.");
-			// Thread.sleep(60000L);
-			// } catch (InterruptedException e) {
-			// logger.error(">>FaceYe throws Exception: --->" + e.toString());
-			// }
-			// }
-			logger.debug(">>FaceYe --> compute finish.");
 		}
 	}
+	/**
+	 * 初始化一只股票的均线
+	 */
+	public void computeDailyDataLines(Stock stock) {
+		// 初始化均线
+		this.initDailyDataAvg(stock);
+		// 初始化EMA12/26
+		this.initEMA(stock);
+	 
+	}
+	
 
 	/**
 	 * 初始化一只股票的均线

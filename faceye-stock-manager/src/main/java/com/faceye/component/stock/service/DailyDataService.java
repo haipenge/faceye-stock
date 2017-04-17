@@ -46,6 +46,14 @@ public interface DailyDataService extends BaseService<DailyData,Long>{
 	 * 2015年2月17日
 	 */
 	public void computeDailyDataLines();
+	/**
+	 * 计算一只股票的均线
+	 * @param stock
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年4月17日 下午5:40:21
+	 */
+	public void computeDailyDataLines(Stock stock);
 	
 	/**
 	 * 从新浪数据接口爬取每日数据
