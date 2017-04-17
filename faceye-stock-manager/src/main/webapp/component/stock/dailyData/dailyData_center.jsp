@@ -11,7 +11,8 @@
 		</div>
 		<div class="col-sm-4">
 			<a class="btn btn-primary pull-right" href="#" id="crawl-history">补全数据 </a>
-		</div>
+			<a class="btn btn-primary pull-right" href="#" id="stat-daily-data-2-find-star">星标分析</a>
+ 		</div>
 	</div>
 
 </div>
