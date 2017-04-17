@@ -86,7 +86,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 		String jidus[] = new String[] { "1", "2", "3", "4" };
 		logger.debug(">>FaceYe current jidu is:" + jidu + ",year is:" + year);
 		if (Integer.parseInt(jidu) > 0) {
-			for (int i = 1; i < Integer.parseInt(jidu); i++) {
+			for (int i = 1; i <= Integer.parseInt(jidu); i++) {
 				this.fetchHistoryData(code, "" + year, "" + i);
 			}
 		}
