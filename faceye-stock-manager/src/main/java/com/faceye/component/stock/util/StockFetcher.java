@@ -182,6 +182,7 @@ public class StockFetcher {
 	public List<Map<String, String>> getStockDataList(String stockCode, String year, String jidu) {
 		List<Map<String, String>> res = new ArrayList<Map<String, String>>();
 		String url = "http://money.finance.sina.com.cn/corp/go.php/vMS_MarketHistory/stockid/" + stockCode + ".phtml?year=" + year + "&jidu=" + jidu;
+		logger.debug(">>FaceYe fetch stock daily data url is:"+url);
 		String content = Http.getInstance().get(url, "gb2312");
 		try {
 			Thread.sleep(1500L);
