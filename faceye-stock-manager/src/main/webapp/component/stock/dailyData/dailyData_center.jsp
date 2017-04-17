@@ -86,7 +86,7 @@
 									</c:when>
 									<c:otherwise>
 									</c:otherwise>
-								</c:choose>--${dailyData.starDataType eq 2 }</td>
+								</c:choose></td>
 							<td><fmt:formatNumber value="${dailyData.ema12}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 							<td><fmt:formatNumber value="${dailyData.ema26}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 							<td><fmt:formatNumber value="${dailyData.dif}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
