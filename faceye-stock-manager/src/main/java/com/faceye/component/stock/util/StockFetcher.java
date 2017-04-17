@@ -161,7 +161,7 @@ public class StockFetcher {
 				map.put("volume", StringUtils.trim(volume));
 				// 成交金额(元)
 				map.put("money", StringUtils.trim(money));
-				logger.debug(">>Date:" + map.get("date") + ",open:" + open + ",high:" + high + ",low:" + low + ",close:" + close + ",volume:" + volume + ",money:" + money);
+				//logger.debug(">>Date:" + map.get("date") + ",open:" + open + ",high:" + high + ",low:" + low + ",close:" + close + ",volume:" + volume + ",money:" + money);
 				data.add(map);
 			}
 		}
