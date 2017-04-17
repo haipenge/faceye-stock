@@ -23,6 +23,7 @@ import com.faceye.component.stock.entity.DailyStat;
 import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.service.DailyDataService;
 import com.faceye.component.stock.service.DailyStatService;
+import com.faceye.component.stock.service.StarDataStatService;
 import com.faceye.component.stock.service.StockService;
 import com.faceye.feature.controller.BaseController;
 import com.faceye.feature.util.AjaxResult;
@@ -44,6 +45,7 @@ public class DailyStatController extends BaseController<DailyStat, Long, DailySt
 	private StockService stockService = null;
 	@Autowired
 	private DailyDataService dailyDataService=null;
+	
 
 	@Autowired
 	public DailyStatController(DailyStatService service) {
@@ -214,6 +216,8 @@ public class DailyStatController extends BaseController<DailyStat, Long, DailySt
 			if(null!=stock){
 				this.dailyDataService.computeDailyDataLines(stock);
 				this.service.statDailyData2FindStar(stock);
+				this.service.statStarData(stock);
+				
 			}
 		}
 		return AjaxResult.getInstance().buildDefaultResult(true);
