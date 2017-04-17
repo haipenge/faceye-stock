@@ -32,6 +32,7 @@
 			</form>
 		</div>
 		<div class="content">
+		   <div id="msg"></div>
 			<div classs="table-responsive" style="font-size: 11px;">
 				<table class="table table-bordered table-hover" style="font-size: 10px;">
 					<thead>
