@@ -69,7 +69,7 @@ public class StarDataStatController extends BaseController<StarDataStat, Long, S
 		model.addAttribute("wrapAvgStarDataStat", wrapAvgStarDataStat);
 		searchParams.put("EQ|starType", StockConstants.STOCK_STAR_TYPE_2);
 		WrapStarDataStat wrapAvgAndMACDStarDataStat=this.service.wrapStarDataStat(searchParams,  getPage(searchParams), getSize(searchParams));
-		model.addAttribute("wrapMACDStarDataStat", wrapAvgAndMACDStarDataStat);
+		model.addAttribute("wrapAvgAndMACDStarDataStat", wrapAvgAndMACDStarDataStat);
 		searchParams.put("EQ|starType", StockConstants.STOCK_STAR_TYPE_3);
 		WrapStarDataStat wrapMACDStarDataStat=this.service.wrapStarDataStat(searchParams,  getPage(searchParams), getSize(searchParams));
 		model.addAttribute("wrapMACDStarDataStat", wrapMACDStarDataStat);

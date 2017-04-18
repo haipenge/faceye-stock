@@ -149,15 +149,15 @@
 							<tbody>
 								<tr>
 									<td class="text-right" style="border-bottom: 1px solid blue;"></td>
-									<td class="text-right" style="border-bottom: 1px solid blue;"><fmt:formatNumber value="${wrapMACDStarDataStat.max5DayIncreaseSuccessRate *100}" type="number"
+									<td class="text-right" style="border-bottom: 1px solid blue;"><fmt:formatNumber value="${wrapAvgAndMACDStarDataStat.max5DayIncreaseSuccessRate *100}" type="number"
 											pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
-									<td class="text-right" style="border-bottom: 1px solid blue;"><fmt:formatNumber value="${wrapMACDStarDataStat.max10DayIncreaseSuccessRate *100}" type="number"
+									<td class="text-right" style="border-bottom: 1px solid blue;"><fmt:formatNumber value="${wrapAvgAndMACDStarDataStat.max10DayIncreaseSuccessRate *100}" type="number"
 											pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
-									<td class="text-right" style="border-bottom: 1px solid blue;"><fmt:formatNumber value="${wrapMACDStarDataStat.max20DayIncreaseSuccessRate *100}" type="number"
+									<td class="text-right" style="border-bottom: 1px solid blue;"><fmt:formatNumber value="${wrapAvgAndMACDStarDataStat.max20DayIncreaseSuccessRate *100}" type="number"
 											pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
-									<td class="text-right" style="border-bottom: 1px solid blue;"><fmt:formatNumber value="${wrapMACDStarDataStat.max30DayIncreaseSuccessRate *100}" type="number"
+									<td class="text-right" style="border-bottom: 1px solid blue;"><fmt:formatNumber value="${wrapAvgAndMACDStarDataStat.max30DayIncreaseSuccessRate *100}" type="number"
 											pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
-									<td class="text-right" style="border-bottom: 1px solid blue;"><fmt:formatNumber value="${wrapMACDStarDataStat.max60DayIncreaseSuccessRate *100}" type="number"
+									<td class="text-right" style="border-bottom: 1px solid blue;"><fmt:formatNumber value="${wrapAvgAndMACDStarDataStat.max60DayIncreaseSuccessRate *100}" type="number"
 											pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
 
 								</tr>
