@@ -19,6 +19,7 @@ public class CrawlStockDailyDataJob extends BaseJob {
 	private DailyDataService dailyDataService=null;
 	@Override
 	public void run() {
+		logger.debug(">>FaceYe start 2 crawl daily data.");
 		dailyDataService.crawlDailyData();
 	}
 

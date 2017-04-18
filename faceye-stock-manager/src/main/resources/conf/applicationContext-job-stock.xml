@@ -44,7 +44,7 @@
 			<ref bean="crawlStockDailyDataJobDetail" />
 		</property>
 		<property name="cronExpression">
-			<value>0 41 17 * * ?</value>
+			<value>0 46 17 * * ?</value>
 		</property>
 	</bean>
 	<bean id="crawlStockDailyDataJobDetail"
