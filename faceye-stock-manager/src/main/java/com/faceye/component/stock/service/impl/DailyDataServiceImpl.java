@@ -397,6 +397,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 		// this.dailyDataCustomerRepository.clearHistoryDailyData();
 		List<Stock> stocks = (List) this.stockRepository.findAll();
 		if (CollectionUtils.isNotEmpty(stocks)) {
+			logger.debug(">>FaceYe crawl stock size is :"+stocks.size());
 			for (Stock stock : stocks) {
 				try {
 					this.crawlDailyData(stock);
@@ -405,6 +406,8 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 					logger.debug(">>FaceYe throws Exception wen crawl stock daily data.exception is:" + e.toString() + ",stock code is:" + stock.getCode());
 				}
 			}
+		}else{
+			logger.debug(">>FaceYe --> stock is empty ,can not be crawl.");
 		}
 	}
 
