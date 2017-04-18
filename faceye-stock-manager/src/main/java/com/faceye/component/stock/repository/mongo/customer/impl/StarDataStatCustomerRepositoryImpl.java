@@ -69,6 +69,7 @@ public class StarDataStatCustomerRepositoryImpl implements StarDataStatCustomerR
 	public void removeStockStarStatResults(Long stockId) {
 		Query query=new Query();
 		query.addCriteria(Criteria.where("stockId").is(stockId));
+		logger.debug(">>FaceYe now remove starData stat result of stock:"+stockId);
 		this.mongoOperations.remove(query, StarDataStat.class);
 	}
 
