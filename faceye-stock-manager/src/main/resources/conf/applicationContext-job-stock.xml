@@ -68,7 +68,7 @@
 			<ref bean="computeStockDailyDataAvgJobDetail" />
 		</property>
 		<property name="cronExpression">
-			<value>0 30 9 * * ?</value>
+			<value>0 30 16 * * ?</value>
 		</property>
 	</bean>
 	<bean id="computeStockDailyDataAvgJobDetail"
@@ -163,7 +163,7 @@
 			<ref bean="dailyStatJobDetail" />
 		</property>
 		<property name="cronExpression">
-			<value>0 20 9 * * ?</value>
+			<value>0 0 16 * * ?</value>
 		</property>
 	</bean>
 	
