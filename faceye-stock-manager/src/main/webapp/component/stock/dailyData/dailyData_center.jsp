@@ -82,7 +82,10 @@
 										<b>AVG</b>
 									</c:when>
 									<c:when test="${dailyData.starDataType eq 2 }">
-										<b>MACD</b>
+										<b>A+M</b>
+									</c:when>
+									<c:when test="${dailyData.starDataType eq 3 }">
+										<b>M</b>
 									</c:when>
 									<c:otherwise>
 									</c:otherwise>

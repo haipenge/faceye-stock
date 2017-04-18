@@ -390,7 +390,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 		Map dailyDataParams = new HashMap();
 		dailyDataParams.put("EQ|stockId", stock.getId());
 		dailyDataParams.put("SORT|date", "asc");
-		dailyDataParams.put("GTE|kaipanjia", 0D);
+		dailyDataParams.put("GT|kaipanjia", 0D);
 		dailyDataParams.put("EQ|starDataType", 1);
 		// 获取均线连续三日排列整齐的股票(starDataType=1)
 		List<DailyData> dailyDatas = this.dailyDataService.getPage(dailyDataParams, 1, 0).getContent();
@@ -429,7 +429,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 		Map dailyDataParams = new HashMap();
 		dailyDataParams.put("EQ|stockId", stock.getId());
 		dailyDataParams.put("SORT|date", "asc");
-		dailyDataParams.put("GTE|kaipanjia", 0D);
+		dailyDataParams.put("GT|kaipanjia", 0D);
 		List<DailyData> dailyDatas = this.dailyDataService.getPage(dailyDataParams, 1, 0).getContent();
 		if (CollectionUtils.isNotEmpty(dailyDatas)) {
 			boolean isContinue=true;
