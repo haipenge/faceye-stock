@@ -255,7 +255,7 @@ public class StockFetcher {
 	 */
 	public Map getLiveDataFromSina(String code) {
 		Map res = new HashMap();
-		String url = "http://hq.sinajs.cn/list=" + code;
+		String url = "http://hq.sinajs.cn/list=" + code.toLowerCase();
 		logger.debug(">>FaceYe crawl daily data url is:"+url);
 		String content = Http.getInstance().get(url, "GB2312");
 		if (StringUtils.isNotEmpty(content)) {
