@@ -181,11 +181,11 @@ public class StockFetcher {
 	 */
 	public List<Map<String, String>> getStockDataList(String stockCode, String year, String jidu) {
 		List<Map<String, String>> res = new ArrayList<Map<String, String>>();
-		String url = "http://money.finance.sina.com.cn/corp/go.php/vMS_MarketHistory/stockid/" + stockCode + ".phtml?year=" + year + "&jidu=" + jidu;
+		String url = "http://money.finance.sina.com.cn/corp/go.php/vMS_MarketHistory/stockid/" + stockCode.toLowerCase() + ".phtml?year=" + year + "&jidu=" + jidu;
 		logger.debug(">>FaceYe fetch stock daily data url is:"+url);
 		String content = Http.getInstance().get(url, "gb2312");
 		try {
-			Thread.sleep(1500L);
+			Thread.sleep(100L);
 		} catch (InterruptedException e) {
 			logger.error(">>FaceYe throws Exception: --->", e);
 		}
@@ -298,7 +298,7 @@ public class StockFetcher {
 	public List<String> getStockBusiness(String code){
 		List<String> res=Lists.newArrayList();
 		String business="默认";
-		String url="http://vip.stock.finance.sina.com.cn/corp/go.php/vCI_CorpOtherInfo/stockid/"+code+"/menu_num/2.phtml";
+		String url="http://vip.stock.finance.sina.com.cn/corp/go.php/vCI_CorpOtherInfo/stockid/"+code.toLowerCase()+"/menu_num/2.phtml";
 		try {
 			String content=this.getContent(url);
 			if(StringUtils.isNotEmpty(content)){

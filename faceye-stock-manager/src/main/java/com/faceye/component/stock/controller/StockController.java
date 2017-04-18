@@ -62,19 +62,20 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 		Double minPe = MapUtils.getDouble(searchParams, "GTE|dailyStat.pe");
 		Double maxPe = MapUtils.getDouble(searchParams, "LTE|dailyStat.pe");
 		String trace = MapUtils.getString(searchParams, "trace");
-		
+
 		if (StringUtils.isNotEmpty(trace)) {
 			Map starParams = new HashMap();
-//			starParams.put("EQ|stockId", value)
+			// starParams.put("EQ|stockId", value)
 			List<Long> traceStockIds = null;
-			if (StringUtils.equals(trace, "avg")) {
+			if (StringUtils.equals(trace, "1")) {
 				// 如果是星标追踪
 				starParams.put("EQ|starType", StockConstants.STOCK_STAR_TYPE_1);
-				traceStockIds = this.starDataStatService.getStarStockIds(starParams);
-			} else if (StringUtils.equals(trace, "macd")) {
+			} else if (StringUtils.equals(trace, "2")) {
 				starParams.put("EQ|starType", StockConstants.STOCK_STAR_TYPE_2);
-				traceStockIds = this.starDataStatService.getStarStockIds(starParams);
+			} else if (StringUtils.equals(trace, "3")) {
+				starParams.put("EQ|starType", StockConstants.STOCK_STAR_TYPE_3);
 			}
+			traceStockIds = this.starDataStatService.getStarStockIds(starParams);
 			if (CollectionUtils.isNotEmpty(traceStockIds)) {
 				searchParams.put("IN|id", traceStockIds);
 			}

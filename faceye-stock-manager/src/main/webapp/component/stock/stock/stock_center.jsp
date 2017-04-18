@@ -50,7 +50,8 @@
 								<select name="trace" class="form-control">
 									<option value="">数据追踪</option>
 									<option value="1">AVG</option>
-									<option value="2">MACD</option>
+									<option value="2">AVG+MACD</option>
+									<option value="3">MACD</option>
 								</select>
 							</div>
 							<div class="form-group">
