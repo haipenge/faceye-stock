@@ -256,6 +256,7 @@ public class StockFetcher {
 	public Map getLiveDataFromSina(String code) {
 		Map res = new HashMap();
 		String url = "http://hq.sinajs.cn/list=" + code;
+		logger.debug(">>FaceYe crawl daily data url is:"+url);
 		String content = Http.getInstance().get(url, "GB2312");
 		if (StringUtils.isNotEmpty(content)) {
 			String[] splitContent = content.split("=");
@@ -278,6 +279,8 @@ public class StockFetcher {
 			} else {
 				logger.debug(">>FaceYe 数据可能存在异常，股票编码:" + code + "数据为:" + content);
 			}
+		}else{
+			logger.debug(">>FaceYe have not got and daily data form url:"+url);
 		}
 		return res;
 	}
