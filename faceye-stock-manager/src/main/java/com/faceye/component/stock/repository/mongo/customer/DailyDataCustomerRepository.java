@@ -24,4 +24,14 @@ public interface DailyDataCustomerRepository {
 	public void removeStockHistoryDailyData(Long stockId);
 
 	public long getCount(Map params);
+	
+	/**
+	 * 重置数据星标类型
+	 * @param stockId
+	 * @param startType
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年4月18日 下午5:20:39
+	 */
+	public void resetDailyDataStatType(Long stockId,Integer starType);
 }/** @generate-repository-source@ **/

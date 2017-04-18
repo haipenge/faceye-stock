@@ -20,6 +20,7 @@ import com.faceye.component.stock.entity.ReportData;
 import com.faceye.component.stock.entity.StarDataStat;
 import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.repository.mongo.DailyStatRepository;
+import com.faceye.component.stock.repository.mongo.customer.DailyDataCustomerRepository;
 import com.faceye.component.stock.repository.mongo.customer.DailyStatCustomerRepository;
 import com.faceye.component.stock.service.DailyDataService;
 import com.faceye.component.stock.service.DailyStatService;
@@ -52,6 +53,8 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 	private ReportDataService reportDataService = null;
 	@Autowired
 	private StarDataStatService starDataStatService = null;
+	@Autowired
+	private DailyDataCustomerRepository dailyDataCustomerRepository=null;
 
 	@Autowired
 	public DailyStatServiceImpl(DailyStatRepository dao) {
@@ -295,6 +298,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 
 	@Override
 	public void statDailyData2FindStar(Stock stock) {
+		this.dailyDataCustomerRepository.resetDailyDataStatType(stock.getId(), 0);
 		this.statDailyData2FindAvgStar(stock);
 		this.statDailyData2FindMACDStar(stock);
 		this.statDailyData2FindMacdAndAvgStar(stock);

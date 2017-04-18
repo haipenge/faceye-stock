@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import com.faceye.component.stock.entity.DailyData;
@@ -56,6 +57,15 @@ public class DailyDataCustomerRepositoryImpl implements DailyDataCustomerReposit
 		query.addCriteria(Criteria.where("stockId").is(stockId));
 		// query.addCriteria(Criteria.where("id").is(id));
 		this.mongoOperations.remove(query, DailyData.class);
+	}
+
+	@Override
+	public void resetDailyDataStatType(Long stockId, Integer starType) {
+		Query query=new Query();
+		query.addCriteria(Criteria.where("stockId").is(stockId));
+		Update update=new Update();
+		update.set("starDataType", starType);
+		this.mongoOperations.updateMulti(query, update, DailyData.class);
 	}
 
 }/** @generate-repository-source@ **/
