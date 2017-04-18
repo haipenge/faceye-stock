@@ -17,4 +17,13 @@ public interface StarDataStatCustomerRepository {
 	 * @Date:2017年4月12日 上午8:21:22
 	 */
 	public long getStarDataStatCount(Map params);
+	
+	/**
+	 * 清空一只股票的星标分析结果
+	 * @param stockId
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年4月18日 上午9:24:31
+	 */
+	public void removeStockStarStatResults(Long stockId);
 }/**@generate-repository-source@**/

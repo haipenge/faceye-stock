@@ -15,20 +15,17 @@
 			<a class="btn btn-primary pull-right" href="#" id="stat-daily-data-2-find-star">星标分析</a>
 		</div>
 	</div>
-
 </div>
 <div class="cl-mcont">
 	<div class="block-flat">
 		<div class="content">
 			<form action="<c:url value="/stock/dailyData/home"/>" method="post" role="form" class="form-horizontal">
-
 				<div class="col-md-2">
 					<input type="text" class="form-control input-sm" name="EQ|stockName" placeholder="Stock Name...">
 				</div>
 				<div class="col-md-2">
 					<button type="submit" value="Search" class="btn btn-sm btn-default">Search</button>
 				</div>
-
 			</form>
 		</div>
 		<div class="content">

@@ -296,6 +296,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 	@Override
 	public void statDailyData2FindStar(Stock stock) {
 		this.statDailyData2FindAvgStar(stock);
+		this.statDailyData2FindMACDStar(stock);
 		this.statDailyData2FindMacdAndAvgStar(stock);
 	}
 
@@ -414,7 +415,31 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 				}
 			}
 		}
-
+	}
+	
+	/**
+	 * 寻找macd dif 上穿dea 数据，并标记类型3
+	 * @param stock
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年4月18日 上午9:39:45
+	 */
+	public void statDailyData2FindMACDStar(Stock stock){
+		Map dailyDataParams = new HashMap();
+		dailyDataParams.put("EQ|stockId", stock.getId());
+		dailyDataParams.put("SORT|date", "asc");
+		dailyDataParams.put("GTE|kaipanjia", 0D);
+//		dailyDataParams.put("EQ|starDataType", 1);
+		// 获取均线连续三日排列整齐的股票(starDataType=1)
+		List<DailyData> dailyDatas = this.dailyDataService.getPage(dailyDataParams, 1, 0).getContent();
+		if(CollectionUtils.isNotEmpty(dailyDatas)){
+			for(DailyData dailyData : dailyDatas){
+				if(dailyData.getDif()>dailyData.getDea()){
+					dailyData.setStarDataType(StockConstants.STOCK_STAR_TYPE_3);
+					this.dailyDataService.save(dailyData);
+				}
+			}
+		}
 	}
 
 	/**
@@ -425,6 +450,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 		List<Stock> stocks = this.stockService.getAll();
 		if (CollectionUtils.isNotEmpty(stocks)) {
 			for (Stock stock : stocks) {
+				
 				this.statStarData(stock);
 			}
 		}
@@ -434,6 +460,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 	 * 分析单只股票的星标
 	 */
 	public void statStarData(Stock stock) {
+		this.starDataStatService.removeStockStarStatResults(stock.getId());
 		Map starParams = new HashMap();
 		starParams.put("EQ|stockId", stock.getId());
 		starParams.put("GT|starDataType", 0);

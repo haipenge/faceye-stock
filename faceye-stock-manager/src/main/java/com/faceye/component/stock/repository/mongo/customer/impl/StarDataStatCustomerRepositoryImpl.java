@@ -31,7 +31,7 @@ public class StarDataStatCustomerRepositoryImpl implements StarDataStatCustomerR
 	public long getStarDataStatCount(Map params) {
 		long count = 0;
 		Query query = new Query();
-		Criteria criteria = Criteria.where("id").gt(0L);
+		Criteria criteria = Criteria.where("_id").gt(0L);
 		Long stockId = MapUtils.getLong(params, "EQ|stockId");
 		Integer starType=MapUtils.getInteger(params, "EQ|starType");
 		Double max5DayIncreaseRate = MapUtils.getDouble(params, "GTE|max5DayIncreaseRate");
@@ -63,6 +63,13 @@ public class StarDataStatCustomerRepositoryImpl implements StarDataStatCustomerR
 		count = this.mongoOperations.count(query, StarDataStat.class);
 		logger.debug(">>FaceYe count Query is:" + query.toString() + ",Query Result is:" + count);
 		return count;
+	}
+
+	@Override
+	public void removeStockStarStatResults(Long stockId) {
+		Query query=new Query();
+		query.addCriteria(Criteria.where("stockId").is(stockId));
+		this.mongoOperations.remove(query, StarDataStat.class);
 	}
 
 }/** @generate-repository-source@ **/

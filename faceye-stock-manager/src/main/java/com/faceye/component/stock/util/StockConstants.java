@@ -41,5 +41,7 @@ public class StockConstants {
 	public static final Integer STOCK_STAR_TYPE_1=1;
 	//avg(5.10.20）多头，之后五个交易日，macd(dif>dea) 快线在慢线之上。
 	public static final Integer STOCK_STAR_TYPE_2=2;
+	//MACD中 Dif 上穿Dea
+	public static final Integer STOCK_STAR_TYPE_3=3;
 	
 }
