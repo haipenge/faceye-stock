@@ -72,14 +72,13 @@
 			</form>
 		</div>
 		 -->
-		<div class="row" style="margin-top:0px;">
+		<div class="row" style="margin-top: 0px;">
 			<div class="col-md-6">
 				<div class="page-head">
 					<h4>均线表现分析</h4>
 				</div>
 				<div class="content">
 					<div id="msg"></div>
-
 					<div classs="table-responsive">
 						<table class="table table-bordered">
 							<thead>
@@ -129,7 +128,6 @@
 					<f:page page="${wrapAvgStarDataStat.starDataStats}" url="/stock/starDataStat/home" params="<%=request.getParameterMap()%>" />
 				</div>
 			</div>
-
 			<div class="col-md-6">
 				<div class="page-head">
 					<h4>MACD表现分析</h4>
@@ -139,12 +137,12 @@
 						<table class="table table-bordered">
 							<thead>
 								<tr>
+									<th class="text-left"><fmt:message key='stock.starDataStat.starDataDate'></fmt:message></th>
 									<th><fmt:message key='stock.starDataStat.max5DayIncreaseRate'></fmt:message></th>
 									<th><fmt:message key='stock.starDataStat.max10DayIncreaseRate'></fmt:message></th>
 									<th><fmt:message key='stock.starDataStat.max20DayIncreaseRate'></fmt:message></th>
 									<th><fmt:message key='stock.starDataStat.max30DayIncreaseRate'></fmt:message></th>
 									<th><fmt:message key='stock.starDataStat.max60DayIncreaseRate'></fmt:message></th>
-									<th><fmt:message key='stock.starDataStat.starDataDate'></fmt:message></th>
 									<!--@generate-entity-jsp-property-desc@-->
 								</tr>
 							</thead>
@@ -164,6 +162,7 @@
 								</tr>
 								<c:forEach items="${wrapMACDStarDataStat.starDataStats.content}" var="starDataStat">
 									<tr>
+										<td class="text-left"><fmt:formatDate pattern="yyyy-MM-dd" value="${starDataStat.starDataDate}" /></td>
 										<td class="text-right ${starDataStat.max5DayIncreaseRate lt 0 ? "decrease-color":"increase-color"}"><fmt:formatNumber
 												value="${starDataStat.max5DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
 										<td class="text-right ${starDataStat.max10DayIncreaseRate lt 0 ? "decrease-color":"increase-color"}"><fmt:formatNumber
@@ -174,7 +173,6 @@
 												value="${starDataStat.max30DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
 										<td class="text-right ${starDataStat.max60DayIncreaseRate lt 0 ? "decrease-color":"increase-color"}"><fmt:formatNumber
 												value="${starDataStat.max60DayIncreaseRate *100}" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
-										<td class="text-right"><fmt:formatDate pattern="yyyy-MM-dd" value="${starDataStat.starDataDate}" /></td>
 										<!--@generate-entity-jsp-property-value@-->
 									<tr>
 								</c:forEach>

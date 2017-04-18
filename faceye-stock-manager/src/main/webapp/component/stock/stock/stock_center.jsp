@@ -100,7 +100,7 @@
 							<!-- 
 							<th><fmt:message key='stock.stock.business'></fmt:message></th>
 							 -->
-							<th>市场</th>
+							
 							<th>当前股价</th>
 							<th><a
 								href="<c:url value="/stock/stock/home?EQ|category.$id=${searchParams.categoryid}&GTE|dailyStat.pe=${searchParams.minPe }&LTE|dailyStat.pe=${searchParams.maxPe}&like|name=${searchParams.name }&like|code=${searchParams.code}&SORT|dailyStat.pe=${empty searchParams.sortPe or searchParams.sortPe eq 'asc' ? 'desc':'asc' }"/>">PE
@@ -124,8 +124,8 @@
 								<td>${stock.name}&nbsp;&nbsp;<small>(<a href="<c:url value="/stock/stock/detail/${stock.id}"/>">${stock.code}</a>)
 								</small></td>
 								<!-- 
-								<td><a href="<c:url value="/stock/stock/home?EQ|category.$id=${stock.category.id}"/>">${stock.category.name}</a></td> -->
-								<td><c:if test="${stock.market eq 'sz'}">深圳(SZ)</c:if> <c:if test="${stock.market eq 'sh'}">上海(SH)</c:if></td>
+								<td><a href="<c:url value="/stock/stock/home?EQ|category.$id=${stock.category.id}"/>">${stock.category.name}</a></td>
+								<td><c:if test="${stock.market eq 'sz'}">深圳(SZ)</c:if> <c:if test="${stock.market eq 'sh'}">上海(SH)</c:if></td> -->
 								<td class="text-right"><fmt:formatNumber value="${stock.dailyStat.todayPrice }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 								<td><span class="pull-left"><fmt:formatNumber value="${stock.dailyStat.pe }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" /></span><span
 									class="span-suffix pull-right"><fmt:formatNumber value="${stock.dailyStat.dynamicPe }" type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />
