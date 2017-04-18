@@ -416,27 +416,35 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 			}
 		}
 	}
-	
+
 	/**
 	 * 寻找macd dif 上穿dea 数据，并标记类型3
+	 * 
 	 * @param stock
 	 * @Desc:
 	 * @Author:haipenge
 	 * @Date:2017年4月18日 上午9:39:45
 	 */
-	public void statDailyData2FindMACDStar(Stock stock){
+	public void statDailyData2FindMACDStar(Stock stock) {
 		Map dailyDataParams = new HashMap();
 		dailyDataParams.put("EQ|stockId", stock.getId());
 		dailyDataParams.put("SORT|date", "asc");
 		dailyDataParams.put("GTE|kaipanjia", 0D);
-//		dailyDataParams.put("EQ|starDataType", 1);
+		// dailyDataParams.put("EQ|starDataType", 1);
 		// 获取均线连续三日排列整齐的股票(starDataType=1)
 		List<DailyData> dailyDatas = this.dailyDataService.getPage(dailyDataParams, 1, 0).getContent();
-		if(CollectionUtils.isNotEmpty(dailyDatas)){
-			for(DailyData dailyData : dailyDatas){
-				if(dailyData.getDif()>dailyData.getDea()){
+		if (CollectionUtils.isNotEmpty(dailyDatas)) {
+			boolean isContinue=true;
+			for (DailyData dailyData : dailyDatas) {
+				//发现在0轴下方，dif 上穿dea的数据
+				if (isContinue &&dailyData.getDif() < 0 && dailyData.getDea() < 0 && dailyData.getDif() > dailyData.getDea()) {
 					dailyData.setStarDataType(StockConstants.STOCK_STAR_TYPE_3);
 					this.dailyDataService.save(dailyData);
+					isContinue=false;
+				}
+				//当dif 下穿dea后，再继续 寻找dif > dea的交叉点
+				if(!isContinue&& dailyData.getDif()<dailyData.getDea()){
+					isContinue=true;
 				}
 			}
 		}
@@ -450,7 +458,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 		List<Stock> stocks = this.stockService.getAll();
 		if (CollectionUtils.isNotEmpty(stocks)) {
 			for (Stock stock : stocks) {
-				
+
 				this.statStarData(stock);
 			}
 		}

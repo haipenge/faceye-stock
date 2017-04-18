@@ -109,9 +109,6 @@ public class StarDataStatController extends BaseController<StarDataStat, Long, S
 		beforeInput(model,request);
 		return "stock.starDataStat.update";
 	}
-	
-	
-    
 
 	/**
 	 * 数据保存<br>
