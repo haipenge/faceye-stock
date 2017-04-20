@@ -139,7 +139,7 @@
 			<ref bean="dataStatJobDetail" />
 		</property>
 		<property name="cronExpression">
-			<value>0 20 3 * * ?</value>
+			<value>0 25 17 * * ?</value>
 		</property>
 	</bean>
 	<bean id="dataStatJobDetail"
