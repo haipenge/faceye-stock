@@ -87,8 +87,8 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	 * @Date:2016年12月21日 下午3:17:28
 	 */
 	public void crawlStock(Stock stock) {
-		boolean isStockCrawled = this.isStockFinancialDataCrawled(stock);
-//		boolean isStockCrawled=false;
+//		boolean isStockCrawled = this.isStockFinancialDataCrawled(stock);
+		boolean isStockCrawled=false;
 		this.crawlStock(stock, isStockCrawled);
 	}
 
