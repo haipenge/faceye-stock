@@ -87,8 +87,8 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	 * @Date:2016年12月21日 下午3:17:28
 	 */
 	public void crawlStock(Stock stock) {
-//		boolean isStockCrawled = this.isStockFinancialDataCrawled(stock);
-		boolean isStockCrawled=false;
+		boolean isStockCrawled = this.isStockFinancialDataCrawled(stock);
+//		boolean isStockCrawled=false;
 		this.crawlStock(stock, isStockCrawled);
 	}
 
@@ -102,7 +102,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 		if(!isEmpty){
 			ReportData lastReportData=reportDatas.getContent().get(0);
 			Date now=new Date();
-			if(lastReportData.getDate()!=null &&now.getTime()-lastReportData.getDate().getTime()>3*30*24*60*60*1000L){
+			if(lastReportData.getDate()!=null &&now.getTime()-lastReportData.getDate().getTime()<3*30*24*60*60*1000L){
 				isCrawled=true;
 			}
 		}

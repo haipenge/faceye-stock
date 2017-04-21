@@ -115,7 +115,7 @@
 			<ref bean="crawlFinancialDataJobDetail" />
 		</property>
 		<property name="cronExpression">
-			<value>0 0 18 * * ?</value>
+			<value>0 30 2 * * ?</value>
 		</property>
 	</bean>
 	<bean id="crawlFinancialDataJobDetail"
@@ -139,7 +139,7 @@
 			<ref bean="dataStatJobDetail" />
 		</property>
 		<property name="cronExpression">
-			<value>0 25 19 * * ?</value>
+			<value>0 0 8 * * ?</value>
 		</property>
 	</bean>
 	<bean id="dataStatJobDetail"
