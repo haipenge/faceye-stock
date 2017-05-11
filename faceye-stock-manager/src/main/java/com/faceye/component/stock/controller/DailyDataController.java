@@ -1,5 +1,8 @@
 package com.faceye.component.stock.controller;
 
+
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -148,6 +151,25 @@ public class DailyDataController extends BaseController<DailyData, Long, DailyDa
 			this.service.initDailyData(stock.getCode());
 		}
 		return AjaxResult.getInstance().buildDefaultResult(true);
+	}
+	
+	/**
+	 * 用于显示股票价格图
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/showDailyData")
+	@ResponseBody
+	public List<DailyData> showDailyData(HttpServletRequest request){
+		List dailyDatas=null;
+		Map searchParams=HttpUtil.getRequestParams(request);
+		Long stockId=MapUtils.getLong(searchParams, "stockId");
+		if(stockId!=null){
+			Map params=new HashMap();
+			params.put("EQ|stockId", stockId);
+			dailyDatas=this.service.getPage(params, 1, 0).getContent();
+		}
+		return dailyDatas;
 	}
 
 }
