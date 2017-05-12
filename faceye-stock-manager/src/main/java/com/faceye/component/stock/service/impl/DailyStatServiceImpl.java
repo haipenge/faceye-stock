@@ -262,6 +262,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 				params = new HashMap();
 				params.put("EQ|stockId", stock.getId());
 				params.put("EQ|type", StockConstants.REPORT_TYPE_YEAR);
+				params.put("LTE|date", dailyData.getDate());
 				params.put("SORT|date", "desc");
 				// 取得最近一份年报
 				List<ReportData> reportDatas = this.reportDataService.getPage(params, 1, 1).getContent();
@@ -276,6 +277,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 				params = new HashMap();
 				params.put("EQ|stockId", stock.getId());
 				params.put("SORT|date", "desc");
+				params.put("LTE|date", dailyData.getDate());
 				// 取得最近一份财务报告
 				reportDatas = this.reportDataService.getPage(params, 1, 1).getContent();
 				if (CollectionUtils.isNotEmpty(reportDatas)) {
