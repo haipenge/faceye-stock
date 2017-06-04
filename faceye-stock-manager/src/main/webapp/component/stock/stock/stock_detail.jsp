@@ -1,51 +1,38 @@
 <%@ include file="/component/core/taglib/taglib.jsp"%>
-<link rel="stylesheet" type="text/css" href="<c:url value="/css/component/stock/stock/stock.css"/>" />
-<script type="text/javascript" src="<c:url value="/js/component/stock/stock/stock.js"/>"></script>
-<div class="panel panel-primary">
-	<div class="panel-heading">
-		<div class="panel-title">
-			<fmt:message key="stock.stock.detail"></fmt:message>
-		</div>
+<%@ page language="java"
+	import="java.util.*,com.faceye.feature.util.*,com.faceye.feature.util.host.*"
+	pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
+<script src="<c:url value="/js/lib/acharts/acharts.js"/>"></script>
+<link rel="stylesheet" type="text/css"
+	href="<c:url value="/css/component/stock/stock/stock.css"/>" />
+<script type="text/javascript"
+	src="<c:url value="/js/component/stock/stock/stock.js"/>"></script>
+<script type="text/javascript"
+	src="<c:url value="/js/component/stock/stock/stockChart.js"/>"></script>
+
+<div class="page-head">
+	<h2>
+		股票趋势 ${stock.name} <span class="span-suffix">(${stock.code})</span>
+		<input type="hidden" name="stockId" value="${stock.id}">
+	</h2>
+</div>
+<div class="cl-mcont">
+	<!-- 
+	<div class="header">
+		<h2>
+			<fmt:message key="security.role.manager"></fmt:message>
+		</h2>
+		<a class="btn btn-default" href="<c:url value="/security/role/input"/>"> <fmt:message key="security.role.add"></fmt:message>
+		</a>
 	</div>
-	<div class="panel-body">
-			<fieldset>
-								<div class="form-group">
-					<label class="col-md-4 control-label" for="stock">
-					  <fmt:message key="stock.stock.code"></fmt:message>
-					 </label>
-					<div class="col-md-4">
-						${stock.code}
-					</div>
-				</div>
-								<div class="form-group">
-					<label class="col-md-4 control-label" for="stock">
-					  <fmt:message key="stock.stock.name"></fmt:message>
-					 </label>
-					<div class="col-md-4">
-						${stock.name}
-					</div>
-				</div>
-								<div class="form-group">
-					<label class="col-md-4 control-label" for="stock">
-					  <fmt:message key="stock.stock.business"></fmt:message>
-					 </label>
-					<div class="col-md-4">
-						${stock.business}
-					</div>
-				</div>
-								<div class="form-group">
-					<label class="col-md-4 control-label" for="stock">
-					  <fmt:message key="stock.stock.market"></fmt:message>
-					 </label>
-					<div class="col-md-4">
-						${stock.market}
-					</div>
-				</div>
-				<!--@generate-entity-jsp-property-detail@-->
-				
-				
-				
-				
-			</fieldset>
+	 -->
+	<div class="block-flat">
+		<div class="content"></div>
+		<div class="content">
+			<div id="msg"></div>
+			<div class="detail-section">
+				<div id="show-pe"></div>
+			</div>
+		</div>
 	</div>
 </div>

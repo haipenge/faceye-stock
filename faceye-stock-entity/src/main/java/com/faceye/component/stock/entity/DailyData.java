@@ -486,5 +486,39 @@ public class DailyData implements Serializable {
 		this.macd = macd;
 	}
 	
+	/**
+	 * 计算每天的PE
+	 */
+	private Double pe=null;
+	public Double getPe() {
+		return pe;
+	}
+	public void setPe(Double pe) {
+		this.pe = pe;
+	}
+	/**
+	 * 动态市盈率
+	 */
+	private Double dynamicPe=null;
+	public Double getDynamicPe() {
+		return dynamicPe;
+	}
+	public void setDynamicPe(Double dynamicPe) {
+		this.dynamicPe = dynamicPe;
+	}
+	/**
+	 * 市净率
+	 */
+	
+	private Double pb=null;
+	public Double getPb() {
+		return pb;
+	}
+	public void setPb(Double pb) {
+		this.pb = pb;
+	}
+	
+	
+	
 }/**@generate-entity-source@**/
 	
