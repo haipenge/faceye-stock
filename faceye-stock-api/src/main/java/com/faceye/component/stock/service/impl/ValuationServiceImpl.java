@@ -1,4 +1,4 @@
-package com.faceye.component.@component.name@.service.impl;
+package com.faceye.component.stock.service.impl;
 
 import java.util.List;
 import java.util.Map;
@@ -12,41 +12,41 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import com.faceye.component.@component.name@.entity.@entity.name@;
+import com.faceye.component.stock.entity.Valuation;
 
-import com.faceye.component.@component.name@.repository.mongo.@entity.name@Repository;
-import com.faceye.component.@component.name@.repository.mongo.customer.@entity.name@CustomerRepository;
-import com.faceye.component.@component.name@.service.@entity.name@Service;
+import com.faceye.component.stock.repository.mongo.ValuationRepository;
+import com.faceye.component.stock.repository.mongo.customer.ValuationCustomerRepository;
+import com.faceye.component.stock.service.ValuationService;
 
 import com.faceye.feature.util.ServiceException;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.querydsl.core.types.Predicate;
 /**
- * @entity.name@ 服务实现类<br>
+ * Valuation 服务实现类<br>
  * @author @haipenge <br>
  * haipenge@gmail.com<br>
 *  Create Date:2014年5月20日<br>
  */
 
 @Service
-public class @entity.name@ServiceImpl extends BaseMongoServiceImpl<@entity.name@, Long, @entity.name@Repository> implements @entity.name@Service {
+public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, ValuationRepository> implements ValuationService {
 	@Autowired
-	private @entity.name@CustomerRepository @entity.config.name@CustomerRepository=null;
+	private ValuationCustomerRepository valuationCustomerRepository=null;
 	@Autowired
-	public @entity.name@ServiceImpl(@entity.name@Repository dao) {
+	public ValuationServiceImpl(ValuationRepository dao) {
 		super(dao);
 	}
 	
 	
 	@Override
-	public Page<@entity.name@> getPage(Map<String, Object> searchParams, int page, int size) throws ServiceException {
+	public Page<Valuation> getPage(Map<String, Object> searchParams, int page, int size) throws ServiceException {
 		if (page != 0) {
 			page = page - 1;
 		}
 		// SimpleEntityPathResolver resolver = SimpleEntityPathResolver.INSTANCE;
-		// EntityPath<@entity.name@> entityPath = resolver.createPath(entityClass);
-		// PathBuilder<@entity.name@> builder = new PathBuilder<@entity.name@>(entityPath.getType(), entityPath.getMetadata());
+		// EntityPath<Valuation> entityPath = resolver.createPath(entityClass);
+		// PathBuilder<Valuation> builder = new PathBuilder<Valuation>(entityPath.getType(), entityPath.getMetadata());
 		// Path path = entityPath.getRoot();
 		// List<Predicate> predicates=DynamicSpecifications.buildPredicates(searchParams, entityClass);
 		// Predicate predicate=DynamicSpecifications.builder(predicates);
@@ -57,15 +57,15 @@ public class @entity.name@ServiceImpl extends BaseMongoServiceImpl<@entity.name@
 			logger.debug(">>FaceYe -->Query predicate is:" + predicate.toString());
 		}
 		Sort sort = new Sort(Direction.DESC, "id");
-		Page<@entity.name@> res = null;
+		Page<Valuation> res = null;
 		if (size != 0) {
 			Pageable pageable = new PageRequest(page, size, sort);
 			res = this.dao.findAll(predicate, pageable);
 		} else {
-			// OrderSpecifier<Comparable> orderPOrderSpecifier=new OrderSpecifier<Comparable>(new Order(), new NumberExpression<@entity.name@>("id") {
+			// OrderSpecifier<Comparable> orderPOrderSpecifier=new OrderSpecifier<Comparable>(new Order(), new NumberExpression<Valuation>("id") {
 			// })
-			List<@entity.name@> items = (List) this.dao.findAll(predicate,sort);
-			res = new PageImpl<@entity.name@>(items);
+			List<Valuation> items = (List) this.dao.findAll(predicate);
+			res = new PageImpl<Valuation>(items);
 
 		}
 		return res;

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+    <!-- 模块:stock 业务对像:Valuation 管理后台 tiles模板配置 -->
+    <!-- 作者:haipege -->
+    <!-- Valuation 管理 首页(列表页) -->
+	<definition name="stock.valuation.web.home" extends="default.web">
+	    <put-attribute name="default-center" value="stock.valuation.center"></put-attribute>
+	</definition>
+	<definition name="stock.valuation.web.center" extends="default.web.center">
+	    <put-attribute name="default-center-right" value="/component/stock/valuation/valuation_center.jsp"></put-attribute>
+	</definition>
+	
+	<!-- Valuation 新增,编辑页面 -->
+	<definition name="stock.valuation.web.update" extends="default.web">
+	    <put-attribute name="default-center" value="stock.valuation.update.web.center"></put-attribute>
+	</definition>
+	<definition name="stock.valuation.update.web.center" extends="default.web.center">
+	    <put-attribute name="default-center-right" value="/component/stock/valuation/valuation_update.jsp"></put-attribute>
+	</definition>
+	
+	<!-- Valuation 明细页 -->
+	<definition name="stock.valuation.web.detail" extends="default.web">
+	    <put-attribute name="default-center" value="stock.valuation.detail.web.center"></put-attribute>
+	</definition>
+	<definition name="stock.valuation.detail.web.center" extends="default.web.center">
+	    <put-attribute name="default-center-right" value="/component/stock/valuation/valuation_detail.jsp"></put-attribute>
+	</definition>
+	
+</tiles-definitions>

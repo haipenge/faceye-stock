@@ -64,7 +64,7 @@ public class FinancialReportServiceImpl extends BaseMongoServiceImpl<FinancialRe
 		} else {
 			// OrderSpecifier<Comparable> orderPOrderSpecifier=new OrderSpecifier<Comparable>(new Order(), new NumberExpression<FinancialReport>("id") {
 			// })
-			List<FinancialReport> items = (List) this.dao.findAll(predicate);
+			List<FinancialReport> items = (List) this.dao.findAll(predicate,sort);
 			res = new PageImpl<FinancialReport>(items);
 
 		}
