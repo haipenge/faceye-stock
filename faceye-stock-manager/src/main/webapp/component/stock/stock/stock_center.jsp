@@ -141,7 +141,7 @@
 								<td><a href="<c:url value="/stock/dailyData/home?EQ|stockId=${stock.id}"/>"><fmt:message key="stock.dailyData" /></a></td>
 								<td><a href="<c:url value="/stock/reportData/report?stockId=${stock.id}"/>">财务报表</a></td>
 								<td><a href="<c:url value="/stock/starDataStat/home?EQ|stockId=${stock.id}"/>">星标表现</a></td>
-								<td><a href="<c:url value="/stock/totalStotck/home?EQ|stockId=${stock.id }"/>">股本变动 </a></td>
+								<td><a href="<c:url value="/stock/totalStock/home?EQ|stockId=${stock.id }"/>">股本变动 </a></td>
 								<td><a href="<c:url value="/stock/stock/edit/${stock.id}"/>"> <fmt:message key="global.edit"></fmt:message></a></td>
 								<td><a href="<c:url value="/stock/stock/remove/${stock.id}"/>"> <fmt:message key="global.remove"></fmt:message></a></td>
 							<tr>
