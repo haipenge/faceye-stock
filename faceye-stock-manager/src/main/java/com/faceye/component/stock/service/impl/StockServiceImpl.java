@@ -220,7 +220,7 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 	}
 
 	@Override
-	public Page<Stock> getPage(Map<String, Object> searchParams, int page, int size) throws ServiceException {
+	public Page<Stock> getPage(Map<String, Object> searchParams, int page, int size) {
 		if (page != 0) {
 			page = page - 1;
 		}

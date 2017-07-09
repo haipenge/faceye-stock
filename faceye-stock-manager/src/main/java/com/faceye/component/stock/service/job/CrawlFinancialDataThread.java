@@ -36,9 +36,9 @@ public class CrawlFinancialDataThread extends BaseThread {
 	private CrawlFinancialDataService crawlFinancialDataService = null;
 
 	public CrawlFinancialDataThread() {
-		financialDataQueueService = BeanContextUtil.getInstance().getBean("financialDataQueueService");
+		financialDataQueueService = BeanContextUtil.getBean("financialDataQueueService");
 
-		crawlFinancialDataService = BeanContextUtil.getInstance().getBean(CrawlFinancialDataService.class);
+		crawlFinancialDataService = BeanContextUtil.getBean(CrawlFinancialDataService.class);
 	}
 
 	@Override

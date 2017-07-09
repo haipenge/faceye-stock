@@ -40,7 +40,7 @@ public class FinancialDataServiceImpl extends BaseMongoServiceImpl<FinancialData
 	}
 
 	@Override
-	public Page<FinancialData> getPage(Map<String, Object> searchParams, int page, int size) throws ServiceException {
+	public Page<FinancialData> getPage(Map<String, Object> searchParams, int page, int size)  {
 		if (page != 0) {
 			page = page - 1;
 		}

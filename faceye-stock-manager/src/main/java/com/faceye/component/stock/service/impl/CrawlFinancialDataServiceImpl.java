@@ -14,6 +14,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +23,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.faceye.component.stock.entity.AccountingSubject;
-import com.faceye.component.stock.entity.FinancialData;
 import com.faceye.component.stock.entity.ReportData;
 import com.faceye.component.stock.entity.Stock;
+import com.faceye.component.stock.entity.TotalStock;
 import com.faceye.component.stock.service.AccountingSubjectService;
 import com.faceye.component.stock.service.CrawlFinancialDataService;
 import com.faceye.component.stock.service.FinancialDataService;
 import com.faceye.component.stock.service.ReportDataService;
 import com.faceye.component.stock.service.StockService;
+import com.faceye.component.stock.service.TotalStockService;
 import com.faceye.component.stock.service.job.CrawlFinancialDataThread;
 import com.faceye.feature.service.QueueService;
 import com.faceye.feature.service.job.thread.ThreadPoolController;
@@ -52,6 +54,8 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	private QueueService financialDataQueueService = null;
 	@Autowired
 	private ReportDataService reportDataService = null;
+	@Autowired
+	private TotalStockService totalStockService = null;
 
 	@Override
 	public void crawl() {
@@ -88,8 +92,9 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	 */
 	public void crawlStock(Stock stock) {
 		boolean isStockCrawled = this.isStockFinancialDataCrawled(stock);
-//		boolean isStockCrawled=false;
+		// boolean isStockCrawled=false;
 		this.crawlStock(stock, isStockCrawled);
+		
 	}
 
 	private boolean isStockFinancialDataCrawled(Stock stock) {
@@ -98,12 +103,12 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 		params.put("EQ|stockId", stock.getId());
 		params.put("SORT|date", "DESC");
 		Page<ReportData> reportDatas = this.reportDataService.getPage(params, 1, 1);
-		boolean isEmpty=CollectionUtils.isEmpty(reportDatas.getContent());
-		if(!isEmpty){
-			ReportData lastReportData=reportDatas.getContent().get(0);
-			Date now=new Date();
-			if(lastReportData.getDate()!=null &&now.getTime()-lastReportData.getDate().getTime()<3*30*24*60*60*1000L){
-				isCrawled=true;
+		boolean isEmpty = CollectionUtils.isEmpty(reportDatas.getContent());
+		if (!isEmpty) {
+			ReportData lastReportData = reportDatas.getContent().get(0);
+			Date now = new Date();
+			if (lastReportData.getDate() != null && now.getTime() - lastReportData.getDate().getTime() < 3 * 30 * 24 * 60 * 60 * 1000L) {
+				isCrawled = true;
 			}
 		}
 		return isCrawled;
@@ -179,39 +184,39 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 		}
 		if (CollectionUtils.isNotEmpty(records)) {
 			this.saveParseData(stock, records, accountingSubject);
-//			List<FinancialData> datas = new ArrayList<FinancialData>();
-//			Long accountingElementId = accountingSubject.getAccountingElement().getId();
-//			for (Map<String, String> record : records) {
-//				String date = MapUtils.getString(record, "date");
-//				String data = MapUtils.getString(record, "data");
-//
-//				// logger.debug(">>FaceYe --> parsed financial data is:" + date + ":" + data);
-//				boolean isExist = false;
-//				 
-//				if (!isExist && StringUtils.isNotEmpty(date)) {
-//					try {
-//						FinancialData financialData = new FinancialData();
-//						financialData.setAccountingSubjectId(accountingSubject.getId());
-//						financialData.setAccountingElementId(accountingElementId);
-//						financialData.setCreateDate(new Date());
-//						if (StringUtils.isEmpty(data)) {
-//							financialData.setData(null);
-//						} else {
-//							financialData.setData(NumberUtils.createDouble(data));
-//						}
-//						financialData.setDate(DateUtil.getDateFromString(date, "yyyy-MM-dd"));
-//						financialData.setStockId(stock.getId());
-//						datas.add(financialData);
-//					} catch (Exception e) {
-//						logger.error(">>FaceYe throws Exception when save data,data :date is:" + data + ":" + date, e);
-//					}
-//				} else {
-//					logger.debug(">>FaceYe --> financial data exist.");
-//				}
-//			}
-//			if (CollectionUtils.isNotEmpty(datas)) {
-//				this.financialDataService.save(datas);
-//			}
+			// List<FinancialData> datas = new ArrayList<FinancialData>();
+			// Long accountingElementId = accountingSubject.getAccountingElement().getId();
+			// for (Map<String, String> record : records) {
+			// String date = MapUtils.getString(record, "date");
+			// String data = MapUtils.getString(record, "data");
+			//
+			// // logger.debug(">>FaceYe --> parsed financial data is:" + date + ":" + data);
+			// boolean isExist = false;
+			//
+			// if (!isExist && StringUtils.isNotEmpty(date)) {
+			// try {
+			// FinancialData financialData = new FinancialData();
+			// financialData.setAccountingSubjectId(accountingSubject.getId());
+			// financialData.setAccountingElementId(accountingElementId);
+			// financialData.setCreateDate(new Date());
+			// if (StringUtils.isEmpty(data)) {
+			// financialData.setData(null);
+			// } else {
+			// financialData.setData(NumberUtils.createDouble(data));
+			// }
+			// financialData.setDate(DateUtil.getDateFromString(date, "yyyy-MM-dd"));
+			// financialData.setStockId(stock.getId());
+			// datas.add(financialData);
+			// } catch (Exception e) {
+			// logger.error(">>FaceYe throws Exception when save data,data :date is:" + data + ":" + date, e);
+			// }
+			// } else {
+			// logger.debug(">>FaceYe --> financial data exist.");
+			// }
+			// }
+			// if (CollectionUtils.isNotEmpty(datas)) {
+			// this.financialDataService.save(datas);
+			// }
 		} else {
 			logger.error(">>FaceYe -> have got empty record of stock :" + stock.getName() + "(" + stock.getCode() + "),[" + stock.getId() + "]");
 		}
@@ -226,7 +231,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	 * @Author:haipenge
 	 * @Date:2017年3月12日 下午9:49:46
 	 */
-	private void saveParseData(Stock stock, List<Map<String,String>> records, AccountingSubject accountingSubject) {
+	private void saveParseData(Stock stock, List<Map<String, String>> records, AccountingSubject accountingSubject) {
 		Map params = new HashMap();
 		params.put("EQ|stockId", stock.getId());
 		List<ReportData> reportDatas = this.reportDataService.getPage(params, 0, 0).getContent();
@@ -234,7 +239,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 		for (Map record : records) {
 			String date = MapUtils.getString(record, "date");
 			String data = MapUtils.getString(record, "data");
-			Date dDate=DateUtil.getDateFromString(date + " 00:00:00", "yyyy-MM-dd HH:mm:ss");
+			Date dDate = DateUtil.getDateFromString(date + " 00:00:00", "yyyy-MM-dd HH:mm:ss");
 			ReportData reportData = null;
 			if (structs.containsKey(date)) {
 				reportData = structs.get(date);
@@ -267,21 +272,21 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 		String propertyName = accountingSubject.getCode().toLowerCase() + "_" + accountingSubjectId;
 		if (StringUtils.isNotEmpty(data)) {
 			String reportCategoryClassName = "com.faceye.component.stock.entity." + accountingSubject.getAccountingElement().getReportCategory().getCode();
-			reportCategoryClassName=reportCategoryClassName.toLowerCase().replaceAll("_", "");
+			reportCategoryClassName = reportCategoryClassName.toLowerCase().replaceAll("_", "");
 			Field[] categoryClazz = ReportData.class.getDeclaredFields();
 			Object categoryObject = null;
 			for (Field field : categoryClazz) {
 				if (field.getType().getName().toLowerCase().equals(reportCategoryClassName)) {
 					try {
-						categoryObject=PropertyUtils.getNestedProperty(reportData, field.getName());
+						categoryObject = PropertyUtils.getNestedProperty(reportData, field.getName());
 					} catch (IllegalAccessException e) {
-						logger.error(">>FaceYe Throws Exception:",e);
+						logger.error(">>FaceYe Throws Exception:", e);
 					} catch (InvocationTargetException e) {
-						logger.error(">>FaceYe Throws Exception:",e);
+						logger.error(">>FaceYe Throws Exception:", e);
 					} catch (NoSuchMethodException e) {
-						logger.error(">>FaceYe Throws Exception:",e);
+						logger.error(">>FaceYe Throws Exception:", e);
 					}
-//					
+					//
 					break;
 				}
 			}
@@ -291,31 +296,31 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 				for (Field el : elObjects) {
 					if (el.getType().getName().equals(eleClassName)) {
 						try {
-							element=PropertyUtils.getProperty(categoryObject, el.getName());
+							element = PropertyUtils.getProperty(categoryObject, el.getName());
 						} catch (IllegalAccessException e) {
-							logger.error(">>FaceYe Throws Exception:",e);
+							logger.error(">>FaceYe Throws Exception:", e);
 						} catch (InvocationTargetException e) {
-							logger.error(">>FaceYe Throws Exception:",e);
+							logger.error(">>FaceYe Throws Exception:", e);
 						} catch (NoSuchMethodException e) {
-							logger.error(">>FaceYe Throws Exception:",e);
+							logger.error(">>FaceYe Throws Exception:", e);
 						}
-//						element = ReflectionUtils.getField(el, categoryObject);
+						// element = ReflectionUtils.getField(el, categoryObject);
 						break;
 					}
 				}
 			}
-			
+
 			if (element != null) {
 				try {
-					PropertyUtils.setProperty(element, propertyName,Double.parseDouble(data));
+					PropertyUtils.setProperty(element, propertyName, Double.parseDouble(data));
 				} catch (NumberFormatException e) {
-					logger.error(">>FaceYe Throws Exception:",e);
+					logger.error(">>FaceYe Throws Exception:", e);
 				} catch (IllegalAccessException e) {
-					logger.error(">>FaceYe Throws Exception:",e);
+					logger.error(">>FaceYe Throws Exception:", e);
 				} catch (InvocationTargetException e) {
-					logger.error(">>FaceYe Throws Exception:",e);
+					logger.error(">>FaceYe Throws Exception:", e);
 				} catch (NoSuchMethodException e) {
-					logger.error(">>FaceYe Throws Exception:",e);
+					logger.error(">>FaceYe Throws Exception:", e);
 				}
 			}
 		}
@@ -363,8 +368,65 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 					// }
 				}
 			}
+			this.crawlTotalStocksNum(stock);
 		} else {
 			logger.debug(">>FaceYe --> stock:" + stock.getName() + "(" + stock.getCode() + ") 已爬取");
+		}
+	}
+
+	/**
+	 * 爬取总股本
+	 * 
+	 * @param stock
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年7月9日 下午9:05:57 http://vip.stock.finance.sina.com.cn/corp/go.php/vCI_StockStructureHistory/stockid/000998/stocktype/TotalStock.phtml
+	 */
+	private void crawlTotalStocksNum(Stock stock) {
+		String url = "http://vip.stock.finance.sina.com.cn/corp/go.php/vCI_StockStructureHistory/stockid/000998/stocktype/TotalStock.phtml";
+		url = StringUtils.replace(url, "000998", stock.getCode());
+		String content = Http.getInstance().get(url, "gb2312");
+		String regexp = "<td><div align=\"center\">([\\S\\s].+)<\\/div><\\/td>";
+		if (StringUtils.isNotEmpty(content)) {
+			try {
+				List<Map<String, String>> results = RegexpUtil.match(content, regexp);
+				TotalStock totalStock = null;
+				if (CollectionUtils.isNotEmpty(results)) {
+					for (int i = 0; i < results.size(); i++) {
+						Map<String, String> map = results.get(i);
+						String value = map.get("1");
+						if (i % 2 != 0) {
+							boolean isExist = this.totalStockService.isTotalStockExist(stock.getId(), value);
+							if (isExist) {
+								continue;
+							}
+						}
+						if (i % 2 == 0) {
+							if (totalStock != null) {
+								this.totalStockService.save(totalStock);
+							}
+							totalStock = new TotalStock();
+							totalStock.setStockId(stock.getId());
+							value = StringUtils.replace(value, "万股", "");
+							if (NumberUtils.isNumber(value)) {
+								Integer stockNum = NumberUtils.toInt(value);
+								totalStock.setStockNum(stockNum);
+							}
+						} else {
+							String format = "yyyy-MM-dd";
+							Date changeDate = DateUtil.getDateFromString(value, format);
+							totalStock.setChangeDate(changeDate);
+						}
+						if (i == results.size() - 1) {
+							if (totalStock != null) {
+								this.totalStockService.save(totalStock);
+							}
+						}
+					}
+				}
+			} catch (Exception e) {
+				logger.error(">>FaceYe Throws Exception:", e);
+			}
 		}
 	}
 }

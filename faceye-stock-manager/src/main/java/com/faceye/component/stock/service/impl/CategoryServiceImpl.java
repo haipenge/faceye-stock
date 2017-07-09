@@ -41,7 +41,7 @@ public class CategoryServiceImpl extends BaseMongoServiceImpl<Category, Long, Ca
 	
 	
 	@Override
-	public Page<Category> getPage(Map<String, Object> searchParams, int page, int size) throws ServiceException {
+	public Page<Category> getPage(Map<String, Object> searchParams, int page, int size)  {
 		if (page != 0) {
 			page = page - 1;
 		}

@@ -40,7 +40,7 @@ public class @entity.name@ServiceImpl extends BaseMongoServiceImpl<@entity.name@
 	
 	
 	@Override
-	public Page<@entity.name@> getPage(Map<String, Object> searchParams, int page, int size) throws ServiceException {
+	public Page<@entity.name@> getPage(Map<String, Object> searchParams, int page, int size) {
 		if (page != 0) {
 			page = page - 1;
 		}
