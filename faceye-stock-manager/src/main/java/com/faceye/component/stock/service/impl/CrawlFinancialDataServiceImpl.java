@@ -409,7 +409,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 							totalStock.setStockId(stock.getId());
 							value = StringUtils.replace(value, "万股", "");
 							if (NumberUtils.isNumber(value)) {
-								Integer stockNum = NumberUtils.toInt(value);
+								Integer stockNum = NumberUtils.toInt(value)*10000;
 								totalStock.setStockNum(stockNum);
 							}
 						} else {
