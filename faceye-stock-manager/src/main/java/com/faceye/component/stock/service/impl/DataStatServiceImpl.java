@@ -1,7 +1,6 @@
 package com.faceye.component.stock.service.impl;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -22,17 +21,18 @@ import org.springframework.stereotype.Service;
 import com.faceye.component.stock.entity.DataStat;
 import com.faceye.component.stock.entity.ReportData;
 import com.faceye.component.stock.entity.Stock;
+import com.faceye.component.stock.entity.TotalStock;
 import com.faceye.component.stock.repository.mongo.DataStatRepository;
 import com.faceye.component.stock.repository.mongo.customer.DataStatCustomerRepository;
 import com.faceye.component.stock.service.DataStatService;
 import com.faceye.component.stock.service.ReportDataService;
 import com.faceye.component.stock.service.StockService;
+import com.faceye.component.stock.service.TotalStockService;
 import com.faceye.component.stock.service.wrapper.StatRecord;
 import com.faceye.component.stock.util.StockConstants;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.faceye.feature.util.DateUtil;
-import com.faceye.feature.util.ServiceException;
 import com.querydsl.core.types.Predicate;
 
 /**
@@ -52,6 +52,8 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	private StockService stockService = null;
 	@Autowired
 	private ReportDataService reportDataService = null;
+	@Autowired
+	private TotalStockService totalStockService=null;
 
 	@Autowired
 	public DataStatServiceImpl(DataStatRepository dao) {
@@ -488,7 +490,47 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 			results = dataStats;
 		}
 		return results;
-
 	}
+	
+	///////////////////////////////////////////////////////////计算每股指标//////////////////////////////////////////////////////////////////////////////
+	private void everyRate(Stock stock,ReportData reportData,DataStat dataStat){
+		
+	}
+	/**
+	 * 计算每股收益，每股净利润
+	 * @param stock
+	 * @param reportData
+	 * @param dataStat
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年7月11日 下午10:02:38
+	 */
+	private void statEps(Stock stock,ReportData reportData,DataStat dataStat){
+		TotalStock totalStock=this.getTotalStock(stock.getId(), reportData.getDate());
+		if(totalStock!=null){
+			Integer total=totalStock.getStockNum()*10000;
+			Double eps=reportData.getInComeSheet().getEle9().getCinst24_128()/total;
+			dataStat.setEps(eps);
+		}
+	}
+	
+	
+	private TotalStock getTotalStock(Long stockId,Date reportDate){
+		TotalStock totalStock=null;
+		String date=DateUtil.formatDate(reportDate, "yyyy-MM-dd");
+		Map searchParams=new HashMap();
+		searchParams.put("EQ|stockId", stockId);
+		searchParams.put("LTE|changeDate", DateUtil.getDateFromString(date+" 23:59:59"));
+		searchParams.put("SORT|changeDate", "desc");
+		Page<TotalStock> totalStocks=this.totalStockService.getPage(searchParams, 1, 1);
+		if(totalStocks!=null && CollectionUtils.isNotEmpty(totalStocks.getContent())){
+			totalStock=totalStocks.getContent().get(0);
+		}
+		return totalStock;
+	}
+
+	
+	
+	/////////////////////////////////////////////////////////结束每股指标计算///////////////////////////////////////////////////////////////////////////
 
 }/** @generate-service-source@ **/

@@ -248,6 +248,93 @@ public class DataStat implements Serializable {
 	public void setCoreProfitMargin(Double coreProfitMargin) {
 		this.coreProfitMargin = coreProfitMargin;
 	}
+	/**
+	 * 每股收益
+	 */
+	private Double eps=0.0D;
+
+	public Double getEps() {
+		return eps;
+	}
+
+	public void setEps(Double eps) {
+		this.eps = eps;
+	}
+	/**
+	 * 每股帐面价值
+	 */
+	private Double bps=0.0D;
+
+	public Double getBps() {
+		return bps;
+	}
+
+	public void setBps(Double bps) {
+		this.bps = bps;
+	}
+	
+	private Double dps=0.0D;
+
+	public Double getDps() {
+		return dps;
+	}
+
+	public void setDps(Double dps) {
+		this.dps = dps;
+	}
+	
+	/**
+	 * 剩余收益
+	 */
+	private Double re=0.0D;
+
+	public Double getRe() {
+		return re;
+	}
+
+	public void setRe(Double re) {
+		this.re = re;
+	}
+	
+	/**
+	 * 普通股权益报酬率 = 净利润/股东权益
+	 */
+	private Double roce=0.0D;
+
+	public Double getRoce() {
+		return roce;
+	}
+
+	public void setRoce(Double roce) {
+		this.roce = roce;
+	}
+	
+	/**
+	 * 市净率
+	 */
+	private Double pb=0.0D;
+
+	public Double getPb() {
+		return pb;
+	}
+
+	public void setPb(Double pb) {
+		this.pb = pb;
+	}
+	/**
+	 * 市盈率
+	 */
+	private Double pe=0.0D;
+
+	public Double getPe() {
+		return pe;
+	}
+
+	public void setPe(Double pe) {
+		this.pe = pe;
+	}
+	
+	
 	
 }/**@generate-entity-source@**/
 	
