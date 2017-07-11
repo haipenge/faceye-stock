@@ -80,7 +80,7 @@ public class TotalStockServiceImpl extends BaseMongoServiceImpl<TotalStock, Long
 		searchParams.put("EQ|stockId", stockId);
 		Date startDate = DateUtil.getDateFromString(changeDate + " 00:00:00");
 		Date endDate = DateUtil.getDateFromString(changeDate + " 23:59:59");
-		searchParams.put("GET|changeDate", startDate);
+		searchParams.put("GTE|changeDate", startDate);
 		searchParams.put("LTE|changeDate", endDate);
 		Page<TotalStock> res = this.getPage(searchParams, 1, 1);
 		if (res != null && CollectionUtils.isNotEmpty(res.getContent())) {

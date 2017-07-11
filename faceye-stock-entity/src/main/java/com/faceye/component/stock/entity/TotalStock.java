@@ -18,7 +18,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  * haipenge@gmail.com<br>
 *  Create Date:2014年5月21日<br>
  */
-@Document(collection="stock_totalStock")
+@Document(collection="stock_total_stock")
 public class TotalStock implements Serializable {
 	private static final long serialVersionUID = 8926119711730830203L;
 	@Id

@@ -386,7 +386,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 		String url = "http://vip.stock.finance.sina.com.cn/corp/go.php/vCI_StockStructureHistory/stockid/000998/stocktype/TotalStock.phtml";
 		url = StringUtils.replace(url, "000998", stock.getCode());
 		String content = Http.getInstance().get(url, "gb2312");
-		String regexp = "<td><div align=\"center\">([\\S\\s].+)<\\/div><\\/td>";
+		String regexp = "<td><div align=\"center\">([\\S\\s].+?)<\\/div><\\/td>";
 		if (StringUtils.isNotEmpty(content)) {
 			try {
 				List<Map<String, String>> results = RegexpUtil.match(content, regexp);
@@ -394,25 +394,25 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 				if (CollectionUtils.isNotEmpty(results)) {
 					for (int i = 0; i < results.size(); i++) {
 						Map<String, String> map = results.get(i);
-						String value = map.get("1");
-						if (i % 2 != 0) {
+						String value = StringUtils.trim(map.get("1"));
+						if (i % 2 == 0) {
 							boolean isExist = this.totalStockService.isTotalStockExist(stock.getId(), value);
 							if (isExist) {
 								continue;
 							}
 						}
-						if (i % 2 == 0) {
-							if (totalStock != null) {
-								this.totalStockService.save(totalStock);
-							}
-							totalStock = new TotalStock();
-							totalStock.setStockId(stock.getId());
+						if (i % 2 != 0) {
 							value = StringUtils.replace(value, "万股", "");
 							if (NumberUtils.isNumber(value)) {
 								Integer stockNum = NumberUtils.toInt(value)*10000;
 								totalStock.setStockNum(stockNum);
 							}
+							if (totalStock != null) {
+								this.totalStockService.save(totalStock);
+							}
 						} else {
+							totalStock = new TotalStock();
+							totalStock.setStockId(stock.getId());
 							String format = "yyyy-MM-dd";
 							Date changeDate = DateUtil.getDateFromString(value, format);
 							totalStock.setChangeDate(changeDate);
