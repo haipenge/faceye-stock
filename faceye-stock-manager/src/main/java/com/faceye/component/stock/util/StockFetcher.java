@@ -185,7 +185,7 @@ public class StockFetcher {
 		logger.debug(">>FaceYe fetch stock daily data url is:"+url);
 		String content = Http.getInstance().get(url, "gb2312");
 		try {
-			Thread.sleep(100L);
+			Thread.sleep(50L);
 		} catch (InterruptedException e) {
 			logger.error(">>FaceYe throws Exception: --->", e);
 		}

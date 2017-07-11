@@ -90,8 +90,8 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 				this.fetchHistoryData(code, "" + year, "" + i);
 			}
 		}
-		// 取过去三年数据
-		for (int i = 1; i < 2; i++) {
+		// 取过去10年数据
+		for (int i = 1; i < 10; i++) {
 			for (String jd : jidus) {
 				this.fetchHistoryData(code, "" + (year - i), jd);
 			}

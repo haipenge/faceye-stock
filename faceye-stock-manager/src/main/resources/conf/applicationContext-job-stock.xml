@@ -30,7 +30,6 @@
 			     <ref bean="crawlStockDailyDataJobTrigger"/>
 			     <ref bean="dailyStatJobTrigger"/>
 			     <ref bean="computeStockDailyDataAvgJobTrigger"/>
-			     
 			     <!--
 			      按季度爬取数据  
 			    
@@ -94,7 +93,7 @@
 			<ref bean="crawlStockMonthDataJobDetail" />
 		</property>
 		<property name="cronExpression">
-			<value>0 15 15 * * ?</value>
+			<value>0 25 15 * * ?</value>
 		</property>
 	</bean>
 	<bean id="crawlStockMonthDataJobDetail"
