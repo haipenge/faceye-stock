@@ -44,4 +44,5 @@ public class StockConstants {
 	//MACD中 Dif 上穿Dea
 	public static final Integer STOCK_STAR_TYPE_3=3;
 	
+	
 }
