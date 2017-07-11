@@ -24,12 +24,13 @@
 		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
+			     <ref bean="crawlStockMonthDataJobTrigger"/>
 			     <ref bean="crawlFinancialDataJobTrigger"/>
 			     <ref bean="dataStatJobTrigger"/>
 			     <ref bean="crawlStockDailyDataJobTrigger"/>
 			     <ref bean="dailyStatJobTrigger"/>
 			     <ref bean="computeStockDailyDataAvgJobTrigger"/>
-			      <ref bean="crawlStockMonthDataJobTrigger"/>
+			     
 			     <!--
 			      按季度爬取数据  
 			    
@@ -93,7 +94,7 @@
 			<ref bean="crawlStockMonthDataJobDetail" />
 		</property>
 		<property name="cronExpression">
-			<value>0 50 12 * * ?</value>
+			<value>0 30 13 * * ?</value>
 		</property>
 	</bean>
 	<bean id="crawlStockMonthDataJobDetail"
