@@ -263,14 +263,6 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-shade-plugin</artifactId> <executions> <execution> <phase>package</phase> 
-				<goals> <goal>shade</goal> </goals> <configuration> <shadedArtifactAttached>true</shadedArtifactAttached> <shadedClassifierName>jar-with-dependencies</shadedClassifierName> 
-				<transformers> <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"> <mainClass>com.faceye.feature.service.impl.BeanContextUtil</mainClass> 
-				</transformer> <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer"> <resource>META-INF/spring.handlers</resource> 
-				</transformer> <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer"> <resource>META-INF/spring.schemas</resource> 
-				</transformer> <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer"> <resource>META-INF/spring.tooling</resource> 
-				</transformer> </transformers> </configuration> </execution> </executions> </plugin> -->
-
 		</plugins>
 	</build>
 	<profiles>
@@ -408,6 +400,53 @@
 				</plugins>
 			</build>
 		</profile>
+
+		<profile>
+			<id>cloud</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<filters>
+					<filter>src/main/filters/cloud.properties</filter>
+				</filters>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<configuration>
+							<archive>
+								<addMavenDescriptor>false</addMavenDescriptor>
+							</archive>
+							<archiveClasses>false</archiveClasses>
+							<webXml>src/main/webapp/WEB-INF/web.xml</webXml>
+							<webResources>
+								<resource>
+									<directory>src/main/webapp</directory>
+									<filtering>true</filtering>
+								</resource>
+								<resource>
+									<directory>../../faceye-security-manager-mongo/faceye-security-manager-mongo/src/main/webapp</directory>
+								</resource>
+								<resource>
+									<directory>../../faceye-feature-mongo/src/main/webapp</directory>
+								</resource>
+								<resource>
+									<directory>../../faceye-feature/src/main/webapp</directory>
+								</resource>
+							</webResources>
+							<resourceEncoding>UTF-8</resourceEncoding>
+							<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
+							<packingExcludes>
+								<exclude>/**/**/*jetty*.jar</exclude>
+							</packingExcludes>
+							<warSourceExcludes>%regex[^.+(?:(?&lt;!(?:-|\.)min)\.js)]</warSourceExcludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
 		<profile>
 			<id>jdk-1.7</id>
 			<activation>
