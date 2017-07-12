@@ -1,7 +1,6 @@
 package com.faceye.component.stock.service.impl;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -22,17 +21,18 @@ import org.springframework.stereotype.Service;
 import com.faceye.component.stock.entity.DataStat;
 import com.faceye.component.stock.entity.ReportData;
 import com.faceye.component.stock.entity.Stock;
+import com.faceye.component.stock.entity.TotalStock;
 import com.faceye.component.stock.repository.mongo.DataStatRepository;
 import com.faceye.component.stock.repository.mongo.customer.DataStatCustomerRepository;
 import com.faceye.component.stock.service.DataStatService;
 import com.faceye.component.stock.service.ReportDataService;
 import com.faceye.component.stock.service.StockService;
+import com.faceye.component.stock.service.TotalStockService;
 import com.faceye.component.stock.service.wrapper.StatRecord;
 import com.faceye.component.stock.util.StockConstants;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.faceye.feature.util.DateUtil;
-import com.faceye.feature.util.ServiceException;
 import com.querydsl.core.types.Predicate;
 
 /**
@@ -44,7 +44,8 @@ import com.querydsl.core.types.Predicate;
  */
 
 @Service
-public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, DataStatRepository> implements DataStatService {
+public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, DataStatRepository>
+		implements DataStatService {
 	@Autowired
 	private DataStatCustomerRepository dataStatCustomerRepository = null;
 
@@ -52,6 +53,8 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	private StockService stockService = null;
 	@Autowired
 	private ReportDataService reportDataService = null;
+	@Autowired
+	private TotalStockService totalStockService=null;
 
 	@Autowired
 	public DataStatServiceImpl(DataStatRepository dao) {
@@ -63,11 +66,16 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		if (page != 0) {
 			page = page - 1;
 		}
-		// SimpleEntityPathResolver resolver = SimpleEntityPathResolver.INSTANCE;
+		// SimpleEntityPathResolver resolver =
+		// SimpleEntityPathResolver.INSTANCE;
 		// EntityPath<DataStat> entityPath = resolver.createPath(entityClass);
-		// PathBuilder<DataStat> builder = new PathBuilder<DataStat>(entityPath.getType(), entityPath.getMetadata());
+		// PathBuilder<DataStat> builder = new
+		// PathBuilder<DataStat>(entityPath.getType(),
+		// entityPath.getMetadata());
 		// Path path = entityPath.getRoot();
-		// List<Predicate> predicates=DynamicSpecifications.buildPredicates(searchParams, entityClass);
+		// List<Predicate>
+		// predicates=DynamicSpecifications.buildPredicates(searchParams,
+		// entityClass);
 		// Predicate predicate=DynamicSpecifications.builder(predicates);
 		// NumberPath numberPath = new NumberPath(Number.class, path, "age");
 		// predicates.add(numberPath.eq(15));
@@ -84,7 +92,9 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 			Pageable pageable = new PageRequest(page, size, sort);
 			res = this.dao.findAll(predicate, pageable);
 		} else {
-			// OrderSpecifier<Comparable> orderPOrderSpecifier=new OrderSpecifier<Comparable>(new Order(), new NumberExpression<DataStat>("id") {
+			// OrderSpecifier<Comparable> orderPOrderSpecifier=new
+			// OrderSpecifier<Comparable>(new Order(), new
+			// NumberExpression<DataStat>("id") {
 			// })
 			List<DataStat> items = (List) this.dao.findAll(predicate, sort);
 			res = new PageImpl<DataStat>(items);
@@ -106,9 +116,12 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		String sDate = DateUtil.formatDate(date, "yyyy-MM-dd");
 		// 营业收入
 		Double operatingIncome = reportData.getInComeSheet().getEle6().getCinst61_89();
-		// List<FinancialData> operatingIncomes = this.getFinancialData(stock.getId(), StockConstants.OPERATING_INCOME, sDate);
+		// List<FinancialData> operatingIncomes =
+		// this.getFinancialData(stock.getId(), StockConstants.OPERATING_INCOME,
+		// sDate);
 		// 净利润
-		// List<FinancialData> netProfits = this.getFinancialData(stock.getId(), StockConstants.NET_PROFIT, sDate);
+		// List<FinancialData> netProfits = this.getFinancialData(stock.getId(),
+		// StockConstants.NET_PROFIT, sDate);
 		Double netProfit = reportData.getInComeSheet().getEle9().getCinst24_128();
 		if (operatingIncome != null && netProfit != null) {
 			Double netProfitMargin = netProfit / operatingIncome;
@@ -134,7 +147,8 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		// 营业成本
 		Double operatingCosts = reportData.getInComeSheet().getEle7().getCinst3_97();
 		Double grossProfitMargin = 0.0D;
-		if (operatingIncome != null && operatingCosts != null && operatingIncome - operatingCosts != 0 && operatingIncome != 0) {
+		if (operatingIncome != null && operatingCosts != null && operatingIncome - operatingCosts != 0
+				&& operatingIncome != 0) {
 			grossProfitMargin = (operatingIncome - operatingCosts) / operatingIncome;
 		}
 		dataStat.setGrossProfitMargin(grossProfitMargin);
@@ -155,10 +169,14 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		Date date = dataStat.getDateCycle();
 		String sDate = DateUtil.formatDate(date, "yyyy-MM-dd");
 		// 营业收入
-		// List<FinancialData> operatingIncomes = this.getFinancialData(stock.getId(), StockConstants.OPERATING_INCOME, sDate);
+		// List<FinancialData> operatingIncomes =
+		// this.getFinancialData(stock.getId(), StockConstants.OPERATING_INCOME,
+		// sDate);
 		Double operatingIncome = reportData.getInComeSheet().getEle6().getCinst61_89();
 		// 资产总额(期末)
-		// List<FinancialData> totalAssets = this.getFinancialData(stock.getId(), StockConstants.TOTAL_ASSETS, sDate);
+		// List<FinancialData> totalAssets =
+		// this.getFinancialData(stock.getId(), StockConstants.TOTAL_ASSETS,
+		// sDate);
 		Double totalAsset = 0.0D;
 		Double endPeriodTotalAsset = reportData.getBalanceSheet().getEle14().getCbsheet46_189();
 		if (endPeriodTotalAsset == null) {
@@ -189,7 +207,9 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 			Double totalAssetsTurnover = operatingIncome / totalAsset;
 			dataStat.setTotalAssetsTurnover(totalAssetsTurnover);
 		}
-		// if (CollectionUtils.isNotEmpty(operatingIncomes) && CollectionUtils.isNotEmpty(totalAssets) && operatingIncomes.size() + totalAssets.size() == 2) {
+		// if (CollectionUtils.isNotEmpty(operatingIncomes) &&
+		// CollectionUtils.isNotEmpty(totalAssets) && operatingIncomes.size() +
+		// totalAssets.size() == 2) {
 		// Double operatingIncome = operatingIncomes.get(0).getData();
 		// Double totalAsset = totalAssets.get(0).getData();
 		//
@@ -207,7 +227,8 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	 * @Author:haipenge
 	 * @Date:2017年3月11日 上午11:42:22
 	 */
-	private DataStat statTotalAssetsNeProfitMargin(Stock stock, ReportData reportData, DataStat dataStat) throws Exception {
+	private DataStat statTotalAssetsNeProfitMargin(Stock stock, ReportData reportData, DataStat dataStat)
+			throws Exception {
 		if (dataStat != null && dataStat.getTotalAssetsTurnover() != null && dataStat.getNetProfitMargin() != null) {
 			Double totalAssetsNetProfitMargin = dataStat.getNetProfitMargin() * dataStat.getTotalAssetsTurnover();
 			dataStat.setTotalAssetsNetProfitMargin(totalAssetsNetProfitMargin);
@@ -229,7 +250,9 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		Date date = dataStat.getDateCycle();
 		String sDate = DateUtil.formatDate(date, "yyyy-MM-dd");
 		// 资产总额
-		// List<FinancialData> totalAssets = this.getFinancialData(stock.getId(), StockConstants.TOTAL_ASSETS, sDate);
+		// List<FinancialData> totalAssets =
+		// this.getFinancialData(stock.getId(), StockConstants.TOTAL_ASSETS,
+		// sDate);
 		Double totalAsset = reportData.getBalanceSheet().getEle14().getCbsheet46_189();
 		// 总负债
 		Double totalLiabilite = reportData.getBalanceSheet().getEle16().getCbsheet77_230();
@@ -257,10 +280,10 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		}
 		return dataStat;
 	}
-	
+
 	/**
-	 * 计算核心利润率
-	 * 核心利润率=（毛利-营业税金及附加-三项费用）/营业收入
+	 * 计算核心利润率 核心利润率=（毛利-营业税金及附加-三项费用）/营业收入
+	 * 
 	 * @param stock
 	 * @param dataStat
 	 * @return
@@ -269,43 +292,43 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	 * @Author:haipenge
 	 * @Date:2017年4月10日 下午6:57:12
 	 */
-	private DataStat statCoreProfitMargin(Stock stock, ReportData reportData,DataStat dataStat) throws Exception{
-		
-		Double coreProfitMargin=0D;
-		//营业收入
-		Double operateIncome=reportData.getInComeSheet().getEle6().getCinst1_90();
-		//营业成本
-		Double operateCost=reportData.getInComeSheet().getEle7().getCinst3_97();
-		//营业税金及附加
-		Double operateShui=reportData.getInComeSheet().getEle7().getCinst4_108();
-		//管理费用
-		Double manageCost=reportData.getInComeSheet().getEle7().getCinst9_110();
-		//销售费用
-		Double saleCost=reportData.getInComeSheet().getEle7().getCinst8_109();
-		//财务费用
-		Double caiwuCost=reportData.getInComeSheet().getEle7().getCinst10_111();
-		Double fenzi=0D;
-		if(operateIncome!=null){
-			fenzi+=operateIncome;
+	private DataStat statCoreProfitMargin(Stock stock, ReportData reportData, DataStat dataStat) throws Exception {
+
+		Double coreProfitMargin = 0D;
+		// 营业收入
+		Double operateIncome = reportData.getInComeSheet().getEle6().getCinst1_90();
+		// 营业成本
+		Double operateCost = reportData.getInComeSheet().getEle7().getCinst3_97();
+		// 营业税金及附加
+		Double operateShui = reportData.getInComeSheet().getEle7().getCinst4_108();
+		// 管理费用
+		Double manageCost = reportData.getInComeSheet().getEle7().getCinst9_110();
+		// 销售费用
+		Double saleCost = reportData.getInComeSheet().getEle7().getCinst8_109();
+		// 财务费用
+		Double caiwuCost = reportData.getInComeSheet().getEle7().getCinst10_111();
+		Double fenzi = 0D;
+		if (operateIncome != null) {
+			fenzi += operateIncome;
 		}
-		if(operateCost!=null){
-			fenzi-=operateCost;
+		if (operateCost != null) {
+			fenzi -= operateCost;
 		}
-		if(operateShui!=null){
-			fenzi-=operateShui;
+		if (operateShui != null) {
+			fenzi -= operateShui;
 		}
-		if(manageCost!=null){
-			fenzi-=manageCost;
+		if (manageCost != null) {
+			fenzi -= manageCost;
 		}
-		if(saleCost!=null){
-			fenzi-=saleCost;
+		if (saleCost != null) {
+			fenzi -= saleCost;
 		}
-		if(caiwuCost!=null){
-			fenzi-=caiwuCost;
+		if (caiwuCost != null) {
+			fenzi -= caiwuCost;
 		}
-		
-		if(operateIncome!=null && operateIncome >0){
-			coreProfitMargin=fenzi/operateIncome;
+
+		if (operateIncome != null && operateIncome > 0) {
+			coreProfitMargin = fenzi / operateIncome;
 		}
 		dataStat.setCoreProfitMargin(coreProfitMargin);
 		return dataStat;
@@ -334,8 +357,6 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		}
 		return dataStat;
 	}
-	
-	
 
 	boolean isStated = false;
 
@@ -382,7 +403,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 					this.statROE(stock, dataStat);
 					// 毛利率
 					this.statGrossProfitMargin(stock, reportData, dataStat);
-					//计算核心利润率
+					// 计算核心利润率
 					this.statCoreProfitMargin(stock, reportData, dataStat);
 					this.save(dataStat);
 				}
@@ -424,7 +445,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		@Override
 		public int compare(StatRecord o1, StatRecord o2) {
 			int res = 0;
-			//以多年平均总资产净收益率排序
+			// 以多年平均总资产净收益率排序
 			res = o2.getAvgTotalAssetsNetProfitMargin().compareTo(o1.getAvgTotalAssetsNetProfitMargin());
 			return res;
 		}
@@ -445,36 +466,37 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		List<DataStat> results = null;
 		Long stockId = stock.getId();
 		Integer type = MapUtils.getInteger(params, "type");
-		Integer years=MapUtils.getInteger(params, "years");//连续多少年
-		
+		Integer years = MapUtils.getInteger(params, "years");// 连续多少年
+
 		// 总资产净利率过滤器
-//		Double totalAssetsNetProfitMargin = MapUtils.getDouble(params, "totalAssetsNetProfitMargin");
-		Double minTotalAssetsNetProfitMargin=MapUtils.getDouble(params, "minTotalAssetsNetProfitMargin");
-		Double maxTotalAssetsNetProfitMargin=MapUtils.getDouble(params, "maxTotalAssetsNetProfitMargin");
-		if(minTotalAssetsNetProfitMargin==null){
-			minTotalAssetsNetProfitMargin=0.05D;
-		}else{
-			minTotalAssetsNetProfitMargin=minTotalAssetsNetProfitMargin/100;
+		// Double totalAssetsNetProfitMargin = MapUtils.getDouble(params,
+		// "totalAssetsNetProfitMargin");
+		Double minTotalAssetsNetProfitMargin = MapUtils.getDouble(params, "minTotalAssetsNetProfitMargin");
+		Double maxTotalAssetsNetProfitMargin = MapUtils.getDouble(params, "maxTotalAssetsNetProfitMargin");
+		if (minTotalAssetsNetProfitMargin == null) {
+			minTotalAssetsNetProfitMargin = 0.05D;
+		} else {
+			minTotalAssetsNetProfitMargin = minTotalAssetsNetProfitMargin / 100;
 		}
-		if(maxTotalAssetsNetProfitMargin==null){
-			maxTotalAssetsNetProfitMargin=0.5D;
-		}else{
-			maxTotalAssetsNetProfitMargin=maxTotalAssetsNetProfitMargin/100;
+		if (maxTotalAssetsNetProfitMargin == null) {
+			maxTotalAssetsNetProfitMargin = 0.5D;
+		} else {
+			maxTotalAssetsNetProfitMargin = maxTotalAssetsNetProfitMargin / 100;
 		}
-		if(years==null){
-			years=5;
+		if (years == null) {
+			years = 5;
 		}
 		// 取最后五年的报表
 		Date now = new Date();
-		Date begin=new Date(now.getTime()-5*365*24*60*60*1000L);
-//		Calendar calendar = Calendar.getInstance();
-//		calendar.set(now.getYear() - 5, 11, 31);
+		Date begin = new Date(now.getTime() - 5 * 365 * 24 * 60 * 60 * 1000L);
+		// Calendar calendar = Calendar.getInstance();
+		// calendar.set(now.getYear() - 5, 11, 31);
 		if (type == null) {
 			type = 0;// 年报
 		}
-//		if (totalAssetsNetProfitMargin == null) {
-//			totalAssetsNetProfitMargin = 0.2;// 1%
-//		}
+		// if (totalAssetsNetProfitMargin == null) {
+		// totalAssetsNetProfitMargin = 0.2;// 1%
+		// }
 		Map dataStatParams = new HashMap();
 		dataStatParams.put("EQ|stockId", stockId);
 		dataStatParams.put("EQ|type", type);
@@ -490,5 +512,62 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		return results;
 
 	}
-
+	///////////////////////////////////////// 分析每股指标///////////////////////////////////////////////////
+    private void statEveryStockData(Stock stock,ReportData reportData,DataStat dataStat){
+    	TotalStock totalStock=this.getTotalStock(stock, reportData);
+    	this.statEps(totalStock, reportData, dataStat);
+    	this.statBps(totalStock, reportData, dataStat);
+    }
+    /**
+     * 分析每股收益
+     * @param stock
+     * @param reportData
+     * @param dataStat
+     */
+    private void statEps(TotalStock totalStock,ReportData reportData,DataStat dataStat){
+    	Double profit=reportData.getInComeSheet().getEle9().getCinst24_128();//净利润
+    	Double eps=profit/totalStock.getStockNum();
+    	dataStat.setEps(eps);
+    }
+    /**
+     * 分析每股净资产
+     * @param totalStock
+     * @param reportData
+     * @param dataStat
+     */
+    private void statBps(TotalStock totalStock,ReportData reportData,DataStat dataStat){
+    	Double data=reportData.getBalanceSheet().getEle17().getCbsheet86_243();//所有者权益
+    	Double bps=data/totalStock.getStockNum();
+    	dataStat.setBps(bps);
+    } 
+    /**
+     * 分析每股股利
+     * @param totalStock
+     * @param reportData
+     * @param dataStat
+     */
+    private void statDps(TotalStock totalStock,ReportData reportData,DataStat dataStat){
+    	
+    }
+    
+    /**
+     * 获取股本
+     * @param stock
+     * @param reportData
+     * @return
+     */
+    private TotalStock getTotalStock(Stock stock,ReportData reportData){
+    	TotalStock totalStock=null;
+    	Map searchParams=new HashMap();
+    	String date=DateUtil.formatDate(reportData.getDate(), "yyyy-MM-dd");
+    	searchParams.put("EQ|stockId", stock.getId());
+    	searchParams.put("LTE|changeDate", DateUtil.getDateFromString(date+" 23:59:59"));
+    	searchParams.put("sort|changeDate", "desc");
+    	Page<TotalStock> page=this.totalStockService.getPage(searchParams, 1, 1);
+    	if(page!=null &&CollectionUtils.isNotEmpty(page.getContent())){
+    		totalStock=page.getContent().get(0);
+    	}
+    	return totalStock;
+    }
+	///////////////////////////////////////// 结束分析每股指标////////////////////////////////////////////////
 }/** @generate-service-source@ **/
