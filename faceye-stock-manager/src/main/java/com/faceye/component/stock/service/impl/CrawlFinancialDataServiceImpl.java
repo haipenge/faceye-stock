@@ -23,10 +23,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.faceye.component.stock.entity.AccountingSubject;
+import com.faceye.component.stock.entity.BonusRecord;
 import com.faceye.component.stock.entity.ReportData;
 import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.entity.TotalStock;
 import com.faceye.component.stock.service.AccountingSubjectService;
+import com.faceye.component.stock.service.BonusRecordService;
 import com.faceye.component.stock.service.CrawlFinancialDataService;
 import com.faceye.component.stock.service.FinancialDataService;
 import com.faceye.component.stock.service.ReportDataService;
@@ -56,6 +58,8 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	private ReportDataService reportDataService = null;
 	@Autowired
 	private TotalStockService totalStockService = null;
+	@Autowired
+	private BonusRecordService bonusRecordService = null;
 
 	@Override
 	public void crawl() {
@@ -94,7 +98,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 		boolean isStockCrawled = this.isStockFinancialDataCrawled(stock);
 		// boolean isStockCrawled=false;
 		this.crawlStock(stock, isStockCrawled);
-		
+
 	}
 
 	private boolean isStockFinancialDataCrawled(Stock stock) {
@@ -404,7 +408,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 						if (i % 2 != 0) {
 							value = StringUtils.replace(value, "万股", "");
 							if (NumberUtils.isNumber(value)) {
-								Integer stockNum = NumberUtils.toInt(value)*10000;
+								Integer stockNum = NumberUtils.toInt(value) * 10000;
 								totalStock.setStockNum(stockNum);
 							}
 							if (totalStock != null) {
@@ -427,6 +431,112 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 			} catch (Exception e) {
 				logger.error(">>FaceYe Throws Exception:", e);
 			}
+		}
+	}
+
+	/**
+	 * 爬取分红记录
+	 * 
+	 * @param stock
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年7月13日 下午9:44:22
+	 */
+	private void crawlBonusRecord(Stock stock) {
+		String url = "http://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/000998.phtml";
+		url = StringUtils.replace(url, "000998", stock.getCode());
+		String regexp = "<table id=\"sharebonus_1\">([\\S\\s]+?)<\\/table>";
+		String content = Http.getInstance().get(url, "gb2312");
+		try {
+			List<Map<String, String>> matcherResult = RegexpUtil.match(content, regexp);
+			if (CollectionUtils.isNotEmpty(matcherResult)) {
+				String table = matcherResult.get(0).get("1");
+				if (StringUtils.isNotEmpty(table)) {
+					regexp = "<tbody>([\\s\\S]+?)<\\/tbody>";
+					List<Map<String, String>> tbodyMatcher = RegexpUtil.match(table, regexp);
+					String tbody = tbodyMatcher.get(0).get("1");
+					if (StringUtils.isNotEmpty(tbody)) {
+						regexp = "<tr>([\\s\\S]*?)<\\/tr>";
+						Pattern pateern = Pattern.compile(regexp, Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
+						Matcher matcher = pateern.matcher(tbody);
+						while (matcher.find()) {
+
+							String tr = matcher.group(1);
+							if (StringUtils.isNotEmpty(tr)) {
+								String reg = "<td>([\\s\\S].+?)<\\/td>";
+								Pattern p = Pattern.compile(reg, Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
+								Matcher m = p.matcher(tr);
+								int i = 0;
+								// 公告日期
+								String publishDateStr = "";
+								// 送股
+								String giveStockCountStr = "";
+								// 转增
+								String increaseStockCountStr = "";
+								// 派息
+								String dividendStr = "";
+								// 进度
+								String status = "";
+								// 除权除息日
+								String exDividendDateStr = "";
+								// 股权登记日
+								String equityRegistrationDateStr = "";
+								//  红股上市日
+								String bonusShareTradingDateStr = "";
+								while (m.find()) {
+									if (i == 0) {
+										publishDateStr = m.group(1);
+									}
+									if (i == 1) {
+										giveStockCountStr = m.group(1);
+									}
+									if (i == 2) {
+										increaseStockCountStr = m.group(1);
+									}
+									if (i == 3) {
+										dividendStr = m.group(1);
+									}
+									if (i == 4) {
+										status = m.group(1);
+									}
+									if (i == 5) {
+										exDividendDateStr = m.group(1);
+									}
+									if (i == 6) {
+										equityRegistrationDateStr = m.group(1);
+									}
+									if (i == 7) {
+										bonusShareTradingDateStr = m.group(1);
+										bonusShareTradingDateStr = StringUtils.replace(bonusShareTradingDateStr, "--", "");
+									}
+									i++;
+								}
+								if (StringUtils.isNotEmpty(publishDateStr)) {
+									boolean isExist = this.bonusRecordService.isExistBonusRecord(stock.getId(), publishDateStr);
+									if (!isExist) {
+										BonusRecord bonusRecord = new BonusRecord();
+										bonusRecord.setPublishDate(DateUtil.getDateFromString(publishDateStr, "yyyy-MM-dd"));
+										if (StringUtils.isNotEmpty(bonusShareTradingDateStr)) {
+											bonusRecord.setBonusShareTradingDate(DateUtil.getDateFromString(bonusShareTradingDateStr, "yyyy-MM-dd"));
+										}
+										bonusRecord.setDividend(Double.valueOf(dividendStr));
+										bonusRecord.setEquityRegistrationDate(DateUtil.getDateFromString(equityRegistrationDateStr,"yyyy-MM-dd"));
+										bonusRecord.setExDividendDate(DateUtil.getDateFromString(exDividendDateStr,"yyyy-MM-dd"));
+										bonusRecord.setGiveStockCount(Double.valueOf(giveStockCountStr));
+										bonusRecord.setIncreaseStockCount(Double.valueOf(increaseStockCountStr));
+										bonusRecord.setPublishDate(DateUtil.getDateFromString(publishDateStr,"yyyy-MM-dd"));
+										bonusRecord.setStatus(status);
+										this.bonusRecordService.save(bonusRecord);
+									}
+								}
+
+							}
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			logger.error(">>FaceYe Throws Exception:", e);
 		}
 	}
 }
