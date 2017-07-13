@@ -372,7 +372,10 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 					// }
 				}
 			}
+			//爬取股本变化记录
 			this.crawlTotalStocksNum(stock);
+			//爬取分红记录
+			this.crawlBonusRecord(stock);
 		} else {
 			logger.debug(">>FaceYe --> stock:" + stock.getName() + "(" + stock.getCode() + ") 已爬取");
 		}
@@ -452,7 +455,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 			if (CollectionUtils.isNotEmpty(matcherResult)) {
 				String table = matcherResult.get(0).get("1");
 				if (StringUtils.isNotEmpty(table)) {
-					regexp = "<tbody>([\\s\\S]+?)<\\/tbody>";
+					regexp = "<tbody>([\\s\\S]*?)<\\/tbody>";
 					List<Map<String, String>> tbodyMatcher = RegexpUtil.match(table, regexp);
 					String tbody = tbodyMatcher.get(0).get("1");
 					if (StringUtils.isNotEmpty(tbody)) {
@@ -463,7 +466,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 
 							String tr = matcher.group(1);
 							if (StringUtils.isNotEmpty(tr)) {
-								String reg = "<td>([\\s\\S].+?)<\\/td>";
+								String reg = "<td>([\\s\\S]*?)<\\/td>";
 								Pattern p = Pattern.compile(reg, Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
 								Matcher m = p.matcher(tr);
 								int i = 0;

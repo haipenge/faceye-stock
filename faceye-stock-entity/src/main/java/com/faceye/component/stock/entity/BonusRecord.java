@@ -47,8 +47,19 @@ public class BonusRecord implements Serializable {
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
+	
+	/**
+	 * 股票ID
+	 */
+	private Long stockId=null;
 
-   /**
+   public Long getStockId() {
+		return stockId;
+	}
+	public void setStockId(Long stockId) {
+		this.stockId = stockId;
+	}
+/**
     * 说明:公告日期<br>
     * 属性名: publishDate<br>
     * 类型: Date<br>

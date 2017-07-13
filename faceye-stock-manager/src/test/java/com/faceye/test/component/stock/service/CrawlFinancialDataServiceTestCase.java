@@ -58,9 +58,9 @@ public class CrawlFinancialDataServiceTestCase extends BaseServiceTestCase {
 	}
 	@Test
    public void testCrawlSingleStock() throws Exception{
-	  Long id=1335L;
-	  Stock stock=this.stockService.get(id);
-	  this.crawlFinancialDataService.crawlStock(stock);
+	  String code="000998";
+	  Stock stock=this.stockService.getStockByCode(code);
+	  this.crawlFinancialDataService.crawlStock(stock,false);
 	  Assert.isTrue(true);
    }
 
