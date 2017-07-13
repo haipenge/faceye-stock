@@ -336,5 +336,64 @@ public class DataStat implements Serializable {
 	
 	
 	
+	/**
+	 * 每股收益
+	 */
+	private Double eps=0.0D;
+
+	public Double getEps() {
+		return eps;
+	}
+
+	public void setEps(Double eps) {
+		this.eps = eps;
+	}
+	/**
+	 * 每股净资产
+	 */
+	private Double bps=0.0D;
+	public Double getBps() {
+		return bps;
+	}
+
+	public void setBps(Double bps) {
+		this.bps = bps;
+	}
+	/**
+	 * 每股股利
+	 */
+	private Double dps=0.0D;
+	public Double getDps() {
+		return dps;
+	}
+
+	public void setDps(Double dps) {
+		this.dps = dps;
+	}
+	/**
+	 * 剩余价值
+	 */
+	private Double re=0.0D;
+	
+	public Double getRe() {
+		return re;
+	}
+
+	public void setRe(Double re) {
+		this.re = re;
+	}
+	/**
+	 * 权益报酬率
+	 */
+	private Double roce=0.0D;
+	public Double getRoce() {
+		return roce;
+	}
+
+	public void setRoce(Double roce) {
+		this.roce = roce;
+	}
+	
+	
 }/**@generate-entity-source@**/
 	
