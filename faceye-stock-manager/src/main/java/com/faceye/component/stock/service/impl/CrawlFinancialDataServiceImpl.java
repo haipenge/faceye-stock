@@ -522,11 +522,11 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 										if (StringUtils.isNotEmpty(bonusShareTradingDateStr)) {
 											bonusRecord.setBonusShareTradingDate(DateUtil.getDateFromString(bonusShareTradingDateStr, "yyyy-MM-dd"));
 										}
-										bonusRecord.setDividend(Double.valueOf(dividendStr));
+										bonusRecord.setDividend(Double.valueOf(dividendStr)/10);
 										bonusRecord.setEquityRegistrationDate(DateUtil.getDateFromString(equityRegistrationDateStr,"yyyy-MM-dd"));
 										bonusRecord.setExDividendDate(DateUtil.getDateFromString(exDividendDateStr,"yyyy-MM-dd"));
-										bonusRecord.setGiveStockCount(Double.valueOf(giveStockCountStr));
-										bonusRecord.setIncreaseStockCount(Double.valueOf(increaseStockCountStr));
+										bonusRecord.setGiveStockCount(Double.valueOf(giveStockCountStr)/10);
+										bonusRecord.setIncreaseStockCount(Double.valueOf(increaseStockCountStr)/10);
 										bonusRecord.setPublishDate(DateUtil.getDateFromString(publishDateStr,"yyyy-MM-dd"));
 										bonusRecord.setStatus(status);
 										this.bonusRecordService.save(bonusRecord);
