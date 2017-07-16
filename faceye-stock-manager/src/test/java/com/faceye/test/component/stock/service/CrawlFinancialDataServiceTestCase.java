@@ -63,6 +63,13 @@ public class CrawlFinancialDataServiceTestCase extends BaseServiceTestCase {
 	  this.crawlFinancialDataService.crawlStock(stock,false);
 	  Assert.isTrue(true);
    }
+	@Test
+	public void testCrawlForecast() throws Exception{
+		 String code="600508";
+		  Stock stock=this.stockService.getStockByCode(code);
+		  this.crawlFinancialDataService.crawlForecast(stock);
+		  Assert.isTrue(true);
+	}
 
 	/**
 	 * 初始化股票代码
@@ -110,4 +117,6 @@ public class CrawlFinancialDataServiceTestCase extends BaseServiceTestCase {
 		//稀土行业股票结束
 
 	}
+	
+	
 }

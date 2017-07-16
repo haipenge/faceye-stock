@@ -52,23 +52,22 @@ public class @entity.name@ServiceImpl extends BaseMongoServiceImpl<@entity.name@
 		// Predicate predicate=DynamicSpecifications.builder(predicates);
 		// NumberPath numberPath = new NumberPath(Number.class, path, "age");
 		// predicates.add(numberPath.eq(15));
-		Predicate predicate = DynamicSpecifications.builder(searchParams, entityClass);
-		if (predicate != null) {
-			logger.debug(">>FaceYe -->Query predicate is:" + predicate.toString());
-		}
-		Sort sort = new Sort(Direction.DESC, "id");
-		Page<@entity.name@> res = null;
-		if (size != 0) {
-			Pageable pageable = new PageRequest(page, size, sort);
-			res = this.dao.findAll(predicate, pageable);
-		} else {
-			// OrderSpecifier<Comparable> orderPOrderSpecifier=new OrderSpecifier<Comparable>(new Order(), new NumberExpression<@entity.name@>("id") {
-			// })
-			List<@entity.name@> items = (List) this.dao.findAll(predicate,sort);
-			res = new PageImpl<@entity.name@>(items);
-
-		}
-		return res;
+//		Predicate predicate = DynamicSpecifications.builder(searchParams, entityClass);
+//		if (predicate != null) {
+//			logger.debug(">>FaceYe -->Query predicate is:" + predicate.toString());
+//		}
+//		Sort sort = new Sort(Direction.DESC, "id");
+//		Page<@entity.name@> res = null;
+//		if (size != 0) {
+//			Pageable pageable = new PageRequest(page, size, sort);
+//			res = this.dao.findAll(predicate, pageable);
+//		} else {
+//			// OrderSpecifier<Comparable> orderPOrderSpecifier=new OrderSpecifier<Comparable>(new Order(), new NumberExpression<@entity.name@>("id") {
+//			// })
+//			List<@entity.name@> items = (List) this.dao.findAll(predicate,sort);
+//			res = new PageImpl<@entity.name@>(items);
+//		}
+		return this.dao.getPage(searchParams, page, size);;
 	}
 	
 }/**@generate-service-source@**/

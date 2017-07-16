@@ -37,4 +37,14 @@ public interface CrawlFinancialDataService {
 	 * @Date:2017年4月4日 上午9:03:51
 	 */
 	public void crawlStock(Stock stock,boolean isCrawled); 
+	
+	
+	/**
+	 * 爬取对企业的估值
+	 * @param stock
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年7月16日 下午6:45:08
+	 */
+	public void crawlForecast(Stock stock);
 }

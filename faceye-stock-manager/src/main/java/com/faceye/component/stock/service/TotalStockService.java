@@ -11,4 +11,6 @@ import com.faceye.feature.service.BaseService;
 public interface TotalStockService extends BaseService<TotalStock,Long>{
 
 	public boolean isTotalStockExist(Long stockId,String changeDate);
+	
+	public TotalStock getTotalStock(Long stockId,String changeDate);
 }/**@generate-service-source@**/

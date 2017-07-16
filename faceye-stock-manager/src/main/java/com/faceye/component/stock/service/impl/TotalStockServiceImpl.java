@@ -76,6 +76,16 @@ public class TotalStockServiceImpl extends BaseMongoServiceImpl<TotalStock, Long
 
 	@Override
 	public boolean isTotalStockExist(Long stockId, String changeDate) {
+		TotalStock totalStock=this.getTotalStock(stockId, changeDate);
+		if (totalStock != null) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public TotalStock getTotalStock(Long stockId, String changeDate) {
+		TotalStock totalStock=null;
 		Map searchParams = new HashMap();
 		searchParams.put("EQ|stockId", stockId);
 		Date startDate = DateUtil.getDateFromString(changeDate + " 00:00:00");
@@ -83,10 +93,10 @@ public class TotalStockServiceImpl extends BaseMongoServiceImpl<TotalStock, Long
 		searchParams.put("GTE|changeDate", startDate);
 		searchParams.put("LTE|changeDate", endDate);
 		Page<TotalStock> res = this.getPage(searchParams, 1, 1);
-		if (res != null && CollectionUtils.isNotEmpty(res.getContent())) {
-			return true;
+		if(res!=null && CollectionUtils.isNotEmpty(res.getContent())){
+			totalStock=res.getContent().get(0);
 		}
-		return false;
+		return totalStock;
 	}
 
 }/** @generate-service-source@ **/

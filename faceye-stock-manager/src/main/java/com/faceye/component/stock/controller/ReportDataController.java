@@ -25,6 +25,7 @@ import com.faceye.component.stock.entity.DataStat;
 import com.faceye.component.stock.entity.ReportCategory;
 import com.faceye.component.stock.entity.ReportData;
 import com.faceye.component.stock.entity.Stock;
+import com.faceye.component.stock.service.BonusRecordService;
 import com.faceye.component.stock.service.DailyStatService;
 import com.faceye.component.stock.service.DataStatService;
 import com.faceye.component.stock.service.ReportCategoryService;
@@ -49,6 +50,9 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 	private DataStatService dataStatService = null;
 	@Autowired
 	private DailyStatService dailyStatService = null;
+	
+	@Autowired
+	private BonusRecordService bonusService=null;
 
 	public ReportDataController(ReportDataService service) {
 		super(service);

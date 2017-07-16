@@ -20,4 +20,7 @@ public interface BonusRecordService extends BaseService<BonusRecord,Long>{
 	 * @Date:2017年7月13日 下午10:35:50
 	 */
 	public boolean isExistBonusRecord(Long stockId,String date);
+	
+	
+	public BonusRecord getBonusRecord(Long stockId,String date);
 }/**@generate-service-source@**/

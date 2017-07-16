@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -24,6 +25,8 @@ import org.springframework.stereotype.Service;
 
 import com.faceye.component.stock.entity.AccountingSubject;
 import com.faceye.component.stock.entity.BonusRecord;
+import com.faceye.component.stock.entity.Forecast;
+import com.faceye.component.stock.entity.Mechanism;
 import com.faceye.component.stock.entity.ReportData;
 import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.entity.TotalStock;
@@ -31,6 +34,8 @@ import com.faceye.component.stock.service.AccountingSubjectService;
 import com.faceye.component.stock.service.BonusRecordService;
 import com.faceye.component.stock.service.CrawlFinancialDataService;
 import com.faceye.component.stock.service.FinancialDataService;
+import com.faceye.component.stock.service.ForecastService;
+import com.faceye.component.stock.service.MechanismService;
 import com.faceye.component.stock.service.ReportDataService;
 import com.faceye.component.stock.service.StockService;
 import com.faceye.component.stock.service.TotalStockService;
@@ -38,6 +43,7 @@ import com.faceye.component.stock.service.job.CrawlFinancialDataThread;
 import com.faceye.feature.service.QueueService;
 import com.faceye.feature.service.job.thread.ThreadPoolController;
 import com.faceye.feature.util.DateUtil;
+import com.faceye.feature.util.html.HtmlUtil;
 import com.faceye.feature.util.http.Http;
 import com.faceye.feature.util.regexp.RegexpUtil;
 
@@ -60,6 +66,10 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	private TotalStockService totalStockService = null;
 	@Autowired
 	private BonusRecordService bonusRecordService = null;
+	@Autowired
+	private ForecastService forecaseService = null;
+	@Autowired
+	private MechanismService mechanismService=null;
 
 	@Override
 	public void crawl() {
@@ -372,10 +382,12 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 					// }
 				}
 			}
-			//爬取股本变化记录
+			// 爬取股本变化记录
 			this.crawlTotalStocksNum(stock);
-			//爬取分红记录
+			// 爬取分红记录
 			this.crawlBonusRecord(stock);
+			// 爬取分析师评估数据
+			this.crawlForecast(stock);
 		} else {
 			logger.debug(">>FaceYe --> stock:" + stock.getName() + "(" + stock.getCode() + ") 已爬取");
 		}
@@ -393,7 +405,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 		String url = "http://vip.stock.finance.sina.com.cn/corp/go.php/vCI_StockStructureHistory/stockid/000998/stocktype/TotalStock.phtml";
 		url = StringUtils.replace(url, "000998", stock.getCode());
 		String content = Http.getInstance().get(url, "gb2312");
-		String regexp = "<td><div align=\"center\">([\\S\\s].+?)<\\/div><\\/td>";
+		String regexp = "<td><div align=\"center\">([\\S\\s\\.].+?)<\\/div><\\/td>";
 		if (StringUtils.isNotEmpty(content)) {
 			try {
 				List<Map<String, String>> results = RegexpUtil.match(content, regexp);
@@ -403,22 +415,22 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 						Map<String, String> map = results.get(i);
 						String value = StringUtils.trim(map.get("1"));
 						if (i % 2 == 0) {
-							boolean isExist = this.totalStockService.isTotalStockExist(stock.getId(), value);
-							if (isExist) {
-								continue;
-							}
+							// boolean isExist = this.totalStockService.isTotalStockExist(stock.getId(), value);
+							totalStock = this.totalStockService.getTotalStock(stock.getId(), value);
 						}
 						if (i % 2 != 0) {
 							value = StringUtils.replace(value, "万股", "");
 							if (NumberUtils.isNumber(value)) {
-								Integer stockNum = NumberUtils.toInt(value) * 10000;
-								totalStock.setStockNum(stockNum);
+								Double stockNum = NumberUtils.toDouble(value) * 10000;
+								totalStock.setStockNum(stockNum.intValue());
 							}
 							if (totalStock != null) {
 								this.totalStockService.save(totalStock);
 							}
 						} else {
-							totalStock = new TotalStock();
+							if (totalStock == null) {
+								totalStock = new TotalStock();
+							}
 							totalStock.setStockId(stock.getId());
 							String format = "yyyy-MM-dd";
 							Date changeDate = DateUtil.getDateFromString(value, format);
@@ -515,22 +527,24 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 									i++;
 								}
 								if (StringUtils.isNotEmpty(publishDateStr)) {
-									boolean isExist = this.bonusRecordService.isExistBonusRecord(stock.getId(), publishDateStr);
-									if (!isExist) {
-										BonusRecord bonusRecord = new BonusRecord();
-										bonusRecord.setPublishDate(DateUtil.getDateFromString(publishDateStr, "yyyy-MM-dd"));
-										if (StringUtils.isNotEmpty(bonusShareTradingDateStr)) {
-											bonusRecord.setBonusShareTradingDate(DateUtil.getDateFromString(bonusShareTradingDateStr, "yyyy-MM-dd"));
-										}
-										bonusRecord.setDividend(Double.valueOf(dividendStr)/10);
-										bonusRecord.setEquityRegistrationDate(DateUtil.getDateFromString(equityRegistrationDateStr,"yyyy-MM-dd"));
-										bonusRecord.setExDividendDate(DateUtil.getDateFromString(exDividendDateStr,"yyyy-MM-dd"));
-										bonusRecord.setGiveStockCount(Double.valueOf(giveStockCountStr)/10);
-										bonusRecord.setIncreaseStockCount(Double.valueOf(increaseStockCountStr)/10);
-										bonusRecord.setPublishDate(DateUtil.getDateFromString(publishDateStr,"yyyy-MM-dd"));
-										bonusRecord.setStatus(status);
-										this.bonusRecordService.save(bonusRecord);
+									// boolean isExist = this.bonusRecordService.isExistBonusRecord(stock.getId(), publishDateStr);
+									BonusRecord bonusRecord = this.bonusRecordService.getBonusRecord(stock.getId(), publishDateStr);
+									if (bonusRecord == null) {
+										bonusRecord = new BonusRecord();
 									}
+									bonusRecord.setStockId(stock.getId());
+									bonusRecord.setPublishDate(DateUtil.getDateFromString(publishDateStr, "yyyy-MM-dd"));
+									if (StringUtils.isNotEmpty(bonusShareTradingDateStr)) {
+										bonusRecord.setBonusShareTradingDate(DateUtil.getDateFromString(bonusShareTradingDateStr, "yyyy-MM-dd"));
+									}
+									bonusRecord.setDividend(Double.valueOf(dividendStr) / 10);
+									bonusRecord.setEquityRegistrationDate(DateUtil.getDateFromString(equityRegistrationDateStr, "yyyy-MM-dd"));
+									bonusRecord.setExDividendDate(DateUtil.getDateFromString(exDividendDateStr, "yyyy-MM-dd"));
+									bonusRecord.setGiveStockCount(Double.valueOf(giveStockCountStr) / 10);
+									bonusRecord.setIncreaseStockCount(Double.valueOf(increaseStockCountStr) / 10);
+									bonusRecord.setPublishDate(DateUtil.getDateFromString(publishDateStr, "yyyy-MM-dd"));
+									bonusRecord.setStatus(status);
+									this.bonusRecordService.save(bonusRecord);
 								}
 
 							}
@@ -541,5 +555,147 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 		} catch (Exception e) {
 			logger.error(">>FaceYe Throws Exception:", e);
 		}
+	}
+
+	public void crawlForecast(Stock stock) {
+		Map<String, String> urls = new HashMap<String, String>();
+		urls.put("eps", "http://vip.stock.finance.sina.com.cn/q/go.php/vPerformancePrediction/kind/eps/index.phtml?symbol=sz000998");
+		// 营收
+		urls.put("sales", "http://vip.stock.finance.sina.com.cn/q/go.php/vPerformancePrediction/kind/sales/index.phtml?symbol=sz000998");
+		// 净利润
+		urls.put("np", "http://vip.stock.finance.sina.com.cn/q/go.php/vPerformancePrediction/kind/np/index.phtml?symbol=sz000998");
+		// 净资产收益率(ROE)
+		urls.put("roe", "http://vip.stock.finance.sina.com.cn/q/go.php/vPerformancePrediction/kind/roe/index.phtml?symbol=sz000998");
+		Iterator<String> keyIterator=urls.keySet().iterator();
+		while(keyIterator.hasNext()){
+			String key=keyIterator.next();
+			String url=urls.get(key);
+			this.crawlForecast(stock, key, url);
+		}
+	}
+
+	/**
+	 * 爬取机构对股票的预测
+	 * 
+	 * @param stock
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年7月15日 下午9:20:48
+	 */
+	private void crawlForecast(Stock stock, String kind, String url) {
+
+		// String url = "http://vip.stock.finance.sina.com.cn/q/go.php/vPerformancePrediction/kind/eps/index.phtml?symbol=sz000998";
+		url = StringUtils.replace(url, "sz000998", stock.getMarket().toLowerCase() + stock.getCode());
+		// http://vip.stock.finance.sina.com.cn/q/go.php/vPerformancePrediction/kind/eps/index.phtml?symbol=sz000998&p=1
+		// http://vip.stock.finance.sina.com.cn/q/go.php/vPerformancePrediction/kind/eps/index.phtml?symbol=sz000998&p=2
+		String content = Http.getInstance().get(url, "gb2312");
+		String regexp = "<table class=\"list_table\" id=\"dataTable\">([\\s\\S]*?)<\\/table>";
+		List<Map<String, String>> table;
+
+		try {
+			table = RegexpUtil.match(content, regexp);
+			if (CollectionUtils.isNotEmpty(table)) {
+				List<String> years = new ArrayList<String>(0);
+				String thRegexp = "<tr class=\"head\">([\\s\\S]*?)<\\/tr>";
+				List<Map<String, String>> thContent = RegexpUtil.match(table.get(0).get("1"), thRegexp);
+				String tdRegexp = "<td>([\\s\\S]*?)<\\/td>";
+				List<Map<String, String>> tdContents = RegexpUtil.match(thContent.get(0).get("1"), tdRegexp);
+				if (CollectionUtils.isNotEmpty(tdContents)) {
+					for (int i = 2; i < tdContents.size(); i++) {
+						if (i <= 5) {
+							Map<String, String> map = tdContents.get(i);
+							String text = map.get("1");
+							text = HtmlUtil.getInstance().replaceAll(text);
+							text = StringUtils.replace(text, "年EPS", "");
+							text = StringUtils.replace(text, "年营收", "");
+							text = StringUtils.replace(text, "年净利", "");
+							text = StringUtils.replace(text, "年ROE(%)", "");
+							years.add(text);
+						}
+					}
+				}
+				List<List> tdResults = new ArrayList<List>(0);
+				String trRegexp = "<tr>([\\S\\s]*?)<\\/tr>";
+				List<Map<String, String>> trMatchers = RegexpUtil.match(table.get(0).get("1"), trRegexp);
+				if (CollectionUtils.isNotEmpty(trMatchers)) {
+					for (int i = 0; i < trMatchers.size(); i++) {
+						Map<String, String> map = trMatchers.get(i);
+						String trText = map.get("1");
+						String tdTextRegexp = "<td[\\S\\s]*?>([\\S\\s]*?)<\\/td>";
+						List<Map<String, String>> tdMatchers = RegexpUtil.match(trText, tdTextRegexp);
+						if (CollectionUtils.isNotEmpty(tdMatchers)) {
+							List<String> subList = new ArrayList<String>(0);
+							for (int j = 2; j < tdMatchers.size() - 1; j++) {
+								Map<String, String> tdMap = tdMatchers.get(j);
+								String tdText = tdMap.get("1");
+								tdText = HtmlUtil.getInstance().replaceAll(tdText);
+								tdText = StringUtils.replace(tdText, "--", "");
+								subList.add(tdText);
+							}
+							tdResults.add(subList);
+						}
+					}
+				}
+
+				for (List<String> items : tdResults) {
+					List<Forecast> forecasts = new ArrayList<Forecast>(0);
+					for (int i = 0; i < items.size(); i++) {
+						String tdText = items.get(i);
+						String reportDate = items.get(4);
+						String mechanismName = items.get(5);
+						if (i <= 3) {
+							String yearText = years.get(i);
+							Forecast forecast = this.forecaseService.getForecast(stock.getId(), Integer.parseInt(yearText), reportDate, mechanismName);
+							if (forecast == null) {
+								forecast = new Forecast();
+								forecast.setStockId(stock.getId());
+							}
+							if (StringUtils.isNotEmpty(tdText)) {
+								if (StringUtils.equals(kind, "eps")) {
+									forecast.setEps(NumberUtils.toDouble(tdText));
+								} else if (StringUtils.equals(kind, "sales")) {
+									forecast.setIncome(NumberUtils.toDouble(tdText));
+								} else if (StringUtils.equals(kind, "np")) {
+									forecast.setProfit(NumberUtils.toDouble(tdText));
+								} else if (StringUtils.equals(kind, "roe")) {
+									forecast.setRoe(NumberUtils.toDouble(tdText) / 100);
+								}
+							}
+							forecast.setYear(NumberUtils.toInt(yearText));
+							forecasts.add(forecast);
+						}
+						if (i == 4) {
+							for (Forecast f : forecasts) {
+								f.setReportDate(DateUtil.getDateFromString(tdText, "yyyy-MM-dd"));
+							}
+						}
+						if (i == 5) {
+							for (Forecast f : forecasts) {
+								Mechanism mechanism=this.mechanismService.getMechanismByName(tdText);
+								if(mechanism==null){
+									mechanism=new Mechanism();
+									mechanism.setName(tdText);
+									this.mechanismService.save(mechanism);
+								}
+								f.setMechanismDef(mechanism);
+								f.setMechanism(tdText);
+							}
+						}
+						if (i == 6) {
+							for (Forecast f : forecasts) {
+								f.setResearcher(tdText);
+							}
+						}
+					}
+					if (CollectionUtils.isNotEmpty(forecasts)) {
+						this.forecaseService.save(forecasts);
+					}
+				}
+
+			}
+		} catch (Exception e) {
+			logger.error(">>FaceYe Throws Exception:", e);
+		}
+
 	}
 }

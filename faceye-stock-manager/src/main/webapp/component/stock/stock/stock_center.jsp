@@ -112,11 +112,12 @@
 							<th><a
 								href="<c:url value="/stock/stock/home?EQ|category.$id=${searchParams.categoryid}&GTE|dailyStat.pe=${searchParams.minPe }&LTE|dailyStat.pe=${searchParams.maxPe}&like|name=${searchParams.name }&like|code=${searchParams.code}&SORT|dailyStat.priceAmplitude=${empty searchParams.sortPriceAmplitude or searchParams.sortPriceAmplitude eq 'asc'? 'desc':'asc' }"/>">30日波幅${empty searchParams.sortPriceAmplitude or searchParams.sortPriceAmplitude eq 'asc' ? '<i class="fa fa-chevron-circle-up"></i>':'<i class="fa fa-chevron-circle-down"></i>' }</a></th>
 							<th><fmt:message key="stock.dailyData" /></th>
-							<th>财务报表</th>
-							<th>星标表现</th>
-							<th>股本变动 </th>
-							<th><fmt:message key="global.edit"></fmt:message></th>
-							<th><fmt:message key="global.remove"></fmt:message></th>
+							<th>财报</th>
+							<th>星标</th>
+							<th>股本</th>
+							<th>分红</th>
+							<th>机构估值</th>
+							
 						</tr>
 					</thead>
 					<tbody>
@@ -139,11 +140,11 @@
 										type="number" pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
 								<!--@generate-entity-jsp-property-value@-->
 								<td><a href="<c:url value="/stock/dailyData/home?EQ|stockId=${stock.id}"/>"><fmt:message key="stock.dailyData" /></a></td>
-								<td><a href="<c:url value="/stock/reportData/report?stockId=${stock.id}"/>">财务报表</a></td>
-								<td><a href="<c:url value="/stock/starDataStat/home?EQ|stockId=${stock.id}"/>">星标表现</a></td>
-								<td><a href="<c:url value="/stock/totalStock/home?EQ|stockId=${stock.id }"/>">股本变动 </a></td>
-								<td><a href="<c:url value="/stock/stock/edit/${stock.id}"/>"> <fmt:message key="global.edit"></fmt:message></a></td>
-								<td><a href="<c:url value="/stock/stock/remove/${stock.id}"/>"> <fmt:message key="global.remove"></fmt:message></a></td>
+								<td><a href="<c:url value="/stock/reportData/report?stockId=${stock.id}"/>">财报</a></td>
+								<td><a href="<c:url value="/stock/starDataStat/home?EQ|stockId=${stock.id}"/>">星标</a></td>
+								<td><a href="<c:url value="/stock/totalStock/home?EQ|stockId=${stock.id }"/>">股本 </a></td>
+								<td><a href="<c:url value="/stock/bonusRecord/home?EQ|stockId=${stock.id}"/>">分红</a></td>
+								<td><a href="<c:url value="/stock/forecast/home?EQ|stockId=${stock.id }"/>">机构估值</a></td>
 							<tr>
 						</c:forEach>
 					</tbody>

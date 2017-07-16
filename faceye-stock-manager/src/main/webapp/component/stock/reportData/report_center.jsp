@@ -221,7 +221,68 @@
 						<!-- 每股指标 -->
 						<c:if test="${not empty dataStats}">
 							<tr>
-								<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">每股指标</th>
+								<th rowspan="7" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">每股指标</th>
+								<td>EPS</td>
+								<c:forEach items="${dataStats}" var="dataStat">
+									<td class="text-right"><fmt:formatNumber value="${dataStat.eps}" type="number" pattern="#,##0.0#" maxFractionDigits="4"
+											groupingUsed="true" /></td>
+								</c:forEach>
+							</tr>
+						</c:if>
+						<c:if test="${not empty dataStats}">
+							<tr>
+								<td>BPS</td>
+								<c:forEach items="${dataStats}" var="dataStat">
+									<td class="text-right"><fmt:formatNumber value="${dataStat.bps}" type="number" pattern="#,##0.00#" maxFractionDigits="4"
+											groupingUsed="true" /></td>
+								</c:forEach>
+							</tr>
+						</c:if>
+						<c:if test="${not empty dataStats}">
+							<tr>
+								<td>DPS</td>
+								<c:forEach items="${dataStats}" var="dataStat">
+									<td class="text-right"><fmt:formatNumber value="${dataStat.dps}" type="number" pattern="#,##0.00#" maxFractionDigits="4"
+											groupingUsed="true" /></td>
+								</c:forEach>
+							</tr>
+						</c:if>
+						<c:if test="${not empty dataStats}">
+							<tr>
+								<td>PB</td>
+								<c:forEach items="${dataStats}" var="dataStat">
+									<td class="text-right"><fmt:formatNumber value="${dataStat.pb}" type="number" pattern="#,##0.00#" maxFractionDigits="4"
+											groupingUsed="true" /></td>
+								</c:forEach>
+							</tr>
+						</c:if>
+						<c:if test="${not empty dataStats}">
+							<tr>
+								<td>PE</td>
+								<c:forEach items="${dataStats}" var="dataStat">
+									<td class="text-right"><fmt:formatNumber value="${dataStat.pe}" type="number" pattern="#,##0.00#" maxFractionDigits="4"
+											groupingUsed="true" /></td>
+								</c:forEach>
+							</tr>
+						</c:if>
+							<c:if test="${not empty dataStats}">
+							<tr>
+								<td>RE</td>
+								<c:forEach items="${dataStats}" var="dataStat">
+								  <td class="text-right">
+								     <fmt:formatNumber value="${dataStat.re}" type="number" pattern="#,##0.00#" maxFractionDigits="4" groupingUsed="true" />
+								  </td>
+								</c:forEach>
+							</tr>
+						</c:if>
+							<c:if test="${not empty dataStats}">
+							<tr>
+								<td style="border-bottom:2px solid gray;">ROCE</td>
+								<c:forEach items="${dataStats}" var="dataStat">
+								  <td class="text-right" style="border-bottom: 2px solid gray;">
+								     <fmt:formatNumber value="${dataStat.roce *100}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%
+								  </td>
+								</c:forEach>
 							</tr>
 						</c:if>
 						<!-- 盈利能力 -->
@@ -266,7 +327,7 @@
 								<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">资本结构</th>
 							</tr>
 						</c:if>
-						
+
 						<!-- 收益质量 -->
 						<c:if test="${not empty dataStats}">
 							<tr>

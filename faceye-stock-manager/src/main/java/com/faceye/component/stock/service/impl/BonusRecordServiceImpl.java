@@ -54,36 +54,46 @@ public class BonusRecordServiceImpl extends BaseMongoServiceImpl<BonusRecord, Lo
 		// Predicate predicate=DynamicSpecifications.builder(predicates);
 		// NumberPath numberPath = new NumberPath(Number.class, path, "age");
 		// predicates.add(numberPath.eq(15));
-		Predicate predicate = DynamicSpecifications.builder(searchParams, entityClass);
-		if (predicate != null) {
-			logger.debug(">>FaceYe -->Query predicate is:" + predicate.toString());
-		}
-		Sort sort = new Sort(Direction.DESC, "id");
-		Page<BonusRecord> res = null;
-		if (size != 0) {
-			Pageable pageable = new PageRequest(page, size, sort);
-			res = this.dao.findAll(predicate, pageable);
-		} else {
-			// OrderSpecifier<Comparable> orderPOrderSpecifier=new OrderSpecifier<Comparable>(new Order(), new NumberExpression<BonusRecord>("id") {
-			// })
-			List<BonusRecord> items = (List) this.dao.findAll(predicate);
-			res = new PageImpl<BonusRecord>(items);
-
-		}
-		return res;
+//		Predicate predicate = DynamicSpecifications.builder(searchParams, entityClass);
+//		if (predicate != null) {
+//			logger.debug(">>FaceYe -->Query predicate is:" + predicate.toString());
+//		}
+//		Sort sort = new Sort(Direction.DESC, "id");
+//		Page<BonusRecord> res = null;
+//		if (size != 0) {
+//			Pageable pageable = new PageRequest(page, size, sort);
+//			res = this.dao.findAll(predicate, pageable);
+//		} else {
+//			// OrderSpecifier<Comparable> orderPOrderSpecifier=new OrderSpecifier<Comparable>(new Order(), new NumberExpression<BonusRecord>("id") {
+//			// })
+//			List<BonusRecord> items = (List) this.dao.findAll(predicate);
+//			res = new PageImpl<BonusRecord>(items);
+//		}
+		searchParams.put("SORT|publishDate", "desc");
+		return this.dao.getPage(searchParams, page, size);
 	}
 
 	@Override
 	public boolean isExistBonusRecord(Long stockId, String date) {
+		BonusRecord record=this.getBonusRecord(stockId, date);
+		if (record != null ) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public BonusRecord getBonusRecord(Long stockId, String date) {
+		BonusRecord record=null;
 		Map searchParams = new HashMap();
 		searchParams.put("EQ|stockId", stockId);
 		searchParams.put("GTE|publishDate", DateUtil.getDateFromString(date + " 00:00:00"));
 		searchParams.put("LTE|publishDate", DateUtil.getDateFromString(date + " 23:59:59"));
 		Page<BonusRecord> records = this.getPage(searchParams, 1, 0);
-		if (records != null && CollectionUtils.isNotEmpty(records.getContent())) {
-			return true;
+		if(records!=null && CollectionUtils.isNotEmpty(records.getContent())){
+			record=records.getContent().get(0);
 		}
-		return false;
+		return record;
 	}
 
 }/** @generate-service-source@ **/
