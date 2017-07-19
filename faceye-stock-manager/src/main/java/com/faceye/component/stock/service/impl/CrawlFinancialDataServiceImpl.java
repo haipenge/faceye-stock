@@ -501,6 +501,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 								while (m.find()) {
 									if (i == 0) {
 										publishDateStr = m.group(1);
+										publishDateStr=StringUtils.replace(publishDateStr, "--", "");
 									}
 									if (i == 1) {
 										giveStockCountStr = m.group(1);
@@ -516,9 +517,11 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 									}
 									if (i == 5) {
 										exDividendDateStr = m.group(1);
+										exDividendDateStr=StringUtils.replace(exDividendDateStr, "--", "");
 									}
 									if (i == 6) {
 										equityRegistrationDateStr = m.group(1);
+										equityRegistrationDateStr=StringUtils.replace(equityRegistrationDateStr, "--", "");
 									}
 									if (i == 7) {
 										bonusShareTradingDateStr = m.group(1);
@@ -537,10 +540,10 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 									if (StringUtils.isNotEmpty(bonusShareTradingDateStr)) {
 										bonusRecord.setBonusShareTradingDate(DateUtil.getDateFromString(bonusShareTradingDateStr, "yyyy-MM-dd"));
 									}
-									bonusRecord.setDividend(Double.valueOf(dividendStr) / 10);
+									bonusRecord.setDividend(NumberUtils.toDouble(dividendStr)/ 10);
 									bonusRecord.setEquityRegistrationDate(DateUtil.getDateFromString(equityRegistrationDateStr, "yyyy-MM-dd"));
 									bonusRecord.setExDividendDate(DateUtil.getDateFromString(exDividendDateStr, "yyyy-MM-dd"));
-									bonusRecord.setGiveStockCount(Double.valueOf(giveStockCountStr) / 10);
+									bonusRecord.setGiveStockCount(NumberUtils.toDouble(giveStockCountStr) / 10);
 									bonusRecord.setIncreaseStockCount(Double.valueOf(increaseStockCountStr) / 10);
 									bonusRecord.setPublishDate(DateUtil.getDateFromString(publishDateStr, "yyyy-MM-dd"));
 									bonusRecord.setStatus(status);
