@@ -17,7 +17,7 @@ import com.faceye.component.stock.entity.ReportCategory;
 import com.faceye.component.stock.repository.mongo.ReportCategoryRepository;
 import com.faceye.component.stock.repository.mongo.customer.ReportCategoryCustomerRepository;
 import com.faceye.component.stock.service.ReportCategoryService;
-
+import com.faceye.component.stock.util.StockConstants;
 import com.faceye.feature.util.ServiceException;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
@@ -76,6 +76,31 @@ public class ReportCategoryServiceImpl extends BaseMongoServiceImpl<ReportCatego
 	@Override
 	public ReportCategory getReportCategoryByCode(String code) {
 		return this.dao.getReportCategoryByCode(code);
+	}
+	
+	public void initReportCategory(){
+		boolean isInit=false;
+		if(!isInit){
+			ReportCategory cashFlow=new ReportCategory();
+			cashFlow.setCode(StockConstants.REPORT_CATEGORY_CASH_FLOW_SHEET);
+			cashFlow.setName("现金流量表");
+			cashFlow.setOrderIndex(3);
+			this.save(cashFlow);
+			ReportCategory inCome=new ReportCategory();
+			inCome.setCode(StockConstants.REPORT_CATEGORY_IN_COME_SHEET);
+			inCome.setName("利润表");
+			inCome.setOrderIndex(2);
+			this.save(inCome);
+			ReportCategory blance=new ReportCategory();
+			blance.setCode(StockConstants.REPORT_CATEGORY_BALANCE_SHEET);
+			blance.setOrderIndex(1);
+			blance.setName("资产负债表");
+			this.save(blance);
+		}
+	}
+	private boolean isInit(){
+		Page<ReportCategory> reportCategories=this.getPage(null, 1, 0);
+		return reportCategories.getContent().size()>0;
 	}
 
 }/** @generate-service-source@ **/

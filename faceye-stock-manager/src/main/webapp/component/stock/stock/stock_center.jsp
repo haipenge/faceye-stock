@@ -15,6 +15,7 @@
 		<div class="col-sm-4 text-right">
 			<a class="btn btn-primary btn-sm" href="<c:url value="/stock/stock/input"/>"> <fmt:message key="stock.stock.add"></fmt:message></a>
 			<button class="btn btn-sm btn-warning" type="button" id="init-stock-category">初始化股票分类</button>
+			<button class="btn btn-sm btn-info" type="button" id="init-system">系统初始化</button>
 		</div>
 	</div>
 </div>

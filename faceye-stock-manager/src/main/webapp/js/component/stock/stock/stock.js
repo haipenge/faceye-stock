@@ -6,6 +6,7 @@ var Stock = {
 		$('#init-stock-category').click(function(){Stock.initStockCategory();return false;});
 		$('#toggle-category').click(function(){$('.category-container').toggle();return false;});
 		$('#btn-multi-stock-compare').click(function(){Stock.multiStockReportCompare();});
+		$('#init-system').click(function(){Stock.initSystem();return false;});
 	},
 	/**
 	 * 初始化股票分类
@@ -38,6 +39,24 @@ var Stock = {
 		}else{
 			location.href='/stock/reportData/compare?stockIds='+checkedIds;
 		}
+	},
+	/**
+	*初始化基础配置
+	*/
+	initSystem:function(){
+	  $.ajax({
+	    url:'/stock/init',
+	    type:'post',
+	    dataType:'json',
+	    success:function(data,textStatus,xhr){
+	       if(data.msg){
+	         var m = new Msg({
+					msg : '系统初始化成功'
+				});
+				m.show();
+	       }
+	    }
+	  });
 	}
 };
 $(document).ready(function(){Stock.init();});

@@ -11,4 +11,6 @@ import com.faceye.feature.service.BaseService;
 public interface ReportCategoryService extends BaseService<ReportCategory,Long>{
 
 	public ReportCategory getReportCategoryByCode(String code);
+	
+	public void initReportCategory();
 }/**@generate-service-source@**/
