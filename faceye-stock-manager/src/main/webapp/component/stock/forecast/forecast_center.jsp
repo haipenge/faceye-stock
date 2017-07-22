@@ -129,3 +129,4 @@
 </c:if>
 </c:forEach>
 </div>
+<div class="block-flat"><f:page page="${wrapForecasts}" url="/stock/forecast/home" params="<%=request.getParameterMap()%>" /></div>
