@@ -74,56 +74,58 @@
 			</form>
 		</div>
 
-		<div class="row">
-			<c:forEach var="wrapForecast" items="${wrapForecasts}" varStatus="status">
-				<c:if test="${status.index mod 2 == 0 }">
+
+		<c:forEach var="wrapForecast" items="${wrapForecasts}" varStatus="status">
+			<c:if test="${status.index mod 2 == 0 }">
+				<div class="row">
 					<div class="col-sm-6 col-md-6">
-				</c:if>
+			</c:if>
 
-				<div class="header">
-					<h3>${wrapForecast.mechanism}
-						<span class="span-suffix">${wrapForecast.reportDateStr}</span>
-					</h3>
-				</div>
-				<div class="content">
-					<table class="no-border">
-						<thead class="no-border">
+			<div class="header">
+				<h3>${wrapForecast.mechanism}
+					<span class="span-suffix">${wrapForecast.reportDateStr}</span>
+				</h3>
+			</div>
+			<div class="content">
+				<table class="no-border">
+					<thead class="no-border">
+						<tr>
+							<th>EPS</th>
+							<th>净利润</th>
+							<th class="text-right">营业收入</th>
+							<th>ROE</th>
+							<th>年</th>
+						</tr>
+					</thead>
+					<tbody class="no-border-x no-border-y">
+						<c:forEach var="forecast" items="${wrapForecast.forecasts}" varStatus="inStatus">
 							<tr>
-								<th style="width: 50%;">EPS</th>
-								<th>净利润</th>
-								<th class="text-right">营业收入</th>
-								<th>ROE</th>
-								<th>年</th>
+								<td class="text-right">${forecast.eps }</td>
+								<td class="text-right">${forecast.profit}</td>
+								<td class="text-right">${forecast.income }</td>
+								<td class="text-right">${forecast.roe }</td>
+								<td>${forecast.year }</td>
 							</tr>
-						</thead>
-						<tbody class="no-border-x no-border-y">
-							<c:forEach var="forecast" items="${wrapForecast.forecasts}" varStatus="inStatus">
+							<c:if test="${inStatus.last }">
 								<tr>
-									<td class="text-right">${forecast.eps }</td>
-									<td class="text-right">${forecast.profit}</td>
-									<td class="text-right">${forecast.income }</td>
-									<td class="text-right">${forecast.roe }</td>
-									<td>${forecast.year }</td>
+									<td colspan="5" class="text-right"><span class="span-suffix">研究员:${forecast.researcher }</span></td>
 								</tr>
-								<c:if test="${inStatus.last }">
-									<tr>
-										<td colspan="5" class="text-right"><span class="span-suffix">研究员:${forecast.researcher }</span></td>
-									</tr>
-								</c:if>
-							</c:forEach>
-						</tbody>
-					</table>
-				</div>
+							</c:if>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
 
-				<c:if test="${status.index mod 2 == 0  and status.index != 0 }">
-		</div>
-		</c:if>
-		<c:if test="${status.last and status.index mod 2 != 0 }">
+			<c:if test="${status.index mod 2 == 0  and status.index != 0 }">
 	</div>
-	<div class="col-sm-6 col-md-6"></div>
-	</c:if>
-	</c:forEach>
 </div>
+</c:if>
+<c:if test="${status.last and status.index mod 2 != 0 }">
+</div>
+<div class="col-sm-6 col-md-6"></div>
+</div>
+</c:if>
+</c:forEach>
 
 <div class="content">
 	<div id="msg"></div>
