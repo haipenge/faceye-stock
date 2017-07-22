@@ -383,6 +383,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		if (stock != null) {
 			Map params = new HashMap();
 			params.put("EQ|stockId", stock.getId());
+			params.put("SORT|date", "asc");
 			List<ReportData> reportDatas = this.reportDataService.getPage(params, 0, 0).getContent();
 			for (ReportData reportData : reportDatas) {
 				try {
@@ -590,8 +591,9 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	}
 
 	/**
-	 * 普通股权益报酬率（净利润/股东权益）
-	 * 
+	 * 普通股权益报酬率（净利润/股东权益[前一期]）：注：股份变化化引起本数据的变化 ，因是每股指标，所以，使用 ROCE(1)=ESP(1)/BPS(0)
+	 * 本处认为净利润=会计期内股东的综合收益
+	 * 同时，没有考虑期初，期末股本变化对数据影响
 	 * @param totalStock
 	 * @param reportData
 	 * @param dataStat
@@ -604,16 +606,19 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		Double profit = reportData.getInComeSheet().getEle9().getCinst24_128();
 		Map searchParams = new HashMap();
 		searchParams.put("EQ|stockId", reportData.getStockId());
-		searchParams.put("LT|date", reportData.getDate());
+		searchParams.put("LT|dateCycle", reportData.getDate());
 		searchParams.put("EQ|type", reportData.getType());
-		searchParams.put("SORT|date", "desc");
-		Page<ReportData> reportDatas = this.reportDataService.getPage(searchParams, 1, 0);
-		if (reportDatas != null && CollectionUtils.isNotEmpty(reportDatas.getContent())) {
-			ReportData lastPeriodReportData = reportDatas.getContent().get(0);
+		searchParams.put("SORT|dateCycle", "desc");
+		Page<DataStat> dataStats=this.dao.getPage(searchParams, 1, 0);
+//		Page<ReportData> reportDatas = this.reportDataService.getPage(searchParams, 1, 0);
+		if (dataStats != null && CollectionUtils.isNotEmpty(dataStats.getContent())) {
+			DataStat lastPeriodDataStat = dataStats.getContent().get(0);
 			// 期初股东权益
-			Double netAssets = lastPeriodReportData.getBalanceSheet().getEle17().getCbsheet86_243();
-			if (profit != null && netAssets != null && netAssets > 0) {
-				dataStat.setRoce(profit / netAssets);
+			Double bps0=lastPeriodDataStat.getBps();
+			Double eps1=dataStat.getEps();
+//			Double netAssets = lastPeriodReportData.getBalanceSheet().getEle17().getCbsheet86_243();
+			if (bps0 != null && eps1 != null && bps0 > 0) {
+				dataStat.setRoce(eps1 / bps0);
 			}
 		}
 	}
