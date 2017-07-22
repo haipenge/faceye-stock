@@ -37,9 +37,9 @@ public class ForecastIndexServiceImpl extends BaseMongoServiceImpl<ForecastIndex
 
 	@Override
 	public Page<ForecastIndex> getPage(Map<String, Object> searchParams, int page, int size) {
-		// if (page != 0) {
-		// page = page - 1;
-		// }
+		 if (page != 0) {
+		 page = page - 1;
+		 }
 		// SimpleEntityPathResolver resolver = SimpleEntityPathResolver.INSTANCE;
 		// EntityPath<ForecastIndex> entityPath = resolver.createPath(entityClass);
 		// PathBuilder<ForecastIndex> builder = new PathBuilder<ForecastIndex>(entityPath.getType(), entityPath.getMetadata());
