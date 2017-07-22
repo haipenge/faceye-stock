@@ -85,9 +85,9 @@
 <div class="col-sm-4 col-md-4">
 	<div class="block-flat">
 		<div class="header">
-			<h3>${wrapForecast.mechanism}
+			<h4>${wrapForecast.mechanism}
 				<span class="span-suffix">${wrapForecast.reportDateStr}</span>
-			</h3>
+			</h4>
 		</div>
 		<div class="content">
 			<table class="no-border">
