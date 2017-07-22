@@ -671,7 +671,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 								ForecastIndex forecastIndex=this.forecastIndexService.getForecastIndexByMechanismAndReportDate(stock.getId(), mechanism,forecast.getReportDate() );
 //								f.setMechanismDef(mechanism);
 								forecast.setForecastIndex(forecastIndex);
-								forecast.setMechanism(tdText);
+								forecast.setMechanism(mechanismName);
 								forecast.setResearcher(researcher);
 							}
 							if (StringUtils.isNotEmpty(tdText)) {
