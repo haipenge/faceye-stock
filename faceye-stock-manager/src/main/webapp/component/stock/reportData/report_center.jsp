@@ -221,7 +221,7 @@
 						<!-- 每股指标 -->
 						<c:if test="${not empty dataStats}">
 							<tr>
-								<th rowspan="7" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">每股指标</th>
+								<th rowspan="6" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">每股指标</th>
 								<td>EPS</td>
 								<c:forEach items="${dataStats}" var="dataStat">
 									<td class="text-right"><fmt:formatNumber value="${dataStat.eps}" type="number" pattern="#,##0.0#" maxFractionDigits="4" groupingUsed="true" /></td>
