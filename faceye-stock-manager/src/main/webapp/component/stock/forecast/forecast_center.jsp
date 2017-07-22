@@ -82,8 +82,8 @@
 </c:if>
 <div class="row">
 </c:if>
-<div class="block-flat">
-	<div class="col-sm-6 col-md-6">
+<div class="col-sm-6 col-md-6">
+	<div class="block-flat">
 		<div class="header">
 			<h3>${wrapForecast.mechanism}
 				<span class="span-suffix">${wrapForecast.reportDateStr}</span>
