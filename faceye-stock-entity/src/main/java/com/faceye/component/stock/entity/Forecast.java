@@ -3,12 +3,9 @@ package com.faceye.component.stock.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 /**
@@ -214,7 +211,7 @@ public class Forecast implements Serializable {
 //	public void setMechanismDef(Mechanism mechanismDef) {
 //		this.mechanismDef = mechanismDef;
 //	}
-	
+	@DBRef
 	private ForecastIndex forecastIndex=null;
 	public ForecastIndex getForecastIndex() {
 		return forecastIndex;
