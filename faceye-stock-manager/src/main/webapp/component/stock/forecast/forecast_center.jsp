@@ -74,13 +74,12 @@
 			</form>
 		</div>
 
-
 		<c:forEach var="wrapForecast" items="${wrapForecasts}" varStatus="status">
 			<c:if test="${status.index mod 2 == 0 }">
 				<c:if test="${status.index != 0 }">
 	</div>
 	</c:if>
-	<div class="row">
+	<div class="row" style="background:gray;">
 	</c:if>
 	<div class="col-sm-6 col-md-6">
 		<div class="header">
@@ -92,14 +91,14 @@
 			<table class="no-border">
 				<thead class="no-border">
 					<tr>
-						<th>EPS</th>
-						<th>净利润</th>
+						<th class="text-right">EPS</th>
+						<th class="text-right">净利润</th>
 						<th class="text-right">营业收入</th>
-						<th>ROE</th>
+						<th class="text-right">ROE</th>
 						<th>年</th>
 					</tr>
 				</thead>
-				<tbody class="no-border-x no-border-y">
+				<tbody class="no-border-y">
 					<c:forEach var="forecast" items="${wrapForecast.forecasts}" varStatus="inStatus">
 						<tr>
 							<td class="text-right">${forecast.eps }</td>
