@@ -80,9 +80,9 @@
 			<c:if test="${status.index != 0 }">
 </div>
 </c:if>
-<div class="row" style="border:1px solid blue;margin-top:0px;">
+<div class="row" style="margin-top:0px;">
 </c:if>
-<div class="col-sm-4 col-md-4" style="border:1px solid red;">
+<div class="col-sm-4 col-md-4">
 	<div class="block-flat" style="padding-bottom:3px;">
 		<div class="header">
 			<h5>${wrapForecast.mechanism}
