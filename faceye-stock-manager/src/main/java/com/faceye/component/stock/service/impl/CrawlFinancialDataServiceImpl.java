@@ -69,7 +69,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	@Autowired
 	private ForecastService forecaseService = null;
 	@Autowired
-	private MechanismService mechanismService=null;
+	private MechanismService mechanismService = null;
 
 	@Override
 	public void crawl() {
@@ -501,7 +501,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 								while (m.find()) {
 									if (i == 0) {
 										publishDateStr = m.group(1);
-										publishDateStr=StringUtils.replace(publishDateStr, "--", "");
+										publishDateStr = StringUtils.replace(publishDateStr, "--", "");
 									}
 									if (i == 1) {
 										giveStockCountStr = m.group(1);
@@ -517,11 +517,11 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 									}
 									if (i == 5) {
 										exDividendDateStr = m.group(1);
-										exDividendDateStr=StringUtils.replace(exDividendDateStr, "--", "");
+										exDividendDateStr = StringUtils.replace(exDividendDateStr, "--", "");
 									}
 									if (i == 6) {
 										equityRegistrationDateStr = m.group(1);
-										equityRegistrationDateStr=StringUtils.replace(equityRegistrationDateStr, "--", "");
+										equityRegistrationDateStr = StringUtils.replace(equityRegistrationDateStr, "--", "");
 									}
 									if (i == 7) {
 										bonusShareTradingDateStr = m.group(1);
@@ -540,7 +540,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 									if (StringUtils.isNotEmpty(bonusShareTradingDateStr)) {
 										bonusRecord.setBonusShareTradingDate(DateUtil.getDateFromString(bonusShareTradingDateStr, "yyyy-MM-dd"));
 									}
-									bonusRecord.setDividend(NumberUtils.toDouble(dividendStr)/ 10);
+									bonusRecord.setDividend(NumberUtils.toDouble(dividendStr) / 10);
 									bonusRecord.setEquityRegistrationDate(DateUtil.getDateFromString(equityRegistrationDateStr, "yyyy-MM-dd"));
 									bonusRecord.setExDividendDate(DateUtil.getDateFromString(exDividendDateStr, "yyyy-MM-dd"));
 									bonusRecord.setGiveStockCount(NumberUtils.toDouble(giveStockCountStr) / 10);
@@ -560,6 +560,9 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 		}
 	}
 
+	/**
+	 * 爬取机构估值
+	 */
 	public void crawlForecast(Stock stock) {
 		Map<String, String> urls = new HashMap<String, String>();
 		urls.put("eps", "http://vip.stock.finance.sina.com.cn/q/go.php/vPerformancePrediction/kind/eps/index.phtml?symbol=sz000998");
@@ -569,10 +572,10 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 		urls.put("np", "http://vip.stock.finance.sina.com.cn/q/go.php/vPerformancePrediction/kind/np/index.phtml?symbol=sz000998");
 		// 净资产收益率(ROE)
 		urls.put("roe", "http://vip.stock.finance.sina.com.cn/q/go.php/vPerformancePrediction/kind/roe/index.phtml?symbol=sz000998");
-		Iterator<String> keyIterator=urls.keySet().iterator();
-		while(keyIterator.hasNext()){
-			String key=keyIterator.next();
-			String url=urls.get(key);
+		Iterator<String> keyIterator = urls.keySet().iterator();
+		while (keyIterator.hasNext()) {
+			String key = keyIterator.next();
+			String url = urls.get(key);
 			this.crawlForecast(stock, key, url);
 		}
 	}
@@ -674,9 +677,9 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 						}
 						if (i == 5) {
 							for (Forecast f : forecasts) {
-								Mechanism mechanism=this.mechanismService.getMechanismByName(tdText);
-								if(mechanism==null){
-									mechanism=new Mechanism();
+								Mechanism mechanism = this.mechanismService.getMechanismByName(tdText);
+								if (mechanism == null) {
+									mechanism = new Mechanism();
 									mechanism.setName(tdText);
 									this.mechanismService.save(mechanism);
 								}

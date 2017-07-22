@@ -114,7 +114,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	 * @Author:haipenge
 	 * @Date:2017年3月11日 上午10:56:54
 	 */
-	private DataStat statNetProfitMargin(Stock stock, ReportData reportData, DataStat dataStat) {
+	private DataStat statNetProfitMargin(Stock stock, ReportData reportData, DataStat dataStat) throws Exception {
 		Date date = dataStat.getDateCycle();
 		String sDate = DateUtil.formatDate(date, "yyyy-MM-dd");
 		// 营业收入
@@ -144,7 +144,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	 * @Author:haipenge
 	 * @Date:2017年3月21日 上午10:26:58
 	 */
-	private DataStat statGrossProfitMargin(Stock stock, ReportData reportData, DataStat dataStat) {
+	private DataStat statGrossProfitMargin(Stock stock, ReportData reportData, DataStat dataStat) throws Exception {
 		// 营业收入
 		Double operatingIncome = reportData.getInComeSheet().getEle6().getCinst61_89();
 		// 营业成本
@@ -167,7 +167,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	 * @Author:haipenge
 	 * @Date:2017年3月11日 上午11:15:00
 	 */
-	private DataStat statTotalAssetsTurnover(Stock stock, ReportData reportData, DataStat dataStat) {
+	private DataStat statTotalAssetsTurnover(Stock stock, ReportData reportData, DataStat dataStat) throws Exception {
 		Date date = dataStat.getDateCycle();
 		String sDate = DateUtil.formatDate(date, "yyyy-MM-dd");
 		// 营业收入
@@ -378,12 +378,13 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	 */
 	@Override
 	public void stat(Stock stock) {
-		try {
-			if (stock != null) {
-				Map params = new HashMap();
-				params.put("EQ|stockId", stock.getId());
-				List<ReportData> reportDatas = this.reportDataService.getPage(params, 0, 0).getContent();
-				for (ReportData reportData : reportDatas) {
+
+		if (stock != null) {
+			Map params = new HashMap();
+			params.put("EQ|stockId", stock.getId());
+			List<ReportData> reportDatas = this.reportDataService.getPage(params, 0, 0).getContent();
+			for (ReportData reportData : reportDatas) {
+				try {
 					Date date = reportData.getDate();
 					String sDate = DateUtil.formatDate(date, "yyyy-MM-dd");
 					DataStat dataStat = this.getDataStat(stock, sDate);
@@ -409,11 +410,12 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 					// 分析每股指标
 					this.statEveryStockData(stock, reportData, dataStat);
 					this.save(dataStat);
+				} catch (Exception e) {
+					logger.error(">>Faceye --> 分析股票:"+stock.getCode()+",抛出异常:" + e.getMessage());
 				}
 			}
-		} catch (Exception e) {
-			logger.error(">>Faceye --> 分析股票总资产回报率抛出异常:[{}]", e.getMessage());
 		}
+
 	}
 
 	/**
@@ -517,11 +519,17 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 
 	///////////////////////////////////////// 分析每股指标///////////////////////////////////////////////////
 	private void statEveryStockData(Stock stock, ReportData reportData, DataStat dataStat) {
-		TotalStock totalStock = this.getTotalStock(stock, reportData);
-		this.statEps(totalStock, reportData, dataStat);
-		this.statBps(totalStock, reportData, dataStat);
-		this.statDps(totalStock, reportData, dataStat);
-		this.statROCE(totalStock, reportData, dataStat);
+		try {
+			TotalStock totalStock = this.getTotalStock(stock, reportData);
+			if (totalStock != null) {
+				this.statEps(totalStock, reportData, dataStat);
+				this.statBps(totalStock, reportData, dataStat);
+				this.statDps(totalStock, reportData, dataStat);
+				this.statROCE(totalStock, reportData, dataStat);
+			}
+		} catch (Exception e) {
+			logger.error(">>FaceYe 分析每股指标异常:" + e);
+		}
 	}
 
 	/**
@@ -531,7 +539,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	 * @param reportData
 	 * @param dataStat
 	 */
-	private void statEps(TotalStock totalStock, ReportData reportData, DataStat dataStat) {
+	private void statEps(TotalStock totalStock, ReportData reportData, DataStat dataStat) throws Exception {
 		Double profit = reportData.getInComeSheet().getEle9().getCinst24_128();// 净利润
 		if (profit != null && totalStock.getStockNum() > 0) {
 			Double eps = profit / totalStock.getStockNum();
@@ -546,7 +554,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	 * @param reportData
 	 * @param dataStat
 	 */
-	private void statBps(TotalStock totalStock, ReportData reportData, DataStat dataStat) {
+	private void statBps(TotalStock totalStock, ReportData reportData, DataStat dataStat) throws Exception {
 		Double data = reportData.getBalanceSheet().getEle17().getCbsheet86_243();// 所有者权益
 		if (data != null && totalStock.getStockNum() > 0) {
 			Double bps = data / totalStock.getStockNum();
@@ -561,20 +569,22 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	 * @param reportData
 	 * @param dataStat
 	 */
-	private void statDps(TotalStock totalStock, ReportData reportData, DataStat dataStat) {
+	private void statDps(TotalStock totalStock, ReportData reportData, DataStat dataStat) throws Exception {
 		Map searchParams = new HashMap();
 		searchParams.put("EQ|stockId", reportData.getStockId());
 		Date date = reportData.getDate();
-		String sDate = DateUtil.formatDate(date, "yyyy-MM-dd");
-		String sEndDate = DateUtil.formatDate(date, "yyyy");
-		Date start = DateUtil.getDateFromString(sDate + " 00:00:01");
-		Date end = DateUtil.getDateFromString(sEndDate + "-12-31 23:59:59");
-		searchParams.put("GTE|publishDate", start);
-		searchParams.put("LTE|publishDate", end);
-		searchParams.put("SORT|publishDate", "asc");
-		Page<BonusRecord> bonusRecords = this.bonusRecordService.getPage(searchParams, 1, 0);
-		if (bonusRecords != null && CollectionUtils.isNotEmpty(bonusRecords.getContent())) {
-			dataStat.setDps(bonusRecords.getContent().get(0).getDividend());
+		if (date != null) {
+			String sDate = DateUtil.formatDate(date, "yyyy-MM-dd");
+			String sEndDate = DateUtil.formatDate(date, "yyyy");
+			Date start = DateUtil.getDateFromString(sDate + " 00:00:01");
+			Date end = DateUtil.getDateFromString(sEndDate + "-12-31 23:59:59");
+			searchParams.put("GTE|publishDate", start);
+			searchParams.put("LTE|publishDate", end);
+			searchParams.put("SORT|publishDate", "asc");
+			Page<BonusRecord> bonusRecords = this.bonusRecordService.getPage(searchParams, 1, 0);
+			if (bonusRecords != null && CollectionUtils.isNotEmpty(bonusRecords.getContent())) {
+				dataStat.setDps(bonusRecords.getContent().get(0).getDividend());
+			}
 		}
 	}
 
@@ -588,7 +598,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	 * @Author:haipenge
 	 * @Date:2017年7月15日 下午8:33:10
 	 */
-	private void statROCE(TotalStock totalStock, ReportData reportData, DataStat dataStat) {
+	private void statROCE(TotalStock totalStock, ReportData reportData, DataStat dataStat) throws Exception {
 		// 综合收益
 		Double profit = reportData.getInComeSheet().getEle9().getCinst24_128();
 		Map searchParams = new HashMap();
