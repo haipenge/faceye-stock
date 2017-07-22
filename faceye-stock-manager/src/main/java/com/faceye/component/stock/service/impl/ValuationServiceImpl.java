@@ -182,5 +182,7 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 		}
 		return valuation;
 	}
+	
+	
 
 }/** @generate-service-source@ **/

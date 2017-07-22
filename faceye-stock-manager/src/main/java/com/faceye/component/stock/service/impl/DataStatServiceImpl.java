@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -577,7 +578,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 			String sDate = DateUtil.formatDate(date, "yyyy-MM-dd");
 			String sEndDate = DateUtil.formatDate(date, "yyyy");
 			Date start = DateUtil.getDateFromString(sDate + " 00:00:01");
-			Date end = DateUtil.getDateFromString(sEndDate + "-12-31 23:59:59");
+			Date end = DateUtil.getDateFromString(NumberUtils.toInt(sEndDate)+1 + "-12-31 23:59:59");
 			searchParams.put("GTE|publishDate", start);
 			searchParams.put("LTE|publishDate", end);
 			searchParams.put("SORT|publishDate", "asc");
