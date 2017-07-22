@@ -639,7 +639,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 								Map<String, String> tdMap = tdMatchers.get(j);
 								String tdText = tdMap.get("1");
 								tdText = HtmlUtil.getInstance().replaceAll(tdText);
-								tdText = StringUtils.replace(tdText, "--", "");
+//								tdText = StringUtils.replace(tdText, "--", "");
 								subList.add(tdText);
 							}
 							tdResults.add(subList);
@@ -660,7 +660,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 								forecast = new Forecast();
 								forecast.setStockId(stock.getId());
 							}
-							if (StringUtils.isNotEmpty(tdText)) {
+							if (StringUtils.isNotEmpty(tdText)&&!StringUtils.equals(tdText, "--")) {
 								if (StringUtils.equals(kind, "eps")) {
 									forecast.setEps(NumberUtils.toDouble(tdText));
 								} else if (StringUtils.equals(kind, "sales")) {
