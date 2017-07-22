@@ -1,6 +1,7 @@
 package com.faceye.test.component.stock.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,25 +15,28 @@ import org.springframework.data.domain.Page;
 import org.springframework.util.Assert;
 
 import com.faceye.component.stock.entity.ForecastIndex;
+import com.faceye.component.stock.entity.Mechanism;
 import com.faceye.component.stock.service.ForecastIndexService;
+import com.faceye.component.stock.service.MechanismService;
 import com.faceye.test.feature.service.BaseServiceTestCase;
 
-
 /**
- * ForecastIndex  服务层测试用例
+ * ForecastIndex 服务层测试用例
  * 
  * @author @haipenge haipenge@gmail.com Create Date:2014年5月20日
  */
 public class ForecastIndexServiceTestCase extends BaseServiceTestCase {
 	@Autowired
 	private ForecastIndexService forecastIndexService = null;
+	@Autowired
+	private MechanismService mechanismService = null;
+
 	/**
 	 * 初始化
+	 * 
 	 * @todo
 	 * @throws Exception
-	 * @author:@haipenge
-	 * haipenge@gmail.com
-	 * 2014年5月20日
+	 * @author:@haipenge haipenge@gmail.com 2014年5月20日
 	 */
 	@Before
 	public void set() throws Exception {
@@ -41,24 +45,22 @@ public class ForecastIndexServiceTestCase extends BaseServiceTestCase {
 
 	/**
 	 * 清理
+	 * 
 	 * @todo
 	 * @throws Exception
-	 * @author:@haipenge
-	 * haipenge@gmail.com
-	 * 2014年5月20日
+	 * @author:@haipenge haipenge@gmail.com 2014年5月20日
 	 */
 	@After
 	public void after() throws Exception {
-		//this.forecastIndexService.removeAllInBatch();
+		// this.forecastIndexService.removeAllInBatch();
 	}
 
 	/**
-	 *  保存测试
+	 * 保存测试
+	 * 
 	 * @todo
 	 * @throws Exception
-	 * @author:@haipenge
-	 * haipenge@gmail.com
-	 * 2014年5月20日
+	 * @author:@haipenge haipenge@gmail.com 2014年5月20日
 	 */
 	@Test
 	public void testSave() throws Exception {
@@ -133,7 +135,7 @@ public class ForecastIndexServiceTestCase extends BaseServiceTestCase {
 		List<ForecastIndex> entities = new ArrayList<ForecastIndex>();
 		for (int i = 0; i < 5; i++) {
 			ForecastIndex entity = new ForecastIndex();
-			
+
 			this.forecastIndexService.save(entity);
 			entities.add(entity);
 		}
@@ -196,5 +198,19 @@ public class ForecastIndexServiceTestCase extends BaseServiceTestCase {
 		}
 		List<ForecastIndex> entities = this.forecastIndexService.getAll(ids);
 		Assert.isTrue(entities != null && entities.size() == 5);
+	}
+
+	@Test
+	public void testGetForecastIndexByMechanism() throws Exception {
+		Mechanism mechanism = new Mechanism();
+		mechanism.setName("test-mechanism");
+		mechanism = this.mechanismService.save(mechanism);
+		Date reportDate = new Date();
+		for (int i = 0; i < 10; i++) {
+			ForecastIndex forecastIndex = this.forecastIndexService.getForecastIndexByMechanismAndReportDate(17L, mechanism, reportDate);
+		}
+		Page<ForecastIndex> page = this.forecastIndexService.getPage(null, 1, 0);
+		Assert.isTrue(page != null && page.getContent().size() == 1);
+
 	}
 }
