@@ -202,9 +202,13 @@ public class ForecastIndexServiceTestCase extends BaseServiceTestCase {
 
 	@Test
 	public void testGetForecastIndexByMechanism() throws Exception {
-		Mechanism mechanism = new Mechanism();
-		mechanism.setName("test-mechanism");
-		mechanism = this.mechanismService.save(mechanism);
+		Mechanism mechanism =null;
+		mechanism = this.mechanismService.getMechanismByName("test-mechanism");
+		if(mechanism==null){
+			mechanism=new Mechanism();
+			mechanism.setName("test-mechanism");
+			this.mechanismService.save(mechanism);
+		}
 		Date reportDate = new Date();
 		for (int i = 0; i < 10; i++) {
 			ForecastIndex forecastIndex = this.forecastIndexService.getForecastIndexByMechanismAndReportDate(17L, mechanism, reportDate);

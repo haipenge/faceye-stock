@@ -74,8 +74,8 @@ public class ForecastIndexServiceImpl extends BaseMongoServiceImpl<ForecastIndex
 		searchParams.put("EQ|stockId", stockId);
 		searchParams.put("EQ|mechanism.$id", mechanism.getId());
 		String sDate = DateUtil.formatDate(reportDate, "yyyy-MM-dd");
-		searchParams.put("GTE|reportDate", DateUtil.getDateFromString(sDate + " 00:00:01"));
-		searchParams.put("LTE|reportDate", DateUtil.getDateFromString(sDate + " 23:59:59"));
+		searchParams.put("GTE|reportDate", DateUtil.getDateFromString(sDate + " 00:00:01","yyyy-MM-dd HH:mm:ss"));
+		searchParams.put("LTE|reportDate", DateUtil.getDateFromString(sDate + " 23:59:59","yyyy-MM-dd HH:mm:ss"));
 		Page<ForecastIndex> indexs = this.getPage(searchParams, 1, 0);
 		if (indexs != null && CollectionUtils.isNotEmpty(indexs.getContent())) {
 			forecastIndex = indexs.getContent().get(0);
