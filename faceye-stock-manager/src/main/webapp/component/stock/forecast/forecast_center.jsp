@@ -128,5 +128,5 @@
 </div>
 </c:if>
 </c:forEach>
-<div class="block-flat"><div class="content"><f:page page="${wrapForecasts}" url="/stock/forecast/home" params="<%=request.getParameterMap()%>" /></div></div>
+<div class="block-flat"><f:page page="${wrapForecasts}" url="/stock/forecast/home" params="<%=request.getParameterMap()%>" /></div>
 </div>
