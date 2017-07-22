@@ -117,6 +117,9 @@ public class ForecastServiceImpl extends BaseMongoServiceImpl<Forecast, Long, Fo
 			}
 		}
 		Sort sort=null;
+		if(page!=0){
+			page=page-1;
+		}
 		Pageable pagable=new PageRequest(page, size, sort);
 		wrapForecastsPage=new PageImpl<WrapForecast>(wrapForecasts, pagable, forecastIndexs.getTotalElements());
 		return wrapForecastsPage;

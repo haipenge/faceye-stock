@@ -639,7 +639,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 								Map<String, String> tdMap = tdMatchers.get(j);
 								String tdText = tdMap.get("1");
 								tdText = HtmlUtil.getInstance().replaceAll(tdText);
-//								tdText = StringUtils.replace(tdText, "--", "");
+								tdText = StringUtils.replace(tdText, "--", "");
 								subList.add(tdText);
 							}
 							tdResults.add(subList);
@@ -648,19 +648,33 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 				}
 
 				for (List<String> items : tdResults) {
-					List<Forecast> forecasts = new ArrayList<Forecast>(0);
+//					List<Forecast> forecasts = new ArrayList<Forecast>(0);
 					for (int i = 0; i < items.size(); i++) {
 						String tdText = items.get(i);
 						String reportDate = items.get(4);
 						String mechanismName = items.get(5);
+						String researcher=items.get(6);
 						if (i <= 3) {
 							String yearText = years.get(i);
 							Forecast forecast = this.forecaseService.getForecast(stock.getId(), Integer.parseInt(yearText), reportDate, mechanismName);
 							if (forecast == null) {
 								forecast = new Forecast();
 								forecast.setStockId(stock.getId());
+								forecast.setReportDate(DateUtil.getDateFromString(reportDate, "yyyy-MM-dd"));
+								forecast.setYear(NumberUtils.toInt(yearText));
+								Mechanism mechanism = this.mechanismService.getMechanismByName(mechanismName);
+								if (mechanism == null) {
+									mechanism = new Mechanism();
+									mechanism.setName(tdText);
+									mechanism=this.mechanismService.save(mechanism);
+								}
+								ForecastIndex forecastIndex=this.forecastIndexService.getForecastIndexByMechanismAndReportDate(stock.getId(), mechanism,forecast.getReportDate() );
+//								f.setMechanismDef(mechanism);
+								forecast.setForecastIndex(forecastIndex);
+								forecast.setMechanism(tdText);
+								forecast.setResearcher(researcher);
 							}
-							if (StringUtils.isNotEmpty(tdText)&&!StringUtils.equals(tdText, "--")) {
+							if (StringUtils.isNotEmpty(tdText)) {
 								if (StringUtils.equals(kind, "eps")) {
 									forecast.setEps(NumberUtils.toDouble(tdText));
 								} else if (StringUtils.equals(kind, "sales")) {
@@ -671,37 +685,38 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 									forecast.setRoe(NumberUtils.toDouble(tdText) / 100);
 								}
 							}
-							forecast.setYear(NumberUtils.toInt(yearText));
-							forecasts.add(forecast);
+							this.forecaseService.save(forecast);
+//							forecast.setYear(NumberUtils.toInt(yearText));
+//							forecasts.add(forecast);
 						}
-						if (i == 4) {
-							for (Forecast f : forecasts) {
-								f.setReportDate(DateUtil.getDateFromString(tdText, "yyyy-MM-dd"));
-							}
-						}
-						if (i == 5) {
-							for (Forecast f : forecasts) {
-								Mechanism mechanism = this.mechanismService.getMechanismByName(tdText);
-								if (mechanism == null) {
-									mechanism = new Mechanism();
-									mechanism.setName(tdText);
-									mechanism=this.mechanismService.save(mechanism);
-								}
-								ForecastIndex forecastIndex=this.forecastIndexService.getForecastIndexByMechanismAndReportDate(stock.getId(), mechanism,f.getReportDate() );
-//								f.setMechanismDef(mechanism);
-								f.setForecastIndex(forecastIndex);
-								f.setMechanism(tdText);
-							}
-						}
-						if (i == 6) {
-							for (Forecast f : forecasts) {
-								f.setResearcher(tdText);
-							}
-						}
+//						if (i == 4) {
+//							for (Forecast f : forecasts) {
+//								f.setReportDate(DateUtil.getDateFromString(tdText, "yyyy-MM-dd"));
+//							}
+//						}
+//						if (i == 5) {
+//							for (Forecast f : forecasts) {
+//								Mechanism mechanism = this.mechanismService.getMechanismByName(tdText);
+//								if (mechanism == null) {
+//									mechanism = new Mechanism();
+//									mechanism.setName(tdText);
+//									mechanism=this.mechanismService.save(mechanism);
+//								}
+//								ForecastIndex forecastIndex=this.forecastIndexService.getForecastIndexByMechanismAndReportDate(stock.getId(), mechanism,f.getReportDate() );
+////								f.setMechanismDef(mechanism);
+//								f.setForecastIndex(forecastIndex);
+//								f.setMechanism(tdText);
+//							}
+//						}
+//						if (i == 6) {
+//							for (Forecast f : forecasts) {
+//								f.setResearcher(tdText);
+//							}
+//						}
 					}
-					if (CollectionUtils.isNotEmpty(forecasts)) {
-						this.forecaseService.save(forecasts);
-					}
+//					if (CollectionUtils.isNotEmpty(forecasts)) {
+//						this.forecaseService.save(forecasts);
+//					}
 				}
 
 			}

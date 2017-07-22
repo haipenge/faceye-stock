@@ -65,7 +65,7 @@ public class CrawlFinancialDataServiceTestCase extends BaseServiceTestCase {
    }
 	@Test
 	public void testCrawlForecast() throws Exception{
-		 String code="600508";
+		 String code="000998";
 		  Stock stock=this.stockService.getStockByCode(code);
 		  this.crawlFinancialDataService.crawlForecast(stock);
 		  Assert.isTrue(true);
