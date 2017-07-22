@@ -102,7 +102,7 @@
 									<td class="text-right">${forecast.eps }</td>
 									<td class="text-right">${forecast.profit}</td>
 									<td class="text-right">${forecast.income }</td>
-									<td class="text-right">${forecast.row }</td>
+									<td class="text-right">${forecast.roe }</td>
 									<td>${forecast.year }</td>
 								</tr>
 								<c:if test="${inStatus.last }">
