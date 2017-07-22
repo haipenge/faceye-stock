@@ -74,15 +74,15 @@
 			</form>
 		</div>
 	</div>
-	<div class="block-flat">
 
-		<c:forEach var="wrapForecast" items="${wrapForecasts}" varStatus="status">
-			<c:if test="${status.index mod 2 == 0 }">
-				<c:if test="${status.index != 0 }">
-	</div>
-	</c:if>
-	<div class="row">
-	</c:if>
+	<c:forEach var="wrapForecast" items="${wrapForecasts}" varStatus="status">
+		<c:if test="${status.index mod 2 == 0 }">
+			<c:if test="${status.index != 0 }">
+</div>
+</c:if>
+<div class="row">
+</c:if>
+<div class="block-flat">
 	<div class="col-sm-6 col-md-6">
 		<div class="header">
 			<h3>${wrapForecast.mechanism}
@@ -119,13 +119,13 @@
 			</table>
 		</div>
 	</div>
-
-	<c:if test="${status.last and status.count mod 2 != 0 }">
-		<div class="col-sm-6 col-md-6"></div>
+</div>
+<c:if test="${status.last and status.count mod 2 != 0 }">
+	<div class="col-sm-6 col-md-6"></div>
 </div>
 </c:if>
 </c:forEach>
-</div>
+
 
 <div class="block-flat">
 	<div class="content">
