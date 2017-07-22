@@ -171,7 +171,7 @@
 				</tbody>
 			</table>
 		</div>
-		<f:page page="${page}" url="/stock/forecast/home" params="<%=request.getParameterMap()%>" />
+		<f:page page="${wrapForecasts}" url="/stock/forecast/home" params="<%=request.getParameterMap()%>" />
 	</div>
 </div>
 </div>
