@@ -115,10 +115,10 @@
 					</table>
 				</div>
 
-				<c:if test="${status.index mod 2 eq 0  and status.index not eq 0 }">
+				<c:if test="${status.index mod 2 == 0  and status.index != 0 }">
 		</div>
 		</c:if>
-		<c:if test="${status.last and status.index mod 2 not eq 0 }">
+		<c:if test="${status.last and status.index mod 2 != 0 }">
 	</div>
 	<div class="col-sm-6 col-md-6"></div>
 	</c:if>
