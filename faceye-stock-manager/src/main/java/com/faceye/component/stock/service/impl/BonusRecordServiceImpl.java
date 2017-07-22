@@ -43,9 +43,9 @@ public class BonusRecordServiceImpl extends BaseMongoServiceImpl<BonusRecord, Lo
 
 	@Override
 	public Page<BonusRecord> getPage(Map<String, Object> searchParams, int page, int size) {
-		if (page != 0) {
-			page = page - 1;
-		}
+//		if (page != 0) {
+//			page = page - 1;
+//		}
 		// SimpleEntityPathResolver resolver = SimpleEntityPathResolver.INSTANCE;
 		// EntityPath<BonusRecord> entityPath = resolver.createPath(entityClass);
 		// PathBuilder<BonusRecord> builder = new PathBuilder<BonusRecord>(entityPath.getType(), entityPath.getMetadata());

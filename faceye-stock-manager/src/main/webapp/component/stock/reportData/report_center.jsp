@@ -209,7 +209,7 @@
 						<c:if test="${not empty dataStats}">
 							<!-- 核心利润率 -->
 							<tr>
-								<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">其它分析</th>
+								<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">其它</th>
 								<td style="border-bottom: 2px solid gray;">核心利润率</td>
 								<c:forEach items="${dataStats}" var="dataStat">
 									<td class="text-right" style="border-bottom: 2px solid gray;"><fmt:formatNumber value="${dataStat.coreProfitMargin *100 }" type="number" pattern="#,##0.0#"
@@ -224,8 +224,7 @@
 								<th rowspan="7" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">每股指标</th>
 								<td>EPS</td>
 								<c:forEach items="${dataStats}" var="dataStat">
-									<td class="text-right"><fmt:formatNumber value="${dataStat.eps}" type="number" pattern="#,##0.0#" maxFractionDigits="4"
-											groupingUsed="true" /></td>
+									<td class="text-right"><fmt:formatNumber value="${dataStat.eps}" type="number" pattern="#,##0.0#" maxFractionDigits="4" groupingUsed="true" /></td>
 								</c:forEach>
 							</tr>
 						</c:if>
@@ -233,8 +232,7 @@
 							<tr>
 								<td>BPS</td>
 								<c:forEach items="${dataStats}" var="dataStat">
-									<td class="text-right"><fmt:formatNumber value="${dataStat.bps}" type="number" pattern="#,##0.00#" maxFractionDigits="4"
-											groupingUsed="true" /></td>
+									<td class="text-right"><fmt:formatNumber value="${dataStat.bps}" type="number" pattern="#,##0.00#" maxFractionDigits="4" groupingUsed="true" /></td>
 								</c:forEach>
 							</tr>
 						</c:if>
@@ -242,8 +240,7 @@
 							<tr>
 								<td>DPS</td>
 								<c:forEach items="${dataStats}" var="dataStat">
-									<td class="text-right"><fmt:formatNumber value="${dataStat.dps}" type="number" pattern="#,##0.00#" maxFractionDigits="4"
-											groupingUsed="true" /></td>
+									<td class="text-right"><fmt:formatNumber value="${dataStat.dps}" type="number" pattern="#,##0.00#" maxFractionDigits="4" groupingUsed="true" /></td>
 								</c:forEach>
 							</tr>
 						</c:if>
@@ -251,8 +248,7 @@
 							<tr>
 								<td>PB</td>
 								<c:forEach items="${dataStats}" var="dataStat">
-									<td class="text-right"><fmt:formatNumber value="${dataStat.pb}" type="number" pattern="#,##0.00#" maxFractionDigits="4"
-											groupingUsed="true" /></td>
+									<td class="text-right"><fmt:formatNumber value="${dataStat.pb}" type="number" pattern="#,##0.00#" maxFractionDigits="4" groupingUsed="true" /></td>
 								</c:forEach>
 							</tr>
 						</c:if>
@@ -260,28 +256,16 @@
 							<tr>
 								<td>PE</td>
 								<c:forEach items="${dataStats}" var="dataStat">
-									<td class="text-right"><fmt:formatNumber value="${dataStat.pe}" type="number" pattern="#,##0.00#" maxFractionDigits="4"
-											groupingUsed="true" /></td>
+									<td class="text-right"><fmt:formatNumber value="${dataStat.pe}" type="number" pattern="#,##0.00#" maxFractionDigits="4" groupingUsed="true" /></td>
 								</c:forEach>
 							</tr>
 						</c:if>
-							<c:if test="${not empty dataStats}">
+						<c:if test="${not empty dataStats}">
 							<tr>
-								<td>RE</td>
+								<td style="border-bottom: 2px solid gray;">ROCE</td>
 								<c:forEach items="${dataStats}" var="dataStat">
-								  <td class="text-right">
-								     <fmt:formatNumber value="${dataStat.re}" type="number" pattern="#,##0.00#" maxFractionDigits="4" groupingUsed="true" />
-								  </td>
-								</c:forEach>
-							</tr>
-						</c:if>
-							<c:if test="${not empty dataStats}">
-							<tr>
-								<td style="border-bottom:2px solid gray;">ROCE</td>
-								<c:forEach items="${dataStats}" var="dataStat">
-								  <td class="text-right" style="border-bottom: 2px solid gray;">
-								     <fmt:formatNumber value="${dataStat.roce *100}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%
-								  </td>
+									<td class="text-right" style="border-bottom: 2px solid gray;"><fmt:formatNumber value="${dataStat.roce *100}" type="number" pattern="#,##0.0#" maxFractionDigits="2"
+											groupingUsed="true" />%</td>
 								</c:forEach>
 							</tr>
 						</c:if>

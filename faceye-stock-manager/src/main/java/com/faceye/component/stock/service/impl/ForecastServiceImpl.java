@@ -1,10 +1,13 @@
 package com.faceye.component.stock.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,7 @@ import com.faceye.component.stock.entity.Forecast;
 import com.faceye.component.stock.repository.mongo.ForecastRepository;
 import com.faceye.component.stock.repository.mongo.customer.ForecastCustomerRepository;
 import com.faceye.component.stock.service.ForecastService;
+import com.faceye.component.stock.service.wrapper.WrapForecast;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.faceye.feature.util.DateUtil;
 /**
@@ -34,9 +38,9 @@ public class ForecastServiceImpl extends BaseMongoServiceImpl<Forecast, Long, Fo
 	
 	@Override
 	public Page<Forecast> getPage(Map<String, Object> searchParams, int page, int size) {
-		if (page != 0) {
-			page = page - 1;
-		}
+//		if (page != 0) {
+//			page = page - 1;
+//		}
 		// SimpleEntityPathResolver resolver = SimpleEntityPathResolver.INSTANCE;
 		// EntityPath<Forecast> entityPath = resolver.createPath(entityClass);
 		// PathBuilder<Forecast> builder = new PathBuilder<Forecast>(entityPath.getType(), entityPath.getMetadata());
@@ -64,7 +68,8 @@ public class ForecastServiceImpl extends BaseMongoServiceImpl<Forecast, Long, Fo
 		if(searchParams==null){
 			searchParams=new HashMap();
 		}
-		searchParams.put("SORT|reportDate", "desc");
+		searchParams.put("SORT|reportDate:1", "desc");
+		searchParams.put("SORT|mechanism:2", "asc");
 		return this.dao.getPage(searchParams, page, size);
 	}
 
@@ -85,6 +90,42 @@ public class ForecastServiceImpl extends BaseMongoServiceImpl<Forecast, Long, Fo
 			forecast=forecasts.getContent().get(0);
 		}
 		return forecast;
+	}
+
+/**
+ * 对估值结果进行包装，包装Key:mechanism,reportDate
+ */
+	@Override
+	public List<WrapForecast> wrapForecasts(List<Forecast> forecasts) {
+		List<WrapForecast> wrapForecasts=new ArrayList<WrapForecast>(0);
+		if(CollectionUtils.isNotEmpty(forecasts)){
+			for(Forecast forecast:forecasts){
+			    String mechanism =forecast.getMechanism();
+			    String reportDateStr=DateUtil.formatDate(forecast.getReportDate(), "yyyy-MM-dd");
+			    WrapForecast wrapForecast=getWrapForecast(mechanism,reportDateStr,wrapForecasts);
+			    wrapForecast.addForecast(forecast);
+			}
+		}
+		return wrapForecasts;
+	}
+	
+	private WrapForecast getWrapForecast(String mechanism,String reportDateStr,List<WrapForecast> wrapForecasts){
+		WrapForecast wrapForecast=null;
+		if(CollectionUtils.isNotEmpty(wrapForecasts)){
+			for(WrapForecast wf:wrapForecasts){
+				if(StringUtils.equals(wf.getMechanism(), mechanism)&&StringUtils.equals(wf.getReportDateStr(), reportDateStr)){
+					wrapForecast=wf;
+					break;
+				}
+			}
+		}
+		if(wrapForecast==null){
+			wrapForecast=new WrapForecast();
+			wrapForecast.setMechanism(mechanism);
+			wrapForecast.setReportDateStr(reportDateStr);
+			wrapForecasts.add(wrapForecast);
+		}
+		return wrapForecast;
 	}
 	
 }/**@generate-service-source@**/
