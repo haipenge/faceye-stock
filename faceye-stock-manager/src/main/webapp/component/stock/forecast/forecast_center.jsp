@@ -122,7 +122,7 @@
 </div>
 <c:if test="${status.last and status.count mod 3 != 0 }">
 	<div class="col-sm-4 col-md-4"></div>
-	<c:if test="${(status.count +1 ) mod 3 != 0">
+	<c:if test="${(status.count + 1 ) mod 3 != 0}">
 		<div class="col-sm-4 col-md-4"></div>
 	</c:if>
 	</div>
