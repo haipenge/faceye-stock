@@ -97,7 +97,7 @@
 							</tr>
 						</thead>
 						<tbody class="no-border-x no-border-y">
-							<c:forEach var="forecast" var="${wrapForecast.forecasts}" varStatus="status">
+							<c:forEach var="forecast" items="${wrapForecast.forecasts}" varStatus="inStatus">
 								<tr>
 									<td class="text-right">${forecast.eps }</td>
 									<td class="text-right">${forecast.profit}</td>
@@ -105,7 +105,7 @@
 									<td class="text-right">${forecast.row }</td>
 									<td>${forecast.year }</td>
 								</tr>
-								<c:if test="${status.last }">
+								<c:if test="${inStatus.last }">
 									<tr>
 										<td colspan="5" class="text-right"><span class="span-suffix">研究员:${forecast.researcher }</span></td>
 									</tr>
