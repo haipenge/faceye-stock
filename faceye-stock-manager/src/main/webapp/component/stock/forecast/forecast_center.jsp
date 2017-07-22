@@ -119,9 +119,8 @@
 		</div>
 	</div>
 
-	<c:if test="${status.last and status.index mod 2 != 0 }">
+	<c:if test="${status.last and status.count mod 2 != 0 }">
 		<div class="col-sm-6 col-md-6"></div>
-</div>
 </div>
 </c:if>
 </c:forEach>
