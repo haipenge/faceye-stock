@@ -110,7 +110,7 @@
 
 
 	<!-- project default level -->
-	<logger name="com.faceye.component.stock" level="${logger.level.faceye}" />
+	<logger name="com.faceye" level="${logger.level.faceye}" />
 
 	<!--log4jdbc -->
 	<logger name="jdbc.sqltiming" level="ERROR" />

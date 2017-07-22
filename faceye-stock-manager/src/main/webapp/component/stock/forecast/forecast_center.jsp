@@ -86,7 +86,7 @@
 	<div class="block-flat" style="padding-bottom:3px;">
 		<div class="header">
 			<h5>${wrapForecast.forecastIndex.mechanism.name}
-				<span class="span-suffix">${wrapForecast.forecastIndex.reportDate}</span>
+				<span class="span-suffix"><fmt:formatDate value="${wrapForecast.forecastIndex.reportDate}" pattern="yyyy-MM-dd"/></span>
 			</h5>
 		</div>
 		<div class="content">
