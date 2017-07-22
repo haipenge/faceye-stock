@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.faceye.component.stock.entity.Forecast;
+import com.faceye.component.stock.entity.ForecastIndex;
 
 /**
  * 对机构估值进行包装
@@ -13,22 +14,14 @@ import com.faceye.component.stock.entity.Forecast;
  */
 public class WrapForecast {
 
-	//机构
-	private String mechanism="";
-	//估值报告日期
-	private String reportDateStr="";
+	private ForecastIndex forecastIndex=null;
 	private List<Forecast> forecasts=new ArrayList<Forecast>(0);
-	public String getMechanism() {
-		return mechanism;
+	
+	public ForecastIndex getForecastIndex() {
+		return forecastIndex;
 	}
-	public void setMechanism(String mechanism) {
-		this.mechanism = mechanism;
-	}
-	public String getReportDateStr() {
-		return reportDateStr;
-	}
-	public void setReportDateStr(String reportDateStr) {
-		this.reportDateStr = reportDateStr;
+	public void setForecastIndex(ForecastIndex forecastIndex) {
+		this.forecastIndex = forecastIndex;
 	}
 	public List<Forecast> getForecasts() {
 		return forecasts;

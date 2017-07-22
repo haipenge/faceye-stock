@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import com.faceye.component.stock.entity.AccountingSubject;
 import com.faceye.component.stock.entity.BonusRecord;
 import com.faceye.component.stock.entity.Forecast;
+import com.faceye.component.stock.entity.ForecastIndex;
 import com.faceye.component.stock.entity.Mechanism;
 import com.faceye.component.stock.entity.ReportData;
 import com.faceye.component.stock.entity.Stock;
@@ -34,6 +35,7 @@ import com.faceye.component.stock.service.AccountingSubjectService;
 import com.faceye.component.stock.service.BonusRecordService;
 import com.faceye.component.stock.service.CrawlFinancialDataService;
 import com.faceye.component.stock.service.FinancialDataService;
+import com.faceye.component.stock.service.ForecastIndexService;
 import com.faceye.component.stock.service.ForecastService;
 import com.faceye.component.stock.service.MechanismService;
 import com.faceye.component.stock.service.ReportDataService;
@@ -70,6 +72,8 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	private ForecastService forecaseService = null;
 	@Autowired
 	private MechanismService mechanismService = null;
+	@Autowired
+	private ForecastIndexService forecastIndexService=null;
 
 	@Override
 	public void crawl() {
@@ -683,7 +687,9 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 									mechanism.setName(tdText);
 									this.mechanismService.save(mechanism);
 								}
-								f.setMechanismDef(mechanism);
+								ForecastIndex forecastIndex=this.forecastIndexService.getForecastIndexByMechanismAndReportDate(stock.getId(), mechanism, f.getReportDate());
+//								f.setMechanismDef(mechanism);
+								f.setForecastIndex(forecastIndex);
 								f.setMechanism(tdText);
 							}
 						}

@@ -1,10 +1,8 @@
 package com.faceye.component.stock.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,34 +10,38 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.validation.BindingResult;
+import javax.validation.Valid;
 
-import com.faceye.component.stock.entity.Forecast;
-import com.faceye.component.stock.service.ForecastService;
-import com.faceye.component.stock.service.wrapper.WrapForecast;
-import com.faceye.feature.controller.BaseController;
+import com.faceye.component.stock.entity.ForecastIndex;
+import com.faceye.component.stock.service.ForecastIndexService;
+
 import com.faceye.feature.util.AjaxResult;
+import com.faceye.feature.util.MathUtil;
 import com.faceye.feature.util.http.HttpUtil;
+import com.faceye.feature.util.regexp.RegexpUtil;
+import com.faceye.feature.util.AjaxResult;
+import com.faceye.feature.controller.BaseController;
 
 /**
  * 模块:stock<br>
- * 实体:Forecast<br>
+ * 实体:ForecastIndex<br>
  * @author @haipenge <br>
  * haipenge@gmail.com<br>
 *  Create Date:2014年12月10日<br>
  */
 @Controller
 @Scope("prototype")
-@RequestMapping("/stock/forecast")
-public class ForecastController extends BaseController<Forecast, Long, ForecastService> {
+@RequestMapping("/stock/forecastIndex")
+public class ForecastIndexController extends BaseController<ForecastIndex, Long, ForecastIndexService> {
 
 	@Autowired
-	public ForecastController(ForecastService service) {
+	public ForecastIndexController(ForecastIndexService service) {
 		super(service);
 	}
 
@@ -51,15 +53,11 @@ public class ForecastController extends BaseController<Forecast, Long, ForecastS
 	 * @author:@haipenge haipenge@gmail.com 2014年5月24日<br>
 	 */
 	@RequestMapping("/home")
-	public String home(HttpServletRequest request, Model model) {
+	@ResponseBody
+	public Page<ForecastIndex> home(HttpServletRequest request, Model model) {
 		Map searchParams=HttpUtil.getRequestParams(request);
-		Page<Forecast> page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
-		Page<WrapForecast>  wrapForecasts=this.service.getWrapForecasts(searchParams, this.getPage(searchParams), this.getSize(searchParams));
-		model.addAttribute("page", page);
-		model.addAttribute("wrapForecasts", wrapForecasts);
-		resetSearchParams(searchParams);
-		model.addAttribute("searchParams", searchParams);
-		return "stock.forecast.manager";
+		Page<ForecastIndex> page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
+		return page
 	}
 
 	/**
@@ -70,13 +68,14 @@ public class ForecastController extends BaseController<Forecast, Long, ForecastS
 	 * @author:@haipenge haipenge@gmail.com 2014年5月24日<br>
 	 */
 	@RequestMapping("/edit/{id}")
+	@ResponseBody
 	public String edit(@PathVariable("id") Long id,Model model,HttpServletRequest request) {
 		if(id!=null){
 			beforeInput(model,request);
-			Forecast entity=this.service.get(id);
-			model.addAttribute("forecast", entity);
+			ForecastIndex entity=this.service.get(id);
+			model.addAttribute("forecastIndex", entity);
 		}
-		return "stock.forecast.update";
+		return AjaxResult.getInstance().buildDefaultResult(true);
 	}
 	
 	/**
@@ -89,26 +88,25 @@ public class ForecastController extends BaseController<Forecast, Long, ForecastS
 	 * 2014年5月27日<br>
 	 */
 	@RequestMapping(value="/input")
-	public String input(Forecast forecast,Model model,HttpServletRequest request){
+	@ResponseBody
+	public String input(ForecastIndex forecastIndex,Model model,HttpServletRequest request){
 		beforeInput(model,request);
-		return "stock.forecast.update";
+		return AjaxResult.getInstance().buildDefaultResult(true);
 	}
-	
-	
-    
 
 	/**
 	 * 数据保存<br>
 	 */
 	@RequestMapping("/save")
-	public String save(@Valid Forecast forecast,BindingResult bindingResult, RedirectAttributes redirectAttributes,Model model,HttpServletRequest request) {
+	@ResponseBody
+	public String save(@Valid ForecastIndex forecastIndex,BindingResult bindingResult, RedirectAttributes redirectAttributes,Model model,HttpServletRequest request) {
 		if(bindingResult.hasErrors()){
 			beforeInput(model,request);
-			return "stock.forecast.update";
+			return AjaxResult.getInstance().buildDefaultResult(false);
 		}else{
-		   this.beforeSave(forecast,request);
-		   this.service.save(forecast);
-		   return "redirect:/stock/forecast/home";
+		   this.beforeSave(forecastIndex,request);
+		   this.service.save(forecastIndex);
+		   return AjaxResult.getInstance().buildDefaultResult(true);
 		}
 	}
 
@@ -120,11 +118,12 @@ public class ForecastController extends BaseController<Forecast, Long, ForecastS
 	 * @author:@haipenge haipenge@gmail.com 2014年5月24日<br>
 	 */
 	@RequestMapping("/remove/{id}")
+	@ResponseBody
 	public String remove(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
 		if(id!=null){
 			this.service.remove(id);
 		}
-		return "redirect:/stock/forecast/home";
+		return AjaxResult.getInstance().buildDefaultResult(true);
 	}
 	
 	/**
@@ -156,12 +155,12 @@ public class ForecastController extends BaseController<Forecast, Long, ForecastS
 	 * 2014年5月26日<br>
 	 */
 	@RequestMapping("/detail/{id}")
-	public String detail(@PathVariable Long id,Model model){
+	@ResponseBody
+	public ForecastIndex detail(@PathVariable Long id,Model model){
 		if(id!=null){
-			Forecast entity=this.service.get(id);
-			model.addAttribute("forecast", entity);
+			ForecastIndex forecastIndex=this.service.get(id);
 		}
-		return "stock.forecast.detail";
+		return forecastIndex;
 	}
 	
 	///////////////////////////////////////////////以下为回调函数////////////////////////////////////////////
@@ -181,7 +180,7 @@ public class ForecastController extends BaseController<Forecast, Long, ForecastS
 	 *
 	 *保存数据前的回调函数
 	 */
-	protected void beforeSave(Forecast forecast,HttpServletRequest request){
+	protected void beforeSave(ForecastIndex forecastIndex,HttpServletRequest request){
 		
 	}
 

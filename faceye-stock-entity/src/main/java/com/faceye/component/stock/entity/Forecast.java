@@ -207,12 +207,20 @@ public class Forecast implements Serializable {
 		this.researcher = researcher;
 	}
 	
-	private Mechanism mechanismDef=null;
-	public Mechanism getMechanismDef() {
-		return mechanismDef;
+//	private Mechanism mechanismDef=null;
+//	public Mechanism getMechanismDef() {
+//		return mechanismDef;
+//	}
+//	public void setMechanismDef(Mechanism mechanismDef) {
+//		this.mechanismDef = mechanismDef;
+//	}
+	
+	private ForecastIndex forecastIndex=null;
+	public ForecastIndex getForecastIndex() {
+		return forecastIndex;
 	}
-	public void setMechanismDef(Mechanism mechanismDef) {
-		this.mechanismDef = mechanismDef;
+	public void setForecastIndex(ForecastIndex forecastIndex) {
+		this.forecastIndex = forecastIndex;
 	}
 	
 	

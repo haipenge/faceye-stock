@@ -1,6 +1,8 @@
 package com.faceye.component.stock.service;
 
-import java.util.List;
+import java.util.Map;
+
+import org.springframework.data.domain.Page;
 
 import com.faceye.component.stock.entity.Forecast;
 import com.faceye.component.stock.service.wrapper.WrapForecast;
@@ -16,5 +18,5 @@ public interface ForecastService extends BaseService<Forecast,Long>{
 
 	public Forecast getForecast(Long stockId,Integer year,String reportDate,String mechanism);
 	
-	public List<WrapForecast> wrapForecasts(List<Forecast> forecasts);
+	public Page<WrapForecast> getWrapForecasts(Map searchParams,Integer page,Integer size);
 }/**@generate-service-source@**/

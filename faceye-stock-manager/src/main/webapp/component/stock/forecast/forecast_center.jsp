@@ -75,7 +75,7 @@
 		</div>
 	</div>
 
-	<c:forEach var="wrapForecast" items="${wrapForecasts}" varStatus="status">
+	<c:forEach var="wrapForecast" items="${wrapForecasts.content}" varStatus="status">
 		<c:if test="${status.index mod 3 == 0 }">
 			<c:if test="${status.index != 0 }">
 </div>
@@ -85,8 +85,8 @@
 <div class="col-sm-4 col-md-4">
 	<div class="block-flat" style="padding-bottom:3px;">
 		<div class="header">
-			<h5>${wrapForecast.mechanism}
-				<span class="span-suffix">${wrapForecast.reportDateStr}</span>
+			<h5>${wrapForecast.forecastIndex.mechanism.name}
+				<span class="span-suffix">${wrapForecast.forecastIndex.reportDate}</span>
 			</h5>
 		</div>
 		<div class="content">
@@ -106,7 +106,7 @@
 							<td class="text-right">${forecast.eps }</td>
 							<td class="text-right">${forecast.profit}</td>
 							<td class="text-right">${forecast.income }</td>
-							<td class="text-right">${forecast.roe }</td>
+							<td class="text-right"><fmt:formatNumber value="${forecast.roe * 100}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
 							<td>${forecast.year }</td>
 						</tr>
 						<c:if test="${inStatus.last }">

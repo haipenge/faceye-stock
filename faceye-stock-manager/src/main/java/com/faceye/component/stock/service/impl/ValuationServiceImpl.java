@@ -13,9 +13,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
+import com.faceye.component.stock.entity.Forecast;
 import com.faceye.component.stock.entity.ReportData;
 import com.faceye.component.stock.entity.Valuation;
 import com.faceye.component.stock.repository.mongo.ValuationRepository;
@@ -23,12 +23,10 @@ import com.faceye.component.stock.repository.mongo.customer.ValuationCustomerRep
 import com.faceye.component.stock.service.ReportDataService;
 import com.faceye.component.stock.service.StockService;
 import com.faceye.component.stock.service.ValuationService;
-import com.faceye.component.stock.util.Params;
 import com.faceye.component.stock.util.StockConstants;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.faceye.feature.util.DateUtil;
-import com.faceye.feature.util.ServiceException;
 import com.querydsl.core.types.Predicate;
 
 /**
@@ -183,6 +181,20 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 		return valuation;
 	}
 	
+	
+	/**
+	 * 根据机构预测进行估值（验证机构估值与现值的偏离程度）
+	 * @param stockId
+	 * @return
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年7月22日 下午5:47:20
+	 */
+	public Valuation valuationWithMechanismReport(Long stockId,List<Forecast> forecasts){
+		Valuation valuation =null;
+		
+		return valuation;
+	}
 	
 
 }/** @generate-service-source@ **/
