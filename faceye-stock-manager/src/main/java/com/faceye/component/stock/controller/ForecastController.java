@@ -53,9 +53,9 @@ public class ForecastController extends BaseController<Forecast, Long, ForecastS
 	@RequestMapping("/home")
 	public String home(HttpServletRequest request, Model model) {
 		Map searchParams=HttpUtil.getRequestParams(request);
-		Page<Forecast> page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
-		Page<WrapForecast>  wrapForecasts=this.service.getWrapForecasts(searchParams, this.getPage(searchParams), this.getSize(searchParams));
-		model.addAttribute("page", page);
+//		Page<Forecast> page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
+		Page<WrapForecast>  wrapForecasts=this.service.getWrapForecasts(searchParams, this.getPage(searchParams), 3*2);
+//		model.addAttribute("page", page);
 		model.addAttribute("wrapForecasts", wrapForecasts);
 		resetSearchParams(searchParams);
 		model.addAttribute("searchParams", searchParams);

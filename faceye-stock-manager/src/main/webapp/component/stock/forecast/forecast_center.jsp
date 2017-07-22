@@ -128,50 +128,5 @@
 	</div>
 </c:if>
 </c:forEach>
-
-
-<div class="block-flat">
-	<div class="content">
-		<div id="msg"></div>
-		<button class="btn btn-primary btn-sm multi-remove">
-			<fmt:message key="global.remove"></fmt:message>
-		</button>
-		<div classs="table-responsive">
-			<table class="table table-bordered">
-				<thead>
-					<tr>
-						<th><input type="checkbox" name="check-all"></th>
-						<th><fmt:message key='stock.forecast.eps'></fmt:message></th>
-						<th><fmt:message key='stock.forecast.profit'></fmt:message></th>
-						<th><fmt:message key='stock.forecast.income'></fmt:message></th>
-						<th><fmt:message key='stock.forecast.roe'></fmt:message></th>
-						<th><fmt:message key='stock.forecast.year'></fmt:message></th>
-						<th><fmt:message key='stock.forecast.reportDate'></fmt:message></th>
-						<th><fmt:message key='stock.forecast.mechanism'></fmt:message></th>
-						<th><fmt:message key='stock.forecast.researcher'></fmt:message></th>
-						<!--@generate-entity-jsp-property-desc@-->
-
-					</tr>
-				</thead>
-				<tbody>
-					<c:forEach items="${page.content}" var="forecast">
-						<tr>
-							<td><input type="checkbox" name="check-single" value="${forecast.id}"></td>
-							<td>${forecast.eps}</td>
-							<td>${forecast.profit}</td>
-							<td>${forecast.income}</td>
-							<td><fmt:formatNumber value="${forecast.roe * 100}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
-							<td>${forecast.year}</td>
-							<td><fmt:formatDate value="${forecast.reportDate}" pattern="yyyy-MM-dd" /></td>
-							<td>${forecast.mechanism}</td>
-							<td>${forecast.researcher}</td>
-							<!--@generate-entity-jsp-property-value@-->
-						<tr>
-					</c:forEach>
-				</tbody>
-			</table>
-		</div>
-		<f:page page="${wrapForecasts}" url="/stock/forecast/home" params="<%=request.getParameterMap()%>" />
-	</div>
-</div>
+<f:page page="${wrapForecasts}" url="/stock/forecast/home" params="<%=request.getParameterMap()%>" />
 </div>
