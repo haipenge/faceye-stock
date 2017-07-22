@@ -76,13 +76,13 @@
 	</div>
 
 	<c:forEach var="wrapForecast" items="${wrapForecasts}" varStatus="status">
-		<c:if test="${status.index mod 2 == 0 }">
+		<c:if test="${status.index mod 3 == 0 }">
 			<c:if test="${status.index != 0 }">
 </div>
 </c:if>
 <div class="row">
 </c:if>
-<div class="col-sm-6 col-md-6">
+<div class="col-sm-4 col-md-4">
 	<div class="block-flat">
 		<div class="header">
 			<h3>${wrapForecast.mechanism}
@@ -120,8 +120,9 @@
 		</div>
 	</div>
 </div>
-<c:if test="${status.last and status.count mod 2 != 0 }">
-	<div class="col-sm-6 col-md-6"></div>
+<c:if test="${status.last and status.count mod 3 != 0 }">
+	<div class="col-sm-4 col-md-4"></div></c:if>
+	<c:if test="${(status.count +1 ) mod 3 != 0"><div class="col-sm-4 col-md-4"></div></c:if>
 </div>
 </c:if>
 </c:forEach>
