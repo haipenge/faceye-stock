@@ -80,7 +80,7 @@
 			<c:if test="${status.index != 0 }">
 </div>
 </c:if>
-<div class="row">
+<div class="row" style="border:1px solid blue;">
 </c:if>
 <div class="col-sm-4 col-md-4">
 	<div class="block-flat">
