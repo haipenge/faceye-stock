@@ -665,7 +665,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 								Mechanism mechanism = this.mechanismService.getMechanismByName(mechanismName);
 								if (mechanism == null) {
 									mechanism = new Mechanism();
-									mechanism.setName(tdText);
+									mechanism.setName(mechanismName);
 									mechanism=this.mechanismService.save(mechanism);
 								}
 								ForecastIndex forecastIndex=this.forecastIndexService.getForecastIndexByMechanismAndReportDate(stock.getId(), mechanism,forecast.getReportDate() );
