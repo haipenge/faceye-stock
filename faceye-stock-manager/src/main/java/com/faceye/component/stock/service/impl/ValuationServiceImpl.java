@@ -283,14 +283,17 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 		List<Double> roces = new ArrayList<Double>(0);
 		List<Double> res = new ArrayList<Double>(0);
 		List<Double> vres = new ArrayList<Double>(0);
+		List<Double> xdps=new ArrayList<Double>(0);
 		Double cv = null;
 		Double bps = new Double(bps0);
 		// 计算BPS(1-t) bps[t] = bps[t-1]+eps[t]
 		for (Double eps : epss) {
 			bpss.add(new Double(bps + eps-dps));
 			bps = new Double(bps + eps);
+			xdps.add(dps);
 		}
 		valuation.setXbps(bpss);
+		valuation.setXdps(xdps);
 		
 		// 计算Roce(1-t) roce[t]=bps[t-1]+roce[t]
 		if (epss.size() == bpss.size()) {

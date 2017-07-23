@@ -113,9 +113,6 @@
 								<tr>
 									<td colspan="5" class="text-right"><span class="span-suffix">研究员:${forecast.researcher }</span></td>
 								</tr>
-								<tr>
-									<td colspan="5">现值(V):<fmt:formatNumber value="${wrapForecast.valuation.totalValue}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
-								</tr>
 							</c:if>
 						</c:forEach>
 					</tbody>
@@ -145,11 +142,9 @@
 						</c:forEach>
 						<tr>
 							<td>CV</td>
-							<td colspan="4" class="text-right"><fmt:formatNumber value="${wrapForecast.valuation.cv}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
-						</tr>
-						<tr>
+							<td colspan="2" class="text-right"><fmt:formatNumber value="${wrapForecast.valuation.cv}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 							<td>V0E</td>
-							<td colspan="4" class="text-right"><fmt:formatNumber value="${wrapForecast.valuation.totalValue}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
+							<td colspan="2" class="text-right"><fmt:formatNumber value="${wrapForecast.valuation.totalValue}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 						</tr>
 					</tbody>
 				</table>
