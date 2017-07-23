@@ -257,7 +257,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 		for (Map record : records) {
 			String date = MapUtils.getString(record, "date");
 			String data = MapUtils.getString(record, "data");
-			Date dDate = DateUtil.getDateFromString(date + " 00:00:00", "yyyy-MM-dd HH:mm:ss");
+			Date dDate = DateUtil.getDateFromString(date + " 12:00:00", "yyyy-MM-dd HH:mm:ss");
 			ReportData reportData = null;
 			if (structs.containsKey(date)) {
 				reportData = structs.get(date);

@@ -24,6 +24,7 @@ var ReportData = {
 					msg : '已开始数据爬取任务...'
 				});
 				m.show();
+				return true;
 			},
 			success : function(data, textStatus, xhr) {
 				if (data.result) {
@@ -53,6 +54,7 @@ var ReportData = {
 					msg : '正在进行数据分析,请稍候...'
 				});
 				m.show();
+				return true;
 			},
 			success : function(data, textStatus, xhr) {
 				var m = new Msg({
