@@ -130,22 +130,27 @@
 							<th class="text-right">XROCE</th>
 							<th class="text-right">XRE</th>
 							<th class="text-right">XVRE</th>
-							<th class="text-right">CV</th>
-							<th class="text-right">V0E</th>
+
 						</tr>
 					</thead>
 					<tbody class="no-border-y">
-					     <c:forEach items="${wrapForecast.valuation.xbps}" var ="xbps" varStatus="status">
-					       <tr>
-					          <td><fmt:formatNumber value="${xbps}" type="number" pattern="#,##0.0#" maxFractionDigits="4" groupingUsed="true" /></td>
-					          <td><fmt:formatNumber value="${wrapForecast.valuation.xdps[status.index]}" type="number" pattern="#,##0.0#" maxFractionDigits="4" groupingUsed="true" /></td>
-					          <td><fmt:formatNumber value="${wrapForecast.valuation.xroces[status.index]}" type="number" pattern="#,##0.0#" maxFractionDigits="4" groupingUsed="true" /></td>
-					          <td><fmt:formatNumber value="${wrapForecast.valuation.xres[status.index]}" type="number" pattern="#,##0.0#" maxFractionDigits="4" groupingUsed="true" /></td>
-					          <td><fmt:formatNumber value="${wrapForecast.valuation.xvres[status.index]}" type="number" pattern="#,##0.0#" maxFractionDigits="4" groupingUsed="true" /></td>
-					          <td rowspan="${status.count}"><fmt:formatNumber value="${wrapForecast.valuation.cv}" type="number" pattern="#,##0.0#" maxFractionDigits="4" groupingUsed="true" /></td>
-					          <td rowspan="${status.count}"><fmt:formatNumber value="${wrapForecast.valuation.totalValue}" type="number" pattern="#,##0.0#" maxFractionDigits="4" groupingUsed="true" /></td>
-					       </tr>
-					     </c:forEach>
+						<c:forEach items="${wrapForecast.valuation.xbps}" var="xbps" varStatus="status">
+							<tr>
+								<td><fmt:formatNumber value="${xbps}" type="number" pattern="#,##0.0#" maxFractionDigits="4" groupingUsed="true" /></td>
+								<td><fmt:formatNumber value="${wrapForecast.valuation.xdps[status.index]}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
+								<td><fmt:formatNumber value="${wrapForecast.valuation.xroces[status.index]}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
+								<td><fmt:formatNumber value="${wrapForecast.valuation.xres[status.index]}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
+								<td><fmt:formatNumber value="${wrapForecast.valuation.xvres[status.index]}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
+							</tr>
+						</c:forEach>
+						<tr>
+							<td>CV</td>
+							<td colspan="4"><fmt:formatNumber value="${wrapForecast.valuation.cv}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
+						</tr>
+						<tr>
+							<td>V0E</td>
+							<td colspan="4"><fmt:formatNumber value="${wrapForecast.valuation.totalValue}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
+						</tr>
 					</tbody>
 				</table>
 			</div>
