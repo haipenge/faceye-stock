@@ -215,6 +215,7 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 			valuation.setDiscountRate(pro);
 			valuation.setForecastIndex(forecastIndex);
 		}
+		logger.debug(">>FaceYe --Start to trace mongo query:"+stockId);
 		Map stockReportDataParams = new HashMap();
 		stockReportDataParams.put("EQ|stockId", stockId);
 		stockReportDataParams.put("EQ|type", StockConstants.REPORT_TYPE_YEAR);
@@ -232,7 +233,7 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 		dataStatSearchParams.put("EQ|type", StockConstants.REPORT_TYPE_YEAR);
 		dataStatSearchParams.put("SORT|dateCycle", "desc");
 		Page<DataStat> dataStats = this.dataStatService.getPage(dataStatSearchParams, 1, 5);
-	    
+	    logger.debug(">>FaceYe end trace of "+stockId);
 		if (dataStats != null && CollectionUtils.isNotEmpty(dataStats.getContent())) {
 			dataStat = dataStats.getContent().get(0);
 			 //计算最近N年平均DPS，并以此为未来DPS的估值
