@@ -208,7 +208,7 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 		Valuation valuation = this.getValuationByForecastIndex(forecastIndex);
 		// 必要报酬率【贴现率】选GDP 增速
 		Double pro = 0.075;
-		Double dps=0D;
+		Double evgDps=0D;
 		if (valuation == null) {
 			valuation = new Valuation();
 			valuation.setStockId(stockId);
@@ -219,9 +219,9 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 		Map stockReportDataParams = new HashMap();
 		stockReportDataParams.put("EQ|stockId", stockId);
 		stockReportDataParams.put("EQ|type", StockConstants.REPORT_TYPE_YEAR);
+		stockReportDataParams.put("LTE|date", forecastIndex.getReportDate());
 		stockReportDataParams.put("SORT|date", "desc");
 		Page<ReportData> reportDatas = this.reportDataService.getPage(stockReportDataParams, 1, 5);
-	
 	
 		ReportData reportData = null;
 		DataStat dataStat = null;
@@ -231,6 +231,7 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 		Map dataStatSearchParams = new HashMap();
 		dataStatSearchParams.put("EQ|stockId", stockId);
 		dataStatSearchParams.put("EQ|type", StockConstants.REPORT_TYPE_YEAR);
+		dataStatSearchParams.put("LTE|dateCycle", forecastIndex.getReportDate());
 		dataStatSearchParams.put("SORT|dateCycle", "desc");
 		Page<DataStat> dataStats = this.dataStatService.getPage(dataStatSearchParams, 1, 5);
 	    logger.debug(">>FaceYe end trace of "+stockId);
@@ -241,7 +242,7 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 			for(DataStat ds:dataStats){
 				dpsSum+=ds.getDps();
 			}
-			dps=dpsSum/dataStats.getContent().size();
+			evgDps=dpsSum/dataStats.getContent().size();
 		}
 		if (reportData != null && dataStat != null) {
 			if (StringUtils.equals(DateUtil.formatDate(reportData.getDate(), "yyyy-MM-dd"), DateUtil.formatDate(dataStat.getDateCycle(), "yyyy-MM-dd"))) {
@@ -262,7 +263,7 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 						}
 					}
 					// 默认使用公式二进行估值，即预测期过后，RE不再增长
-					valuationOnEps(bps0, pro,dps, epss,valuation);
+					valuationOnEps(bps0, pro,dataStat.getDps(),evgDps, epss,valuation);
 				}
 			} else {
 				logger.error(">>FaceYe -->使用机构预测进行估值时,报表时间与Data stat 时间不同，请检查财务摘要。");
@@ -274,23 +275,28 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 		return valuation;
 	}
 
-	private void valuationOnEps(Double bps0, Double pro,Double dps, List<Double> epss,Valuation valuation) {
+	private void valuationOnEps(Double bps0, Double pro,Double dps0,Double evgDps, List<Double> epss,Valuation valuation) {
 		if(CollectionUtils.isEmpty(epss)){
 			return;
 		}
 		Double val = 0D;
 		List<Double> bpss = new ArrayList<Double>(0);
+		bpss.add(bps0);
 		List<Double> roces = new ArrayList<Double>(0);
+		roces.add(0D);
 		List<Double> res = new ArrayList<Double>(0);
+		res.add(0D);
 		List<Double> vres = new ArrayList<Double>(0);
+		vres.add(0D);
 		List<Double> xdps=new ArrayList<Double>(0);
+		xdps.add(dps0);
 		Double cv = null;
 		Double bps = new Double(bps0);
 		// 计算BPS(1-t) bps[t] = bps[t-1]+eps[t]
 		for (Double eps : epss) {
-			bpss.add(new Double(bps + eps-dps));
+			bpss.add(new Double(bps + eps-evgDps));
 			bps = new Double(bps + eps);
-			xdps.add(dps);
+			xdps.add(evgDps);
 		}
 		valuation.setXbps(bpss);
 		valuation.setXdps(xdps);
