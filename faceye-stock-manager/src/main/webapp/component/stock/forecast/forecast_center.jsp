@@ -97,7 +97,7 @@
 							<th class="text-right">EPS</th>
 							<th class="text-right">净利润</th>
 							<th class="text-right">营业收入</th>
-							<th class="text-right" style="border-right: solid gray 1px;">ROE</th>
+							<th class="text-right" style="border-right: solid #eee 1px;">ROE</th>
 							<th class="text-rigth">BPS</th>
 							<th class="text-rigth">DPS</th>
 							<th class="text-rigth">ROCE</th>
@@ -114,7 +114,7 @@
 								<td class="text-right">${forecast.eps }</td>
 								<td class="text-right">${forecast.profit}</td>
 								<td class="text-right">${forecast.income }</td>
-								<td class="text-right" style="border-right: solid gray 1px;"><fmt:formatNumber value="${forecast.roe * 100}" type="number" pattern="#,##0.0#" maxFractionDigits="2"
+								<td class="text-right" style="border-right: solid #eee 1px;"><fmt:formatNumber value="${forecast.roe * 100}" type="number" pattern="#,##0.0#" maxFractionDigits="2"
 										groupingUsed="true" />%</td>
 								<td class="text-rigth"><c:if test="${forecast.eps !=0 and inStatus.index != 0 }">
 										<fmt:formatNumber value="${wrapForecast.valuation.xbps[eIndex]}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />
@@ -133,50 +133,21 @@
 									</c:if></td>
 							</tr>
 							<c:if test="${forecast.eps !=0 and inStatus.index != 0 }">
-								<c:set var="eIndex" value="${eIndex + 1 }"/>
+								<c:set var="eIndex" value="${eIndex + 1 }" />
 							</c:if>
 							<c:if test="${inStatus.last }">
 								<tr>
 									<td colspan="10" class="text-right"><span class="span-suffix">研究员:${forecast.researcher }</span></td>
 								</tr>
+								<tr>
+									<td>CV</td>
+									<td colspan="4" class="text-right"><fmt:formatNumber value="${wrapForecast.valuation.cv}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
+									<td>V0E</td>
+									<td colspan="4" class="text-right"><fmt:formatNumber value="${wrapForecast.valuation.totalValue}" type="number" pattern="#,##0.0#" maxFractionDigits="2"
+											groupingUsed="true" /></td>
+								</tr>
 							</c:if>
 						</c:forEach>
-					</tbody>
-				</table>
-			</div>
-			<div class="content">
-				<table class="no-border">
-					<thead class="no-border">
-						<tr>
-							<th class="text-right">XBPS</th>
-							<th class="text-right">XDPS</th>
-							<th class="text-right">XROCE</th>
-							<th class="text-right">XRE</th>
-							<th class="text-right">XVRE</th>
-
-						</tr>
-					</thead>
-					<tbody class="no-border-y">
-						<c:forEach items="${wrapForecast.valuation.xbps}" var="xbps" varStatus="status">
-							<tr>
-								<td class="text-right"><fmt:formatNumber value="${xbps}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
-								<td class="text-right"><fmt:formatNumber value="${wrapForecast.valuation.xdps[status.index]}" type="number" pattern="#,##0.0#" maxFractionDigits="2"
-										groupingUsed="true" /></td>
-								<td class="text-right"><fmt:formatNumber value="${wrapForecast.valuation.xroces[status.index]}" type="number" pattern="#,##0.0#" maxFractionDigits="2"
-										groupingUsed="true" /></td>
-								<td class="text-right"><fmt:formatNumber value="${wrapForecast.valuation.xres[status.index]}" type="number" pattern="#,##0.0#" maxFractionDigits="2"
-										groupingUsed="true" /></td>
-								<td class="text-right"><fmt:formatNumber value="${wrapForecast.valuation.xvres[status.index]}" type="number" pattern="#,##0.0#" maxFractionDigits="2"
-										groupingUsed="true" /></td>
-							</tr>
-						</c:forEach>
-						<tr>
-							<td>CV</td>
-							<td colspan="2" class="text-right"><fmt:formatNumber value="${wrapForecast.valuation.cv}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
-							<td>V0E</td>
-							<td colspan="2" class="text-right"><fmt:formatNumber value="${wrapForecast.valuation.totalValue}" type="number" pattern="#,##0.0#" maxFractionDigits="2"
-									groupingUsed="true" /></td>
-						</tr>
 					</tbody>
 				</table>
 			</div>
