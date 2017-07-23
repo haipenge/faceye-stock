@@ -305,12 +305,12 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 		if (epss.size() == bpss.size()) {
 			for (int i = 0; i < epss.size(); i++) {
 				Double eps = epss.get(i);
-				Double ibps = null;
-				if (i == 0) {
-					ibps = bps0;
-				} else {
-					ibps = bpss.get(i - 1);
-				}
+				Double ibps = bpss.get(i);
+//				if (i == 0) {
+//					ibps = bps0;
+//				} else {
+//					ibps = bpss.get(i - 1);
+//				}
 				Double roce = eps / ibps;
 				roces.add(roce);
 			}
@@ -319,20 +319,20 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 		// 计算RE(1-t),RE(t)=bps(t-1)*(roce[t]-pro)
 		for (int i = 0; i < roces.size(); i++) {
 			Double roce = roces.get(i);
-			Double ibps = null;
-			if (i == 0) {
-				ibps = bps0;
-			} else {
-				ibps = bpss.get(i - 1);
-			}
+			Double ibps = bpss.get(i);
+//			if (i == 0) {
+//				ibps = bps0;
+//			} else {
+//				ibps = bpss.get(i - 1);
+//			}
 			Double re = ibps * (roce - pro);
 			res.add(re);
 		}
 		valuation.setXres(res);
 		// 计算RE的现值 vre =re/(1+pro)[t]
-		for (int i = 0; i < res.size(); i++) {
+		for (int i = 1; i < res.size(); i++) {
 			Double re = res.get(i);
-			Double vre = re / (Math.pow((1 + pro), i + 1));
+			Double vre = re / (Math.pow((1 + pro), i));
 			vres.add(vre);
 		}
 		valuation.setXvres(vres);
@@ -340,9 +340,9 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 		// 注：默认T期之后RE增长率为0
 		Double reT = res.get(res.size() - 1);
 		// 剩余价值增长率为0是持续价值的计算
-		cv = reT / pro / (Math.pow(1 + pro, res.size()));
+		cv = reT / pro / (Math.pow(1 + pro, res.size()-1));
 		// 剩余价值增长率为g时持续价值的计算
-		// cv=reT/(pro-g)/Math.pow(1+pro, res.size());
+		// cv=reT/(pro-g)/Math.pow(1+pro, res.size()-1);
 		valuation.setCv(cv);
 		// 计算价值
 		val += bps0;
