@@ -86,7 +86,7 @@
 		<div class="block-flat" style="padding-bottom: 3px;">
 			<div class="header">
 				<h5>${wrapForecast.forecastIndex.mechanism.name}
-					<span class="span-suffix"><fmt:formatDate value="${wrapForecast.forecastIndex.reportDate}" pattern="yyyy-MM-dd" /></span>
+					<span class="span-suffix"><fmt:formatDate value="${wrapForecast.forecastIndex.reportDate}" pattern="yyyy-MM-dd" />&nbsp;&nbsp;研究员:${forecast.researcher }</span>
 				</h5>
 			</div>
 			<div class="content">
@@ -136,9 +136,6 @@
 								<c:set var="eIndex" value="${eIndex + 1 }" />
 							</c:if>
 							<c:if test="${inStatus.last }">
-								<tr>
-									<td colspan="10" class="text-right"><span class="span-suffix">研究员:${forecast.researcher }</span></td>
-								</tr>
 								<tr>
 									<td>CV</td>
 									<td colspan="4" class="text-right"><fmt:formatNumber value="${wrapForecast.valuation.cv}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
