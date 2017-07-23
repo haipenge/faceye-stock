@@ -220,7 +220,7 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 		stockReportDataParams.put("EQ|stockId", stockId);
 		stockReportDataParams.put("EQ|type", StockConstants.REPORT_TYPE_YEAR);
 		stockReportDataParams.put("SORT|date", "desc");
-		Page<ReportData> reportDatas = this.reportDataService.getPage(stockReportDataParams, 1, 3);
+		Page<ReportData> reportDatas = this.reportDataService.getPage(stockReportDataParams, 1, 5);
 	
 	
 		ReportData reportData = null;
@@ -232,7 +232,7 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 		dataStatSearchParams.put("EQ|stockId", stockId);
 		dataStatSearchParams.put("EQ|type", StockConstants.REPORT_TYPE_YEAR);
 		dataStatSearchParams.put("SORT|dateCycle", "desc");
-		Page<DataStat> dataStats = this.dataStatService.getPage(dataStatSearchParams, 1, 3);
+		Page<DataStat> dataStats = this.dataStatService.getPage(dataStatSearchParams, 1, 5);
 	    logger.debug(">>FaceYe end trace of "+stockId);
 		if (dataStats != null && CollectionUtils.isNotEmpty(dataStats.getContent())) {
 			dataStat = dataStats.getContent().get(0);
@@ -267,7 +267,7 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 			} else {
 				logger.error(">>FaceYe -->使用机构预测进行估值时,报表时间与Data stat 时间不同，请检查财务摘要。");
 				logger.error(">>FaceYe -->Trace:reportDate is:" + DateUtil.formatDate(reportData.getDate(), "yyyy-MM-dd") + ",data stat date is:"
-						+ DateUtil.formatDate(dataStat.getDateCycle(), "yyyy-MM-dd") + ",report data is:" + reportData.getId() + ",dataStat id:" + dataStat.getId()+",report data stockID is:"+reportData.getStockId()+",data stat stockId is :"+dataStat.getStockId());
+						+ DateUtil.formatDate(dataStat.getDateCycle(), "yyyy-MM-dd") + ",report data is:" + reportData.getId() +":"+reportData.getType()+ ",dataStat id:" + dataStat.getId()+",report data stockID is:"+reportData.getStockId()+",data stat stockId is :"+dataStat.getStockId()+":"+dataStat.getType());
 			}
 		}
 		this.save(valuation);
