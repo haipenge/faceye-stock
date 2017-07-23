@@ -114,10 +114,38 @@
 									<td colspan="5" class="text-right"><span class="span-suffix">研究员:${forecast.researcher }</span></td>
 								</tr>
 								<tr>
-								   <td colspan="5">现值(V):<fmt:formatNumber value="${wrapForecast.valuation.totalValue}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
+									<td colspan="5">现值(V):<fmt:formatNumber value="${wrapForecast.valuation.totalValue}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 								</tr>
 							</c:if>
 						</c:forEach>
+					</tbody>
+				</table>
+			</div>
+			<div class="content">
+				<table class="no-border">
+					<thead class="no-border">
+						<tr>
+							<th class="text-right">XBPS</th>
+							<th class="text-right">XDPS</th>
+							<th class="text-right">XROCE</th>
+							<th class="text-right">XRE</th>
+							<th class="text-right">XVRE</th>
+							<th class="text-right">CV</th>
+							<th class="text-right">V0E</th>
+						</tr>
+					</thead>
+					<tbody class="no-border-y">
+					     <c:forEach items="${wrapForecast.valuation.xbps}" var ="xbps" varStatus="status">
+					       <tr>
+					          <td><fmt:formatNumber value="${xbps}" type="number" pattern="#,##0.0#" maxFractionDigits="4" groupingUsed="true" /></td>
+					          <td><fmt:formatNumber value="${wrapForecast.valuation.xdps[status.index]}" type="number" pattern="#,##0.0#" maxFractionDigits="4" groupingUsed="true" /></td>
+					          <td><fmt:formatNumber value="${wrapForecast.valuation.xroces[status.index]}" type="number" pattern="#,##0.0#" maxFractionDigits="4" groupingUsed="true" /></td>
+					          <td><fmt:formatNumber value="${wrapForecast.valuation.xres[status.index]}" type="number" pattern="#,##0.0#" maxFractionDigits="4" groupingUsed="true" /></td>
+					          <td><fmt:formatNumber value="${wrapForecast.valuation.xvres[status.index]}" type="number" pattern="#,##0.0#" maxFractionDigits="4" groupingUsed="true" /></td>
+					          <td rowspan="${status.count}"><fmt:formatNumber value="${wrapForecast.valuation.cv}" type="number" pattern="#,##0.0#" maxFractionDigits="4" groupingUsed="true" /></td>
+					          <td rowspan="${status.count}"><fmt:formatNumber value="${wrapForecast.valuation.totalValue}" type="number" pattern="#,##0.0#" maxFractionDigits="4" groupingUsed="true" /></td>
+					       </tr>
+					     </c:forEach>
 					</tbody>
 				</table>
 			</div>
