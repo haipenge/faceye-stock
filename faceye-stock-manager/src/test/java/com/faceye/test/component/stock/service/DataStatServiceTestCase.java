@@ -14,7 +14,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.util.Assert;
 
 import com.faceye.component.stock.entity.DataStat;
+import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.service.DataStatService;
+import com.faceye.component.stock.service.StockService;
 import com.faceye.test.feature.service.BaseServiceTestCase;
 
 
@@ -26,6 +28,8 @@ import com.faceye.test.feature.service.BaseServiceTestCase;
 public class DataStatServiceTestCase extends BaseServiceTestCase {
 	@Autowired
 	private DataStatService dataStatService = null;
+	@Autowired
+	private StockService stockService=null;
 	/**
 	 * 初始化
 	 * @todo
@@ -196,5 +200,11 @@ public class DataStatServiceTestCase extends BaseServiceTestCase {
 		}
 		List<DataStat> entities = this.dataStatService.getAll(ids);
 		Assert.isTrue(entities != null && entities.size() == 5);
+	}
+	@Test
+	public void statStock() throws Exception{
+		Stock stock=this.stockService.getStockByCode("000998");
+		this.dataStatService.stat(stock);
+		Assert.isTrue(true);
 	}
 }

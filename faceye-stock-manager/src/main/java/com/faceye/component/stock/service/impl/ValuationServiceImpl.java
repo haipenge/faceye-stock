@@ -58,7 +58,7 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 	@Autowired
 	private DataStatService dataStatService = null;
 	@Autowired
-	private ForecastIndexService forecastIndexService=null;
+	private ForecastIndexService forecastIndexService = null;
 
 	@Autowired
 	public ValuationServiceImpl(ValuationRepository dao) {
@@ -208,8 +208,9 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 		Valuation valuation = this.getValuationByForecastIndex(forecastIndex);
 		// 必要报酬率【贴现率】选GDP 增速
 		Double pro = 0.075;
-		if(valuation==null ){
-			valuation=new Valuation();
+		Double dps=0D;
+		if (valuation == null) {
+			valuation = new Valuation();
 			valuation.setStockId(stockId);
 			valuation.setDiscountRate(pro);
 			valuation.setForecastIndex(forecastIndex);
@@ -219,6 +220,8 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 		stockReportDataParams.put("EQ|type", StockConstants.REPORT_TYPE_YEAR);
 		stockReportDataParams.put("SORT|date", "desc");
 		Page<ReportData> reportDatas = this.reportDataService.getPage(stockReportDataParams, 1, 5);
+	
+	
 		ReportData reportData = null;
 		DataStat dataStat = null;
 		if (reportDatas != null && CollectionUtils.isNotEmpty(reportDatas.getContent())) {
@@ -229,8 +232,15 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 		dataStatSearchParams.put("EQ|type", StockConstants.REPORT_TYPE_YEAR);
 		dataStatSearchParams.put("SORT|dateCycle", "desc");
 		Page<DataStat> dataStats = this.dataStatService.getPage(dataStatSearchParams, 1, 5);
+	    
 		if (dataStats != null && CollectionUtils.isNotEmpty(dataStats.getContent())) {
 			dataStat = dataStats.getContent().get(0);
+			 //计算最近N年平均DPS，并以此为未来DPS的估值
+			Double dpsSum=0D;
+			for(DataStat ds:dataStats){
+				dpsSum+=ds.getDps();
+			}
+			dps=dpsSum/dataStats.getContent().size();
 		}
 		if (reportData != null && dataStat != null) {
 			if (StringUtils.equals(DateUtil.formatDate(reportData.getDate(), "yyyy-MM-dd"), DateUtil.formatDate(dataStat.getDateCycle(), "yyyy-MM-dd"))) {
@@ -245,33 +255,39 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 					List<Double> epss = new ArrayList<Double>(0);
 					for (Forecast forecast : forecasts) {
 						if (forecast.getYear() > NumberUtils.toInt(dataStatYear)) {
-							epss.add(forecast.getEps());
+							if (forecast.getEps() > 0) {
+								epss.add(forecast.getEps());
+							}
 						}
 					}
 					// 默认使用公式二进行估值，即预测期过后，RE不再增长
-					Double val=valuationOnEps(bps0,pro,epss);
+					Double val = valuationOnEps(bps0, pro,dps, epss);
 					valuation.setTotalValue(val);
 				}
 			} else {
 				logger.error(">>FaceYe -->使用机构预测进行估值时,报表时间与Data stat 时间不同，请检查财务摘要。");
-				logger.error(">>FaceYe -->Trace:reportDate is:"+DateUtil.formatDate(reportData.getDate(), "yyyy-MM-dd")+",data stat date is:"+DateUtil.formatDate(dataStat.getDateCycle(), "yyyy-MM-dd")+",report data is:"+reportData.getId()+",dataStat id:"+dataStat.getId());
+				logger.error(">>FaceYe -->Trace:reportDate is:" + DateUtil.formatDate(reportData.getDate(), "yyyy-MM-dd") + ",data stat date is:"
+						+ DateUtil.formatDate(dataStat.getDateCycle(), "yyyy-MM-dd") + ",report data is:" + reportData.getId() + ",dataStat id:" + dataStat.getId());
 			}
 		}
 		this.save(valuation);
 		return valuation;
 	}
 
-	private Double valuationOnEps(Double bps0, Double pro, List<Double> epss) {
+	private Double valuationOnEps(Double bps0, Double pro,Double dps, List<Double> epss) {
+		if(CollectionUtils.isEmpty(epss)){
+			return 0D;
+		}
 		Double val = 0D;
 		List<Double> bpss = new ArrayList<Double>(0);
 		List<Double> roces = new ArrayList<Double>(0);
 		List<Double> res = new ArrayList<Double>(0);
-		List<Double>vres=new ArrayList<Double>(0);
-		Double cv=null;
+		List<Double> vres = new ArrayList<Double>(0);
+		Double cv = null;
 		Double bps = new Double(bps0);
-		// 计算BPS(1-t)  bps[t] = bps[t-1]+eps[t]
+		// 计算BPS(1-t) bps[t] = bps[t-1]+eps[t]
 		for (Double eps : epss) {
-			bpss.add(new Double(bps + eps));
+			bpss.add(new Double(bps + eps-dps));
 			bps = new Double(bps + eps);
 		}
 		// 计算Roce(1-t) roce[t]=bps[t-1]+roce[t]
@@ -282,66 +298,73 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 				if (i == 0) {
 					ibps = bps0;
 				} else {
-					 ibps = bpss.get(i - 1);
+					ibps = bpss.get(i - 1);
 				}
 				Double roce = eps / ibps;
 				roces.add(roce);
 			}
 		}
 		// 计算RE(1-t),RE(t)=bps(t-1)*(roce[t]-pro)
-		for(int i=0;i<roces.size();i++){
-			Double roce=roces.get(i);
-			Double ibps=null;
-			if(i==0){
-				ibps=bps0;
-			}else{
-				ibps=bpss.get(i-1);
+		for (int i = 0; i < roces.size(); i++) {
+			Double roce = roces.get(i);
+			Double ibps = null;
+			if (i == 0) {
+				ibps = bps0;
+			} else {
+				ibps = bpss.get(i - 1);
 			}
-			Double re=ibps*(roce-pro);
+			Double re = ibps * (roce - pro);
 			res.add(re);
 		}
-		//计算RE的现值 vre =re/(1+pro)[t]
-		for(int i=0;i<res.size();i++){
-			Double re=res.get(i);
-			Double vre=re/(Math.pow((1+pro), i+1));
-			vres.add(re);
+		// 计算RE的现值 vre =re/(1+pro)[t]
+		for (int i = 0; i < res.size(); i++) {
+			Double re = res.get(i);
+			Double vre = re / (Math.pow((1 + pro), i + 1));
+			vres.add(vre);
 		}
-		//计算持续价值CV,cv=(RE[t]/pro)/pro{t}
-		//注：默认T期之后RE增长率为0
-		Double reT=res.get(res.size()-1);
-		//剩余价值增长率为0是持续价值的计算
-		cv=reT/pro/(Math.pow(1+pro, res.size()));
-		//剩余价值增长率为g时持续价值的计算
-		//cv=reT/(pro-g)/Math.pow(1+pro, res.size());
-		//计算价值
-		val+=bps0;
-		for(Double vre:vres){
-			val+=vre;
+		// 计算持续价值CV,cv=(RE[t]/pro)/pro{t}
+		// 注：默认T期之后RE增长率为0
+		Double reT = res.get(res.size() - 1);
+		// 剩余价值增长率为0是持续价值的计算
+		cv = reT / pro / (Math.pow(1 + pro, res.size()));
+		// 剩余价值增长率为g时持续价值的计算
+		// cv=reT/(pro-g)/Math.pow(1+pro, res.size());
+		// 计算价值
+		val += bps0;
+		for (Double vre : vres) {
+			val += vre;
 		}
-		val+=cv;
+		val += cv;
 		return val;
 	}
 
 	@Override
 	public void doStockValuation(Long stockId) {
-		Map searchForecastIndexParams=new HashMap();
+		
+		Map searchForecastIndexParams = new HashMap();
 		searchForecastIndexParams.put("EQ|stockId", stockId);
-		Page<ForecastIndex> forecastIndexs=this.forecastIndexService.getPage(searchForecastIndexParams, 1, 0);
-		if(forecastIndexs!=null && CollectionUtils.isNotEmpty(forecastIndexs.getContent())){
-			for(ForecastIndex forecastIndex:forecastIndexs){
+		searchForecastIndexParams.put("SORT|reportDate", "desc");
+		Page<ForecastIndex> forecastIndexs = this.forecastIndexService.getPage(searchForecastIndexParams, 1, 0);
+		if (forecastIndexs != null && CollectionUtils.isNotEmpty(forecastIndexs.getContent())) {
+			for (ForecastIndex forecastIndex : forecastIndexs) {
+				try{
 				this.valuationWithMechanismForecast(stockId, forecastIndex);
+				}catch(Exception e){
+					logger.error(">>FaceYe error:股票估值异常:"+e);
+				}
 			}
 		}
+		
 	}
 
 	@Override
 	public Valuation getValuationByForecastIndex(ForecastIndex forecastIndex) {
-		Valuation valuation=null;
-		Map valuationSearchParams=new HashMap(0);
-		valuationSearchParams.put("EQ|forcastIndex.$id", forecastIndex.getId());
-		Page<Valuation> valuations=this.getPage(valuationSearchParams, 1, 0);
-		if(valuations!=null && CollectionUtils.isNotEmpty(valuations.getContent())){
-			valuation=valuations.getContent().get(0);
+		Valuation valuation = null;
+		Map valuationSearchParams = new HashMap(0);
+		valuationSearchParams.put("EQ|forecastIndex.$id", forecastIndex.getId());
+		Page<Valuation> valuations = this.getPage(valuationSearchParams, 1, 0);
+		if (valuations != null && CollectionUtils.isNotEmpty(valuations.getContent())) {
+			valuation = valuations.getContent().get(0);
 		}
 		return valuation;
 	}
