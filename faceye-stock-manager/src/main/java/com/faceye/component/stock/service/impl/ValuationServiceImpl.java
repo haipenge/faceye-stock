@@ -220,7 +220,7 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 		stockReportDataParams.put("EQ|stockId", stockId);
 		stockReportDataParams.put("EQ|type", StockConstants.REPORT_TYPE_YEAR);
 		stockReportDataParams.put("SORT|date", "desc");
-		Page<ReportData> reportDatas = this.reportDataService.getPage(stockReportDataParams, 1, 5);
+		Page<ReportData> reportDatas = this.reportDataService.getPage(stockReportDataParams, 1, 3);
 	
 	
 		ReportData reportData = null;
@@ -232,7 +232,7 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 		dataStatSearchParams.put("EQ|stockId", stockId);
 		dataStatSearchParams.put("EQ|type", StockConstants.REPORT_TYPE_YEAR);
 		dataStatSearchParams.put("SORT|dateCycle", "desc");
-		Page<DataStat> dataStats = this.dataStatService.getPage(dataStatSearchParams, 1, 5);
+		Page<DataStat> dataStats = this.dataStatService.getPage(dataStatSearchParams, 1, 3);
 	    logger.debug(">>FaceYe end trace of "+stockId);
 		if (dataStats != null && CollectionUtils.isNotEmpty(dataStats.getContent())) {
 			dataStat = dataStats.getContent().get(0);
