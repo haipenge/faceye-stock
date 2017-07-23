@@ -115,6 +115,7 @@ public class ForecastServiceImpl extends BaseMongoServiceImpl<Forecast, Long, Fo
 				WrapForecast wrapForecast=new WrapForecast();
 				Map searchForecastParams = new HashMap();
 				searchForecastParams.put("EQ|forecastIndex.$id", forecastIndex.getId());
+				searchForecastParams.put("SORT|year", "asc");
 				List<Forecast> forecasts=this.getPage(searchForecastParams, 1, 0).getContent();
 				wrapForecast.setForecastIndex(forecastIndex);
 				wrapForecast.setForecasts(forecasts);
