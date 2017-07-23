@@ -133,7 +133,7 @@
 									</c:if></td>
 							</tr>
 							<c:if test="${forecast.eps !=0 and inStatus.index != 0 }">
-								<c:set var="eIndex" value="${eIndex + 1 }"
+								<c:set var="eIndex" value="${eIndex + 1 }"/>
 							</c:if>
 							<c:if test="${inStatus.last }">
 								<tr>
