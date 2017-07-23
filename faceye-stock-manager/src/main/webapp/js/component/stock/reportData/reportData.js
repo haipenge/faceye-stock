@@ -19,12 +19,19 @@ var ReportData = {
 			data : {
 				id : stockId
 			},
+			beforeSend:function(xhr){
+				var m = new Msg({
+					msg : '已开始数据爬取任务...'
+				});
+				m.show();
+			},
 			success : function(data, textStatus, xhr) {
 				if (data.result) {
 					var m = new Msg({
-						msg : '已开始数据爬取任务...'
+						msg : '完成数据爬取'
 					});
 					m.show();
+					window.location.reload();
 				}
 			}
 		});
@@ -41,11 +48,18 @@ var ReportData = {
 			data : {
 				stockId : stockId
 			},
+			beforeSend:function(xhr){
+				var m = new Msg({
+					msg : '正在进行数据分析,请稍候...'
+				});
+				m.show();
+			},
 			success : function(data, textStatus, xhr) {
 				var m = new Msg({
 					msg : '已完成分析.'
 				});
 				m.show();
+				window.location.reload();
 			}
 		});
 	},
