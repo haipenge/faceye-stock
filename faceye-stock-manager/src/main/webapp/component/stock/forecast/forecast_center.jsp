@@ -117,23 +117,23 @@
 								<td class="text-right" style="border-right: solid #eee 1px;"><fmt:formatNumber value="${forecast.roe * 100}" type="number" pattern="#,##0.0#" maxFractionDigits="2"
 										groupingUsed="true" />%</td>
 
-									<td class="text-rigth"><c:if test="${forecast.eps !=0 and inStatus.index not eq 0}">
+									<td class="text-rigth"><c:if test="${forecast.eps !=0 and inStatus.index != 0}">
 											<fmt:formatNumber value="${wrapForecast.valuation.xbps[eIndex]}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />
 										</c:if></td>
-									<td class="text-rigth"><c:if test="${forecast.eps !=0 and inStatus.index not eq 0}">
+									<td class="text-rigth"><c:if test="${forecast.eps !=0 and inStatus.index != 0}">
 											<fmt:formatNumber value="${wrapForecast.valuation.xdps[eIndex]}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />
 										</c:if></td>
-									<td class="text-rigth"><c:if test="${forecast.eps !=0 and inStatus.index not eq 0}">
+									<td class="text-rigth"><c:if test="${forecast.eps !=0 and inStatus.index != 0}">
 											<fmt:formatNumber value="${wrapForecast.valuation.xroces[eIndex]}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />
 										</c:if></td>
-									<td class="text-rigth"><c:if test="${forecast.eps !=0  and inStatus.index not eq 0}">
+									<td class="text-rigth"><c:if test="${forecast.eps !=0  and inStatus.index != 0}">
 											<fmt:formatNumber value="${wrapForecast.valuation.xres[eIndex]}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />
 										</c:if></td>
-									<td class="text-rigth"><c:if test="${forecast.eps !=0 and inStatus.index not eq 0}">
+									<td class="text-rigth"><c:if test="${forecast.eps !=0 and inStatus.index != 0}">
 											<fmt:formatNumber value="${wrapForecast.valuation.xvres[eIndex]}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />
 										</c:if></td>
 							</tr>
-							<c:if test="${forecast.eps !=0  and inStatus.index not eq 0}">
+							<c:if test="${forecast.eps !=0  and inStatus.index != 0}">
 								<c:set var="eIndex" value="${eIndex + 1 }" />
 							</c:if>
 							<c:if test="${inStatus.last }">
