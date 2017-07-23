@@ -163,14 +163,13 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 					// 分析每股指标
 					this.statEveryStockData(stock, reportData, dataStat);
 					this.save(dataStat);
-					//根据机构评测进行估值
-					this.valuationService.doStockValuation(stock.getId());
 				} catch (Exception e) {
 					logger.error(">>Faceye --> 分析股票:"+stock.getCode()+",抛出异常:" + e);
 				}
 			}
 		}
-
+		//根据机构评测进行估值
+		this.valuationService.doStockValuation(stock.getId());
 	}
 
 	/**
