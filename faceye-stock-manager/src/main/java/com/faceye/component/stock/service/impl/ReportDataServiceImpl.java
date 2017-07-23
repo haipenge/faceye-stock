@@ -81,8 +81,8 @@ public class ReportDataServiceImpl extends BaseMongoServiceImpl<ReportData, Long
 			logger.debug(">>FaceYe -->Query predicate is:" + predicate.toString());
 		}
 		Sort sort = this.buildSort(searchParams);
-		if (sort == null) {
-			sort = new Sort(Direction.DESC, "id");
+		if(sort!=null){
+			logger.debug(">>FaceYe sort is:"+sort.toString());
 		}
 		Page<ReportData> res = null;
 		if (size != 0) {
