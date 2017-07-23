@@ -135,6 +135,16 @@ public class Valuation implements Serializable {
 	public void setPeriod(Date period) {
 		this.period = period;
 	}
+	/**
+	 * 机构估值
+	 */
+	private ForecastIndex forecastIndex=null;
+	public ForecastIndex getForecastIndex() {
+		return forecastIndex;
+	}
+	public void setForecastIndex(ForecastIndex forecastIndex) {
+		this.forecastIndex = forecastIndex;
+	}
 	
 	
 }/**@generate-entity-source@**/

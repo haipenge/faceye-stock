@@ -31,6 +31,7 @@ import com.faceye.component.stock.service.DataStatService;
 import com.faceye.component.stock.service.ReportDataService;
 import com.faceye.component.stock.service.StockService;
 import com.faceye.component.stock.service.TotalStockService;
+import com.faceye.component.stock.service.ValuationService;
 import com.faceye.component.stock.service.wrapper.StatRecord;
 import com.faceye.component.stock.util.StockConstants;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
@@ -59,6 +60,8 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	private TotalStockService totalStockService = null;
 	@Autowired
 	private BonusRecordService bonusRecordService = null;
+	@Autowired
+	private ValuationService valuationService=null;
 
 	@Autowired
 	public DataStatServiceImpl(DataStatRepository dao) {
@@ -105,6 +108,68 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 
 		}
 		return res;
+	}
+	
+	boolean isStated = false;
+
+	@Override
+	public void stat() {
+		if (!isStated) {
+			isStated = true;
+			List<Stock> stocks = this.stockService.getAll();
+			for (Stock stock : stocks) {
+				this.stat(stock);
+			}
+		}
+
+	}
+
+	/**
+	 * 对财务报表进行比率分析
+	 */
+	@Override
+	public void stat(Stock stock) {
+
+		if (stock != null) {
+			Map params = new HashMap();
+			params.put("EQ|stockId", stock.getId());
+			params.put("SORT|date", "asc");
+			List<ReportData> reportDatas = this.reportDataService.getPage(params, 0, 0).getContent();
+			for (ReportData reportData : reportDatas) {
+				try {
+					Date date = reportData.getDate();
+					String sDate = DateUtil.formatDate(date, "yyyy-MM-dd");
+					DataStat dataStat = this.getDataStat(stock, sDate);
+					if (dataStat == null) {
+						dataStat = new DataStat();
+						dataStat.setStockId(stock.getId());
+						dataStat.setDateCycle(DateUtil.getDateFromString(sDate + " 00:00:00", "yyyy-MM-dd HH:mm:ss"));
+					}
+					// 净利率
+					this.statNetProfitMargin(stock, reportData, dataStat);
+					// 总资产周转率
+					this.statTotalAssetsTurnover(stock, reportData, dataStat);
+					// 总资产利润率
+					this.statTotalAssetsNeProfitMargin(stock, reportData, dataStat);
+					// 负债率
+					this.statDebtToAssetsRatio(stock, reportData, dataStat);
+					// 净资产回报率
+					this.statROE(stock, dataStat);
+					// 毛利率
+					this.statGrossProfitMargin(stock, reportData, dataStat);
+					// 计算核心利润率
+					this.statCoreProfitMargin(stock, reportData, dataStat);
+					// 分析每股指标
+					this.statEveryStockData(stock, reportData, dataStat);
+					this.save(dataStat);
+					//根据机构评测进行估值
+					this.valuationService.doStockValuation(stock.getId());
+				} catch (Exception e) {
+					logger.error(">>Faceye --> 分析股票:"+stock.getCode()+",抛出异常:" + e.getMessage());
+				}
+			}
+		}
+
 	}
 
 	/**
@@ -360,65 +425,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		return dataStat;
 	}
 
-	boolean isStated = false;
-
-	@Override
-	public void stat() {
-		if (!isStated) {
-			isStated = true;
-			List<Stock> stocks = this.stockService.getAll();
-			for (Stock stock : stocks) {
-				this.stat(stock);
-			}
-		}
-
-	}
-
-	/**
-	 * 对财务报表进行比率分析
-	 */
-	@Override
-	public void stat(Stock stock) {
-
-		if (stock != null) {
-			Map params = new HashMap();
-			params.put("EQ|stockId", stock.getId());
-			params.put("SORT|date", "asc");
-			List<ReportData> reportDatas = this.reportDataService.getPage(params, 0, 0).getContent();
-			for (ReportData reportData : reportDatas) {
-				try {
-					Date date = reportData.getDate();
-					String sDate = DateUtil.formatDate(date, "yyyy-MM-dd");
-					DataStat dataStat = this.getDataStat(stock, sDate);
-					if (dataStat == null) {
-						dataStat = new DataStat();
-						dataStat.setStockId(stock.getId());
-						dataStat.setDateCycle(DateUtil.getDateFromString(sDate + " 00:00:00", "yyyy-MM-dd HH:mm:ss"));
-					}
-					// 净利率
-					this.statNetProfitMargin(stock, reportData, dataStat);
-					// 总资产周转率
-					this.statTotalAssetsTurnover(stock, reportData, dataStat);
-					// 总资产利润率
-					this.statTotalAssetsNeProfitMargin(stock, reportData, dataStat);
-					// 负债率
-					this.statDebtToAssetsRatio(stock, reportData, dataStat);
-					// 净资产回报率
-					this.statROE(stock, dataStat);
-					// 毛利率
-					this.statGrossProfitMargin(stock, reportData, dataStat);
-					// 计算核心利润率
-					this.statCoreProfitMargin(stock, reportData, dataStat);
-					// 分析每股指标
-					this.statEveryStockData(stock, reportData, dataStat);
-					this.save(dataStat);
-				} catch (Exception e) {
-					logger.error(">>Faceye --> 分析股票:"+stock.getCode()+",抛出异常:" + e.getMessage());
-				}
-			}
-		}
-
-	}
+	
 
 	/**
 	 * 根据特定条件筛选股票

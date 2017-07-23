@@ -17,10 +17,12 @@ import org.springframework.stereotype.Service;
 
 import com.faceye.component.stock.entity.Forecast;
 import com.faceye.component.stock.entity.ForecastIndex;
+import com.faceye.component.stock.entity.Valuation;
 import com.faceye.component.stock.repository.mongo.ForecastRepository;
 import com.faceye.component.stock.repository.mongo.customer.ForecastCustomerRepository;
 import com.faceye.component.stock.service.ForecastIndexService;
 import com.faceye.component.stock.service.ForecastService;
+import com.faceye.component.stock.service.ValuationService;
 import com.faceye.component.stock.service.wrapper.WrapForecast;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.faceye.feature.util.DateUtil;
@@ -39,6 +41,8 @@ public class ForecastServiceImpl extends BaseMongoServiceImpl<Forecast, Long, Fo
 	private ForecastCustomerRepository forecastCustomerRepository = null;
 	@Autowired
 	private ForecastIndexService forecastIndexService = null;
+	@Autowired
+	private ValuationService valuationService=null;
 
 	@Autowired
 	public ForecastServiceImpl(ForecastRepository dao) {
@@ -107,12 +111,14 @@ public class ForecastServiceImpl extends BaseMongoServiceImpl<Forecast, Long, Fo
 		List<WrapForecast> wrapForecasts=new ArrayList<WrapForecast>(0);
 		if (forecastIndexs != null && CollectionUtils.isNotEmpty(forecastIndexs.getContent())) {
 			for (ForecastIndex forecastIndex : forecastIndexs.getContent()) {
+				Valuation valuation=this.valuationService.getValuationByForecastIndex(forecastIndex);
 				WrapForecast wrapForecast=new WrapForecast();
 				Map searchForecastParams = new HashMap();
 				searchForecastParams.put("EQ|forecastIndex.$id", forecastIndex.getId());
 				List<Forecast> forecasts=this.getPage(searchForecastParams, 1, 0).getContent();
 				wrapForecast.setForecastIndex(forecastIndex);
 				wrapForecast.setForecasts(forecasts);
+				wrapForecast.setValuation(valuation);
 				wrapForecasts.add(wrapForecast);
 			}
 		}
@@ -124,6 +130,8 @@ public class ForecastServiceImpl extends BaseMongoServiceImpl<Forecast, Long, Fo
 		wrapForecastsPage=new PageImpl<WrapForecast>(wrapForecasts, pagable, forecastIndexs.getTotalElements());
 		return wrapForecastsPage;
 	}
+	
+	
 
 	/**
 	 * 对估值结果进行包装，包装Key:mechanism,reportDate

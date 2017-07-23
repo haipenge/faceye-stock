@@ -1,5 +1,6 @@
 package com.faceye.component.stock.service;
 
+import com.faceye.component.stock.entity.ForecastIndex;
 import com.faceye.component.stock.entity.Valuation;
 import com.faceye.feature.service.BaseService;
 /**
@@ -20,5 +21,19 @@ public interface ValuationService extends BaseService<Valuation,Long>{
 	 * @Date:2017年6月4日 下午3:49:49
 	 */
 	public void doStockValuation(Long stockId,Double roce,Double discountRate);
+	
+	/**
+	 * 对一只股票进行估值
+	 * @param stockId
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年7月23日 上午8:45:29
+	 */
+	public void doStockValuation(Long stockId);
+	
+	
+	public Valuation getValuationByForecastIndex(ForecastIndex forecastIndex);
+	
+	
 	
 }/**@generate-service-source@**/

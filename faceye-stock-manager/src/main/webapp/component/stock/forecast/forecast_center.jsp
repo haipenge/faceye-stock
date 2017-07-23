@@ -113,6 +113,9 @@
 								<tr>
 									<td colspan="5" class="text-right"><span class="span-suffix">研究员:${forecast.researcher }</span></td>
 								</tr>
+								<tr>
+								   <td colspan="5">现值(V):<fmt:formatNumber value="${wrapForecast.valuation.totalValue}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
+								</tr>
 							</c:if>
 						</c:forEach>
 					</tbody>
