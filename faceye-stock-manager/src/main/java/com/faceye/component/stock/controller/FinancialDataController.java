@@ -527,6 +527,7 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 			this.clearCrawledFinancialData(id);
 			Stock stock = this.stockService.get(id);
 			if (stock != null) {
+				this.reportDataService.clearReportData(stock.getId());
 				this.crawlFinancialDataService.crawlStock(stock,false);
 			}
 		}

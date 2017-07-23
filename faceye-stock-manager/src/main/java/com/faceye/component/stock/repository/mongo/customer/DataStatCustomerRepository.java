@@ -13,5 +13,5 @@ import com.faceye.feature.repository.mongo.BaseMongoRepository;
  */
 public interface DataStatCustomerRepository {
 	
-	
+	public void removeDataStat(Long stockId);
 }/**@generate-repository-source@**/

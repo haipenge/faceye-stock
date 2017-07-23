@@ -22,5 +22,14 @@ public interface ReportDataService extends BaseService<ReportData,Long>{
 	 */
 	public WrapReporter wrapReportData(List<ReportData> reportDatas,String categoryName);
 	
+	/**
+	 * 清理已爬取、计算的报告
+	 * @param stockId
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年7月23日 下午3:35:28
+	 */
+	public void clearReportData(Long stockId);
+	
 	
 }/**@generate-service-source@**/

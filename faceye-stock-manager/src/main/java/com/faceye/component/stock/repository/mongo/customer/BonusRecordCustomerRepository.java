@@ -13,5 +13,5 @@ import com.faceye.feature.repository.mongo.BaseMongoRepository;
  */
 public interface BonusRecordCustomerRepository {
 	
-	
+	public void removeBonus(Long stockId);
 }/**@generate-repository-source@**/

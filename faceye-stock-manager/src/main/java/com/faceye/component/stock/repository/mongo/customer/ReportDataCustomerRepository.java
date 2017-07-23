@@ -13,5 +13,5 @@ import com.faceye.feature.repository.mongo.BaseMongoRepository;
  */
 public interface ReportDataCustomerRepository {
 	
-	
+	public void removeReportData(Long stockId);
 }/**@generate-repository-source@**/

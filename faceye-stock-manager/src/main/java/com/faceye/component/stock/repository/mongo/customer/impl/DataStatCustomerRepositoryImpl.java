@@ -4,13 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.querydsl.QueryDslPredicateExecutor;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import com.faceye.component.stock.entity.DataStat;
 import com.faceye.component.stock.repository.mongo.customer.DataStatCustomerRepository;
-import com.faceye.feature.repository.mongo.BaseMongoRepository;
 /**
  * DataStat 实体DAO<br>
  * @author @haipenge <br>
@@ -22,5 +21,11 @@ public class DataStatCustomerRepositoryImpl implements DataStatCustomerRepositor
 	private Logger logger=LoggerFactory.getLogger(getClass());
 	@Autowired
 	private MongoOperations mongoOperations = null;
+	@Override
+	public void removeDataStat(Long stockId) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("stockId").is(stockId));
+		this.mongoOperations.remove(query, DataStat.class);
+	}
 	
 }/**@generate-repository-source@**/

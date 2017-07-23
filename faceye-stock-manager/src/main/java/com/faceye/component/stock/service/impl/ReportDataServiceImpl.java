@@ -22,6 +22,7 @@ import com.faceye.component.stock.entity.AccountingSubject;
 import com.faceye.component.stock.entity.ReportCategory;
 import com.faceye.component.stock.entity.ReportData;
 import com.faceye.component.stock.repository.mongo.ReportDataRepository;
+import com.faceye.component.stock.repository.mongo.customer.DataStatCustomerRepository;
 import com.faceye.component.stock.repository.mongo.customer.ReportDataCustomerRepository;
 import com.faceye.component.stock.service.AccountingElementService;
 import com.faceye.component.stock.service.AccountingSubjectService;
@@ -34,7 +35,6 @@ import com.faceye.component.stock.service.wrapper.WrapReporterTitle;
 import com.faceye.component.stock.util.StockConstants;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
-import com.faceye.feature.util.ServiceException;
 import com.querydsl.core.types.Predicate;
 
 /**
@@ -55,6 +55,8 @@ public class ReportDataServiceImpl extends BaseMongoServiceImpl<ReportData, Long
 	private AccountingElementService accountingElementService = null;
 	@Autowired
 	private ReportCategoryService reportCategorySerivce = null;
+	@Autowired
+	private DataStatCustomerRepository dataStatCustomerRepository=null;
 
 	@Autowired
 	public ReportDataServiceImpl(ReportDataRepository dao) {
@@ -236,6 +238,12 @@ public class ReportDataServiceImpl extends BaseMongoServiceImpl<ReportData, Long
 				}
 			}
 		}
+	}
+
+	@Override
+	public void clearReportData(Long stockId) {
+		this.reportDataRepositoryCustomerRepository.removeReportData(stockId);
+		this.dataStatCustomerRepository.removeDataStat(stockId);
 	}
 
 }/** @generate-service-source@ **/
