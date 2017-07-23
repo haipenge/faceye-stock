@@ -76,13 +76,13 @@
 	</div>
 
 	<c:forEach var="wrapForecast" items="${wrapForecasts.content}" varStatus="status">
-		<c:if test="${status.index mod 3 == 0 }">
+		<c:if test="${status.index mod 2 == 0 }">
 			<c:if test="${status.index != 0 }">
 </div>
 </c:if>
 <div class="row" style="margin-top: 0px;">
 	</c:if>
-	<div class="col-sm-4 col-md-4">
+	<div class="col-sm-6 col-md-6">
 		<div class="block-flat" style="padding-bottom: 3px;">
 			<div class="header">
 				<h5>${wrapForecast.forecastIndex.mechanism.name}
@@ -93,25 +93,51 @@
 				<table class="no-border">
 					<thead class="no-border">
 						<tr>
+							<th>年</th>
 							<th class="text-right">EPS</th>
 							<th class="text-right">净利润</th>
 							<th class="text-right">营业收入</th>
-							<th class="text-right">ROE</th>
-							<th>年</th>
+							<th class="text-right" style="border-right: solid gray 1px;">ROE</th>
+							<th class="text-rigth">BPS</th>
+							<th class="text-rigth">DPS</th>
+							<th class="text-rigth">ROCE</th>
+							<th class="text-rigth">RE</th>
+							<th class="text-rigth">VRE</th>
+
 						</tr>
 					</thead>
 					<tbody class="no-border-y">
+						<c:set var="eIndex" value="0" />
 						<c:forEach var="forecast" items="${wrapForecast.forecasts}" varStatus="inStatus">
 							<tr>
+								<td>${forecast.year }</td>
 								<td class="text-right">${forecast.eps }</td>
 								<td class="text-right">${forecast.profit}</td>
 								<td class="text-right">${forecast.income }</td>
-								<td class="text-right"><fmt:formatNumber value="${forecast.roe * 100}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
-								<td>${forecast.year }</td>
+								<td class="text-right" style="border-right: solid gray 1px;"><fmt:formatNumber value="${forecast.roe * 100}" type="number" pattern="#,##0.0#" maxFractionDigits="2"
+										groupingUsed="true" />%</td>
+								<td class="text-rigth"><c:if test="${forecast.eps !=0 and inStatus.index != 0 }">
+										<fmt:formatNumber value="${wrapForecast.valuation.xbps[eIndex]}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />
+									</c:if></td>
+								<td class="text-rigth"><c:if test="${forecast.eps !=0 and inStatus.index != 0 }">
+										<fmt:formatNumber value="${wrapForecast.valuation.xdps[eIndex]}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />
+									</c:if></td>
+								<td class="text-rigth"><c:if test="${forecast.eps !=0 and inStatus.index != 0 }">
+										<fmt:formatNumber value="${wrapForecast.valuation.xroces[eIndex]}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />
+									</c:if></td>
+								<td class="text-rigth"><c:if test="${forecast.eps !=0 and inStatus.index != 0 }">
+										<fmt:formatNumber value="${wrapForecast.valuation.xres[eIndex]}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />
+									</c:if></td>
+								<td class="text-rigth"><c:if test="${forecast.eps !=0 and inStatus.index != 0 }">
+										<fmt:formatNumber value="${wrapForecast.valuation.xvres[eIndex]}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />
+									</c:if></td>
 							</tr>
+							<c:if test="${forecast.eps !=0 and inStatus.index != 0 }">
+								<c:set var="eIndex" value="${eIndex + 1 }"
+							</c:if>
 							<c:if test="${inStatus.last }">
 								<tr>
-									<td colspan="5" class="text-right"><span class="span-suffix">研究员:${forecast.researcher }</span></td>
+									<td colspan="10" class="text-right"><span class="span-suffix">研究员:${forecast.researcher }</span></td>
 								</tr>
 							</c:if>
 						</c:forEach>
@@ -133,29 +159,36 @@
 					<tbody class="no-border-y">
 						<c:forEach items="${wrapForecast.valuation.xbps}" var="xbps" varStatus="status">
 							<tr>
-								<td class="text-right"><fmt:formatNumber value="${xbps}" type="number" pattern="#,##0.0#" maxFractionDigits="4" groupingUsed="true" /></td>
-								<td class="text-right"><fmt:formatNumber value="${wrapForecast.valuation.xdps[status.index]}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
-								<td class="text-right"><fmt:formatNumber value="${wrapForecast.valuation.xroces[status.index]}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
-								<td class="text-right"><fmt:formatNumber value="${wrapForecast.valuation.xres[status.index]}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
-								<td class="text-right"><fmt:formatNumber value="${wrapForecast.valuation.xvres[status.index]}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
+								<td class="text-right"><fmt:formatNumber value="${xbps}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
+								<td class="text-right"><fmt:formatNumber value="${wrapForecast.valuation.xdps[status.index]}" type="number" pattern="#,##0.0#" maxFractionDigits="2"
+										groupingUsed="true" /></td>
+								<td class="text-right"><fmt:formatNumber value="${wrapForecast.valuation.xroces[status.index]}" type="number" pattern="#,##0.0#" maxFractionDigits="2"
+										groupingUsed="true" /></td>
+								<td class="text-right"><fmt:formatNumber value="${wrapForecast.valuation.xres[status.index]}" type="number" pattern="#,##0.0#" maxFractionDigits="2"
+										groupingUsed="true" /></td>
+								<td class="text-right"><fmt:formatNumber value="${wrapForecast.valuation.xvres[status.index]}" type="number" pattern="#,##0.0#" maxFractionDigits="2"
+										groupingUsed="true" /></td>
 							</tr>
 						</c:forEach>
 						<tr>
 							<td>CV</td>
 							<td colspan="2" class="text-right"><fmt:formatNumber value="${wrapForecast.valuation.cv}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 							<td>V0E</td>
-							<td colspan="2" class="text-right"><fmt:formatNumber value="${wrapForecast.valuation.totalValue}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
+							<td colspan="2" class="text-right"><fmt:formatNumber value="${wrapForecast.valuation.totalValue}" type="number" pattern="#,##0.0#" maxFractionDigits="2"
+									groupingUsed="true" /></td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
 		</div>
 	</div>
-	<c:if test="${status.last and status.count mod 3 != 0 }">
-		<div class="col-sm-4 col-md-4"></div>
+	<c:if test="${status.last and status.count mod 2 != 0 }">
+		<div class="col-sm-6 col-md-6"></div>
+		<!-- 
 		<c:if test="${(status.count + 1 ) mod 3 != 0}">
 			<div class="col-sm-4 col-md-4"></div>
 		</c:if>
+		 -->
 </div>
 </c:if>
 </c:forEach>
