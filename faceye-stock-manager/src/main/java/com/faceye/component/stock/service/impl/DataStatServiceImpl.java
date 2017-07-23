@@ -143,7 +143,8 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 					if (dataStat == null) {
 						dataStat = new DataStat();
 						dataStat.setStockId(stock.getId());
-						dataStat.setDateCycle(DateUtil.getDateFromString(sDate + " 00:00:00", "yyyy-MM-dd HH:mm:ss"));
+//						dataStat.setDateCycle(DateUtil.getDateFromString(sDate + " 00:00:00", "yyyy-MM-dd HH:mm:ss"));
+						dataStat.setDateCycle(date);
 					}
 					// 净利率
 					this.statNetProfitMargin(stock, reportData, dataStat);

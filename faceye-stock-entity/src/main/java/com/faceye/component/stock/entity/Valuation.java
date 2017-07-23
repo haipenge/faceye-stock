@@ -152,6 +152,67 @@ public class Valuation implements Serializable {
 	private List<Double> xbps=new ArrayList<Double>(0);
 	
 	
+	public List<Double> getXbps() {
+		return xbps;
+	}
+	public void setXbps(List<Double> xbps) {
+		this.xbps = xbps;
+	}
+	/**
+	 * 股利
+	 */
+	private List<Double> xdps=new ArrayList<Double>(0);
+	public List<Double> getXdps() {
+		return xdps;
+	}
+	public void setXdps(List<Double> xdps) {
+		this.xdps = xdps;
+	}
+	
+	/**
+	 * 股东权益回报率
+	 */
+	private List<Double> xroces=new ArrayList<Double>(0);
+	public List<Double> getXroces() {
+		return xroces;
+	}
+	public void setXroces(List<Double> xroces) {
+		this.xroces = xroces;
+	}
+	
+	/**
+	 * 剩余价值
+	 */
+	private List<Double> xres=new ArrayList<Double>(0);
+	public List<Double> getXres() {
+		return xres;
+	}
+	public void setXres(List<Double> xres) {
+		this.xres = xres;
+	}
+	/**
+	 * 剩余价值的现值
+	 */
+	private List<Double> xvres=new ArrayList<Double>(0);
+	
+	
+	public List<Double> getXvres() {
+		return xvres;
+	}
+	public void setXvres(List<Double> xvres) {
+		this.xvres = xvres;
+	}
+	/**
+	 * 持续价值
+	 */
+	private Double cv=0D;
+	public Double getCv() {
+		return cv;
+	}
+	public void setCv(Double cv) {
+		this.cv = cv;
+	}
+	
 	
 }/**@generate-entity-source@**/
 	

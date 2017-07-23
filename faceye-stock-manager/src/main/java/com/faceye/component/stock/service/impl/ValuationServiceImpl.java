@@ -261,22 +261,21 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 						}
 					}
 					// 默认使用公式二进行估值，即预测期过后，RE不再增长
-					Double val = valuationOnEps(bps0, pro,dps, epss);
-					valuation.setTotalValue(val);
+					valuationOnEps(bps0, pro,dps, epss,valuation);
 				}
 			} else {
 				logger.error(">>FaceYe -->使用机构预测进行估值时,报表时间与Data stat 时间不同，请检查财务摘要。");
 				logger.error(">>FaceYe -->Trace:reportDate is:" + DateUtil.formatDate(reportData.getDate(), "yyyy-MM-dd") + ",data stat date is:"
-						+ DateUtil.formatDate(dataStat.getDateCycle(), "yyyy-MM-dd") + ",report data is:" + reportData.getId() + ",dataStat id:" + dataStat.getId());
+						+ DateUtil.formatDate(dataStat.getDateCycle(), "yyyy-MM-dd") + ",report data is:" + reportData.getId() + ",dataStat id:" + dataStat.getId()+",report data stockID is:"+reportData.getStockId()+",data stat stockId is :"+dataStat.getStockId());
 			}
 		}
 		this.save(valuation);
 		return valuation;
 	}
 
-	private Double valuationOnEps(Double bps0, Double pro,Double dps, List<Double> epss) {
+	private void valuationOnEps(Double bps0, Double pro,Double dps, List<Double> epss,Valuation valuation) {
 		if(CollectionUtils.isEmpty(epss)){
-			return 0D;
+			return;
 		}
 		Double val = 0D;
 		List<Double> bpss = new ArrayList<Double>(0);
@@ -290,6 +289,8 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 			bpss.add(new Double(bps + eps-dps));
 			bps = new Double(bps + eps);
 		}
+		valuation.setXbps(bpss);
+		
 		// 计算Roce(1-t) roce[t]=bps[t-1]+roce[t]
 		if (epss.size() == bpss.size()) {
 			for (int i = 0; i < epss.size(); i++) {
@@ -304,6 +305,7 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 				roces.add(roce);
 			}
 		}
+		valuation.setXroces(roces);
 		// 计算RE(1-t),RE(t)=bps(t-1)*(roce[t]-pro)
 		for (int i = 0; i < roces.size(); i++) {
 			Double roce = roces.get(i);
@@ -316,12 +318,14 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 			Double re = ibps * (roce - pro);
 			res.add(re);
 		}
+		valuation.setXres(res);
 		// 计算RE的现值 vre =re/(1+pro)[t]
 		for (int i = 0; i < res.size(); i++) {
 			Double re = res.get(i);
 			Double vre = re / (Math.pow((1 + pro), i + 1));
 			vres.add(vre);
 		}
+		valuation.setXvres(vres);
 		// 计算持续价值CV,cv=(RE[t]/pro)/pro{t}
 		// 注：默认T期之后RE增长率为0
 		Double reT = res.get(res.size() - 1);
@@ -329,13 +333,15 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 		cv = reT / pro / (Math.pow(1 + pro, res.size()));
 		// 剩余价值增长率为g时持续价值的计算
 		// cv=reT/(pro-g)/Math.pow(1+pro, res.size());
+		valuation.setCv(cv);
 		// 计算价值
 		val += bps0;
 		for (Double vre : vres) {
 			val += vre;
 		}
 		val += cv;
-		return val;
+		valuation.setTotalValue(val);
+//		return val;
 	}
 
 	@Override
