@@ -254,6 +254,7 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 				}
 			} else {
 				logger.error(">>FaceYe -->使用机构预测进行估值时,报表时间与Data stat 时间不同，请检查财务摘要。");
+				logger.error(">>FaceYe -->Trace:reportDate is:"+DateUtil.formatDate(reportData.getDate(), "yyyy-MM-dd")+",data stat date is:"+DateUtil.formatDate(dataStat.getDateCycle(), "yyyy-MM-dd")+",report data is:"+reportData.getId()+",dataStat id:"+dataStat.getId());
 			}
 		}
 		this.save(valuation);
