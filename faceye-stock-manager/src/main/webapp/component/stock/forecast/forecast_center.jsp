@@ -139,9 +139,12 @@
 							<c:if test="${inStatus.last }">
 								<tr>
 									<td>CV</td>
-									<td colspan="4" class="text-right"><fmt:formatNumber value="${wrapForecast.valuation.cv}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
+									<td colspan="2" class="text-right"><fmt:formatNumber value="${wrapForecast.valuation.cv}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 									<td>V0E</td>
-									<td colspan="4" class="text-right"><fmt:formatNumber value="${wrapForecast.valuation.totalValue}" type="number" pattern="#,##0.0#" maxFractionDigits="2"
+									<td colspan="2" class="text-right"><fmt:formatNumber value="${wrapForecast.valuation.totalValue}" type="number" pattern="#,##0.0#" maxFractionDigits="2"
+											groupingUsed="true" /></td>
+									<td>ER</td>
+									<td colspan="3"><fmt:formatNumber value="${wrapForecast.valuation.er}" type="number" pattern="#,##0.0#" maxFractionDigits="2"
 											groupingUsed="true" /></td>
 								</tr>
 							</c:if>

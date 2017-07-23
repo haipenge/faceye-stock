@@ -212,6 +212,17 @@ public class Valuation implements Serializable {
 	public void setCv(Double cv) {
 		this.cv = cv;
 	}
+	/**
+	 * 加权平均预期收益增长率
+	 */
+	private Double er=0D;
+	public Double getEr() {
+		return er;
+	}
+	public void setEr(Double er) {
+		this.er = er;
+	}
+	
 	
 	
 }/**@generate-entity-source@**/
