@@ -37,12 +37,12 @@ import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.service.AccountingElementService;
 import com.faceye.component.stock.service.AccountingSubjectService;
 import com.faceye.component.stock.service.CrawlFinancialDataService;
+import com.faceye.component.stock.service.DataStatService;
 import com.faceye.component.stock.service.FinancialDataService;
 import com.faceye.component.stock.service.ReportCategoryService;
 import com.faceye.component.stock.service.ReportDataService;
 import com.faceye.component.stock.service.StockService;
 import com.faceye.component.stock.service.wrapper.Record;
-import com.faceye.component.stock.service.wrapper.WrapReporter;
 import com.faceye.component.stock.util.StockConstants;
 import com.faceye.feature.controller.BaseController;
 import com.faceye.feature.util.AjaxResult;
@@ -73,6 +73,8 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 	private CrawlFinancialDataService crawlFinancialDataService = null;
 	@Autowired
 	private ReportDataService reportDataService = null;
+	@Autowired
+	private DataStatService dataStatService=null;
 
 	@Autowired
 	public FinancialDataController(FinancialDataService service) {
@@ -529,6 +531,7 @@ public class FinancialDataController extends BaseController<FinancialData, Long,
 			if (stock != null) {
 				this.reportDataService.clearReportData(stock.getId());
 				this.crawlFinancialDataService.crawlStock(stock,false);
+				this.dataStatService.stat(stock);
 			}
 		}
 		return AjaxResult.getInstance().buildDefaultResult(true);
