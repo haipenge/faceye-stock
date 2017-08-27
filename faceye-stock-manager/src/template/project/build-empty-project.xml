@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="generate-empty-project-tools" basedir="." default="help">
+	<property file="build.properties"></property>
+	<!-- 定义常量 -->
+	<!-- 临时输出目录 -->
+	<property name="output.dir" value="${basedir}/target/output"></property>
+	<property name="generate.project.dir" value=".."></property>
+	<target name="help">
+     <echo message="您应该从build-tools.xml开始执行"/>
+	</target>
+	<!-- ===========================generate empty project =============================== -->
+	<!-- 使用本任务创建的项目,将都依赖faceye-generate-feature -->
+	<!-- 创建空项目，用于有依赖关系的项目启动 -->
+	<target name="generate-empty-project" depends="init-project-template">
+		<input message="请输入工程名称:" addProperty="generate.project.name"></input>
+		<input message="请输入包名:如:com.faceye" addProperty="generate.project.package.name"></input>
+		<input message="请输入包路径:com.faceye 对应为:com/faceye" addProperty="generate.project.package.path"></input>
+		<input message="请输入MySQL数据库用户名(Root权限):" addProperty="generate.project.db.user.name"></input>
+		<input message="请输入MySQL数据库密码:" addProperty="generate.project.db.user.password"></input>
+		<input
+			message="请选择项目结构: &#10;1-->管理后台+WEB前端. &#10;2-->管理后台+服务端+WEB前端.&#10;3-->管理后台+服务端+Web前端+android.&#10;4-->管理后台+服务端+Web前端+android+IOS"
+			addProperty="generate.project.struct"></input>
+		<mkdir dir="${generate.project.dir}/${generate.project.name}"></mkdir>
+		<antcall target="prepare-generate-empty-project">
+			<param name="generate.project.name" value="${generate.project.name}"></param>
+			<param name="generate.project.package.path" value="${generate.project.package.path}"></param>
+			<param name="generate.project.package.path" value="${generate.project.package.path}"></param>
+			<param name="generate.project.db.user.name" value="${generate.project.db.user.name}"></param>
+			<param name="generate.project.db.user.password" value="${generate.project.db.user.password}"></param>
+		</antcall>
+		<if>
+			<!-- 1 管理后台+WEB前端 -->
+			<equals arg1="${generate.project.struct}" arg2="1"></equals>
+			<then>
+				<antcall target="generate-empty-project-manager">
+					<param name="generate.project.name" value="${generate.project.name}"></param>
+					<param name="generate.project.package.name" value="${generate.project.package.name}"></param>
+				</antcall>
+				<antcall target="generate-empty-project-web">
+					<param name="generate.project.name" value="${generate.project.name}"></param>
+					<param name="generate.project.package.name" value="${generate.project.package.name}"></param>
+				</antcall>
+			</then>
+			<!-- 2 管理后台+服务端+WEB前端 -->
+			<elseif>
+				<equals arg1="${generate.project.struct}" arg2="2"></equals>
+				<then>
+					<antcall target="generate-empty-project-manager">
+						<param name="generate.project.name" value="${generate.project.name}"></param>
+						<param name="generate.project.package.name" value="${generate.project.package.name}"></param>
+					</antcall>
+					<antcall target="generate-empty-project-api">
+						<param name="generate.project.name" value="${generate.project.name}"></param>
+						<param name="generate.project.package.name" value="${generate.project.package.name}"></param>
+					</antcall>
+					<antcall target="generate-empty-project-web">
+						<param name="generate.project.name" value="${generate.project.name}"></param>
+						<param name="generate.project.package.name" value="${generate.project.package.name}"></param>
+					</antcall>
+				</then>
+			</elseif>
+			<!-- 3 管理后台+服务端+Web前端+android -->
+			<elseif>
+				<equals arg1="${generate.project.struct}" arg2="3"></equals>
+				<then>
+					<antcall target="generate-empty-project-manager">
+						<param name="generate.project.name" value="${generate.project.name}"></param>
+						<param name="generate.project.package.name" value="${generate.project.package.name}"></param>
+					</antcall>
+					<antcall target="generate-empty-project-api">
+						<param name="generate.project.name" value="${generate.project.name}"></param>
+						<param name="generate.project.package.name" value="${generate.project.package.name}"></param>
+					</antcall>
+					<antcall target="generate-empty-project-web">
+						<param name="generate.project.name" value="${generate.project.name}"></param>
+						<param name="generate.project.package.name" value="${generate.project.package.name}"></param>
+					</antcall>
+				</then>
+			</elseif>
+			<!-- 4 管理后台+服务端+Web前端+android+IOS -->
+			<elseif>
+				<equals arg1="${generate.project.struct}" arg2="4"></equals>
+				<then>
+					<antcall target="generate-empty-project-manager">
+						<param name="generate.project.name" value="${generate.project.name}"></param>
+						<param name="generate.project.package.name" value="${generate.project.package.name}"></param>
+					</antcall>
+					<antcall target="generate-empty-project-web">
+						<param name="generate.project.name" value="${generate.project.name}"></param>
+						<param name="generate.project.package.name" value="${generate.project.package.name}"></param>
+					</antcall>
+				</then>
+			</elseif>
+		</if>
+		<antcall target="generate-empty-project-entity">
+              <param name="generate.project.name" value="${generate.project.name}"></param>
+						<param name="generate.project.package.name" value="${generate.project.package.name}"></param>
+		</antcall>
+	</target>
+	<!-- 准备创建工程 -->
+	<target name="prepare-generate-empty-project">
+		<!-- 清理输出目录 -->
+		<antcall target="clean-generate-path"></antcall>
+		<input message="请输入工程名称:" addProperty="generate.project.name"></input>
+		<input message="请输入包名:如:com.faceye" addProperty="generate.project.package.name"></input>
+		<input message="请输入包名:如:com/faceye" addProperty="generate.project.package.path"></input>
+		<input message="请输入MySQL数据库用户名(Root权限):" addProperty="generate.project.db.user.name"></input>
+		<input message="请输入MySQL数据库密码:" addProperty="generate.project.db.user.password"></input>
+		<mkdir dir="${output.dir}/project"></mkdir>
+		<mkdir dir="${output.dir}/project/src/main/resources/i18n"/>
+		<copy todir="${output.dir}/project" overwrite="true" encoding="UTF-8"
+			outputencoding="UTF-8" includeEmptyDirs="true">
+			<fileset dir="${basedir}/src/template/project">
+				<exclude name="src/main/java/com/faceye/**"></exclude>
+				<exclude name="src/test/java/com/faceye/**"></exclude>
+				<exclude name="src/main/resources/i18n/**"></exclude>
+				<exclude name="src/main/resources/tiles/*/**"></exclude>
+				<exclude name="src/main/resources/config.properties"></exclude>
+				<exclude name="src/ftl/**"></exclude>
+				<exclude name="pom.xml"></exclude>
+				<exclude name="src/main/webapp/component/**"></exclude>
+				<exclude name="src/main/webapp/css/**"></exclude>
+				<exclude name="src/main/webapp/js/**"></exclude>
+				<exclude name="src/main/webapp/WEB-INF/tld/*.tld"></exclude>
+			</fileset>
+
+			<fileset dir="${basedir}/src/template/source">
+				<include name="pom*.xml"></include>
+				<include name="build.properties"></include>
+			</fileset>
+			<fileset dir="${basedir}">
+				<include name="build-tools.xml"></include>
+				<include name="build-tar.xml"></include>
+				<include name="build-scp.xml"></include>
+				<include name="README.md"></include>
+			</fileset>
+			<fileset dir="${basedir}/src/template/project">
+				<include
+					name="src/main/webapp/component/core/template/manager/default_center_left.jsp"></include>
+			</fileset>
+		</copy>
+		<copy todir="${output.dir}/project/src/main/resources" includeEmptyDirs="true">
+		    <fileset dir="${basedir}/src/template/source/main/resources">
+		        <include name="config.properties"></include>
+		    </fileset>
+		</copy>
+		<replace file="${output.dir}/project/build.properties"
+			encoding="UTF-8">
+			<replacefilter token="@package@" value="${generate.project.package.name}"></replacefilter>
+			<replacefilter token="@package.path@" value="${generate.project.package.path}"></replacefilter>
+			<replacefilter token="@project.name@" value="${generate.project.name}"></replacefilter>
+		</replace>
+		
+		<!-- 替换数据库信息 -->
+		<replace dir="${output.dir}/project/src/main" encoding="UTF-8">
+			<include name="**/**/*.properties"></include>
+			<include name="**/**/*.sql"></include>
+			<replacefilter token="faceye_feature" value="${generate.project.name}"></replacefilter>
+			<replacefilter token="feature" value="${generate.project.db.user.name}"></replacefilter>
+			<replacefilter token="123456"
+				value="${generate.project.db.user.password}"></replacefilter>
+		</replace>
+         <mkdir dir="${output.dir}/project/src/main/java/${generate.project.package.path}"></mkdir>
+         <mkdir dir="${output.dir}/project/src/test/java/${generate.project.package.path}/test"></mkdir>
+	</target>
+	<!-- 创建项目管理后台 -->
+	<target name="generate-empty-project-manager">
+		<echo message="创建项目管理后台"></echo>
+		<input message="请输入项目名称(注：项目名称后面会自动增加'-manager'字样)" addProperty="generate.project.name"></input>
+		<input message ="请输入包名,如com.faceye" addProperty="generate.project.package.name"></input>
+		<property name="generate.project.manager.path"
+			value="${generate.project.dir}/${generate.project.name}/${generate.project.name}-manager"></property>
+		<mkdir dir="${generate.project.manager.path}"></mkdir>
+		<copy todir="${generate.project.manager.path}" overwrite="true"
+			encoding="UTF-8" outputencoding="UTF-8" includeEmptyDirs="true">
+			<fileset dir="${output.dir}/project">
+				<include name="**"></include>
+			</fileset>
+		</copy>
+		<move file="${generate.project.manager.path}/pom-manager.xml"
+			tofile="${generate.project.manager.path}/pom.xml"
+			encoding="UTF-8"></move>
+		<replace dir="${generate.project.manager.path}" encoding="UTF-8">
+			<include name="pom*.xml"></include>
+			<replacefilter token="project-name-security-manager-mongo" value="faceye-security-manager-mongo"></replacefilter>
+			<replacefilter token="project-name-entity" value="${generate.project.name}-entity"></replacefilter>
+			<replacefilter token="project-group-id" value="${generate.project.package.name}"></replacefilter>
+			<replacefilter token="project-name" value="${generate.project.name}-manager"></replacefilter>
+		</replace>
+	</target>
+	<!-- 创建项目web前台 -->
+	<target name="generate-empty-project-web">
+		<echo message="创建项目Web/wap端"></echo>
+		<input message="请输入项目名称(注：项目名称后面会自动增加'-web'字样)" addProperty="generate.project.name"></input>
+		<input message ="请输入包名,如com.faceye" addProperty="generate.project.package.name"></input>
+		<property name="generate.project.web.path"
+			value="${generate.project.dir}/${generate.project.name}/${generate.project.name}-web"></property>
+		<mkdir dir="${generate.project.web.path}"></mkdir>
+		<copy todir="${generate.project.web.path}" overwrite="true"
+			encoding="UTF-8" outputencoding="UTF-8" includeEmptyDirs="true">
+			<fileset dir="${output.dir}/project">
+				<include name="**/**/*.*"></include>
+			</fileset>
+		</copy>
+		<replace dir="${generate.project.web.path}" encoding="UTF-8">
+			<include name="pom*.xml"></include>
+			<replacefilter token="project-name-security-manager-mongo" value="faceye-security-manager-mongo"></replacefilter>
+			<replacefilter token="project-name-entity" value="${generate.project.name}-entity"></replacefilter>
+			<replacefilter token="project-group-id" value="${generate.project.package.name}"></replacefilter>
+			<replacefilter token="project-name" value="${generate.project.name}-web"></replacefilter>
+		</replace>
+	</target>
+	<!-- 创建移动服务端 -->
+	<target name="generate-empty-project-api">
+		<echo message="创建项目服务端"></echo>
+		<input message="请输入项目名称(注：项目名称后面会自动增加'-api'字样)" addProperty="generate.project.name"></input>
+		<input message ="请输入包名,如com.faceye" addProperty="generate.project.package.name"></input>
+		<property name="generate.project.api.path"
+			value="${generate.project.dir}/${generate.project.name}/${generate.project.name}-api"></property>
+		<mkdir dir="${generate.project.api.path}"></mkdir>
+		<copy todir="${generate.project.api.path}" overwrite="true"
+			encoding="UTF-8" outputencoding="UTF-8" includeEmptyDirs="true">
+			<fileset dir="${output.dir}/project">
+				<exclude name="src/main/webapp/**/**/**.jsp"></exclude>
+				<exclude name="src/main/webapp/**/**/**.js"></exclude>
+				<exclude name="src/main/webapp/**/**/**.css"></exclude>
+				<exclude name="src/main/webapp/**/**/**.jpg"></exclude>
+				<exclude name="src/main/webapp/**/**/**.png"></exclude>
+				<exclude name="src/main/webapp/**/**/**.gif"></exclude>
+			</fileset>
+		</copy>
+		<move file="${generate.project.api.path}/pom-manager.xml"
+			tofile="${generate.project.api.path}/pom.xml"
+			encoding="UTF-8"></move>
+		<replace dir="${generate.project.api.path}" encoding="UTF-8">
+			<include name="pom*.xml"></include>
+			<replacefilter token="project-name-security-manager-mongo" value="faceye-security-manager-mongo"></replacefilter>
+			<replacefilter token="project-name-entity" value="${generate.project.name}-entity"></replacefilter>
+			<replacefilter token="project-group-id" value="${generate.project.package.name}"></replacefilter>
+			<replacefilter token="project-name" value="${generate.project.name}-main-api"></replacefilter>
+		</replace>
+	</target>
+	<!--生成空的实体工程-->
+	<target name="generate-empty-project-entity">
+        <echo message="创建实体项目"></echo>
+		<input message="请输入项目名称(注：项目名称后面会自动增加'-entity'字样)" addProperty="generate.project.name"></input>
+		<input message ="请输入包名,如com.faceye" addProperty="generate.project.package.name"></input>
+		<property name="generate.project.entity.path"
+			value="${generate.project.dir}/${generate.project.name}/${generate.project.name}-entity"></property>
+		<mkdir dir="${generate.project.entity.path}"></mkdir>
+		<copy todir="${generate.project.entity.path}" overwrite="true"
+			encoding="UTF-8" outputencoding="UTF-8" includeEmptyDirs="true">
+			<fileset dir="${output.dir}/project">
+				<exclude name="src/main/webapp/**/*.*"></exclude>
+			</fileset>
+		</copy>
+		<replace dir="${generate.project.entity.path}" encoding="UTF-8">
+			<include name="pom*.xml"></include>
+			<replacefilter token="project-name-security-manager-mongo" value="faceye-security-manager-mongo"></replacefilter>
+			<replacefilter token="project-name-entity" value="${generate.project.name}-entity"></replacefilter>
+			<replacefilter token="project-group-id" value="${generate.project.package.name}"></replacefilter>
+			<replacefilter token="project-name" value="${generate.project.name}-entity"></replacefilter>
+		</replace>
+	</target>
+</project>

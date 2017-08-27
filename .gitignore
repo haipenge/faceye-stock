@@ -3,15 +3,12 @@
 /*/.project
 /*/src/main/resources/db/*
 /*/src/main/filters/dev.properties
-/*/src/template/project
 /*/.settings
 /*/target
 /*/bin
 /*/*.sql
 /*/logs/*
-#/*/data/*
 #/*/db
-/*/build*.xml
 
 /*/*/.project
 /*/src/main/filters/dev.properties
@@ -20,21 +17,16 @@
 /*/*/bin
 /*/*/src/main/resources/db/*
 /*/*/src/main/filters/dev.properties
-/*/*/src/template/project
 /*/*/logs/*
 #/*/*/db
-/*/*/build*.xml
 
 /.classpath
 /.project
 /.settings
 /src/main/filters/dev.properties
 /src/main/resources/db/*
-/src/template/project
 /target
 /bin
 /logs/*
 /*.tar.gz
 #/db
-#/data
-/build*.xml
