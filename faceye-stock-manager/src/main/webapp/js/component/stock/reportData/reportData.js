@@ -24,6 +24,13 @@ var ReportData = {
 					msg : '已开始数据爬取任务...'
 				});
 				m.show();
+				var win=new Modal({
+				id:'data-crawl-wati-win',
+				header:false,
+				title:'数据爬取',
+				body:'正在进行数据爬取,请稍后...'
+				});
+				win.show();
 				return true;
 			},
 			success : function(data, textStatus, xhr) {
@@ -32,6 +39,7 @@ var ReportData = {
 						msg : '完成数据爬取'
 					});
 					m.show();
+					$('#data-crawl-wati-win').remove();
 					window.location.reload();
 				}
 			}
