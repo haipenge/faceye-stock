@@ -322,7 +322,7 @@
 							<c:forEach var="wrapCompareReporter" items="${wrapCompareReporters}" varStatus="cStatus">
 								<c:if test="${cStatus.first}">
                                       <tr>
-                                        <td>ROCE</td>
+                                        <td style="border-bottom: 2px solid gray;">ROCE</td>
 								</c:if>
 								<td class="text-right" style="border-bottom: 2px solid gray;"><fmt:formatNumber value="${wrapCompareReporter.dataStats[0].roce *100}" type="number" pattern="#,##0.0#" maxFractionDigits="2"
 											groupingUsed="true" />%</td>
