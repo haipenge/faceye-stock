@@ -236,7 +236,7 @@
 							<c:forEach var="wrapCompareReporter" items="${wrapCompareReporters }" varStatus="cStatus">
 								<c:if test="${cStatus.first}">
 									<tr>
-										<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">其它分析</th>
+										<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">其它</th>
 										<td style="border-bottom: 2px solid gray;">核心利润率</td>
 								</c:if>
 								<td class="text-right" style="border-bottom: 2px solid gray;"><fmt:formatNumber value="${wrapCompareReporter.dataStats[0].coreProfitMargin *100 }" type="number"
