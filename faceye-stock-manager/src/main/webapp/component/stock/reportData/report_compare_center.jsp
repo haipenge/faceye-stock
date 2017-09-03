@@ -234,7 +234,7 @@
 						<c:if test="${not empty wrapCompareReporters[0].dataStats}">
 							<!-- 核心利润率 -->
 							<c:forEach var="wrapCompareReporter" items="${wrapCompareReporters }" varStatus="cStatus">
-								<c:if teset="${cStatus.first}">
+								<c:if test="${cStatus.first}">
 									<tr>
 										<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">其它分析</th>
 										<td style="border-bottom: 2px solid gray;">核心利润率</td>
