@@ -288,7 +288,7 @@
 								</c:if>
 							</c:forEach>
 						</c:if>
-						<c:if test="${not empty wrapCompareReporters[0]dataStats}">
+						<c:if test="${not empty wrapCompareReporters[0].dataStats}">
 
 							<c:forEach var="wrapCompareReporter" items="${wrapCompareReporters}" varStatus="cStatus">
 								<c:if test="${cStatus.first}">
@@ -303,7 +303,7 @@
 
 
 						</c:if>
-						<c:if test="${not empty dataStats}">
+						<c:if test="${not empty wrapCompareReporters[0].dataStats}">
 
 							<c:forEach var="wrapCompareReporter" items="${wrapCompareReporters}" varStatus="cStatus">
 								<c:if test="${cStatus.first}">
@@ -318,7 +318,7 @@
 
 
 						</c:if>
-						<c:if test="${not empty dataStats}">
+						<c:if test="${not empty wrapCompareReporters[0].dataStats}">
 							<c:forEach var="wrapCompareReporter" items="${wrapCompareReporters}" varStatus="cStatus">
 								<c:if test="${cStatus.first}">
                                       <tr>
