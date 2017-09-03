@@ -239,7 +239,7 @@
 										<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">其它分析</th>
 										<td style="border-bottom: 2px solid gray;">核心利润率</td>
 								</c:if>
-								<td class="text-right" style="border-bottom: 2px solid gray;"><fmt:formatNumber value="${wrapCompareReporter[0].coreProfitMargin *100 }" type="number"
+								<td class="text-right" style="border-bottom: 2px solid gray;"><fmt:formatNumber value="${wrapCompareReporter.dataStats[0].coreProfitMargin *100 }" type="number"
 										pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
 								<c:if test="${cStatus.last}">
 									</tr>
