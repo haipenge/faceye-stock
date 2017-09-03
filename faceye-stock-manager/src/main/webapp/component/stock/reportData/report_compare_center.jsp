@@ -73,8 +73,8 @@
 								</c:if>
 								<c:if test="${not empty wrapCompareReporters and empty wrapCompareReporter.dataStats}">
 									<th style="border-bottom: 2px solid gray; padding-bottom: 0px; padding-top: 0px;" class="text-center"><p style="margin-bottom: 0px; border-bottom: 1px solid gray;">
-											<a href="<c:url value="/stock/reportData/report?stockId=${wrapCompareReporter.stock.id}"/>">${wrapCompareReporter.stock.name}</a>
-											<span class="span-suffix"><fmt:formatDate value="${wrapCompareReporter.wrapReporter.records[0].date}" pattern="yyyy-MM-dd" /></span>
+											<a href="<c:url value="/stock/reportData/report?stockId=${wrapCompareReporter.stock.id}"/>">${wrapCompareReporter.stock.name}</a> <span class="span-suffix"><fmt:formatDate
+													value="${wrapCompareReporter.wrapReporter.records[0].date}" pattern="yyyy-MM-dd" /></span>
 										</p>
 										<p style="margin-top: 0px; margin-bottom: 0px;">
 											<span class="small pull-left">同型</span><span class="small">金额(元)</span><span class="pull-right small">趋势</span>
@@ -83,7 +83,8 @@
 								<!-- 财务接要-杜邦分析 -->
 								<c:if test="${not empty wrapCompareReporter.dataStats}">
 									<c:forEach items="${wrapCompareReporter.dataStats}" var="dataStat" begin="0" end="0" step="1">
-										<th style="border-bottom: 2px solid gray;" class="text-center"><a href="<c:url value="/stock/reportData/report?stockId=${wrapCompareReporter.stock.id}"/>">${wrapCompareReporter.stock.name }</a><span class="span-suffix"><fmt:formatDate value="${dataStat.dateCycle}" pattern="yyyy-MM-dd" /></span></th>
+										<th style="border-bottom: 2px solid gray;" class="text-center"><a href="<c:url value="/stock/reportData/report?stockId=${wrapCompareReporter.stock.id}"/>">${wrapCompareReporter.stock.name }</a><span
+											class="span-suffix"><fmt:formatDate value="${dataStat.dateCycle}" pattern="yyyy-MM-dd" /></span></th>
 									</c:forEach>
 								</c:if>
 							</c:forEach>
@@ -230,16 +231,21 @@
 						</c:if>
 						<!-- 财务摘要-杜邦分析结束  -->
 						<!-- 其它财务指标分析 -->
-						<c:if test="${not empty dataStats}">
-						<!-- 核心利润率 -->
-							<tr>
-								<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">其它分析</th>
-								<td style="border-bottom: 2px solid gray;">核心利润率</td>
-								<c:forEach items="${dataStats}" var="dataStat">
-									<td class="text-right" style="border-bottom: 2px solid gray;"><fmt:formatNumber value="${dataStat.coreProfitMargin *100 }" type="number" pattern="#,##0.0#"
-											maxFractionDigits="1" groupingUsed="true" />%</td>
-								</c:forEach>
-							</tr>
+						<c:if test="${not empty wrapCompareReporters[0].dataStats}">
+							<!-- 核心利润率 -->
+							<c:forEach var="wrapCompareReporter" items="${wrapCompareReporters }" varStatus="cStatus">
+								<c:if teset="${cStatus.first}">
+									<tr>
+										<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">其它分析</th>
+										<td style="border-bottom: 2px solid gray;">核心利润率</td>
+								</c:if>
+								<td class="text-right" style="border-bottom: 2px solid gray;"><fmt:formatNumber value="${wrapCompareReporter[0].coreProfitMargin *100 }" type="number"
+										pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" />%</td>
+								<c:if test="${cStatus.last}">
+									</tr>
+								</c:if>
+
+							</c:forEach>
 						</c:if>
 						<!-- 其它 财务指标结束 -->
 					</table>
