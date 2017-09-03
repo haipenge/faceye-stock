@@ -248,6 +248,90 @@
 							</c:forEach>
 						</c:if>
 						<!-- 其它 财务指标结束 -->
+						<!-- 分析每股指标 -->
+						<c:if test="${not empty wrapCompareReporters[0].dataStats}">
+							<c:forEach var="wrapCompareReporter" items="${wrapCompareReporters}" varStatus="cStatus">
+								<c:if test="${cStatus.first}">
+									<tr>
+										<th rowspan="6" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">每股指标</th>
+										<td>EPS</td>
+								</c:if>
+								<td class="text-right"><fmt:formatNumber value="${wrapCompareReporter.dataStats[0].eps}" type="number" pattern="#,##0.0#" maxFractionDigits="4" groupingUsed="true" /></td>
+								<c:if test="${cStatus.last}">
+									</tr>
+								</c:if>
+							</c:forEach>
+						</c:if>
+						<c:if test="${not empty wrapCompareReporters[0].dataStats}">
+
+							<c:forEach var="wrapCompareReporter" items="${wrapCompareReporters}" varStatus="cStatus">
+								<c:if test="${cStatus.first}">
+									<tr>
+										<td>BPS</td>
+								</c:if>
+								<td class="text-right"><fmt:formatNumber value="${wrapCompareReporter.dataStats[0].bps}" type="number" pattern="#,##0.00#" maxFractionDigits="4" groupingUsed="true" /></td>
+								<c:if test="${cStatus.last}">
+									</tr>
+								</c:if>
+							</c:forEach>
+
+						</c:if>
+						<c:if test="${not empty wrapCompareReporters[0].dataStats}">
+							<c:forEach var="wrapCompareReporter" items="${wrapCompareReporters}" varStatus="cStatus">
+								<c:if test="${cStatus.first}">
+									<tr>
+										<td>DPS</td>
+								</c:if>
+								<td class="text-right"><fmt:formatNumber value="${wrapCompareReporter.dataStats[0].dps}" type="number" pattern="#,##0.00#" maxFractionDigits="4" groupingUsed="true" /></td>
+								<c:if test="${cStatus.last}">
+									</tr>
+								</c:if>
+							</c:forEach>
+						</c:if>
+						<c:if test="${not empty wrapCompareReporters[0]dataStats}">
+
+							<c:forEach var="wrapCompareReporter" items="${wrapCompareReporters}" varStatus="cStatus">
+								<c:if test="${cStatus.first}">
+									<tr>
+										<td>PB</td>
+								</c:if>
+								<td class="text-right"><fmt:formatNumber value="${wrapCompareReporter.dataStats[0].pb}" type="number" pattern="#,##0.00#" maxFractionDigits="4" groupingUsed="true" /></td>
+								<c:if test="${cStatus.last}">
+									</tr>
+								</c:if>
+							</c:forEach>
+
+
+						</c:if>
+						<c:if test="${not empty dataStats}">
+
+							<c:forEach var="wrapCompareReporter" items="${wrapCompareReporters}" varStatus="cStatus">
+								<c:if test="${cStatus.first}">
+									<tr>
+										<td>PE</td>
+								</c:if>
+								<td class="text-right"><fmt:formatNumber value="${wrapCompareReporter.dataStats[0].pe}" type="number" pattern="#,##0.00#" maxFractionDigits="4" groupingUsed="true" /></td>
+								<c:if test="${cStatus.last}">
+									</tr>
+								</c:if>
+							</c:forEach>
+
+
+						</c:if>
+						<c:if test="${not empty dataStats}">
+							<c:forEach var="wrapCompareReporter" items="${wrapCompareReporters}" varStatus="cStatus">
+								<c:if test="${cStatus.first}">
+                                      <tr>
+                                        <td>ROCE</td>
+								</c:if>
+								<td class="text-right" style="border-bottom: 2px solid gray;"><fmt:formatNumber value="${wrapCompareReporter.dataStats[0].roce *100}" type="number" pattern="#,##0.0#" maxFractionDigits="2"
+											groupingUsed="true" />%</td>
+								<c:if test="${cStatus.last}">
+									</tr>
+								</c:if>
+							</c:forEach>
+						</c:if>
+						<!-- 每股指标结束 -->
 					</table>
 				</div>
 			</div>
