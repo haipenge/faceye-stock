@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="
+     http://www.springframework.org/schema/beans 
+     http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/tx
+     http://www.springframework.org/schema/tx/spring-tx.xsd
+     http://www.springframework.org/schema/aop 
+     http://www.springframework.org/schema/aop/spring-aop.xsd
+     http://www.springframework.org/schema/jee  
+     http://www.springframework.org/schema/jee/spring-jee.xsd
+     http://www.springframework.org/schema/context 
+     http://www.springframework.org/schema/context/spring-context.xsd
+     http://www.springframework.org/schema/cache 
+     http://www.springframework.org/schema/cache/spring-cache.xsd
+     http://www.springframework.org/schema/data/jpa
+    http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+	<!-- 自动扫描的包名 -->
+	<context:component-scan base-package="com.faceye">
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+		<!-- <context:include-filter type="regex" expression="com.faceye.feature.controller.*Controller" 
+			/> <context:include-filter type="regex" expression="com.faceye.component.*.controller.*Controller" 
+			/> -->
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Service" />
+	</context:component-scan>
+	<!-- 指定自己定义的validator -->
+	<mvc:annotation-driven validator="validator"
+		conversion-service="conversionService"></mvc:annotation-driven>
+	<!-- 默认的注解映射的支持 -->
+	<!-- <mvc:annotation-driven> <mvc:message-converters register-defaults="true"> 
+		<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"> 
+		<property name="supportMediaTypes" value="application/json;charset=UTF-8"></property> 
+		</bean> </mvc:message-converters> </mvc:annotation-driven> -->
+	<!-- <mvc:view-controller path="/" view-name="/default.jsp" /> -->
+	<!-- 视图解释类 -->
+	<bean id="jspViewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/" />
+		<property name="suffix" value=".jsp" />
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="order" value="1"></property>
+	</bean>
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.tiles3.TilesView" />
+		<property name="order" value="0"></property>
+	</bean>
+
+	<bean id="tilesConfigurer"
+		class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		<property name="definitions">
+			<list>
+				<value>classpath*:/tiles/manager/*.xml</value>
+			</list>
+		</property>
+	</bean>
+	<!-- <mvc:view-controller path="/" view-name="index" /> -->
+	<!-- mvc:resources mapping="/js/**" location="/js/" / -->
+	<!-- mvc:resources mapping="/images/**" location="/images/" / -->
+	<!-- mvc:resources mapping="/css/**" location="/css/" / -->
+	<!-- 对静态资源文件的访问 -->
+	<!-- 对，a.jpg 会先找a.jpp Controller,找不到，才会转资源处理器，可能存在性能问题. -->
+	<mvc:view-controller path="/login" view-name="security.user.login" />
+	<mvc:view-controller path="/register" view-name="security.user.register" />
+	<mvc:default-servlet-handler />
+	<!-- 拦截器 -->
+
+	<mvc:interceptors>
+		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
+		<!-- <bean class="com.faceye.component.security.interceptor.MenuHandlerInterceptor"></bean> -->
+	</mvc:interceptors>
+	<!-- <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver" 
+		/> -->
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+		<property name="cookieName" value="clientlanguage" />
+		<property name="cookieMaxAge" value="94608000" />
+		<property name="defaultLocale" value="zh_CN" />
+	</bean>
+	<mvc:view-controller path="/error" view-name="default.error" />
+
+	<!-- 总错误处理 -->
+	<bean id="exceptionResolver"
+		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="defaultErrorView">
+			<value>/error</value>
+		</property>
+		<property name="defaultStatusCode">
+			<value>500</value>
+		</property>
+		<property name="warnLogCategory">
+			<value>org.springframework.web.servlet.handler.SimpleMappingExceptionResolver
+			</value>
+		</property>
+	</bean>
+
+	<!-- Invokes Spring MVC @Controller methods -->
+	<!-- 支持2个'/'之间为空白的URL <bean id="pathMatcher" class="org.soofa.util.SeaAntPathMatcher" 
+		/> -->
+	<bean id="pathMatcher" class="org.springframework.util.AntPathMatcher" />
+
+	<!-- 注意,p:useSuffixPatternMatch参数配置影响安全性,如果为true,则会将类似'/user/'这样的URL也等同于'/user',从而导致能跳过权限检验 -->
+	<!-- 设置成false,将会导致'/user.json'无法映射到'/user'上,会影响REST的功能实现,故此处设置为true,但是在spring 
+		security处要明显处理以'/'结尾的URL -->
+	<bean
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"
+		p:alwaysUseFullPath="true" p:pathMatcher-ref="pathMatcher" p:order="3"
+		p:useSuffixPatternMatch="true">
+	</bean>
+
+	<!-- 配置RequestMappingHandlerAdapter -->
+	<bean
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<!-- <property name="webBindingInitializer"> -->
+		<!-- <bean class="org.soofa.web.base.binder.DefaultBindingInitializer"> -->
+		<!-- 需要事先配置好validator -->
+		<!-- <property name="validator" ref="validator" /> -->
+		<!-- </bean> -->
+		<!-- </property> -->
+		<!-- 支持@ResponseBody注解,直接从controller方法中返回各种类型的数据到HTTP Response中,例如String 
+			,图片等 -->
+		<property name="messageConverters">
+			<list>
+				<bean
+					class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
+				<bean
+					class="org.springframework.http.converter.StringHttpMessageConverter">
+					<property name="writeAcceptCharset" value="false" />
+					<property name="supportedMediaTypes">
+						<list>
+							<value>text/plain;charset=UTF-8</value>
+						</list>
+					</property>
+					<!-- See SPR-7316 -->
+				</bean>
+				<bean
+					class="org.springframework.http.converter.ResourceHttpMessageConverter" />
+				<bean
+					class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />
+				<bean
+					class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
+				<!-- <bean class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter"> -->
+				<!-- <constructor-arg index="0"> -->
+				<!-- <bean id="jaxbMarshaller" class="org.soofa.web.base.converter.ScanAnnotationJaxb2Marshaller" 
+					/> -->
+				<!-- </constructor-arg> -->
+				<!-- </bean> -->
+				<bean
+					class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter" />
+				<bean
+					class="org.springframework.http.converter.xml.XmlAwareFormHttpMessageConverter" />
+				<bean
+					class="org.springframework.http.converter.BufferedImageHttpMessageConverter" />
+				<ref bean="formHttpMessageConverter" />
+			</list>
+		</property>
+		<!-- <property name="customModelAndViewResolvers"> <list> <ref local="denyDuplicateSubmitModelAndViewResolver"/> 
+			</list> </property> -->
+	</bean>
+	<bean id="formHttpMessageConverter"
+		class="org.springframework.http.converter.FormHttpMessageConverter">
+	</bean>
+	<!-- 支持上传文件 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
+	</bean>
+	<!-- i18n -->
+	<!-- 国际化资源文件绑定，该文件放置在src下 -->
+	<!-- org.springframework.context.support.ResourceBundleMessageSource com.faceye.feature.service.impl.RegexPropertyMessageResources -->
+
+	<bean id="messageSource"
+		class="com.faceye.feature.service.impl.RegexPropertyMessageResources">
+		<property name="basenames">
+			<list>
+				<value>classpath:i18n/*</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"> 
+		<property name="basenames"> <list> <value>classpath:i18n/project</value> 
+		<value>classpath:org/hibernate/validator/ValidationMessages</value> </list> 
+		</property> <property name="useCodeAsDefaultMessage" value="false" /> <property 
+		name="defaultEncoding" value="UTF-8" /> <property name="cacheSeconds" value="60" 
+		/> </bean> -->
+	<!-- <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"> 
+		<property name="basename" value="classpath:messages" /> <property name="fileEncodings" 
+		value="utf-8" /> <property name="cacheSeconds" value="120" /> </bean> -->
+
+	<bean id="validator"
+		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<property name="providerClass" value="org.hibernate.validator.HibernateValidator" />
+		<property name="validationMessageSource" ref="messageSource" />
+
+	</bean>
+
+	<!-- <bean id="webBindingInitializer" class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer"> 
+		<property name="conversionService" ref="conversionService" /> <property name="validator" 
+		ref="validator" /> </bean> -->
+	<!-- org.springframework.context.support.ConversionServiceFactoryBean org.springframework.format.support.FormattingConversionServiceFactoryBean -->
+	<bean id="conversionService"
+		class="org.springframework.format.support.FormattingConversionServiceFactoryBean"></bean>
+	<bean id="webBindingInitializer"
+		class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
+		<property name="conversionService" ref="conversionService" />
+		<property name="validator" ref="validator" />
+	</bean>
+	<!-- 国际化的消息资源文件（本系统中主要用于显示/错误消息定制） -->
+	<!-- 在web环境中一定要定位到classpath 否则默认到当前web应用下找 -->
+	<!-- <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"> 
+		<property name="basenames"> <list> <value>classpath:messages</value> <value>classpath:org/hibernate/validator/ValidationMessages</value> 
+		</list> </property> <property name="useCodeAsDefaultMessage" value="false" 
+		/> <property name="defaultEncoding" value="UTF-8" /> <property name="cacheSeconds" 
+		value="60" /> </bean> -->
+</beans> 

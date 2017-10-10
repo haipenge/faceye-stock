@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+    <!-- 模块:generate 业务对像:Project 管理后台 tiles模板配置 -->
+    <!-- 作者:haipege -->
+    <!-- Project 管理 首页(列表页) -->
+	<definition name="generate.project.manager" extends="default.manager">
+	    <put-attribute name="default-center" value="generate.project.center"></put-attribute>
+	</definition>
+	<definition name="generate.project.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/generate/project/project_center.jsp"></put-attribute>
+	</definition>
+	
+	<!-- Project 新增,编辑页面 -->
+	<definition name="generate.project.update" extends="default.manager">
+	    <put-attribute name="default-center" value="generate.project.update.center"></put-attribute>
+	</definition>
+	<definition name="generate.project.update.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/generate/project/project_update.jsp"></put-attribute>
+	</definition>
+	
+	<!-- Project 明细页 -->
+	<definition name="generate.project.detail" extends="default.manager">
+	    <put-attribute name="default-center" value="generate.project.detail.center"></put-attribute>
+	</definition>
+	<definition name="generate.project.detail.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/generate/project/project_detail.jsp"></put-attribute>
+	</definition>
+	
+</tiles-definitions>

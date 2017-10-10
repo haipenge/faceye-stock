@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="generate-tools" basedir="." default="scp">
+<!-- tar Target -->
+	<target name="tar" depends="clean-target">
+		<tar destfile="${basedir}/target/faceye-generate-manager.tar">
+			<fileset dir="${basedir}">
+				<exclude name="target/**" />
+				<exclude name="logs/*.*" />
+				<exclude name="src/template/**" />
+				<exclude name="db/*.*" />
+				<exclude name="*.rar" />
+				<exclude name="*.zip" />
+				<exclude name="build*.xml"/>
+			</fileset>
+		</tar>
+		<gzip destfile="${basedir}/target/faceye-generate-manager.tar.gz" src="${basedir}/target/faceye-generate-manager.tar"></gzip>
+	</target>
+</project>

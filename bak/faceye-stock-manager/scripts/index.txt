@@ -1,0 +1,1 @@
+db.stock_financial_data.ensureIndex({_id:1,stockId:1,accountingSubjectId:1,accountingElementId:1,date:1});

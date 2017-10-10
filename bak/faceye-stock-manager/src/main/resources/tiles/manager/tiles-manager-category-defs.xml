@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+    <!-- 模块:stock 业务对像:Category 管理后台 tiles模板配置 -->
+    <!-- 作者:haipege -->
+    <!-- Category 管理 首页(列表页) -->
+	<definition name="stock.category.manager" extends="default.manager">
+	    <put-attribute name="default-center" value="stock.category.center"></put-attribute>
+	</definition>
+	<definition name="stock.category.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/stock/category/category_center.jsp"></put-attribute>
+	</definition>
+	
+	<!-- Category 新增,编辑页面 -->
+	<definition name="stock.category.update" extends="default.manager">
+	    <put-attribute name="default-center" value="stock.category.update.center"></put-attribute>
+	</definition>
+	<definition name="stock.category.update.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/stock/category/category_update.jsp"></put-attribute>
+	</definition>
+	
+	<!-- Category 明细页 -->
+	<definition name="stock.category.detail" extends="default.manager">
+	    <put-attribute name="default-center" value="stock.category.detail.center"></put-attribute>
+	</definition>
+	<definition name="stock.category.detail.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/stock/category/category_detail.jsp"></put-attribute>
+	</definition>
+	
+</tiles-definitions>

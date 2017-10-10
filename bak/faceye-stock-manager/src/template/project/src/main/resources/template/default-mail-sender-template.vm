@@ -1,0 +1,348 @@
+<html>
+ <head>
+ <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">  
+ <title>FaceYe Mail Center</title>
+   <style>
+body { /**
+	*font-family: verdana, tahoma, helvetica;
+	*/
+	font-family: 宋体,verdana,Arial,tahoma,helvetica;
+	margin: 0px auto;
+	font-size: 12px;
+	text-align: center;
+	/**
+	*word-wrap:break-word;
+	*/
+	word-break:break-all;
+	background-color:white;
+	margin:5px 5px 5px 5px;
+}
+a:link {
+	text-decoration: none;
+	color: #006699;
+}
+a:visited {
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+a:active {
+	
+}
+.gray {
+	color: #666666;
+}
+/**
+*.d=.default
+*/
+.default {
+	margin: 0px auto;
+	position: relative;
+	width: 100%;
+	overflow: hidden;
+}
+/**
+*.d-h = default-header
+*/
+.default-header { 
+	margin: 0px;
+	height: 100px;
+}
+/**
+*.d-c=.default-center-left
+*/
+.default-center{
+	position: relative;
+	margin: 5px 0px 5px 0px;
+	overflow: hidden;
+	width: 100%;
+}
+/**
+*.d-f=default-footer
+*/
+.default-footer {
+	margin: 15px 0px 15px 0px;
+	padding:15px 0px 15px 0px;
+	border-top:1px solid #EBEBEB;
+	position: relative;
+	width: 100% !important; 
+	*width: 100% !important;
+	width: 100%;
+	overflow: hidden;
+}
+/**
+*default-center-left
+*/
+.default-center-left {
+	border: 0px solid #EBEBEB;
+	margin: 5px 5px 0px 0px;
+	float: left;
+	overflow: hidden;
+	width: 25%;
+}
+.default-center-right {
+	border: 0px solid #EBEBEB;
+	margin: 5px 5px 0px 0px;
+	float: right;
+	overflow: hidden;
+	width: 73%;
+}
+/**
+*分页标签
+*/
+.default-page-container {
+	height: 20px;
+	font-weight: bold;
+	font-size: 12px;
+	text-align:center;
+	margin-top:5px!important;
+}
+.default-page-container span {
+	display: inline;
+	margin-left: 3px;
+	padding: 2px 5px 2px 5px;
+	height: 20px;
+	height: 14px !important;
+	*height: 20px;
+	text-align: center;
+	vertical-align: middle;
+	border: 1px solid #90ABC4;
+	margin-top:5px;
+	margin-bottom:5px;
+}
+/**
+*----------------
+*定义系统中统用容器
+*.c=.container
+*/
+.container{
+overflow: hidden;
+ border:1px solid #EBEBEB;
+}
+.container-no-border{
+  overflow: hidden;
+}
+.m-t-5{
+  margin-top:5px;
+}
+.m-t-15{
+  margin-top:15px;
+}
+.m-t-20{
+  margin-top:20px;
+}
+.m-t-25{
+  margin-top:25px;
+}
+.m-l-10{
+  margin-left:10px;
+}
+.m-l-15{
+  margin-left:15px;
+}
+.m-r-10{
+  margin-right:10px;
+}
+.m-r-15{
+  margin-right:15px;
+}
+/*
+*container-float-left -> left
+*/
+.left {
+	float: left;
+}
+/*
+*container-float-right -> right
+*/
+.right {
+	float: right;
+}
+.content { 
+	overflow:hidden;
+	text-align: left;
+	height:auto;
+	font-size:12px;
+	font-family: verdana,Arial,tahoma,宋体,helvetica;
+}
+.content>ul {
+	padding: 0px;
+	margin: 5px 5px 5px 5px;
+	list-style:none;
+}
+.content>ul>li {
+	padding: 0px;
+	overflow:auto;
+	margin-top:2px;
+	margin-bottom:2px;
+	vertical-align:auto;
+	word-wrap:break-word;
+	word-break:break-all;
+	text-overflow: ellipsis;
+}
+.title {
+	text-align: left;
+	font-size: 12px;
+	height: 25px;
+	line-height: 23px;
+	padding-left: 5px;
+	padding-right: 5px;
+	color: #3D5376;
+	valign: middle;
+	font-weight: bold;
+	background-color:#F1F6FB;
+	border-bottom: 1px solid #EBEBEB;
+}
+.normal{
+  font-weight:normal;
+}
+.bold{
+ font-weight:bold;
+}
+.content table{
+    text-align: left;
+    width:100%;
+    margin:auto;
+    border-collapse:collapse;
+	height:auto;
+	font-size:12px;
+	font-family: verdana,Arial,tahoma,宋体,helvetica;
+}
+.content table td{
+   border:1px solid #F1F6FB;
+   padding-left: 5px;
+}
+/**
+*表格中的编辑，删除列样式定义
+*/
+.table-edit{
+  width:50px;
+  text-align:center;
+}
+/**
+*表头样式定义
+*/
+.table-header{
+  background-color:#F1F6FB;
+  font-weight:bold;
+  color: #3D5376;
+}
+/**
+*form 下表格左边文字
+*/
+.table-column-name{
+  width:80px;
+  text-align:left;
+}
+/**
+*用户注册与登录css控制
+*/
+input.security{
+float:left;
+border:1px solid #DDDDDD;
+width:250px;
+float:right;
+margin-left:5px;
+height:33px;
+color:#5C9BCC;
+font-size:17px;
+line-height:33px;
+vertical-align:middle;
+}
+.security-field-label{
+color:#5C9BCC;
+width:70px;
+float:left;
+text-align:right;
+height:35px;
+vertical-align:middle;
+font-size:14px;
+line-height:35px;
+}
+.security-content{
+ width:550px;
+ text-align:center;
+ margin:0 auto;
+ font-size:14px;
+}
+.tip-msg{
+border:1px solid #DDDDDD;
+display:none;
+float:right;
+width:210px;
+height:33px;
+font-size:14px;
+text-align:left;
+line-height:33px;
+vertical-align:middle;
+}
+.pointer{
+  cursor:pointer;
+}
+/**
+*管理界面后台
+*/
+.security-header{
+   background:#183D5C;
+   color:white;
+}
+.security-header a{
+  color:white;
+}
+/**
+*统一form样式定义
+*/
+input[type="text"]{
+	width:300px;
+	height: 30px;
+	font:12px blue;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-left: 5px;
+	border:1px solid gray;
+}
+input[type="submit"]{
+	width:75px;
+	height:55px;
+	margin-top: 15px;
+	margin-bottom: 15px;
+	text-align: center;
+	margin-left: 250px;
+
+}
+textarea{
+  width: 300px;
+  height: 100px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  border:1px solid gray;
+}
+select{
+   width: 300px;
+   height:30px;
+   margin-top: 5px;
+   margin-bottom: 5px;
+   margin-left: 5px;
+   border:1px solid gray;
+}
+   </style> 
+ </head>
+   <body>
+   <div class="container">
+     <div class="title">
+       FaceYe--Mail Center.
+     </div>
+     
+     <div class="content">
+        <ul>
+           #foreach($m in $body.entrySet())
+            <li>$m.key - $m.value</li>
+           #end 
+           <li>$key-1     :     $key-2</li>
+        </ul>
+     </div>   
+   </div>
+   </body>
+</html>

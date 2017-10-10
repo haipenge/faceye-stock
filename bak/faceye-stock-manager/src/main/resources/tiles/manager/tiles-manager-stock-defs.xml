@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+    <!-- 模块:stock 业务对像:Stock 管理后台 tiles模板配置 -->
+    <!-- 作者:haipege -->
+    <!-- Stock 管理 首页(列表页) -->
+	<definition name="stock.stock.manager" extends="default.manager">
+	    <put-attribute name="default-center" value="stock.stock.center"></put-attribute>
+	</definition>
+	<definition name="stock.stock.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/stock/stock/stock_center.jsp"></put-attribute>
+	</definition>
+	
+	<!-- Stock 新增,编辑页面 -->
+	<definition name="stock.stock.update" extends="default.manager">
+	    <put-attribute name="default-center" value="stock.stock.update.center"></put-attribute>
+	</definition>
+	<definition name="stock.stock.update.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/stock/stock/stock_update.jsp"></put-attribute>
+	</definition>
+	
+	<!-- Stock 明细页 -->
+	<definition name="stock.stock.detail" extends="default.manager">
+	    <put-attribute name="default-center" value="stock.stock.detail.center"></put-attribute>
+	</definition>
+	<definition name="stock.stock.detail.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/stock/stock/stock_detail.jsp"></put-attribute>
+	</definition>
+	
+</tiles-definitions>

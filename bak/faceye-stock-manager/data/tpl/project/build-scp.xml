@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="generate-tools" basedir="." default="scp">
+   <import file="build-tar.xml"></import>
+	<!-- SCP Target -->
+	<target name="scp" depends="tar">
+		<scp
+			todir="song:song12345@222.171.225.170:/home/song/app/build/faceye-generate-feature"
+			trust="true" sftp="true">
+			<fileset dir="${basedir}/target">
+				<include name="**/*.tar.gz" />
+			</fileset>
+		</scp>
+	</target>
+	<!-- Clean target dir -->
+	<target name="clean-target">
+		<delete dir="${basedir}/target">
+			<include name="*.tar*"></include>
+		</delete>
+		<delete dir="${basedir}/logs"></delete>
+	</target>
+	<target name="exec" depends="scp">
+		<sshexec host="222.171.225.170" username="song" password="song12345"
+			command="/home/song/app/shell/manager-deploy.sh" trust="true" />
+		<sleep seconds="15" />
+	</target>
+
+	<target name="scp-product" depends="clean-target,tar">
+		<scp
+			todir="dev:psuitxeesonge@120.27.51.168:/app/source/faceye-generate-search-manager"
+			trust="true" sftp="true">
+			<fileset dir="${basedir}/target">
+				<include name="**/*.tar.gz" />
+			</fileset>
+		</scp>
+	</target>
+</project>
