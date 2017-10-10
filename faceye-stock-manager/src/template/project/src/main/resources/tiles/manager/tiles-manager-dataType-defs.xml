@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+    <!-- 模块:generate 业务对像:DataType 管理后台 tiles模板配置 -->
+    <!-- 作者:haipege -->
+    <!-- DataType 管理 首页(列表页) -->
+	<definition name="generate.dataType.manager" extends="default.manager">
+	    <put-attribute name="default-center" value="generate.dataType.center"></put-attribute>
+	</definition>
+	<definition name="generate.dataType.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/generate/dataType/dataType_center.jsp"></put-attribute>
+	</definition>
+	
+	<!-- DataType 新增,编辑页面 -->
+	<definition name="generate.dataType.update" extends="default.manager">
+	    <put-attribute name="default-center" value="generate.dataType.update.center"></put-attribute>
+	</definition>
+	<definition name="generate.dataType.update.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/generate/dataType/dataType_update.jsp"></put-attribute>
+	</definition>
+	
+	<!-- DataType 明细页 -->
+	<definition name="generate.dataType.detail" extends="default.manager">
+	    <put-attribute name="default-center" value="generate.dataType.detail.center"></put-attribute>
+	</definition>
+	<definition name="generate.dataType.detail.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/generate/dataType/dataType_detail.jsp"></put-attribute>
+	</definition>
+	
+</tiles-definitions>

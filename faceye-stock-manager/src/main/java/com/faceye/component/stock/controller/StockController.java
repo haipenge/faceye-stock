@@ -62,6 +62,7 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 		Double minPe = MapUtils.getDouble(searchParams, "GTE|dailyStat.pe");
 		Double maxPe = MapUtils.getDouble(searchParams, "LTE|dailyStat.pe");
 		String trace = MapUtils.getString(searchParams, "trace");
+		
 
 		if (StringUtils.isNotEmpty(trace)) {
 			Map starParams = new HashMap();

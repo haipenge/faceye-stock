@@ -121,7 +121,6 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 				this.stat(stock);
 			}
 		}
-
 	}
 
 	/**

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration>
+<configuration scan="true" scanPeriod="60 seconds">
 	<property name="log.dir" value="${x.logger.dir}"></property>
 	<property name="logger.level.faceye" value="${x.logger.level.faceye}"></property>
 	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">

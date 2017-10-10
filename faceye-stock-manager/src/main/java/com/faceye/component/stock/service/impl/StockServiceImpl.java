@@ -203,18 +203,18 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 	 */
 	public boolean initStockCategory() {
 		boolean res = false;
-		List<Stock> stocks = this.getAll();
-		for (Stock stock : stocks) {
-			String categoryName = StringUtils.isNotEmpty(stock.getBusiness()) ? StringUtils.trim(stock.getBusiness()) : "Default";
-			Category category = this.categoryService.getCategoryByName(categoryName);
-			if (category == null) {
-				category = new Category();
-				category.setName(categoryName);
-				this.categoryService.save(category);
-			}
-			stock.setCategory(category);
-			this.save(stock);
-		}
+//		List<Stock> stocks = this.getAll();
+//		for (Stock stock : stocks) {
+//			String categoryName = StringUtils.isNotEmpty(stock.getBusiness()) ? StringUtils.trim(stock.getBusiness()) : "Default";
+//			Category category = this.categoryService.getCategoryByName(categoryName);
+//			if (category == null) {
+//				category = new Category();
+//				category.setName(categoryName);
+//				this.categoryService.save(category);
+//			}
+//			stock.setCategory(category);
+//			this.save(stock);
+//		}
 		res = true;
 		return res;
 	}

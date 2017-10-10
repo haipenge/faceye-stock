@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import com.faceye.component.stock.entity.AccountingSubject;
 import com.faceye.component.stock.entity.BonusRecord;
+import com.faceye.component.stock.entity.Category;
 import com.faceye.component.stock.entity.Forecast;
 import com.faceye.component.stock.entity.ForecastIndex;
 import com.faceye.component.stock.entity.Mechanism;
@@ -33,6 +34,7 @@ import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.entity.TotalStock;
 import com.faceye.component.stock.service.AccountingSubjectService;
 import com.faceye.component.stock.service.BonusRecordService;
+import com.faceye.component.stock.service.CategoryService;
 import com.faceye.component.stock.service.CrawlFinancialDataService;
 import com.faceye.component.stock.service.FinancialDataService;
 import com.faceye.component.stock.service.ForecastIndexService;
@@ -56,6 +58,8 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	@Autowired
 	private StockService stockService = null;
 	@Autowired
+	private CategoryService categoryService =null;
+	@Autowired
 	private AccountingSubjectService accountingSubjectService = null;
 	@Autowired
 	private FinancialDataService financialDataService = null;
@@ -73,7 +77,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	@Autowired
 	private MechanismService mechanismService = null;
 	@Autowired
-	private ForecastIndexService forecastIndexService=null;
+	private ForecastIndexService forecastIndexService = null;
 
 	@Override
 	public void crawl() {
@@ -125,7 +129,8 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 		if (!isEmpty) {
 			ReportData lastReportData = reportDatas.getContent().get(0);
 			Date now = new Date();
-			if (lastReportData.getDate() != null && now.getTime() - lastReportData.getDate().getTime() < 3 * 30 * 24 * 60 * 60 * 1000L) {
+			if (lastReportData.getDate() != null
+					&& now.getTime() - lastReportData.getDate().getTime() < 3 * 30 * 24 * 60 * 60 * 1000L) {
 				isCrawled = true;
 			}
 		}
@@ -203,12 +208,14 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 		if (CollectionUtils.isNotEmpty(records)) {
 			this.saveParseData(stock, records, accountingSubject);
 			// List<FinancialData> datas = new ArrayList<FinancialData>();
-			// Long accountingElementId = accountingSubject.getAccountingElement().getId();
+			// Long accountingElementId =
+			// accountingSubject.getAccountingElement().getId();
 			// for (Map<String, String> record : records) {
 			// String date = MapUtils.getString(record, "date");
 			// String data = MapUtils.getString(record, "data");
 			//
-			// // logger.debug(">>FaceYe --> parsed financial data is:" + date + ":" + data);
+			// // logger.debug(">>FaceYe --> parsed financial data is:" + date +
+			// ":" + data);
 			// boolean isExist = false;
 			//
 			// if (!isExist && StringUtils.isNotEmpty(date)) {
@@ -222,11 +229,13 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 			// } else {
 			// financialData.setData(NumberUtils.createDouble(data));
 			// }
-			// financialData.setDate(DateUtil.getDateFromString(date, "yyyy-MM-dd"));
+			// financialData.setDate(DateUtil.getDateFromString(date,
+			// "yyyy-MM-dd"));
 			// financialData.setStockId(stock.getId());
 			// datas.add(financialData);
 			// } catch (Exception e) {
-			// logger.error(">>FaceYe throws Exception when save data,data :date is:" + data + ":" + date, e);
+			// logger.error(">>FaceYe throws Exception when save data,data :date
+			// is:" + data + ":" + date, e);
 			// }
 			// } else {
 			// logger.debug(">>FaceYe --> financial data exist.");
@@ -236,7 +245,8 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 			// this.financialDataService.save(datas);
 			// }
 		} else {
-			logger.error(">>FaceYe -> have got empty record of stock :" + stock.getName() + "(" + stock.getCode() + "),[" + stock.getId() + "]");
+			logger.error(">>FaceYe -> have got empty record of stock :" + stock.getName() + "(" + stock.getCode()
+					+ "),[" + stock.getId() + "]");
 		}
 	}
 
@@ -289,7 +299,8 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 		String eleClassName = "com.faceye.component.stock.entity.Ele" + accountingElementId;
 		String propertyName = accountingSubject.getCode().toLowerCase() + "_" + accountingSubjectId;
 		if (StringUtils.isNotEmpty(data)) {
-			String reportCategoryClassName = "com.faceye.component.stock.entity." + accountingSubject.getAccountingElement().getReportCategory().getCode();
+			String reportCategoryClassName = "com.faceye.component.stock.entity."
+					+ accountingSubject.getAccountingElement().getReportCategory().getCode();
 			reportCategoryClassName = reportCategoryClassName.toLowerCase().replaceAll("_", "");
 			Field[] categoryClazz = ReportData.class.getDeclaredFields();
 			Object categoryObject = null;
@@ -322,7 +333,8 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 						} catch (NoSuchMethodException e) {
 							logger.error(">>FaceYe Throws Exception:", e);
 						}
-						// element = ReflectionUtils.getField(el, categoryObject);
+						// element = ReflectionUtils.getField(el,
+						// categoryObject);
 						break;
 					}
 				}
@@ -367,6 +379,9 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 			if (accountingSubjects == null) {
 				accountingSubjects = this.getAccountingSubjects();
 			}
+			/**
+			 * 爬取财报数据
+			 */
 			if (CollectionUtils.isNotEmpty(accountingSubjects)) {
 				for (AccountingSubject accountingSubject : accountingSubjects) {
 					url = accountingSubject.getSinaUrl();
@@ -392,6 +407,8 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 			this.crawlBonusRecord(stock);
 			// 爬取分析师评估数据
 			this.crawlForecast(stock);
+			//爬取行业、分类
+			this.crawlCategory(stock);
 		} else {
 			logger.debug(">>FaceYe --> stock:" + stock.getName() + "(" + stock.getCode() + ") 已爬取");
 		}
@@ -403,7 +420,8 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	 * @param stock
 	 * @Desc:
 	 * @Author:haipenge
-	 * @Date:2017年7月9日 下午9:05:57 http://vip.stock.finance.sina.com.cn/corp/go.php/vCI_StockStructureHistory/stockid/000998/stocktype/TotalStock.phtml
+	 * @Date:2017年7月9日 下午9:05:57
+	 *                 http://vip.stock.finance.sina.com.cn/corp/go.php/vCI_StockStructureHistory/stockid/000998/stocktype/TotalStock.phtml
 	 */
 	private void crawlTotalStocksNum(Stock stock) {
 		String url = "http://vip.stock.finance.sina.com.cn/corp/go.php/vCI_StockStructureHistory/stockid/000998/stocktype/TotalStock.phtml";
@@ -419,7 +437,9 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 						Map<String, String> map = results.get(i);
 						String value = StringUtils.trim(map.get("1"));
 						if (i % 2 == 0) {
-							// boolean isExist = this.totalStockService.isTotalStockExist(stock.getId(), value);
+							// boolean isExist =
+							// this.totalStockService.isTotalStockExist(stock.getId(),
+							// value);
 							totalStock = this.totalStockService.getTotalStock(stock.getId(), value);
 						}
 						if (i % 2 != 0) {
@@ -525,31 +545,41 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 									}
 									if (i == 6) {
 										equityRegistrationDateStr = m.group(1);
-										equityRegistrationDateStr = StringUtils.replace(equityRegistrationDateStr, "--", "");
+										equityRegistrationDateStr = StringUtils.replace(equityRegistrationDateStr, "--",
+												"");
 									}
 									if (i == 7) {
 										bonusShareTradingDateStr = m.group(1);
-										bonusShareTradingDateStr = StringUtils.replace(bonusShareTradingDateStr, "--", "");
+										bonusShareTradingDateStr = StringUtils.replace(bonusShareTradingDateStr, "--",
+												"");
 									}
 									i++;
 								}
 								if (StringUtils.isNotEmpty(publishDateStr)) {
-									// boolean isExist = this.bonusRecordService.isExistBonusRecord(stock.getId(), publishDateStr);
-									BonusRecord bonusRecord = this.bonusRecordService.getBonusRecord(stock.getId(), publishDateStr);
+									// boolean isExist =
+									// this.bonusRecordService.isExistBonusRecord(stock.getId(),
+									// publishDateStr);
+									BonusRecord bonusRecord = this.bonusRecordService.getBonusRecord(stock.getId(),
+											publishDateStr);
 									if (bonusRecord == null) {
 										bonusRecord = new BonusRecord();
 									}
 									bonusRecord.setStockId(stock.getId());
-									bonusRecord.setPublishDate(DateUtil.getDateFromString(publishDateStr, "yyyy-MM-dd"));
+									bonusRecord
+											.setPublishDate(DateUtil.getDateFromString(publishDateStr, "yyyy-MM-dd"));
 									if (StringUtils.isNotEmpty(bonusShareTradingDateStr)) {
-										bonusRecord.setBonusShareTradingDate(DateUtil.getDateFromString(bonusShareTradingDateStr, "yyyy-MM-dd"));
+										bonusRecord.setBonusShareTradingDate(
+												DateUtil.getDateFromString(bonusShareTradingDateStr, "yyyy-MM-dd"));
 									}
 									bonusRecord.setDividend(NumberUtils.toDouble(dividendStr) / 10);
-									bonusRecord.setEquityRegistrationDate(DateUtil.getDateFromString(equityRegistrationDateStr, "yyyy-MM-dd"));
-									bonusRecord.setExDividendDate(DateUtil.getDateFromString(exDividendDateStr, "yyyy-MM-dd"));
+									bonusRecord.setEquityRegistrationDate(
+											DateUtil.getDateFromString(equityRegistrationDateStr, "yyyy-MM-dd"));
+									bonusRecord.setExDividendDate(
+											DateUtil.getDateFromString(exDividendDateStr, "yyyy-MM-dd"));
 									bonusRecord.setGiveStockCount(NumberUtils.toDouble(giveStockCountStr) / 10);
 									bonusRecord.setIncreaseStockCount(Double.valueOf(increaseStockCountStr) / 10);
-									bonusRecord.setPublishDate(DateUtil.getDateFromString(publishDateStr, "yyyy-MM-dd"));
+									bonusRecord
+											.setPublishDate(DateUtil.getDateFromString(publishDateStr, "yyyy-MM-dd"));
 									bonusRecord.setStatus(status);
 									this.bonusRecordService.save(bonusRecord);
 								}
@@ -569,13 +599,17 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	 */
 	public void crawlForecast(Stock stock) {
 		Map<String, String> urls = new HashMap<String, String>();
-		urls.put("eps", "http://vip.stock.finance.sina.com.cn/q/go.php/vPerformancePrediction/kind/eps/index.phtml?symbol=sz000998");
+		urls.put("eps",
+				"http://vip.stock.finance.sina.com.cn/q/go.php/vPerformancePrediction/kind/eps/index.phtml?symbol=sz000998");
 		// 营收
-		urls.put("sales", "http://vip.stock.finance.sina.com.cn/q/go.php/vPerformancePrediction/kind/sales/index.phtml?symbol=sz000998");
+		urls.put("sales",
+				"http://vip.stock.finance.sina.com.cn/q/go.php/vPerformancePrediction/kind/sales/index.phtml?symbol=sz000998");
 		// 净利润
-		urls.put("np", "http://vip.stock.finance.sina.com.cn/q/go.php/vPerformancePrediction/kind/np/index.phtml?symbol=sz000998");
+		urls.put("np",
+				"http://vip.stock.finance.sina.com.cn/q/go.php/vPerformancePrediction/kind/np/index.phtml?symbol=sz000998");
 		// 净资产收益率(ROE)
-		urls.put("roe", "http://vip.stock.finance.sina.com.cn/q/go.php/vPerformancePrediction/kind/roe/index.phtml?symbol=sz000998");
+		urls.put("roe",
+				"http://vip.stock.finance.sina.com.cn/q/go.php/vPerformancePrediction/kind/roe/index.phtml?symbol=sz000998");
 		Iterator<String> keyIterator = urls.keySet().iterator();
 		while (keyIterator.hasNext()) {
 			String key = keyIterator.next();
@@ -594,7 +628,8 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	 */
 	private void crawlForecast(Stock stock, String kind, String url) {
 
-		// String url = "http://vip.stock.finance.sina.com.cn/q/go.php/vPerformancePrediction/kind/eps/index.phtml?symbol=sz000998";
+		// String url =
+		// "http://vip.stock.finance.sina.com.cn/q/go.php/vPerformancePrediction/kind/eps/index.phtml?symbol=sz000998";
 		url = StringUtils.replace(url, "sz000998", stock.getMarket().toLowerCase() + stock.getCode());
 		// http://vip.stock.finance.sina.com.cn/q/go.php/vPerformancePrediction/kind/eps/index.phtml?symbol=sz000998&p=1
 		// http://vip.stock.finance.sina.com.cn/q/go.php/vPerformancePrediction/kind/eps/index.phtml?symbol=sz000998&p=2
@@ -648,15 +683,16 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 				}
 
 				for (List<String> items : tdResults) {
-//					List<Forecast> forecasts = new ArrayList<Forecast>(0);
+					// List<Forecast> forecasts = new ArrayList<Forecast>(0);
 					for (int i = 0; i < items.size(); i++) {
 						String tdText = items.get(i);
 						String reportDate = items.get(4);
 						String mechanismName = items.get(5);
-						String researcher=items.get(6);
+						String researcher = items.get(6);
 						if (i <= 3) {
 							String yearText = years.get(i);
-							Forecast forecast = this.forecaseService.getForecast(stock.getId(), Integer.parseInt(yearText), reportDate, mechanismName);
+							Forecast forecast = this.forecaseService.getForecast(stock.getId(),
+									Integer.parseInt(yearText), reportDate, mechanismName);
 							if (forecast == null) {
 								forecast = new Forecast();
 								forecast.setStockId(stock.getId());
@@ -666,10 +702,12 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 								if (mechanism == null) {
 									mechanism = new Mechanism();
 									mechanism.setName(mechanismName);
-									mechanism=this.mechanismService.save(mechanism);
+									mechanism = this.mechanismService.save(mechanism);
 								}
-								ForecastIndex forecastIndex=this.forecastIndexService.getForecastIndexByMechanismAndReportDate(stock.getId(), mechanism,forecast.getReportDate() );
-//								f.setMechanismDef(mechanism);
+								ForecastIndex forecastIndex = this.forecastIndexService
+										.getForecastIndexByMechanismAndReportDate(stock.getId(), mechanism,
+												forecast.getReportDate());
+								// f.setMechanismDef(mechanism);
 								forecast.setForecastIndex(forecastIndex);
 								forecast.setMechanism(mechanismName);
 								forecast.setResearcher(researcher);
@@ -686,37 +724,41 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 								}
 							}
 							this.forecaseService.save(forecast);
-//							forecast.setYear(NumberUtils.toInt(yearText));
-//							forecasts.add(forecast);
+							// forecast.setYear(NumberUtils.toInt(yearText));
+							// forecasts.add(forecast);
 						}
-//						if (i == 4) {
-//							for (Forecast f : forecasts) {
-//								f.setReportDate(DateUtil.getDateFromString(tdText, "yyyy-MM-dd"));
-//							}
-//						}
-//						if (i == 5) {
-//							for (Forecast f : forecasts) {
-//								Mechanism mechanism = this.mechanismService.getMechanismByName(tdText);
-//								if (mechanism == null) {
-//									mechanism = new Mechanism();
-//									mechanism.setName(tdText);
-//									mechanism=this.mechanismService.save(mechanism);
-//								}
-//								ForecastIndex forecastIndex=this.forecastIndexService.getForecastIndexByMechanismAndReportDate(stock.getId(), mechanism,f.getReportDate() );
-////								f.setMechanismDef(mechanism);
-//								f.setForecastIndex(forecastIndex);
-//								f.setMechanism(tdText);
-//							}
-//						}
-//						if (i == 6) {
-//							for (Forecast f : forecasts) {
-//								f.setResearcher(tdText);
-//							}
-//						}
+						// if (i == 4) {
+						// for (Forecast f : forecasts) {
+						// f.setReportDate(DateUtil.getDateFromString(tdText,
+						// "yyyy-MM-dd"));
+						// }
+						// }
+						// if (i == 5) {
+						// for (Forecast f : forecasts) {
+						// Mechanism mechanism =
+						// this.mechanismService.getMechanismByName(tdText);
+						// if (mechanism == null) {
+						// mechanism = new Mechanism();
+						// mechanism.setName(tdText);
+						// mechanism=this.mechanismService.save(mechanism);
+						// }
+						// ForecastIndex
+						// forecastIndex=this.forecastIndexService.getForecastIndexByMechanismAndReportDate(stock.getId(),
+						// mechanism,f.getReportDate() );
+						//// f.setMechanismDef(mechanism);
+						// f.setForecastIndex(forecastIndex);
+						// f.setMechanism(tdText);
+						// }
+						// }
+						// if (i == 6) {
+						// for (Forecast f : forecasts) {
+						// f.setResearcher(tdText);
+						// }
+						// }
 					}
-//					if (CollectionUtils.isNotEmpty(forecasts)) {
-//						this.forecaseService.save(forecasts);
-//					}
+					// if (CollectionUtils.isNotEmpty(forecasts)) {
+					// this.forecaseService.save(forecasts);
+					// }
 				}
 
 			}
@@ -725,4 +767,60 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 		}
 
 	}
+
+	/**
+	 * 爬取股票所属分类
+	 * 
+	 * @param stock
+	 *            Url:http://vip.stock.finance.sina.com.cn/corp/go.php/vCI_CorpOtherInfo/stockid/000998/menu_num/5.phtml
+	 */
+	private void crawlCategory(Stock stock) {
+		String url = "http://vip.stock.finance.sina.com.cn/corp/go.php/vCI_CorpOtherInfo/stockid/000998/menu_num/5.phtml";
+		url = StringUtils.replace(url, "000998", stock.getCode());
+		String content = Http.getInstance().get(url, "gb2312");
+		String regexp = "<table class=\"comInfo1\" width=\"60%\" align=\"center\">([\\S\\s]*?)</table>";
+		try {
+			List<Map<String, String>> tables = RegexpUtil.match(content, regexp);
+			if (CollectionUtils.isNotEmpty(tables) && tables.size() == 2) {
+				// 证监会行业分类
+				Map<String, String> businessTable = tables.get(0);
+				// 概念行业分类
+				Map<String, String> categoriesTable = tables.get(1);
+
+				// 证监会行业分类匹配
+				String business = "Default";
+				String businessContent = businessTable.get("1");
+				String businessRegexp = "<td class=\"ct\" align=\"center\">([\\S\\s]*?)</td>";
+				List<Map<String, String>> businessMatchers = RegexpUtil.match(businessContent, businessRegexp);
+				if (CollectionUtils.isNotEmpty(businessMatchers) && businessMatchers.size() == 2) {
+					business = StringUtils.trim(businessMatchers.get(1).get("1"));
+				}
+				//概念行业分类
+				List<Category> categories=new ArrayList<>(0);
+				String categoriesContent=categoriesTable.get("1");
+				String categoriesRegexp="<td class=\"ct\" align=\"center\">([\\S\\s]*?)</td>";
+				List<Map<String,String>> categoriesMatchers=RegexpUtil.match(categoriesContent, categoriesRegexp);
+				if(CollectionUtils.isNotEmpty(categoriesMatchers)){
+					for(int i=0;i<categoriesMatchers.size();i+=2){
+						String categoryName=categoriesMatchers.get(i).get("1");
+						Category category=this.categoryService.getCategoryByName(categoryName);
+						if(category!=null){
+							categories.add(category);
+						}else{
+							category=new Category();
+							category.setName(categoryName);
+							this.categoryService.save(category);
+							categories.add(category);
+						}
+					}
+				}
+				stock.setBusiness(business);
+				stock.setCategories(categories);
+				this.stockService.save(stock);
+			}
+		} catch (Exception e) {
+			logger.error(">>Exception:" + e);
+		}
+	}
+
 }

@@ -47,6 +47,11 @@
 			</c:if>
 		</div>
 	</div>
+	<div class="row">
+	  <div class="content">
+	  行业:${stock.business}&nbsp;&nbsp;概念:<c:forEach var="category" items="${stock.categories}">${category.name}</c:forEach>
+	  </div>
+	</div>
 </div>
 <div class="cl-mcont">
 	<div class="block-flat">

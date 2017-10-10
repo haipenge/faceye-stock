@@ -57,7 +57,9 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 			// criteria.andOperator(Criteria.where("dailyStat.pe").gt(0D));
 		}
 		if (categoryId != null) {
-			criteria.and("category.$id").is(categoryId);
+//			db.stock_stock.find({categories:{$elemMatch:{_id:2}}}).pretty();
+//			criteria.and("category.$id").is(categoryId);
+			criteria.and("categories").elemMatch(Criteria.where("_id").is(categoryId));
 			// criteria.andOperator(Criteria.where("category.$id").is(categoryId));
 		}
 		Criteria peCriteria = null;

@@ -27,7 +27,7 @@
 	</div>
 	 -->
 	<div class="block-flat">
-		<div class="content"></div>
+		<div class="content">行业:${stock.business}&nbsp;&nbsp;概念:<c:forEach var="category" items="${stock.categories}">${category.name}</c:forEach></div>
 		<div class="content">
 			<div id="msg"></div>
 			<div class="detail-section">
