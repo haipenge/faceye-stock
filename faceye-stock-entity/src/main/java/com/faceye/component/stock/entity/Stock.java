@@ -2,6 +2,7 @@ package com.faceye.component.stock.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Id;
 
@@ -101,10 +102,24 @@ public class Stock implements Serializable {
 	public Category getCategory() {
 		return category;
 	}
+	
+	/**
+	 * 所属概念板块
+	 */
+	private List<Category> categories=null;
+	
+	public List<Category> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(List<Category> categories) {
+		this.categories = categories;
+	}
 
 	public void setCategory(Category category) {
 		this.category = category;
 	}
+	
 	
 	/**
 	 * 每日数据分析
