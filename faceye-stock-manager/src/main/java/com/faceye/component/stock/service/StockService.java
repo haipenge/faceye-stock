@@ -1,5 +1,8 @@
 package com.faceye.component.stock.service;
 
+import java.io.OutputStream;
+import java.util.Map;
+
 import com.faceye.component.stock.entity.Stock;
 import com.faceye.feature.service.BaseService;
 
@@ -25,5 +28,12 @@ public interface StockService extends BaseService<Stock,Long>{
 	 * @Date:2017年3月21日 上午10:44:05
 	 */
 	public boolean initStockCategory() ;
+	
+	
+	/**
+	 * 根据条件，出出股票
+	 * @param searchParams
+	 */
+	public void export(Map searchParams,OutputStream stream);
 	
 }/**@generate-service-source@**/

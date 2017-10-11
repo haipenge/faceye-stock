@@ -1,10 +1,12 @@
 package com.faceye.component.stock.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
@@ -54,15 +56,47 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 	 * @author:@haipenge haipenge@gmail.com 2014年5月24日
 	 */
 	@RequestMapping("/home")
-	public String home(HttpServletRequest request, Model model) {
+	public String home(HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page page = null;
+		Map searchParams = this.filterParams(request);
+		page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
+		this.resetSearchParams(searchParams);
+		model.addAttribute("searchParams", searchParams);
+		model.addAttribute("page", page);
+		List<Category> categories = this.categoryService.getAll();
+		model.addAttribute("categories", categories);
+		return "stock.stock.manager";
+	}
+	
+	/**
+	 * 导出数据到Excel
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping("/export")
+	public String export(HttpServletRequest request,HttpServletResponse response){
+		Map searchParams = this.filterParams(request);
+		response.setHeader("Content-disposition", "stock-filter.xls");  
+        response.setContentType("application/vnd.ms-excel");    
+        response.setHeader("Content-disposition", "attachment;filename=stock-filter.xls");    
+        response.setHeader("Pragma", "No-cache");  
+		try {
+			this.service.export(searchParams, response.getOutputStream());
+		} catch (IOException e) {
+			logger.error(">>Exception:"+e);
+		}
+		return null;
+	}
+	
+	private Map filterParams(HttpServletRequest request){
 		Map searchParams = HttpUtil.getRequestParams(request);
 		String nameQueryKey = MapUtils.getString(searchParams, "like|name");
 		String codeQueryKey = MapUtils.getString(searchParams, "like|code");
 		Double minPe = MapUtils.getDouble(searchParams, "GTE|dailyStat.pe");
 		Double maxPe = MapUtils.getDouble(searchParams, "LTE|dailyStat.pe");
 		String trace = MapUtils.getString(searchParams, "trace");
-		
+
+		String submit = MapUtils.getString(searchParams, "submit", "query");
 
 		if (StringUtils.isNotEmpty(trace)) {
 			Map starParams = new HashMap();
@@ -89,13 +123,7 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 		searchParams.put("sortTodayIncreaseRate", sortTodayIncreaseRate);
 		String sortPriceAmplitude = MapUtils.getString(searchParams, "SORT|dailyStat.priceAmplitude");
 		searchParams.put("sortPriceAmplitude", sortPriceAmplitude);
-		page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
-		this.resetSearchParams(searchParams);
-		model.addAttribute("searchParams", searchParams);
-		model.addAttribute("page", page);
-		List<Category> categories = this.categoryService.getAll();
-		model.addAttribute("categories", categories);
-		return "stock.stock.manager";
+		return searchParams;
 	}
 
 	/**

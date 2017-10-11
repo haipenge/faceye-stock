@@ -7,6 +7,7 @@ var Stock = {
 		$('#toggle-category').click(function(){$('.category-container').toggle();return false;});
 		$('#btn-multi-stock-compare').click(function(){Stock.multiStockReportCompare();});
 		$('#init-system').click(function(){Stock.initSystem();return false;});
+		$('#export').click(function(){Stock.exportExcel();return false;});
 	},
 	/**
 	 * 初始化股票分类
@@ -57,6 +58,13 @@ var Stock = {
 	       }
 	    }
 	  });
+	},
+	exportExcel:function(){
+		var url="/stock/stock/export";
+		$('#query-form').attr('action',url);
+		$('#query-form').submit();
+		url='/stock/stock/home';
+		$('#query-form').attr('action',url);
 	}
 };
 $(document).ready(function(){Stock.init();});

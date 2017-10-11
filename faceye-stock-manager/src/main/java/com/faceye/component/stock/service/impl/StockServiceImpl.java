@@ -1,29 +1,34 @@
 package com.faceye.component.stock.service.impl;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.OutputStream;
+import java.text.DecimalFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.faceye.component.stock.entity.Category;
+import com.faceye.component.stock.entity.DataStat;
 import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.repository.mongo.StockRepository;
 import com.faceye.component.stock.repository.mongo.customer.StockCustomerRepository;
 import com.faceye.component.stock.service.CategoryService;
+import com.faceye.component.stock.service.DataStatService;
 import com.faceye.component.stock.service.StockService;
+import com.faceye.component.stock.util.StockConstants;
 import com.faceye.component.stock.util.StockFetcher;
+import com.faceye.feature.service.export.excel.ExcelService;
+import com.faceye.feature.service.export.excel.data.DCell;
+import com.faceye.feature.service.export.excel.data.DHeader;
+import com.faceye.feature.service.export.excel.data.DRecord;
+import com.faceye.feature.service.export.excel.data.DSheet;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
-import com.faceye.feature.util.ServiceException;
-import com.faceye.feature.util.http.Http;
 
 @Service
 public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRepository> implements StockService {
@@ -34,6 +39,14 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 	private StockCustomerRepository stockCustomerRepository = null;
 
 	@Autowired
+	private ExcelService excelService = null;
+
+	@Autowired
+	private DataStatService dataStatService = null;
+
+	private DecimalFormat df = new DecimalFormat("######0.00");
+
+	@Autowired
 	public StockServiceImpl(StockRepository dao) {
 		super(dao);
 	}
@@ -41,7 +54,8 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 	@Override
 	public void initStocks() {
 		// try {
-		// String path="/work/Work/FeatureWorkSpace/feature/faceye-stock/faceye-stock-manager/src/main/resources/stock/sz-sh-a-stocks.txt";
+		// String
+		// path="/work/Work/FeatureWorkSpace/feature/faceye-stock/faceye-stock-manager/src/main/resources/stock/sz-sh-a-stocks.txt";
 		// BufferedReader in = new BufferedReader(new FileReader(path));
 		// List<String> lines = IOUtils.readLines(in);
 		// if (CollectionUtils.isNotEmpty(lines)) {
@@ -49,7 +63,8 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 		// this.initOneLinn(line, "");
 		// }
 		// }
-		// String path = "/work/Work/FeatureWorkSpace/feature/faceye-stock/faceye-stock-manager/src/main/resources/stock/sz-a-stocks.txt";
+		// String path =
+		// "/work/Work/FeatureWorkSpace/feature/faceye-stock/faceye-stock-manager/src/main/resources/stock/sz-a-stocks.txt";
 		// BufferedReader in = new BufferedReader(new FileReader(path));
 		// List<String> lines = IOUtils.readLines(in);
 		// if (CollectionUtils.isNotEmpty(lines)) {
@@ -57,7 +72,8 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 		// this.initOneLinn(line, "sz");
 		// }
 		// }
-		// path = "/work/Work/FeatureWorkSpace/feature/faceye-stock/faceye-stock-manager/src/main/resources/stock/sh-a-stocks.txt";
+		// path =
+		// "/work/Work/FeatureWorkSpace/feature/faceye-stock/faceye-stock-manager/src/main/resources/stock/sh-a-stocks.txt";
 		// in = new BufferedReader(new FileReader(path));
 		// lines = IOUtils.readLines(in);
 		// if (CollectionUtils.isNotEmpty(lines)) {
@@ -130,13 +146,13 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 	private void checkStockFromHexun() {
 		StockFetcher fetcher = new StockFetcher();
 		String url = "http://quote.eastmoney.com/stocklist.html";
-//		String content = Http.getInstance().get(url, "gb2312");
-		String content="";
+		// String content = Http.getInstance().get(url, "gb2312");
+		String content = "";
 		try {
 			content = fetcher.getContent("http://quote.eastmoney.com/stocklist.html");
-			logger.debug(">>FaceYe --> fetch hexun stock content is:"+content);
+			logger.debug(">>FaceYe --> fetch hexun stock content is:" + content);
 		} catch (Exception e1) {
-			logger.error(">>FaceYe Throws Exception:",e1);
+			logger.error(">>FaceYe Throws Exception:", e1);
 		}
 		if (StringUtils.isNotEmpty(content)) {
 			try {
@@ -148,27 +164,29 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 					category.setCode("default");
 					this.categoryService.save(category);
 				}
-				int count=0;
+				int count = 0;
 				if (CollectionUtils.isNotEmpty(codeNames)) {
 					for (Map<String, String> map : codeNames) {
 						String market = "";
 						String code = map.keySet().iterator().next();
 						market = StringUtils.substring(code, 0, 2);
-						market=StringUtils.upperCase(market);
+						market = StringUtils.upperCase(market);
 						code = StringUtils.substring(code, 2);
 						String name = map.values().iterator().next();
 						name = StringUtils.replace(name, "(", "");
 						name = StringUtils.replace(name, ")", "");
 						name = StringUtils.replace(name, code, "");
-						logger.debug(">>FaceYe check code is:"+code);
-						if (StringUtils.isNotEmpty(code) && (StringUtils.startsWith(code, "6") || StringUtils.startsWith(code, "0") || StringUtils.startsWith(code, "3"))) {
+						logger.debug(">>FaceYe check code is:" + code);
+						if (StringUtils.isNotEmpty(code) && (StringUtils.startsWith(code, "6")
+								|| StringUtils.startsWith(code, "0") || StringUtils.startsWith(code, "3"))) {
 							Stock stock = this.getStockByCode(code);
 							count++;
 							if (stock == null) {
-//								if (StringUtils.startsWith(code, "0") || StringUtils.startsWith(code, "3")) {
-//									market = "SZ";
-//								}
-								logger.debug(">>FaceYe will add stock is:"+code);
+								// if (StringUtils.startsWith(code, "0") ||
+								// StringUtils.startsWith(code, "3")) {
+								// market = "SZ";
+								// }
+								logger.debug(">>FaceYe will add stock is:" + code);
 								stock = new Stock();
 								stock.setName(name);
 								stock.setCategory(category);
@@ -179,8 +197,8 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 						}
 					}
 				}
-				logger.debug(">>FaceYe --> stock count:"+count);
-				logger.debug(">>FaceYe stock size is:"+this.getPage(null, 1, 1).getTotalElements());
+				logger.debug(">>FaceYe --> stock count:" + count);
+				logger.debug(">>FaceYe stock size is:" + this.getPage(null, 1, 1).getTotalElements());
 			} catch (Exception e) {
 				logger.error(">>FaceYe Throws Exception:", e);
 			}
@@ -203,18 +221,20 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 	 */
 	public boolean initStockCategory() {
 		boolean res = false;
-//		List<Stock> stocks = this.getAll();
-//		for (Stock stock : stocks) {
-//			String categoryName = StringUtils.isNotEmpty(stock.getBusiness()) ? StringUtils.trim(stock.getBusiness()) : "Default";
-//			Category category = this.categoryService.getCategoryByName(categoryName);
-//			if (category == null) {
-//				category = new Category();
-//				category.setName(categoryName);
-//				this.categoryService.save(category);
-//			}
-//			stock.setCategory(category);
-//			this.save(stock);
-//		}
+		// List<Stock> stocks = this.getAll();
+		// for (Stock stock : stocks) {
+		// String categoryName = StringUtils.isNotEmpty(stock.getBusiness()) ?
+		// StringUtils.trim(stock.getBusiness()) : "Default";
+		// Category category =
+		// this.categoryService.getCategoryByName(categoryName);
+		// if (category == null) {
+		// category = new Category();
+		// category.setName(categoryName);
+		// this.categoryService.save(category);
+		// }
+		// stock.setCategory(category);
+		// this.save(stock);
+		// }
 		res = true;
 		return res;
 	}
@@ -224,18 +244,24 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 		if (page != 0) {
 			page = page - 1;
 		}
-		// SimpleEntityPathResolver resolver = SimpleEntityPathResolver.INSTANCE;
+		// SimpleEntityPathResolver resolver =
+		// SimpleEntityPathResolver.INSTANCE;
 		// EntityPath<T> entityPath = resolver.createPath(entityClass);
-		// PathBuilder<T> builder = new PathBuilder<T>(entityPath.getType(), entityPath.getMetadata());
+		// PathBuilder<T> builder = new PathBuilder<T>(entityPath.getType(),
+		// entityPath.getMetadata());
 		// Path path = entityPath.getRoot();
-		// List<Predicate> predicates=DynamicSpecifications.buildPredicates(searchParams, entityClass);
+		// List<Predicate>
+		// predicates=DynamicSpecifications.buildPredicates(searchParams,
+		// entityClass);
 		// Predicate predicate=DynamicSpecifications.builder(predicates);
 		// NumberPath numberPath = new NumberPath(Number.class, path, "age");
 		// predicates.add(numberPath.eq(15));
-		// Predicate predicate = DynamicSpecifications.builder(searchParams, entityClass);
+		// Predicate predicate = DynamicSpecifications.builder(searchParams,
+		// entityClass);
 		// Sort sort = this.buildSort(searchParams);
 		// if (predicate != null) {
-		// logger.debug(">>FaceYe -->Query predicate is:" + predicate.toString());
+		// logger.debug(">>FaceYe -->Query predicate is:" +
+		// predicate.toString());
 		// }
 		// if(sort!=null){
 		// logger.debug(">>FaceYe --> Query sort is:"+sort.toString());
@@ -245,13 +271,145 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 		// Pageable pageable = new PageRequest(page, size, sort);
 		// res = this.dao.findAll(predicate, pageable);
 		// } else {
-		// // OrderSpecifier<Comparable> orderPOrderSpecifier=new OrderSpecifier<Comparable>(new Order(), new NumberExpression<T>("id") {
+		// // OrderSpecifier<Comparable> orderPOrderSpecifier=new
+		// OrderSpecifier<Comparable>(new Order(), new NumberExpression<T>("id")
+		// {
 		// // })
 		// List<Stock> items = (List) this.dao.findAll(predicate, sort);
 		// res = new PageImpl<Stock>(items);
 		// }
 		// return res;
 		Page<Stock> res = this.stockCustomerRepository.getPage(searchParams, page, size);
+		return res;
+	}
+
+	@Override
+	public void export(Map searchParams,OutputStream stream) {
+		Page<Stock> stocks = this.getPage(searchParams, 1, 100);
+		DSheet dsheet = new DSheet();
+		// 构建表头
+		DHeader dheader = new DHeader();
+		dheader.add(buildDCell("名称"));
+		dheader.add(buildDCell("编码"));
+		dheader.add(buildDCell("PB"));
+		dheader.add(buildDCell("PE"));
+		dheader.add(buildDCell("DPE"));
+		dheader.add(buildDCell("概念行业"));
+		dheader.add(buildDCell("股价"));
+		dheader.add(buildDCell("今日涨跌"));
+		dheader.add(buildDCell("30天最高价"));
+		dheader.add(buildDCell("30天最低价"));
+		dheader.add(buildDCell("30天振幅"));
+		for (int i = 0; i < 5; i++) {
+			dheader.add(buildDCell("核心利润率" + i));
+		}
+		for (int i = 0; i < 5; i++) {
+			dheader.add(buildDCell("EPS" + i));
+		}
+		for (int i = 0; i < 5; i++) {
+			dheader.add(buildDCell("BPS" + i));
+		}
+		for (int i = 0; i < 5; i++) {
+			dheader.add(buildDCell("DPS" + i));
+		}
+		dsheet.setHeader(dheader);
+		// 填充数据
+
+		for (Stock stock : stocks) {
+			DRecord dr = new DRecord();
+			dr.add(buildDCell(stock.getName()));
+			dr.add(buildDCell(stock.getCode()));
+			dr.add(buildDCell(stock.getDailyStat().getPb() == null ? "" : df.format(stock.getDailyStat().getPb())));
+			dr.add(buildDCell(stock.getDailyStat().getPe() == null ? "" : df.format(stock.getDailyStat().getPe())));
+			dr.add(buildDCell(
+					stock.getDailyStat().getDynamicPe() == null ? "" : df.format(stock.getDailyStat().getDynamicPe())));
+			List<Category> categories = stock.getCategories();
+			StringBuffer sb = new StringBuffer();
+			if (CollectionUtils.isNotEmpty(categories)) {
+				for (Category c : categories) {
+					sb.append(c.getName());
+					sb.append(",");
+				}
+			}
+			if (sb != null && StringUtils.isNotEmpty(sb.toString())) {
+				sb.deleteCharAt(sb.lastIndexOf(","));
+			}
+			dr.add(buildDCell(sb.toString()));
+			dr.add(buildDCell(formatValue(stock.getDailyStat().getTodayPrice())));
+			dr.add(buildDCell(stock.getDailyStat().getTodayIncreaseRate() == null ? ""
+					: df.format(stock.getDailyStat().getTodayIncreaseRate() * 100) + "%"));
+			dr.add(buildDCell(stock.getDailyStat().getTopPriceOf30Day() == null ? ""
+					: df.format(stock.getDailyStat().getTopPriceOf30Day())));
+			dr.add(buildDCell(stock.getDailyStat().getLowPriceOf30Day() == null ? ""
+					: df.format(stock.getDailyStat().getLowPriceOf30Day())));
+			dr.add(buildDCell(stock.getDailyStat().getPriceAmplitude() == null ? ""
+					: df.format(stock.getDailyStat().getPriceAmplitude() * 100) + "%"));
+			dsheet.add(dr);
+			// 取得财报分析数据
+			Map dataStatParams = new HashMap();
+			dataStatParams.put("EQ|stockId", stock.getId());
+			dataStatParams.put("EQ|type", StockConstants.REPORT_TYPE_YEAR);
+			// dataStatParams.put("LT|dateCycle", new
+			// Date(System.currentTimeMillis()-5*365*24*60*60*1000L));
+			dataStatParams.put("SORT|dateCycle", "desc");
+			List<DataStat> dataStats = this.dataStatService.getPage(dataStatParams, 1, 5).getContent();
+			if (CollectionUtils.isNotEmpty(dataStats)) {
+				// 核心利润率
+				for (DataStat dataStat : dataStats) {
+					dr.add(buildDCell(formatValue(dataStat.getCoreProfitMargin() * 100) + "%"));
+				}
+				if (dataStats.size() < 5) {
+					for (int i = 0; i < 5 - dataStats.size(); i++) {
+						dr.add(buildDCell("--"));
+					}
+				}
+				//EPS
+				for (DataStat dataStat : dataStats) {
+					dr.add(buildDCell(formatValue(dataStat.getEps())));
+				}
+				if (dataStats.size() < 5) {
+					for (int i = 0; i < 5 - dataStats.size(); i++) {
+						dr.add(buildDCell("--"));
+					}
+				}
+				//BPS
+				for (DataStat dataStat : dataStats) {
+					dr.add(buildDCell(formatValue(dataStat.getBps())));
+				}
+				if (dataStats.size() < 5) {
+					for (int i = 0; i < 5 - dataStats.size(); i++) {
+						dr.add(buildDCell("--"));
+					}
+				}
+				//DPS
+				for (DataStat dataStat : dataStats) {
+					dr.add(buildDCell(formatValue(dataStat.getDps())));
+				}
+				if (dataStats.size() < 5) {
+					for (int i = 0; i < 5 - dataStats.size(); i++) {
+						dr.add(buildDCell("--"));
+					}
+				}
+			} else {
+				for (int i = 0; i < 20; i++) {
+					dr.add(buildDCell("--"));
+				}
+			}
+		}
+		excelService.export(dsheet,stream);
+	}
+
+	private DCell buildDCell(String v) {
+		DCell cell = new DCell();
+		cell.setV(v);
+		return cell;
+	}
+
+	private String formatValue(Double value) {
+		String res = "";
+		if (value != null) {
+			res = df.format(value);
+		}
 		return res;
 	}
 

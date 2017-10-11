@@ -182,6 +182,9 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 		logger.debug(">>FaceYe query object is:" + query.toString());
 		List<Stock> stocks = this.mongoOperations.find(query, Stock.class);
 		long count = this.mongoOperations.count(query, Stock.class);
+		if(size==0){
+			size=new Integer(""+count);
+		}
 		Pageable pageable = new PageRequest(page, size);
 		Page<Stock> res = new PageImpl(stocks, pageable, count);
 		return res;
