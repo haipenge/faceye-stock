@@ -24,7 +24,7 @@
 		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-			     
+			     <ref bean="initStockJobTrigger"/>
 			     <ref bean="crawlFinancialDataJobTrigger"/>
 			     <ref bean="dataStatJobTrigger"/>
 			     <ref bean="crawlStockDailyDataJobTrigger"/>
@@ -190,7 +190,7 @@
 			<ref bean="initStockJobDetail" />
 		</property>
 		<property name="cronExpression">
-			<value>0 30 10 * * ?</value>
+			<value>0 55 10 * * ?</value>
 		</property>
 	</bean>
 	
