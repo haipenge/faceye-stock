@@ -2,6 +2,7 @@ package com.faceye.component.stock.service.impl;
 
 import java.io.OutputStream;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +30,8 @@ import com.faceye.feature.service.export.excel.data.DHeader;
 import com.faceye.feature.service.export.excel.data.DRecord;
 import com.faceye.feature.service.export.excel.data.DSheet;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
+import com.faceye.feature.util.http.Http;
+import com.faceye.feature.util.regexp.RegexpUtil;
 
 @Service
 public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRepository> implements StockService {
@@ -88,6 +91,12 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 		// logger.error(">>FaceYe throws Exception: --->" + e.toString());
 		// }
 		this.checkStockFromHexun();
+		List<Stock> stocks=this.getAll();
+		if(CollectionUtils.isNotEmpty(stocks)){
+			for(Stock stock:stocks){
+				this.crawlCategory(stock);
+			}
+		}
 	}
 
 	private void initOneLinn(String line, String market) {
@@ -189,7 +198,7 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 								logger.debug(">>FaceYe will add stock is:" + code);
 								stock = new Stock();
 								stock.setName(name);
-								stock.setCategory(category);
+//								stock.setCategory(category);
 								stock.setCode(code);
 								stock.setMarket(market);
 								this.save(stock);
@@ -285,7 +294,7 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 
 	@Override
 	public void export(Map searchParams,OutputStream stream) {
-		Page<Stock> stocks = this.getPage(searchParams, 1, 100);
+		Page<Stock> stocks = this.getPage(searchParams, 1, 0);
 		DSheet dsheet = new DSheet();
 		// 构建表头
 		DHeader dheader = new DHeader();
@@ -411,6 +420,61 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 			res = df.format(value);
 		}
 		return res;
+	}
+	
+	/**
+	 * 爬取股票所属分类
+	 * 
+	 * @param stock
+	 *            Url:http://vip.stock.finance.sina.com.cn/corp/go.php/vCI_CorpOtherInfo/stockid/000998/menu_num/5.phtml
+	 */
+	private void crawlCategory(Stock stock) {
+		String url = "http://vip.stock.finance.sina.com.cn/corp/go.php/vCI_CorpOtherInfo/stockid/000998/menu_num/5.phtml";
+		url = StringUtils.replace(url, "000998", stock.getCode());
+		String content = Http.getInstance().get(url, "gb2312");
+		String regexp = "<table class=\"comInfo1\" width=\"60%\" align=\"center\">([\\S\\s]*?)</table>";
+		try {
+			List<Map<String, String>> tables = RegexpUtil.match(content, regexp);
+			if (CollectionUtils.isNotEmpty(tables) && tables.size() == 2) {
+				// 证监会行业分类
+				Map<String, String> businessTable = tables.get(0);
+				// 概念行业分类
+				Map<String, String> categoriesTable = tables.get(1);
+
+				// 证监会行业分类匹配
+				String business = "Default";
+				String businessContent = businessTable.get("1");
+				String businessRegexp = "<td class=\"ct\" align=\"center\">([\\S\\s]*?)</td>";
+				List<Map<String, String>> businessMatchers = RegexpUtil.match(businessContent, businessRegexp);
+				if (CollectionUtils.isNotEmpty(businessMatchers) && businessMatchers.size() == 2) {
+					business = StringUtils.trim(businessMatchers.get(1).get("1"));
+				}
+				//概念行业分类
+				List<Category> categories=new ArrayList<>(0);
+				String categoriesContent=categoriesTable.get("1");
+				String categoriesRegexp="<td class=\"ct\" align=\"center\">([\\S\\s]*?)</td>";
+				List<Map<String,String>> categoriesMatchers=RegexpUtil.match(categoriesContent, categoriesRegexp);
+				if(CollectionUtils.isNotEmpty(categoriesMatchers)){
+					for(int i=0;i<categoriesMatchers.size();i+=2){
+						String categoryName=categoriesMatchers.get(i).get("1");
+						Category category=this.categoryService.getCategoryByName(categoryName);
+						if(category!=null){
+							categories.add(category);
+						}else{
+							category=new Category();
+							category.setName(categoryName);
+							this.categoryService.save(category);
+							categories.add(category);
+						}
+					}
+				}
+				stock.setBusiness(business);
+				stock.setCategories(categories);
+				this.save(stock);
+			}
+		} catch (Exception e) {
+			logger.error(">>Exception:" + e);
+		}
 	}
 
 }

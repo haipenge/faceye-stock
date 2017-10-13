@@ -59,6 +59,9 @@ var Stock = {
 	    }
 	  });
 	},
+	/**
+	 * 将股票导出到Excel
+	 */
 	exportExcel:function(){
 		var url="/stock/stock/export";
 		$('#query-form').attr('action',url);

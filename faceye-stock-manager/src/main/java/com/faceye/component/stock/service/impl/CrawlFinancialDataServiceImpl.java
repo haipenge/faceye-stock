@@ -407,8 +407,6 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 			this.crawlBonusRecord(stock);
 			// 爬取分析师评估数据
 			this.crawlForecast(stock);
-			//爬取行业、分类
-			this.crawlCategory(stock);
 		} else {
 			logger.debug(">>FaceYe --> stock:" + stock.getName() + "(" + stock.getCode() + ") 已爬取");
 		}
@@ -768,59 +766,6 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 
 	}
 
-	/**
-	 * 爬取股票所属分类
-	 * 
-	 * @param stock
-	 *            Url:http://vip.stock.finance.sina.com.cn/corp/go.php/vCI_CorpOtherInfo/stockid/000998/menu_num/5.phtml
-	 */
-	private void crawlCategory(Stock stock) {
-		String url = "http://vip.stock.finance.sina.com.cn/corp/go.php/vCI_CorpOtherInfo/stockid/000998/menu_num/5.phtml";
-		url = StringUtils.replace(url, "000998", stock.getCode());
-		String content = Http.getInstance().get(url, "gb2312");
-		String regexp = "<table class=\"comInfo1\" width=\"60%\" align=\"center\">([\\S\\s]*?)</table>";
-		try {
-			List<Map<String, String>> tables = RegexpUtil.match(content, regexp);
-			if (CollectionUtils.isNotEmpty(tables) && tables.size() == 2) {
-				// 证监会行业分类
-				Map<String, String> businessTable = tables.get(0);
-				// 概念行业分类
-				Map<String, String> categoriesTable = tables.get(1);
-
-				// 证监会行业分类匹配
-				String business = "Default";
-				String businessContent = businessTable.get("1");
-				String businessRegexp = "<td class=\"ct\" align=\"center\">([\\S\\s]*?)</td>";
-				List<Map<String, String>> businessMatchers = RegexpUtil.match(businessContent, businessRegexp);
-				if (CollectionUtils.isNotEmpty(businessMatchers) && businessMatchers.size() == 2) {
-					business = StringUtils.trim(businessMatchers.get(1).get("1"));
-				}
-				//概念行业分类
-				List<Category> categories=new ArrayList<>(0);
-				String categoriesContent=categoriesTable.get("1");
-				String categoriesRegexp="<td class=\"ct\" align=\"center\">([\\S\\s]*?)</td>";
-				List<Map<String,String>> categoriesMatchers=RegexpUtil.match(categoriesContent, categoriesRegexp);
-				if(CollectionUtils.isNotEmpty(categoriesMatchers)){
-					for(int i=0;i<categoriesMatchers.size();i+=2){
-						String categoryName=categoriesMatchers.get(i).get("1");
-						Category category=this.categoryService.getCategoryByName(categoryName);
-						if(category!=null){
-							categories.add(category);
-						}else{
-							category=new Category();
-							category.setName(categoryName);
-							this.categoryService.save(category);
-							categories.add(category);
-						}
-					}
-				}
-				stock.setBusiness(business);
-				stock.setCategories(categories);
-				this.stockService.save(stock);
-			}
-		} catch (Exception e) {
-			logger.error(">>Exception:" + e);
-		}
-	}
+	
 
 }

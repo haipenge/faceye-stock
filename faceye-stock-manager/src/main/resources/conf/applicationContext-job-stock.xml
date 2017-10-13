@@ -180,5 +180,31 @@
 			<value>false</value>
 		</property>
 	</bean>
+	
+	
+	<!-- Init Stock 初始化股票，每天中午12点，自动发现当天发行新股票 ，并于15点进行当天数据爬取 -->
+	
+	<bean id="initStockJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="initStockJobDetail" />
+		</property>
+		<property name="cronExpression">
+			<value>0 30 10 * * ?</value>
+		</property>
+	</bean>
+	
+	<bean id="initStockJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="initStockJob" />
+		</property>
+		<property name="targetMethod">
+			<value>doJob</value>
+		</property>
+		<property name="concurrent">
+			<value>false</value>
+		</property>
+	</bean>
 
 </beans>
