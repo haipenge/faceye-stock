@@ -136,5 +136,11 @@ public class StarDataStatServiceImpl extends BaseMongoServiceImpl<StarDataStat, 
 	public void removeStockStarStatResults(Long stockId) {
 		this.starDataStatCustomerRepository.removeStockStarStatResults(stockId);
 	}
+	
+	public void println(WrapStarDataStat wrapStarDataStat){
+		StringBuffer sb=new StringBuffer();
+		
+		logger.debug(sb.toString());
+	}
 
 }/** @generate-service-source@ **/

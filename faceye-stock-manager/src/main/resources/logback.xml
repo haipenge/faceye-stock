@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="60 seconds">
 	<property name="log.dir" value="${x.logger.dir}"></property>
+	<property name="logger.level" value="${x.logger.level}"></property>
 	<property name="logger.level.faceye" value="${x.logger.level.faceye}"></property>
 	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
@@ -111,7 +112,7 @@
 
 	<!-- project default level -->
 	<logger name="com.faceye" level="${logger.level.faceye}" />
-	<logger name="com.mongodb" level="${logger.level.faceye}"/>
+	<logger name="com.mongodb" level="${logger.level}"/>
 	
 
 	<!--log4jdbc -->
@@ -128,7 +129,7 @@
 	</logger>
 	<logger name="info-rollingFile" level="INFO" additivity="false">
 		<appender-ref ref="info-rollingFile" />
-	</logger>
+	</logger> 
 
 	<root level="${x.logger.level}">
 		<appender-ref ref="console" />

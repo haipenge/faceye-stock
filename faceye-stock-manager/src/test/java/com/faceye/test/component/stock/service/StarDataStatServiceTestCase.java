@@ -14,7 +14,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.util.Assert;
 
 import com.faceye.component.stock.entity.StarDataStat;
+import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.service.StarDataStatService;
+import com.faceye.component.stock.service.StockService;
+import com.faceye.component.stock.service.wrapper.WrapStarDataStat;
 import com.faceye.test.feature.service.BaseServiceTestCase;
 
 
@@ -26,6 +29,8 @@ import com.faceye.test.feature.service.BaseServiceTestCase;
 public class StarDataStatServiceTestCase extends BaseServiceTestCase {
 	@Autowired
 	private StarDataStatService starDataStatService = null;
+	@Autowired
+	private StockService stockService =null;
 	/**
 	 * 初始化
 	 * @todo
@@ -199,6 +204,14 @@ public class StarDataStatServiceTestCase extends BaseServiceTestCase {
 	}
 	@Test
 	public void testStarDataStat() throws Exception{
-		
+		String code="";
+		Stock stock=this.stockService.getStockByCode(code);
+		if(stock!=null){
+			Map searchParams=new HashMap();
+			searchParams.put("EQ|stockId", stock.getId());
+			WrapStarDataStat wrapStarDataStat=this.starDataStatService.wrapStarDataStat(searchParams, 1, 0);
+		}
 	}
+	
+	
 }
