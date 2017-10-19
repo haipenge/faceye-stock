@@ -223,6 +223,7 @@ public class DailyDataServiceTestCase extends BaseServiceTestCase {
 	@Test
 	public void testCrawlDailyData() throws Exception{
 		String code="000099";
+		code="600518";
 		Stock stock=this.stockService.getStockByCode(code);
 		this.dailyDataService.crawlDailyData(stock);
 	}
