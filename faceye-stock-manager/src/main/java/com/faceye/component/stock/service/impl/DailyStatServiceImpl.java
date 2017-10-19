@@ -102,12 +102,12 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 		return res;
 	}
 
-	public void statStockDailyData(Stock stock){
+	public void statStockDailyData(Stock stock) {
 		statPriceIn30Days(stock);
 		statDailyData2FindStar(stock);
 		statStarData(stock);
 	}
-	
+
 	/**
 	 * 分析30天股票价格的变化情况
 	 */
@@ -120,8 +120,8 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 			}
 		}
 	}
-	
-	public void statPriceIn30Days(Stock stock){
+
+	public void statPriceIn30Days(Stock stock) {
 		this.statStockPriceIn30Days(stock);
 		this.statPe(stock);
 	}
@@ -136,7 +136,9 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 		} else {
 			dailyStat = new DailyStat();
 			dailyStat.setStockId(stock.getId());
-			dailyStat.setCategoryId(stock.getCategory().getId());
+			if (stock.getCategory() != null) {
+				dailyStat.setCategoryId(stock.getCategory().getId());
+			}
 		}
 		Map params = new HashMap();
 		Date now = new Date();
@@ -307,7 +309,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 				dailyData.setDynamicPe(dynamicPe);
 				dailyData.setPb(pb);
 				this.dailyDataService.save(dailyData);
-				
+
 			}
 			// 如果数据循环结束，重新获取下一批数据
 			if (index + 1 == dailyDatas.size()) {
@@ -319,7 +321,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 				start++;
 				dailyDatas = this.dailyDataService.getPage(params, start, size).getContent();
 				index = 0;
-				if(CollectionUtils.isEmpty(dailyDatas)){
+				if (CollectionUtils.isEmpty(dailyDatas)) {
 					dailyStat.setPe(pe);
 					dailyStat.setDynamicPe(dynamicPe);
 					this.save(dailyStat);
@@ -445,9 +447,9 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 		// 获取均线连续三日排列整齐的股票(starDataType=1)
 		List<DailyData> dailyDatas = this.dailyDataService.getPage(dailyDataParams, 1, 0).getContent();
 		for (DailyData dailyData : dailyDatas) {
-			Date dailyDate=dailyData.getDate();
-			//向前10个交易日，寻找是否有快线上穿慢线的情况
-			dailyDate=new Date(dailyDate.getTime()-10*24*60*60*1000L);
+			Date dailyDate = dailyData.getDate();
+			// 向前10个交易日，寻找是否有快线上穿慢线的情况
+			dailyDate = new Date(dailyDate.getTime() - 10 * 24 * 60 * 60 * 1000L);
 			Map macdParams = new HashMap();
 			macdParams.put("EQ|stockId", stock.getId());
 			macdParams.put("GT|date", dailyData.getDate());
@@ -608,7 +610,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 					if (start2BuyPrice > 0) {
 						max5DayIncreaseRate = (max5DayPrice - start2BuyPrice) / start2BuyPrice;
 						max10DayIncreaseRate = (max10DayPrice - start2BuyPrice) / start2BuyPrice;
-						max20DayIncreaseRate = (max20DayPrice - start2BuyPrice) / start2BuyPrice; 
+						max20DayIncreaseRate = (max20DayPrice - start2BuyPrice) / start2BuyPrice;
 						max30DayIncreaseRate = (max30DayPrice - start2BuyPrice) / start2BuyPrice;
 						max60DayIncreaseRate = (max60DayPrice - start2BuyPrice) / start2BuyPrice;
 					}
