@@ -208,6 +208,7 @@ public class DailyDataServiceTestCase extends BaseServiceTestCase {
 	@Rollback(false)
 	public void testInitDailyData() throws Exception{
 		String code="000099";
+		code="600518";
 //		this.dailyDataService.initDailyData(code);
 		this.dailyDataService.initDailyData();
 		Page<DailyData> page=this.dailyDataService.getPage(null, 1, 10);
@@ -224,6 +225,13 @@ public class DailyDataServiceTestCase extends BaseServiceTestCase {
 		String code="000099";
 		Stock stock=this.stockService.getStockByCode(code);
 		this.dailyDataService.crawlDailyData(stock);
+	}
+	
+	@Test
+	public void computeDailyDataLines() throws Exception{
+		String code="600518";
+		this.dailyDataService.computeDailyDataLines();
+//		this.dailyDataService.computeDailyDataLines(this.stockService.getStockByCode(code));
 	}
 	
 	

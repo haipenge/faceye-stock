@@ -328,10 +328,12 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 			DRecord dr = new DRecord();
 			dr.add(buildDCell(stock.getName()));
 			dr.add(buildDCell(stock.getCode()));
+			if(stock.getDailyStat()!=null){
 			dr.add(buildDCell(stock.getDailyStat().getPb() == null ? "" : df.format(stock.getDailyStat().getPb())));
 			dr.add(buildDCell(stock.getDailyStat().getPe() == null ? "" : df.format(stock.getDailyStat().getPe())));
 			dr.add(buildDCell(
 					stock.getDailyStat().getDynamicPe() == null ? "" : df.format(stock.getDailyStat().getDynamicPe())));
+			}
 			List<Category> categories = stock.getCategories();
 			StringBuffer sb = new StringBuffer();
 			if (CollectionUtils.isNotEmpty(categories)) {
@@ -344,6 +346,7 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 				sb.deleteCharAt(sb.lastIndexOf(","));
 			}
 			dr.add(buildDCell(sb.toString()));
+			if(stock.getDailyStat()!=null){
 			dr.add(buildDCell(formatValue(stock.getDailyStat().getTodayPrice())));
 			dr.add(buildDCell(stock.getDailyStat().getTodayIncreaseRate() == null ? ""
 					: df.format(stock.getDailyStat().getTodayIncreaseRate() * 100) + "%"));
@@ -353,6 +356,7 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 					: df.format(stock.getDailyStat().getLowPriceOf30Day())));
 			dr.add(buildDCell(stock.getDailyStat().getPriceAmplitude() == null ? ""
 					: df.format(stock.getDailyStat().getPriceAmplitude() * 100) + "%"));
+			}
 			dsheet.add(dr);
 			// 取得财报分析数据
 			Map dataStatParams = new HashMap();

@@ -102,6 +102,12 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 		return res;
 	}
 
+	public void statStockDailyData(Stock stock){
+		statPriceIn30Days(stock);
+		statDailyData2FindStar(stock);
+		statStarData(stock);
+	}
+	
 	/**
 	 * 分析30天股票价格的变化情况
 	 */
@@ -110,13 +116,17 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 		List<Stock> stocks = this.stockService.getAll();
 		if (CollectionUtils.isNotEmpty(stocks)) {
 			for (Stock stock : stocks) {
-				this.statPriceIn30Days(stock);
-				this.statPe(stock);
+				statPriceIn30Days(stock);
 			}
 		}
 	}
+	
+	public void statPriceIn30Days(Stock stock){
+		this.statStockPriceIn30Days(stock);
+		this.statPe(stock);
+	}
 
-	private void statPriceIn30Days(Stock stock) {
+	private void statStockPriceIn30Days(Stock stock) {
 		DailyStat dailyStat = null;
 		Map statParams = new HashMap();
 		statParams.put("EQ|stockId", stock.getId());
@@ -435,13 +445,16 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 		// 获取均线连续三日排列整齐的股票(starDataType=1)
 		List<DailyData> dailyDatas = this.dailyDataService.getPage(dailyDataParams, 1, 0).getContent();
 		for (DailyData dailyData : dailyDatas) {
+			Date dailyDate=dailyData.getDate();
+			//向前10个交易日，寻找是否有快线上穿慢线的情况
+			dailyDate=new Date(dailyDate.getTime()-10*24*60*60*1000L);
 			Map macdParams = new HashMap();
 			macdParams.put("EQ|stockId", stock.getId());
 			macdParams.put("GT|date", dailyData.getDate());
 			macdParams.put("GT|kaipanjia", 0D);
 			macdParams.put("SORT|date", "asc");
-			// 五个交易日内快线上穿慢线
-			List<DailyData> macdDailyDatas = this.dailyDataService.getPage(macdParams, 1, 5).getContent();
+			// 五个交易日内快线上穿慢线->变更为前后20个交易日内，是否有快线上穿慢线
+			List<DailyData> macdDailyDatas = this.dailyDataService.getPage(macdParams, 1, 20).getContent();
 			if (CollectionUtils.isNotEmpty(macdDailyDatas)) {
 				int count = 0;
 				for (int i = 0; i < macdDailyDatas.size(); i++) {
@@ -595,7 +608,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 					if (start2BuyPrice > 0) {
 						max5DayIncreaseRate = (max5DayPrice - start2BuyPrice) / start2BuyPrice;
 						max10DayIncreaseRate = (max10DayPrice - start2BuyPrice) / start2BuyPrice;
-						max20DayIncreaseRate = (max20DayPrice - start2BuyPrice) / start2BuyPrice;
+						max20DayIncreaseRate = (max20DayPrice - start2BuyPrice) / start2BuyPrice; 
 						max30DayIncreaseRate = (max30DayPrice - start2BuyPrice) / start2BuyPrice;
 						max60DayIncreaseRate = (max60DayPrice - start2BuyPrice) / start2BuyPrice;
 					}

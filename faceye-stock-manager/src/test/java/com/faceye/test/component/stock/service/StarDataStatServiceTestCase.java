@@ -197,4 +197,8 @@ public class StarDataStatServiceTestCase extends BaseServiceTestCase {
 		List<StarDataStat> entities = this.starDataStatService.getAll(ids);
 		Assert.isTrue(entities != null && entities.size() == 5);
 	}
+	@Test
+	public void testStarDataStat() throws Exception{
+		
+	}
 }

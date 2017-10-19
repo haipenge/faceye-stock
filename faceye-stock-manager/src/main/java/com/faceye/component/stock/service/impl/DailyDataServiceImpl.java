@@ -90,8 +90,8 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 				this.fetchHistoryData(code, "" + year, "" + i);
 			}
 		}
-		// 取过去10年数据
-		for (int i = 1; i < 10; i++) {
+		// 取过去3年数据
+		for (int i = 1; i < 3; i++) {
 			for (String jd : jidus) {
 				this.fetchHistoryData(code, "" + (year - i), jd);
 			}
@@ -136,7 +136,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 						// if (now.getTime() - dDate.getTime() > 31 * 24 * 60 * 60 * 1000L) {
 						// continue;
 						// }
-						boolean isDailyDataExist = this.isDailyDataExist(code, date);
+						boolean isDailyDataExist = this.isDailyDataExist(code, date)!=null;
 						date += " 15:00:00";
 						if (!isDailyDataExist) {
 							DailyData dailyData = new DailyData();
@@ -170,10 +170,10 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 			for (Stock stock : stocks) {
 				Map params = new HashMap();
 				params.put("EQ|stockId", stock.getId());
-				long count = this.dailyDataCustomerRepository.getCount(params);
-				if (count < 30) {
+//				long count = this.dailyDataCustomerRepository.getCount(params);
+//				if (count < 30) {
 					this.initDailyData(stock.getCode());
-				}
+//				}
 			}
 		}
 	}
@@ -369,7 +369,8 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 	 * @return
 	 * @author:@haipenge haipenge@gmail.com 2015年2月23日
 	 */
-	private boolean isDailyDataExist(String code, String date) {
+	private DailyData isDailyDataExist(String code, String date) {
+		DailyData dailyData=null;
 		boolean res = false;
 		Stock stock = this.stockRepository.getStockByCode(code);
 		if (stock != null) {
@@ -381,9 +382,11 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 			builder.and(qDailyData.date.before(DateUtil.getDateFromString(endDate)));
 			builder.and(qDailyData.date.after(DateUtil.getDateFromString(startDate)));
 			List<DailyData> dailyDatas = (List) this.dao.findAll(builder.getValue());
-			res = CollectionUtils.isNotEmpty(dailyDatas);
+			if(CollectionUtils.isNotEmpty(dailyDatas)){
+				dailyData=dailyDatas.get(0);
+			};
 		}
-		return res;
+		return dailyData;
 	}
 
 	/**
@@ -434,8 +437,12 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 			if (StringUtils.isNotEmpty(open) && Double.parseDouble(open) > 0 && !StringUtils.equals(open, "0.00") && !StringUtils.equals(close, "0.00")) {
 				String date = MapUtils.getString(data, "date");
 				String time = MapUtils.getString(data, "time");
-				boolean isDailyDataExist = this.isDailyDataExist(stock.getCode(), date);
-				if (!isDailyDataExist) {
+//				boolean isDailyDataExist = this.isDailyDataExist(stock.getCode(), date);
+				DailyData existDailyData=this.isDailyDataExist(stock.getCode(), date);
+				if(existDailyData!=null){
+					this.dao.delete(existDailyData);
+				}
+//				if (!isDailyDataExist) {
 					DailyData dailyData = new DailyData();
 					dailyData.setChengjiaogupiaoshu(Double.parseDouble(volume));
 					dailyData.setChengjiaojine(Double.parseDouble(money));
@@ -452,7 +459,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 					dailyData.setStockId(stock.getId());
 					// dailyData.setStockName(stock.getName());
 					this.save(dailyData);
-				}
+//				}
 			}
 
 		}

@@ -14,7 +14,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.util.Assert;
 
 import com.faceye.component.stock.entity.DailyStat;
+import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.service.DailyStatService;
+import com.faceye.component.stock.service.StockService;
 import com.faceye.test.feature.service.BaseServiceTestCase;
 
 
@@ -26,6 +28,8 @@ import com.faceye.test.feature.service.BaseServiceTestCase;
 public class DailyStatServiceTestCase extends BaseServiceTestCase {
 	@Autowired
 	private DailyStatService dailyStatService = null;
+	@Autowired
+	private StockService stockService=null;
 	/**
 	 * 初始化
 	 * @todo
@@ -196,5 +200,13 @@ public class DailyStatServiceTestCase extends BaseServiceTestCase {
 		}
 		List<DailyStat> entities = this.dailyStatService.getAll(ids);
 		Assert.isTrue(entities != null && entities.size() == 5);
+	}
+	
+	@Test
+	public void testStatStockDailyData() throws Exception{
+		Stock stock=this.stockService.getStockByCode("600518");
+		if(stock!=null){
+			this.dailyStatService.statStockDailyData(stock);
+		}
 	}
 }

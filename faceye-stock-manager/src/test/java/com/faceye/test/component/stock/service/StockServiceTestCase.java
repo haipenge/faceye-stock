@@ -13,26 +13,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.util.Assert;
 
+import com.faceye.component.stock.entity.Category;
 import com.faceye.component.stock.entity.Stock;
+import com.faceye.component.stock.service.CategoryService;
 import com.faceye.component.stock.service.StockService;
 import com.faceye.test.feature.service.BaseServiceTestCase;
 
 /**
- * Stock  服务层测试用例
+ * Stock 服务层测试用例
  * 
  * @author @haipenge haipenge@gmail.com Create Date:2014年5月20日
  */
 public class StockServiceTestCase extends BaseServiceTestCase {
 	@Autowired
 	private StockService stockService = null;
+	@Autowired
+	private CategoryService categoryService = null;
 
 	/**
 	 * 初始化
+	 * 
 	 * @todo
 	 * @throws Exception
-	 * @author:@haipenge
-	 * haipenge@gmail.com
-	 * 2014年5月20日
+	 * @author:@haipenge haipenge@gmail.com 2014年5月20日
 	 */
 	@Before
 	public void set() throws Exception {
@@ -41,11 +44,10 @@ public class StockServiceTestCase extends BaseServiceTestCase {
 
 	/**
 	 * 清理
+	 * 
 	 * @todo
 	 * @throws Exception
-	 * @author:@haipenge
-	 * haipenge@gmail.com
-	 * 2014年5月20日
+	 * @author:@haipenge haipenge@gmail.com 2014年5月20日
 	 */
 	@After
 	public void after() throws Exception {
@@ -53,12 +55,11 @@ public class StockServiceTestCase extends BaseServiceTestCase {
 	}
 
 	/**
-	 *  保存测试
+	 * 保存测试
+	 * 
 	 * @todo
 	 * @throws Exception
-	 * @author:@haipenge
-	 * haipenge@gmail.com
-	 * 2014年5月20日
+	 * @author:@haipenge haipenge@gmail.com 2014年5月20日
 	 */
 	@Test
 	public void testSave() throws Exception {
@@ -201,18 +202,42 @@ public class StockServiceTestCase extends BaseServiceTestCase {
 	@Test
 	public void testInit() throws Exception {
 		this.stockService.initStocks();
-        Page<Stock> stocks=this.stockService.getPage(null, 1, 2141);
-        Assert.isTrue(stocks!=null && stocks.getContent().size()==2141);
-	} 
+		Page<Stock> stocks = this.stockService.getPage(null, 1, 2141);
+		Assert.isTrue(stocks != null && stocks.getContent().size() == 2141);
+	}
+
 	@Test
-	public void testTimeTip() throws Exception{
-		long time=System.currentTimeMillis();
-		logger.debug("Time is:"+time+",length is:"+(""+time).length());
+	public void testTimeTip() throws Exception {
+		long time = System.currentTimeMillis();
+		logger.debug("Time is:" + time + ",length is:" + ("" + time).length());
 		Assert.isTrue(true);
 	}
+
 	@Test
-	public void testExport() throws Exception{
-		this.stockService.export(null,null);
-		
+	public void testExport() throws Exception {
+//		Category category = this.categoryService.getCategoryByName("一带一路");
+		Category category = this.categoryService.getCategoryByName("新疆振兴");
+		if (category != null) {
+			Map searchParams = new HashMap();
+			searchParams.put("EQ|category.$id", category.getId());
+			this.stockService.export(searchParams, null);
+		}
+	}
+
+	@Test
+	public void testIsStockHaveCategory() throws Exception {
+		List<Stock> stocks = this.stockService.getAll();
+		for (Stock stock : stocks) {
+			List<Category> categories = stock.getCategories();
+			if (CollectionUtils.isEmpty(categories)) {
+				logger.debug(">>Stock:" + stock.getName() + "(" + stock.getCode() + ") category is null.");
+			}
+		}
+	}
+
+	@Test
+	public void testInitStock() throws Exception {
+		this.stockService.initStocks();
+
 	}
 }

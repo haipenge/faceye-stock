@@ -13,6 +13,8 @@ import com.faceye.feature.service.BaseService;
  */
 public interface DailyStatService extends BaseService<DailyStat, Long> {
 
+	
+	public void statStockDailyData(Stock stock);
 	/**
 	 * 
 	 * 分析30天股价的变化情况
@@ -22,6 +24,13 @@ public interface DailyStatService extends BaseService<DailyStat, Long> {
 	 * @Date:2017年3月24日 下午2:54:29
 	 */
 	public void statPriceIn30Days();
+	
+	/**
+	 * 分析一只股票 30天的价格变化 
+	 * @param stock
+	 */
+	public void statPriceIn30Days(Stock stock);
+	
 
 	/**
 	 * 分析每日交易数据，标记星标数据 找出5，10，20线成多头排列的时间点
