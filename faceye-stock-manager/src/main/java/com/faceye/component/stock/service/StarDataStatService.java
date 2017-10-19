@@ -44,4 +44,10 @@ public interface StarDataStatService extends BaseService<StarDataStat, Long> {
 	 * @Date:2017年4月18日 上午9:24:31
 	 */
 	public void removeStockStarStatResults(Long stockId);
+	
+	/**
+	 * 打印星标分析结果
+	 * @param wrapStarDataStat
+	 */
+	public void println(WrapStarDataStat wrapStarDataStat);
 }/** @generate-service-source@ **/

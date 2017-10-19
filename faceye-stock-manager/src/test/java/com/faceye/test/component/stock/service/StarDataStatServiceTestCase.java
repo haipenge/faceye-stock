@@ -18,6 +18,7 @@ import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.service.StarDataStatService;
 import com.faceye.component.stock.service.StockService;
 import com.faceye.component.stock.service.wrapper.WrapStarDataStat;
+import com.faceye.component.stock.util.StockConstants;
 import com.faceye.test.feature.service.BaseServiceTestCase;
 
 
@@ -204,12 +205,14 @@ public class StarDataStatServiceTestCase extends BaseServiceTestCase {
 	}
 	@Test
 	public void testStarDataStat() throws Exception{
-		String code="";
+		String code="600518";
 		Stock stock=this.stockService.getStockByCode(code);
 		if(stock!=null){
 			Map searchParams=new HashMap();
 			searchParams.put("EQ|stockId", stock.getId());
+			searchParams.put("EQ|starType", StockConstants.STOCK_STAR_TYPE_2);
 			WrapStarDataStat wrapStarDataStat=this.starDataStatService.wrapStarDataStat(searchParams, 1, 0);
+			this.starDataStatService.println(wrapStarDataStat);
 		}
 	}
 	

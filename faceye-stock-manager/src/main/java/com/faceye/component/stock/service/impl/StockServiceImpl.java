@@ -451,7 +451,7 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 				String businessRegexp = "<td class=\"ct\" align=\"center\">([\\S\\s]*?)</td>";
 				List<Map<String, String>> businessMatchers = RegexpUtil.match(businessContent, businessRegexp);
 				if (CollectionUtils.isNotEmpty(businessMatchers) && businessMatchers.size() == 2) {
-					business = StringUtils.trim(businessMatchers.get(1).get("1"));
+					business = StringUtils.trim(businessMatchers.get(0).get("1"));
 				}
 				//概念行业分类
 				List<Category> categories=new ArrayList<>(0);
