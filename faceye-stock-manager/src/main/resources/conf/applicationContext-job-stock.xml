@@ -30,7 +30,7 @@
 			     <ref bean="crawlStockDailyDataJobTrigger"/>
 			     <ref bean="dailyStatJobTrigger"/>
 			     <ref bean="computeStockDailyDataAvgJobTrigger"/>
-			     <ref bean="crawlStockMonthDataJobTrigger"/>
+			     
 			     <!--
 			      按季度爬取数据  
 			    <ref bean="crawlStockMonthDataJobTrigger"/>

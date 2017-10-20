@@ -218,12 +218,21 @@ public class DailyDataServiceTestCase extends BaseServiceTestCase {
 	@Test
 	@Rollback(false)
 	public void testInitDailyData() throws Exception{
+		boolean res=false;
 		String code="000099";
 		code="600518";
+		Stock stock=this.stockService.getStockByCode(code);
 		this.dailyDataService.initDailyData(code);
 //		this.dailyDataService.initDailyData();
-		Page<DailyData> page=this.dailyDataService.getPage(null, 1, 10);
-		Assert.assertTrue(page!=null && page.getContent().size()==10);
+//		Page<DailyData> page=this.dailyDataService.getPage(null, 1, 10);
+//		Assert.assertTrue(page!=null && page.getContent().size()==10);
+		Map dailyDataParams=new HashMap();
+		dailyDataParams.put("EQ|stockId", stock.getId());
+		Page<DailyData> dailyDatas=this.dailyDataService.getPage(dailyDataParams, 1, 10);
+		Page<DailyStat> dailyStats=this.dailyStatService.getPage(dailyDataParams, 1, 10);
+		Page<StarDataStat> starDataStats=this.starDataStatService.getPage(dailyDataParams, 1, 10);
+		res=CollectionUtils.isEmpty(dailyDatas.getContent())&&CollectionUtils.isEmpty(dailyStats.getContent())&&CollectionUtils.isEmpty(starDataStats.getContent());
+	    Assert.assertTrue(!res);
 	}
 	@Test
 	public void testInitAvgDailyData() throws Exception{
