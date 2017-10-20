@@ -141,9 +141,9 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 						// if (now.getTime() - dDate.getTime() > 31 * 24 * 60 * 60 * 1000L) {
 						// continue;
 						// }
-						boolean isDailyDataExist = this.isDailyDataExist(code, date)!=null;
+						boolean isDailyDataExist = this.isDailyDataExist(code, date)==null;
 						date += " 15:00:00";
-						if (!isDailyDataExist) {
+						if (isDailyDataExist) {
 							DailyData dailyData = new DailyData();
 							// dailyData.setStockCode(stock.getCode());
 							dailyData.setStockId(stock.getId());
