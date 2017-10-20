@@ -72,4 +72,10 @@ public interface DailyDataService extends BaseService<DailyData,Long>{
 	 * 2015年2月24日
 	 */
 	public void crawlDailyData(Stock stock);
+	
+	/**
+	 *  清除某一股票的每日数据
+	 * @param stockId
+	 */
+	public void removeDailyDataByStock(Long stockId);
 }/**@generate-service-source@**/

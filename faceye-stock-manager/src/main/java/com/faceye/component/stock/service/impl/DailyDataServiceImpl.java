@@ -25,6 +25,8 @@ import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.repository.mongo.DailyDataRepository;
 import com.faceye.component.stock.repository.mongo.StockRepository;
 import com.faceye.component.stock.repository.mongo.customer.DailyDataCustomerRepository;
+import com.faceye.component.stock.repository.mongo.customer.DailyStatCustomerRepository;
+import com.faceye.component.stock.repository.mongo.customer.StarDataStatCustomerRepository;
 import com.faceye.component.stock.service.DailyDataService;
 import com.faceye.component.stock.util.StockFetcher;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
@@ -33,7 +35,6 @@ import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.faceye.feature.service.job.thread.BaseThread;
 import com.faceye.feature.util.DateUtil;
 import com.faceye.feature.util.MathUtil;
-import com.faceye.feature.util.ServiceException;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -50,6 +51,10 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 
 	@Autowired
 	private DailyDataCustomerRepository dailyDataCustomerRepository = null;
+	@Autowired
+	private DailyStatCustomerRepository dailyStatCustomerRepository=null;
+	@Autowired
+	private StarDataStatCustomerRepository starDataStarCustomerRepository=null;
 
 	// 均线周期
 	private static Integer[] AVG_DAYS = new Integer[] { 5, 10, 20, 30, 60, 120, 250 };
@@ -556,6 +561,13 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 	@Override
 	public void remove(Long stockId){
 		this.dailyDataCustomerRepository.removeStockHistoryDailyData(stockId);
+	}
+
+	@Override
+	public void removeDailyDataByStock(Long stockId) {
+		this.dailyDataCustomerRepository.removeStockHistoryDailyData(stockId);
+		this.dailyStatCustomerRepository.removeDailyStatByStock(stockId);
+		this.starDataStarCustomerRepository.removeStockStarStatResults(stockId);
 	}
 
 }
