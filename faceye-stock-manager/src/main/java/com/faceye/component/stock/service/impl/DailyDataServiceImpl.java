@@ -9,9 +9,11 @@ import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -44,6 +46,11 @@ import com.querydsl.core.types.Predicate;
 public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, DailyDataRepository>
 		implements DailyDataService {
 
+	// 爬取数据年限
+	@Value("#{property[stock.crawl.daily.data.years]}")
+	private String CRAWL_STOCK_DAILY_DATA_YEARS = "";
+	// 默认爬取三年数据
+	private Integer DEFAULT_CRAWL_STOCK_DAILY_DATA_YEARS = 3;
 	@Autowired
 	private StockRepository stockRepository = null;
 	@Autowired
@@ -75,6 +82,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 		// List<Map<String, String>> data = fetcher.getStockDailyData(code, "",
 		// "");
 		Stock stock = this.stockRepository.getStockByCode(code);
+		Integer crawlStockDataYears=getCrawlStockDailyDataYears();
 		this.removeDailyDataByStock(stock.getId());
 		Calendar calendar = Calendar.getInstance();
 		Date now = new Date();
@@ -102,15 +110,27 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 			}
 		}
 		// 取过去3年数据
-		for (int i = 1; i < 10; i++) {
+		for (int i = 1; i < crawlStockDataYears; i++) {
 			for (String jd : jidus) {
 				this.fetchHistoryData(code, "" + (year - i), jd);
 			}
 		}
-		
+
 		this.computeDailyDataLines(stock);
 		this.dailyStatService.statDailyData2FindStar(stock);
 		this.dailyStatService.statStarData(stock);
+	}
+
+	/**
+	 * 获取爬取数据的年限(默认三年)
+	 * @return
+	 */
+	private Integer getCrawlStockDailyDataYears() {
+		if (StringUtils.isEmpty(CRAWL_STOCK_DAILY_DATA_YEARS)) {
+			return DEFAULT_CRAWL_STOCK_DAILY_DATA_YEARS;
+		} else {
+			return NumberUtils.toInt(CRAWL_STOCK_DAILY_DATA_YEARS);
+		}
 	}
 
 	/**
