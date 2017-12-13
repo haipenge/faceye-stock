@@ -48,7 +48,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 
 	// 爬取数据年限
 	@Value("#{property[stock.crawl.daily.data.years]}")
-	private String CRAWL_STOCK_DAILY_DATA_YEARS = "";
+	private String crawlStockDailyDataYears = "";
 	// 默认爬取三年数据
 	private Integer DEFAULT_CRAWL_STOCK_DAILY_DATA_YEARS = 3;
 	@Autowired
@@ -126,10 +126,10 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 	 * @return
 	 */
 	private Integer getCrawlStockDailyDataYears() {
-		if (StringUtils.isEmpty(CRAWL_STOCK_DAILY_DATA_YEARS)) {
+		if (StringUtils.isEmpty(crawlStockDailyDataYears)) {
 			return DEFAULT_CRAWL_STOCK_DAILY_DATA_YEARS;
 		} else {
-			return NumberUtils.toInt(CRAWL_STOCK_DAILY_DATA_YEARS);
+			return NumberUtils.toInt(crawlStockDailyDataYears);
 		}
 	}
 
