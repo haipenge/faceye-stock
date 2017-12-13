@@ -206,6 +206,7 @@ public class StarDataStatServiceTestCase extends BaseServiceTestCase {
 	@Test
 	public void testStarDataStat() throws Exception{
 		String code="600518";
+//		code ="000099";
 		Stock stock=this.stockService.getStockByCode(code);
 		if(stock!=null){
 			Map searchParams=new HashMap();

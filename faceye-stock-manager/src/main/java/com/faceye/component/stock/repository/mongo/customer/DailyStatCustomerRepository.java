@@ -13,5 +13,9 @@ import com.faceye.feature.repository.mongo.BaseMongoRepository;
  */
 public interface DailyStatCustomerRepository {
 	
-	
+	/**
+	 * 清除某一股票的每日分析数据
+	 * @param stockId
+	 */
+	public void removeDailyStatByStock(Long stockId);
 }/**@generate-repository-source@**/

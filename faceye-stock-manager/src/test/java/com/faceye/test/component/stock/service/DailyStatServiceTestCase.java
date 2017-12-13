@@ -209,4 +209,10 @@ public class DailyStatServiceTestCase extends BaseServiceTestCase {
 			this.dailyStatService.statStockDailyData(stock);
 		}
 	}
+	
+	@Test
+	public void testStatAllStockDailyData() throws Exception{
+		this.dailyStatService.statDailyData2FindStar();
+		this.dailyStatService.statStarData();
+	}
 }

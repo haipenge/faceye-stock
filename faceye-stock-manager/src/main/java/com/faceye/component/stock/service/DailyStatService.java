@@ -69,5 +69,12 @@ public interface DailyStatService extends BaseService<DailyStat, Long> {
 	 * @Date:2017年4月17日 上午9:11:26
 	 */
 	public void statStarData(Stock stock);
+	
+	
+	/**
+	 * 删除某一只股票 的分析结果
+	 * @param stockId
+	 */
+	public void removeDailyStatByStock(Long stockId);
 
 }/** @generate-service-source@ **/

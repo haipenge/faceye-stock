@@ -449,7 +449,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 		for (DailyData dailyData : dailyDatas) {
 			Date dailyDate = dailyData.getDate();
 			// 向前10个交易日，寻找是否有快线上穿慢线的情况
-			dailyDate = new Date(dailyDate.getTime() - 10 * 24 * 60 * 60 * 1000L);
+			//dailyDate = new Date(dailyDate.getTime() - 10 * 24 * 60 * 60 * 1000L);
 			Map macdParams = new HashMap();
 			macdParams.put("EQ|stockId", stock.getId());
 			macdParams.put("GT|date", dailyData.getDate());
@@ -623,6 +623,11 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 				}
 			}
 		}
+	}
+
+	@Override
+	public void removeDailyStatByStock(Long stockId) {
+		this.dailyStatCustomerRepository.removeDailyStatByStock(stockId);
 	}
 
 }/** @generate-service-source@ **/

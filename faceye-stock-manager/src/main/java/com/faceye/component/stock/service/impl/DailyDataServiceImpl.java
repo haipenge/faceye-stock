@@ -9,9 +9,11 @@ import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +28,8 @@ import com.faceye.component.stock.repository.mongo.DailyDataRepository;
 import com.faceye.component.stock.repository.mongo.StockRepository;
 import com.faceye.component.stock.repository.mongo.customer.DailyDataCustomerRepository;
 import com.faceye.component.stock.service.DailyDataService;
+import com.faceye.component.stock.service.DailyStatService;
+import com.faceye.component.stock.service.StarDataStatService;
 import com.faceye.component.stock.util.StockFetcher;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.MultiQueueService;
@@ -33,15 +37,20 @@ import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.faceye.feature.service.job.thread.BaseThread;
 import com.faceye.feature.util.DateUtil;
 import com.faceye.feature.util.MathUtil;
-import com.faceye.feature.util.ServiceException;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 
 @Service
-public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, DailyDataRepository> implements DailyDataService {
+public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, DailyDataRepository>
+		implements DailyDataService {
 
+	// 爬取数据年限
+	@Value("#{property[stock.crawl.daily.data.years]}")
+	private String CRAWL_STOCK_DAILY_DATA_YEARS = "";
+	// 默认爬取三年数据
+	private Integer DEFAULT_CRAWL_STOCK_DAILY_DATA_YEARS = 3;
 	@Autowired
 	private StockRepository stockRepository = null;
 	@Autowired
@@ -50,6 +59,12 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 
 	@Autowired
 	private DailyDataCustomerRepository dailyDataCustomerRepository = null;
+	// @Autowired
+	// private DailyStatCustomerRepository dailyStatCustomerRepository=null;
+	@Autowired
+	private DailyStatService dailyStatService = null;
+	@Autowired
+	private StarDataStatService starDataStarService = null;
 
 	// 均线周期
 	private static Integer[] AVG_DAYS = new Integer[] { 5, 10, 20, 30, 60, 120, 250 };
@@ -64,7 +79,11 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 	 */
 	@Override
 	public void initDailyData(String code) {
-		// List<Map<String, String>> data = fetcher.getStockDailyData(code, "", "");
+		// List<Map<String, String>> data = fetcher.getStockDailyData(code, "",
+		// "");
+		Stock stock = this.stockRepository.getStockByCode(code);
+		Integer crawlStockDataYears=getCrawlStockDailyDataYears();
+		this.removeDailyDataByStock(stock.getId());
 		Calendar calendar = Calendar.getInstance();
 		Date now = new Date();
 		int year = calendar.get(Calendar.YEAR);
@@ -91,12 +110,27 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 			}
 		}
 		// 取过去3年数据
-		for (int i = 1; i < 3; i++) {
+		for (int i = 1; i < crawlStockDataYears; i++) {
 			for (String jd : jidus) {
 				this.fetchHistoryData(code, "" + (year - i), jd);
 			}
 		}
 
+		this.computeDailyDataLines(stock);
+		this.dailyStatService.statDailyData2FindStar(stock);
+		this.dailyStatService.statStarData(stock);
+	}
+
+	/**
+	 * 获取爬取数据的年限(默认三年)
+	 * @return
+	 */
+	private Integer getCrawlStockDailyDataYears() {
+		if (StringUtils.isEmpty(CRAWL_STOCK_DAILY_DATA_YEARS)) {
+			return DEFAULT_CRAWL_STOCK_DAILY_DATA_YEARS;
+		} else {
+			return NumberUtils.toInt(CRAWL_STOCK_DAILY_DATA_YEARS);
+		}
 	}
 
 	/**
@@ -133,10 +167,11 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 						String money = map.get("money");
 						Date dDate = DateUtil.getDateFromString(date + " 00:00:00", "yyyy-MM-dd HH:mm:ss");
 						// 只存储最近30天的数据
-						// if (now.getTime() - dDate.getTime() > 31 * 24 * 60 * 60 * 1000L) {
+						// if (now.getTime() - dDate.getTime() > 31 * 24 * 60 *
+						// 60 * 1000L) {
 						// continue;
 						// }
-						boolean isDailyDataExist = this.isDailyDataExist(code, date)==null;
+						boolean isDailyDataExist = this.isDailyDataExist(code, date) == null;
 						date += " 15:00:00";
 						if (isDailyDataExist) {
 							DailyData dailyData = new DailyData();
@@ -170,10 +205,11 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 			for (Stock stock : stocks) {
 				Map params = new HashMap();
 				params.put("EQ|stockId", stock.getId());
-//				long count = this.dailyDataCustomerRepository.getCount(params);
-//				if (count < 30) {
-					this.initDailyData(stock.getCode());
-//				}
+				// long count =
+				// this.dailyDataCustomerRepository.getCount(params);
+				// if (count < 30) {
+				this.initDailyData(stock.getCode());
+				// }
 			}
 		}
 	}
@@ -217,7 +253,8 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 			// this.stockQueueService.addAll(stocks);
 			for (int i = 0; i < stocks.size(); i++) {
 				Stock stock = stocks.get(i);
-				logger.debug(">>FaceYe --> stock index is:" + stock.getName() + "(" + stock.getCode() + "),index is:" + i + ",total size is:" + stocks.size());
+				logger.debug(">>FaceYe --> stock index is:" + stock.getName() + "(" + stock.getCode() + "),index is:"
+						+ i + ",total size is:" + stocks.size());
 				this.computeDailyDataLines(stock);
 			}
 		}
@@ -256,12 +293,13 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 			for (DailyData dailyData : dailyDatas) {
 				Integer[] days = new Integer[] { 5, 10, 20, 30, 60, 120, 250 };
 				if (index % 50 == 0) {
-					logger.debug(">>FaceYe --> current compute daily index is,stock is:" + stock.getName() + "(" + stock.getCode() + "),daily data size:" + dailyDatas.size()
-							+ ",index :" + index);
+					logger.debug(">>FaceYe --> current compute daily index is,stock is:" + stock.getName() + "("
+							+ stock.getCode() + "),daily data size:" + dailyDatas.size() + ",index :" + index);
 				}
 				boolean isNeed2Compute = false;
-				if (dailyData.getAvg10() == null || dailyData.getAvg120() == null || dailyData.getAvg20() == null || dailyData.getAvg250() == null || dailyData.getAvg30() == null
-						|| dailyData.getAvg5() == null || dailyData.getAvg60() == null) {
+				if (dailyData.getAvg10() == null || dailyData.getAvg120() == null || dailyData.getAvg20() == null
+						|| dailyData.getAvg250() == null || dailyData.getAvg30() == null || dailyData.getAvg5() == null
+						|| dailyData.getAvg60() == null) {
 					isNeed2Compute = true;
 				}
 				if (isNeed2Compute) {
@@ -269,7 +307,8 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 						Integer toIndex = index + day;
 						if (toIndex <= dailyDatas.size()) {
 							List<DailyData> sub = dailyDatas.subList(index, toIndex);
-							// logger.debug(">>FaceYe --> Sub size is:"+sub.size()+",day is :"+day);
+							// logger.debug(">>FaceYe --> Sub size
+							// is:"+sub.size()+",day is :"+day);
 							if (sub.size() == day.intValue()) {
 								Double computeResult = 0D;
 								Double total = 0D;
@@ -311,7 +350,8 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 	}
 
 	/**
-	 * 计算每天的EMA,(EMA12,EMA26) EMAtoday=α * ( Pricetoday - EMAyesterday ) + EMAyesterday;
+	 * 计算每天的EMA,(EMA12,EMA26) EMAtoday=α * ( Pricetoday - EMAyesterday ) +
+	 * EMAyesterday;
 	 * 
 	 * @param stock
 	 * @Desc:
@@ -370,7 +410,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 	 * @author:@haipenge haipenge@gmail.com 2015年2月23日
 	 */
 	private DailyData isDailyDataExist(String code, String date) {
-		DailyData dailyData=null;
+		DailyData dailyData = null;
 		boolean res = false;
 		Stock stock = this.stockRepository.getStockByCode(code);
 		if (stock != null) {
@@ -382,9 +422,10 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 			builder.and(qDailyData.date.before(DateUtil.getDateFromString(endDate)));
 			builder.and(qDailyData.date.after(DateUtil.getDateFromString(startDate)));
 			List<DailyData> dailyDatas = (List) this.dao.findAll(builder.getValue());
-			if(CollectionUtils.isNotEmpty(dailyDatas)){
-				dailyData=dailyDatas.get(0);
-			};
+			if (CollectionUtils.isNotEmpty(dailyDatas)) {
+				dailyData = dailyDatas.get(0);
+			}
+			;
 		}
 		return dailyData;
 	}
@@ -400,16 +441,17 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 		// this.dailyDataCustomerRepository.clearHistoryDailyData();
 		List<Stock> stocks = (List) this.stockRepository.findAll();
 		if (CollectionUtils.isNotEmpty(stocks)) {
-			logger.debug(">>FaceYe crawl stock size is :"+stocks.size());
+			logger.debug(">>FaceYe crawl stock size is :" + stocks.size());
 			for (Stock stock : stocks) {
 				try {
 					this.crawlDailyData(stock);
 					Thread.sleep(2000L);
 				} catch (Exception e) {
-					logger.debug(">>FaceYe throws Exception wen crawl stock daily data.exception is:" + e.toString() + ",stock code is:" + stock.getCode());
+					logger.debug(">>FaceYe throws Exception wen crawl stock daily data.exception is:" + e.toString()
+							+ ",stock code is:" + stock.getCode());
 				}
 			}
-		}else{
+		} else {
 			logger.debug(">>FaceYe --> stock is empty ,can not be crawl.");
 		}
 	}
@@ -434,32 +476,34 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 			String volume = MapUtils.getString(data, "volume");
 			String money = MapUtils.getString(data, "money");
 			String yesterdayPrice = MapUtils.getString(data, "yesterdayPrice");
-			if (StringUtils.isNotEmpty(open) && Double.parseDouble(open) > 0 && !StringUtils.equals(open, "0.00") && !StringUtils.equals(close, "0.00")) {
+			if (StringUtils.isNotEmpty(open) && Double.parseDouble(open) > 0 && !StringUtils.equals(open, "0.00")
+					&& !StringUtils.equals(close, "0.00")) {
 				String date = MapUtils.getString(data, "date");
 				String time = MapUtils.getString(data, "time");
-//				boolean isDailyDataExist = this.isDailyDataExist(stock.getCode(), date);
-				DailyData existDailyData=this.isDailyDataExist(stock.getCode(), date);
-				if(existDailyData!=null){
+				// boolean isDailyDataExist =
+				// this.isDailyDataExist(stock.getCode(), date);
+				DailyData existDailyData = this.isDailyDataExist(stock.getCode(), date);
+				if (existDailyData != null) {
 					this.dao.delete(existDailyData);
 				}
-//				if (!isDailyDataExist) {
-					DailyData dailyData = new DailyData();
-					dailyData.setChengjiaogupiaoshu(Double.parseDouble(volume));
-					dailyData.setChengjiaojine(Double.parseDouble(money));
-					dailyData.setDangqianjiage(Double.parseDouble(close));
-					dailyData.setShoupanjia(Double.parseDouble(close));
-					dailyData.setJintianzuidijia(Double.parseDouble(low));
-					dailyData.setJintianzuigaojia(Double.parseDouble(high));
-					dailyData.setKaipanjia(Double.parseDouble(open));
-					dailyData.setDate(DateUtil.getDateFromString(date + " " + time));
-					if (StringUtils.isNotEmpty(yesterdayPrice)) {
-						dailyData.setYesterdayPrice(Double.parseDouble(yesterdayPrice));
-					}
-					// dailyData.setStockCode(stock.getCode());
-					dailyData.setStockId(stock.getId());
-					// dailyData.setStockName(stock.getName());
-					this.save(dailyData);
-//				}
+				// if (!isDailyDataExist) {
+				DailyData dailyData = new DailyData();
+				dailyData.setChengjiaogupiaoshu(Double.parseDouble(volume));
+				dailyData.setChengjiaojine(Double.parseDouble(money));
+				dailyData.setDangqianjiage(Double.parseDouble(close));
+				dailyData.setShoupanjia(Double.parseDouble(close));
+				dailyData.setJintianzuidijia(Double.parseDouble(low));
+				dailyData.setJintianzuigaojia(Double.parseDouble(high));
+				dailyData.setKaipanjia(Double.parseDouble(open));
+				dailyData.setDate(DateUtil.getDateFromString(date + " " + time));
+				if (StringUtils.isNotEmpty(yesterdayPrice)) {
+					dailyData.setYesterdayPrice(Double.parseDouble(yesterdayPrice));
+				}
+				// dailyData.setStockCode(stock.getCode());
+				dailyData.setStockId(stock.getId());
+				// dailyData.setStockName(stock.getName());
+				this.save(dailyData);
+				// }
 			}
 
 		}
@@ -489,10 +533,13 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 	// BooleanBuilder builder = new BooleanBuilder();
 	// builder.and(qDailyData.stockId.eq(stock.getId()));
 	// builder.and(qDailyData.date.before(date));
-	// OrderSpecifier orderSpecifier = new OrderSpecifier(Order.DESC, qDailyData.date);
+	// OrderSpecifier orderSpecifier = new OrderSpecifier(Order.DESC,
+	// qDailyData.date);
 	// predicate = builder.getValue();
-	// List<DailyData> dailyDatas = (List) dao.findAll(predicate, orderSpecifier);
-	// logger.debug(">>FaceYe --> compute daily data avg,query prediate is :" + predicate.toString() + ",query result size is+"
+	// List<DailyData> dailyDatas = (List) dao.findAll(predicate,
+	// orderSpecifier);
+	// logger.debug(">>FaceYe --> compute daily data avg,query prediate is :" +
+	// predicate.toString() + ",query result size is+"
 	// + (dailyDatas == null ? "0" : dailyDatas.size()));
 	// if (CollectionUtils.isNotEmpty(dailyDatas)) {
 	// int index = 0;
@@ -530,7 +577,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 	// }
 	// }
 	@Override
-	public Page<DailyData> getPage(Map<String, Object> searchParams, int page, int size)  {
+	public Page<DailyData> getPage(Map<String, Object> searchParams, int page, int size) {
 		if (page != 0) {
 			page = page - 1;
 		}
@@ -546,16 +593,26 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 			Pageable pageable = new PageRequest(page, size, sort);
 			res = this.dao.findAll(predicate, pageable);
 		} else {
-			// OrderSpecifier<Comparable> orderPOrderSpecifier=new OrderSpecifier<Comparable>(new Order(), new NumberExpression<T>("id") {
+			// OrderSpecifier<Comparable> orderPOrderSpecifier=new
+			// OrderSpecifier<Comparable>(new Order(), new
+			// NumberExpression<T>("id") {
 			// })
 			List<DailyData> items = (List) this.dao.findAll(predicate, sort);
 			res = new PageImpl<DailyData>(items);
 		}
 		return res;
 	}
+
 	@Override
-	public void remove(Long stockId){
+	public void remove(Long stockId) {
 		this.dailyDataCustomerRepository.removeStockHistoryDailyData(stockId);
+	}
+
+	@Override
+	public void removeDailyDataByStock(Long stockId) {
+		this.dailyDataCustomerRepository.removeStockHistoryDailyData(stockId);
+		this.dailyStatService.removeDailyStatByStock(stockId);
+		this.starDataStarService.removeStockStarStatResults(stockId);
 	}
 
 }
