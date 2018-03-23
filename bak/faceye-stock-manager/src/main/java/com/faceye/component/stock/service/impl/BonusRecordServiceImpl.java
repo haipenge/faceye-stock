@@ -70,7 +70,7 @@ public class BonusRecordServiceImpl extends BaseMongoServiceImpl<BonusRecord, Lo
 //			res = new PageImpl<BonusRecord>(items);
 //		}
 		searchParams.put("SORT|publishDate", "desc");
-		return this.dao.getPage(searchParams, page, size);
+		return super.getPage(searchParams, page, size);
 	}
 
 	@Override

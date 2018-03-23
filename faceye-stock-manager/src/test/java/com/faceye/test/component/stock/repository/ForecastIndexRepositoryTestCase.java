@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
+import org.junit.Assert;
 
 import com.faceye.component.stock.entity.ForecastIndex;
 import com.faceye.component.stock.repository.mongo.ForecastIndexRepository;
@@ -34,24 +34,24 @@ public class ForecastIndexRepositoryTestCase extends BaseRepositoryTestCase {
 		ForecastIndex entity = new ForecastIndex();
 		this.forecastIndexRepository.save(entity);
 		Iterable<ForecastIndex> entities = this.forecastIndexRepository.findAll();
-		Assert.isTrue(entities.iterator().hasNext());
+		Assert.assertTrue(entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testDelete() throws Exception {
 		ForecastIndex entity = new ForecastIndex();
 		this.forecastIndexRepository.save(entity);
-        this.forecastIndexRepository.delete(entity.getId());
+        this.forecastIndexRepository.deleteById(entity.getId());
         Iterable<ForecastIndex> entities = this.forecastIndexRepository.findAll();
-		Assert.isTrue(!entities.iterator().hasNext());
+		Assert.assertTrue(!entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testFindOne() throws Exception {
 		ForecastIndex entity = new ForecastIndex();
 		this.forecastIndexRepository.save(entity);
-		ForecastIndex forecastIndex=this.forecastIndexRepository.findOne(entity.getId());
-		Assert.isTrue(forecastIndex!=null);
+		ForecastIndex forecastIndex=this.forecastIndexRepository.findById(entity.getId()).get();
+		Assert.assertTrue(forecastIndex!=null);
 	}
 
 	

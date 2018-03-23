@@ -23,7 +23,7 @@ import com.faceye.component.stock.service.StarDataStatService;
 import com.faceye.component.stock.service.wrapper.WrapStarDataStat;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
-import com.faceye.feature.util.ServiceException;
+ 
 import com.google.common.collect.Lists;
 import com.querydsl.core.types.Predicate;
 

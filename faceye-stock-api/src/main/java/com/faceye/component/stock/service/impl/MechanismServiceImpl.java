@@ -18,7 +18,7 @@ import com.faceye.component.stock.repository.mongo.MechanismRepository;
 import com.faceye.component.stock.repository.mongo.customer.MechanismCustomerRepository;
 import com.faceye.component.stock.service.MechanismService;
 
-import com.faceye.feature.util.ServiceException;
+ 
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.querydsl.core.types.Predicate;
@@ -40,7 +40,7 @@ public class MechanismServiceImpl extends BaseMongoServiceImpl<Mechanism, Long, 
 	
 	
 	@Override
-	public Page<Mechanism> getPage(Map<String, Object> searchParams, int page, int size) throws ServiceException {
+	public Page<Mechanism> getPage(Map<String, Object> searchParams, int page, int size)   {
 		if (page != 0) {
 			page = page - 1;
 		}
@@ -68,7 +68,7 @@ public class MechanismServiceImpl extends BaseMongoServiceImpl<Mechanism, Long, 
 //			res = new PageImpl<Mechanism>(items);
 //
 //		}
-		return this.dao.getPage(searchParams, page, size);;
+		return super.getPage(searchParams, page, size);;
 	}
 	
 }/**@generate-service-source@**/

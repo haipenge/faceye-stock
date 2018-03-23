@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
+import org.junit.Assert;
 
 import com.faceye.component.stock.entity.TotalStock;
 import com.faceye.component.stock.repository.mongo.TotalStockRepository;
@@ -34,24 +34,24 @@ public class TotalStockRepositoryTestCase extends BaseRepositoryTestCase {
 		TotalStock entity = new TotalStock();
 		this.totalStockRepository.save(entity);
 		Iterable<TotalStock> entities = this.totalStockRepository.findAll();
-		Assert.isTrue(entities.iterator().hasNext());
+		Assert.assertTrue(entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testDelete() throws Exception {
 		TotalStock entity = new TotalStock();
 		this.totalStockRepository.save(entity);
-        this.totalStockRepository.delete(entity.getId());
+        this.totalStockRepository.deleteById(entity.getId());
         Iterable<TotalStock> entities = this.totalStockRepository.findAll();
-		Assert.isTrue(!entities.iterator().hasNext());
+		Assert.assertTrue(!entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testFindOne() throws Exception {
 		TotalStock entity = new TotalStock();
 		this.totalStockRepository.save(entity);
-		TotalStock totalStock=this.totalStockRepository.findOne(entity.getId());
-		Assert.isTrue(totalStock!=null);
+		TotalStock totalStock=this.totalStockRepository.findById(entity.getId()).get();
+		Assert.assertTrue(totalStock!=null);
 	}
 
 	

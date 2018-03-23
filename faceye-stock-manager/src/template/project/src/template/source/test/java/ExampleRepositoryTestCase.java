@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
+import org.junit.Assert;
 
 import com.faceye.component.@component.name@.entity.@entity.name@;
 import com.faceye.component.@component.name@.repository.@entity.name@Repository;
@@ -34,24 +34,24 @@ public class @entity.name@RepositoryTestCase extends BaseRepositoryTestCase {
 		@entity.name@ entity = new @entity.name@();
 		this.@entity.config.name@Repository.save(entity);
 		Iterable<@entity.name@> entities = this.@entity.config.name@Repository.findAll();
-		Assert.isTrue(entities.iterator().hasNext());
+		Assert.assertTrue(entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testDelete() throws Exception {
 		@entity.name@ entity = new @entity.name@();
 		this.@entity.config.name@Repository.save(entity);
-        this.@entity.config.name@Repository.delete(entity.getId());
+        this.@entity.config.name@Repository.deleteById(entity.getId());
         Iterable<@entity.name@> entities = this.@entity.config.name@Repository.findAll();
-		Assert.isTrue(!entities.iterator().hasNext());
+		Assert.assertTrue(!entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testFindOne() throws Exception {
 		@entity.name@ entity = new @entity.name@();
 		this.@entity.config.name@Repository.save(entity);
-		@entity.name@ @entity.config.name@=this.@entity.config.name@Repository.findOne(entity.getId());
-		Assert.isTrue(@entity.config.name@!=null);
+		@entity.name@ @entity.config.name@=this.@entity.config.name@Repository.findById(entity.getId()).get();
+		Assert.assertTrue(@entity.config.name@!=null);
 	}
 
 	

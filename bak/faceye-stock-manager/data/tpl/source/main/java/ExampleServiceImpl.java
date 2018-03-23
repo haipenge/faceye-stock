@@ -18,7 +18,7 @@ import com.faceye.component.@component.name@.repository.jpa.@entity.name@Reposit
 import com.faceye.feature.repository.SearchFilter;
 import com.faceye.component.@component.name@.service.@entity.name@Service;
 import com.faceye.feature.service.impl.BaseServiceImpl;
-import com.faceye.feature.util.ServiceException;
+ 
 /**
  * 模块:@component.name@<br>
  * 实体:@entity.name@<br>

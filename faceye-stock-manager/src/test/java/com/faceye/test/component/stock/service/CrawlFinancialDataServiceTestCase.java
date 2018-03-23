@@ -7,7 +7,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
+import org.junit.Assert;
 
 import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.service.CrawlFinancialDataService;
@@ -54,21 +54,21 @@ public class CrawlFinancialDataServiceTestCase extends BaseServiceTestCase {
 				logger.debug(">>Stock:" + code + " is empty.");
 			}
 		}
-		Assert.isTrue(true);
+		Assert.assertTrue(true);
 	}
 	@Test
    public void testCrawlSingleStock() throws Exception{
 	  String code="000998";
 	  Stock stock=this.stockService.getStockByCode(code);
 	  this.crawlFinancialDataService.crawlStock(stock,false);
-	  Assert.isTrue(true);
+	  Assert.assertTrue(true);
    }
 	@Test
 	public void testCrawlForecast() throws Exception{
 		 String code="000998";
 		  Stock stock=this.stockService.getStockByCode(code);
 		  this.crawlFinancialDataService.crawlForecast(stock);
-		  Assert.isTrue(true);
+		  Assert.assertTrue(true);
 	}
 
 	/**

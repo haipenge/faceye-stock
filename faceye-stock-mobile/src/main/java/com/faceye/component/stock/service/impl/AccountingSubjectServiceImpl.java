@@ -18,7 +18,7 @@ import com.faceye.component.stock.repository.mongo.AccountingSubjectRepository;
 import com.faceye.component.stock.repository.mongo.customer.AccountingSubjectCustomerRepository;
 import com.faceye.component.stock.service.AccountingSubjectService;
 
-import com.faceye.feature.util.ServiceException;
+ 
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.querydsl.core.types.Predicate;
@@ -40,7 +40,7 @@ public class AccountingSubjectServiceImpl extends BaseMongoServiceImpl<Accountin
 	
 	
 	@Override
-	public Page<AccountingSubject> getPage(Map<String, Object> searchParams, int page, int size) throws ServiceException {
+	public Page<AccountingSubject> getPage(Map<String, Object> searchParams, int page, int size)   {
 		if (page != 0) {
 			page = page - 1;
 		}

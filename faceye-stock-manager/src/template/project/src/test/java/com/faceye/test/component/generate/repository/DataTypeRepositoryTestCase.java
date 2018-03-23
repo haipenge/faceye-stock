@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
+import org.junit.Assert;
 
 import com.faceye.component.generate.entity.DataType;
 import com.faceye.component.generate.repository.mongo.DataTypeRepository;
@@ -34,24 +34,24 @@ public class DataTypeRepositoryTestCase extends BaseRepositoryTestCase {
 		DataType entity = new DataType();
 		this.dataTypeRepository.save(entity);
 		Iterable<DataType> entities = this.dataTypeRepository.findAll();
-		Assert.isTrue(entities.iterator().hasNext());
+		Assert.assertTrue(entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testDelete() throws Exception {
 		DataType entity = new DataType();
 		this.dataTypeRepository.save(entity);
-        this.dataTypeRepository.delete(entity.getId());
+        this.dataTypeRepository.deleteById(entity.getId());
         Iterable<DataType> entities = this.dataTypeRepository.findAll();
-		Assert.isTrue(!entities.iterator().hasNext());
+		Assert.assertTrue(!entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testFindOne() throws Exception {
 		DataType entity = new DataType();
 		this.dataTypeRepository.save(entity);
-		DataType dataType=this.dataTypeRepository.findOne(entity.getId());
-		Assert.isTrue(dataType!=null);
+		DataType dataType=this.dataTypeRepository.findById(entity.getId()).get();
+		Assert.assertTrue(dataType!=null);
 	}
 
 	

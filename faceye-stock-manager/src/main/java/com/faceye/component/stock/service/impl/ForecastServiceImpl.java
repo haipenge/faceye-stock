@@ -83,7 +83,7 @@ public class ForecastServiceImpl extends BaseMongoServiceImpl<Forecast, Long, Fo
 		}
 		searchParams.put("SORT|reportDate:1", "desc");
 		searchParams.put("SORT|mechanism:2", "asc");
-		return this.dao.getPage(searchParams, page, size);
+		return super.getPage(searchParams, page, size);
 	}
 
 	@Override

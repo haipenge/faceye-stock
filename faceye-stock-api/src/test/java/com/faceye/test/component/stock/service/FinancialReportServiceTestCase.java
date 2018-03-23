@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.util.Assert;
+import org.junit.Assert;
 
 import com.faceye.component.stock.entity.FinancialReport;
 import com.faceye.component.stock.service.FinancialReportService;
@@ -36,7 +36,7 @@ public class FinancialReportServiceTestCase extends BaseServiceTestCase {
 	 */
 	@Before
 	public void set() throws Exception {
-		Assert.isTrue(financialReportService != null);
+		Assert.assertTrue(financialReportService != null);
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class FinancialReportServiceTestCase extends BaseServiceTestCase {
 		FinancialReport entity = new FinancialReport();
 		this.financialReportService.save(entity);
 		List<FinancialReport> entites = this.financialReportService.getAll();
-		Assert.isTrue(CollectionUtils.isNotEmpty(entites));
+		Assert.assertTrue(CollectionUtils.isNotEmpty(entites));
 	}
 
 	@Test
@@ -73,7 +73,7 @@ public class FinancialReportServiceTestCase extends BaseServiceTestCase {
 		FinancialReport entity = new FinancialReport();
 		this.financialReportService.save(entity);
 		List<FinancialReport> entites = this.financialReportService.getAll();
-		Assert.isTrue(CollectionUtils.isNotEmpty(entites));
+		Assert.assertTrue(CollectionUtils.isNotEmpty(entites));
 	}
 
 	@Test
@@ -83,7 +83,7 @@ public class FinancialReportServiceTestCase extends BaseServiceTestCase {
 			this.financialReportService.save(entity);
 		}
 		List<FinancialReport> entities = this.financialReportService.getAll();
-		Assert.isTrue(CollectionUtils.isNotEmpty(entities) && entities.size() == 5);
+		Assert.assertTrue(CollectionUtils.isNotEmpty(entities) && entities.size() == 5);
 	}
 
 	@Test
@@ -92,7 +92,7 @@ public class FinancialReportServiceTestCase extends BaseServiceTestCase {
 		this.financialReportService.save(entity);
 		logger.debug(">>Entity id is:" + entity.getId());
 		FinancialReport e = this.financialReportService.get(entity.getId());
-		Assert.isTrue(e != null);
+		Assert.assertTrue(e != null);
 	}
 
 	@Test
@@ -101,7 +101,7 @@ public class FinancialReportServiceTestCase extends BaseServiceTestCase {
 		this.financialReportService.save(entity);
 		this.financialReportService.remove(entity);
 		List<FinancialReport> entities = this.financialReportService.getAll();
-		Assert.isTrue(CollectionUtils.isEmpty(entities));
+		Assert.assertTrue(CollectionUtils.isEmpty(entities));
 	}
 
 	@Test
@@ -111,10 +111,10 @@ public class FinancialReportServiceTestCase extends BaseServiceTestCase {
 			this.financialReportService.save(entity);
 		}
 		List<FinancialReport> entities = this.financialReportService.getAll();
-		Assert.isTrue(CollectionUtils.isNotEmpty(entities) && entities.size() == 5);
+		Assert.assertTrue(CollectionUtils.isNotEmpty(entities) && entities.size() == 5);
 		this.financialReportService.removeAllInBatch();
 		entities = this.financialReportService.getAll();
-		Assert.isTrue(CollectionUtils.isEmpty(entities));
+		Assert.assertTrue(CollectionUtils.isEmpty(entities));
 	}
 
 	@Test
@@ -125,7 +125,7 @@ public class FinancialReportServiceTestCase extends BaseServiceTestCase {
 		}
 		this.financialReportService.removeAll();
 		List<FinancialReport> entities = this.financialReportService.getAll();
-		Assert.isTrue(CollectionUtils.isEmpty(entities));
+		Assert.assertTrue(CollectionUtils.isEmpty(entities));
 	}
 
 	@Test
@@ -139,7 +139,7 @@ public class FinancialReportServiceTestCase extends BaseServiceTestCase {
 		}
 		this.financialReportService.removeInBatch(entities);
 		entities = this.financialReportService.getAll();
-		Assert.isTrue(CollectionUtils.isEmpty(entities));
+		Assert.assertTrue(CollectionUtils.isEmpty(entities));
 	}
 
 	@Test
@@ -149,7 +149,7 @@ public class FinancialReportServiceTestCase extends BaseServiceTestCase {
 			this.financialReportService.save(entity);
 		}
 		List<FinancialReport> entities = this.financialReportService.getAll();
-		Assert.isTrue(CollectionUtils.isNotEmpty(entities) && entities.size() == 5);
+		Assert.assertTrue(CollectionUtils.isNotEmpty(entities) && entities.size() == 5);
 	}
 
 	@Test
@@ -160,15 +160,15 @@ public class FinancialReportServiceTestCase extends BaseServiceTestCase {
 		}
 		Map<String, Object> searchParams = new HashMap<String, Object>();
 		Page<FinancialReport> page = this.financialReportService.getPage(searchParams, 1, 5);
-		Assert.isTrue(page != null && page.getSize() == 5);
+		Assert.assertTrue(page != null && page.getSize() == 5);
 		searchParams.put("EQ_name", "test-10");
 		page = this.financialReportService.getPage(searchParams, 1, 5);
-		Assert.isTrue(page != null && page.getTotalElements() == 1);
+		Assert.assertTrue(page != null && page.getTotalElements() == 1);
 		searchParams = new HashMap<String, Object>();
 		searchParams.put("LIKE_name", "test");
 		page = this.financialReportService.getPage(searchParams, 1, 5);
 
-		Assert.isTrue(page != null && page.getTotalElements() == 25 && page.getNumberOfElements() == 5);
+		Assert.assertTrue(page != null && page.getTotalElements() == 25 && page.getNumberOfElements() == 5);
 
 	}
 
@@ -181,7 +181,7 @@ public class FinancialReportServiceTestCase extends BaseServiceTestCase {
 			id = entity.getId();
 		}
 		FinancialReport e = this.financialReportService.get(id);
-		Assert.isTrue(e != null);
+		Assert.assertTrue(e != null);
 	}
 
 	@Test
@@ -195,6 +195,6 @@ public class FinancialReportServiceTestCase extends BaseServiceTestCase {
 			}
 		}
 		List<FinancialReport> entities = this.financialReportService.getAll(ids);
-		Assert.isTrue(entities != null && entities.size() == 5);
+		Assert.assertTrue(entities != null && entities.size() == 5);
 	}
 }

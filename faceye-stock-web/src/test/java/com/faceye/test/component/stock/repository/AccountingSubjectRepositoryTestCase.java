@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
+import org.junit.Assert;
 
 import com.faceye.component.stock.entity.AccountingSubject;
 import com.faceye.component.stock.repository.mongo.AccountingSubjectRepository;
@@ -34,24 +34,24 @@ public class AccountingSubjectRepositoryTestCase extends BaseRepositoryTestCase 
 		AccountingSubject entity = new AccountingSubject();
 		this.accountingSubjectRepository.save(entity);
 		Iterable<AccountingSubject> entities = this.accountingSubjectRepository.findAll();
-		Assert.isTrue(entities.iterator().hasNext());
+		Assert.assertTrue(entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testDelete() throws Exception {
 		AccountingSubject entity = new AccountingSubject();
 		this.accountingSubjectRepository.save(entity);
-        this.accountingSubjectRepository.delete(entity.getId());
+        this.accountingSubjectRepository.deleteById(entity.getId());
         Iterable<AccountingSubject> entities = this.accountingSubjectRepository.findAll();
-		Assert.isTrue(!entities.iterator().hasNext());
+		Assert.assertTrue(!entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testFindOne() throws Exception {
 		AccountingSubject entity = new AccountingSubject();
 		this.accountingSubjectRepository.save(entity);
-		AccountingSubject accountingSubject=this.accountingSubjectRepository.findOne(entity.getId());
-		Assert.isTrue(accountingSubject!=null);
+		AccountingSubject accountingSubject=this.accountingSubjectRepository.findById(entity.getId()).get();
+		Assert.assertTrue(accountingSubject!=null);
 	}
 
 	

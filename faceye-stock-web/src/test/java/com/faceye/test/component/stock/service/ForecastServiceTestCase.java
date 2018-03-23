@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.util.Assert;
+import org.junit.Assert;
 
 import com.faceye.component.stock.entity.Forecast;
 import com.faceye.component.stock.service.ForecastService;
@@ -36,7 +36,7 @@ public class ForecastServiceTestCase extends BaseServiceTestCase {
 	 */
 	@Before
 	public void set() throws Exception {
-		Assert.isTrue(forecastService != null);
+		Assert.assertTrue(forecastService != null);
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class ForecastServiceTestCase extends BaseServiceTestCase {
 		Forecast entity = new Forecast();
 		this.forecastService.save(entity);
 		List<Forecast> entites = this.forecastService.getAll();
-		Assert.isTrue(CollectionUtils.isNotEmpty(entites));
+		Assert.assertTrue(CollectionUtils.isNotEmpty(entites));
 	}
 
 	@Test
@@ -73,7 +73,7 @@ public class ForecastServiceTestCase extends BaseServiceTestCase {
 		Forecast entity = new Forecast();
 		this.forecastService.save(entity);
 		List<Forecast> entites = this.forecastService.getAll();
-		Assert.isTrue(CollectionUtils.isNotEmpty(entites));
+		Assert.assertTrue(CollectionUtils.isNotEmpty(entites));
 	}
 
 	@Test
@@ -83,7 +83,7 @@ public class ForecastServiceTestCase extends BaseServiceTestCase {
 			this.forecastService.save(entity);
 		}
 		List<Forecast> entities = this.forecastService.getAll();
-		Assert.isTrue(CollectionUtils.isNotEmpty(entities) && entities.size() == 5);
+		Assert.assertTrue(CollectionUtils.isNotEmpty(entities) && entities.size() == 5);
 	}
 
 	@Test
@@ -92,7 +92,7 @@ public class ForecastServiceTestCase extends BaseServiceTestCase {
 		this.forecastService.save(entity);
 		logger.debug(">>Entity id is:" + entity.getId());
 		Forecast e = this.forecastService.get(entity.getId());
-		Assert.isTrue(e != null);
+		Assert.assertTrue(e != null);
 	}
 
 	@Test
@@ -101,7 +101,7 @@ public class ForecastServiceTestCase extends BaseServiceTestCase {
 		this.forecastService.save(entity);
 		this.forecastService.remove(entity);
 		List<Forecast> entities = this.forecastService.getAll();
-		Assert.isTrue(CollectionUtils.isEmpty(entities));
+		Assert.assertTrue(CollectionUtils.isEmpty(entities));
 	}
 
 	@Test
@@ -111,10 +111,10 @@ public class ForecastServiceTestCase extends BaseServiceTestCase {
 			this.forecastService.save(entity);
 		}
 		List<Forecast> entities = this.forecastService.getAll();
-		Assert.isTrue(CollectionUtils.isNotEmpty(entities) && entities.size() == 5);
+		Assert.assertTrue(CollectionUtils.isNotEmpty(entities) && entities.size() == 5);
 		this.forecastService.removeAllInBatch();
 		entities = this.forecastService.getAll();
-		Assert.isTrue(CollectionUtils.isEmpty(entities));
+		Assert.assertTrue(CollectionUtils.isEmpty(entities));
 	}
 
 	@Test
@@ -125,7 +125,7 @@ public class ForecastServiceTestCase extends BaseServiceTestCase {
 		}
 		this.forecastService.removeAll();
 		List<Forecast> entities = this.forecastService.getAll();
-		Assert.isTrue(CollectionUtils.isEmpty(entities));
+		Assert.assertTrue(CollectionUtils.isEmpty(entities));
 	}
 
 	@Test
@@ -139,7 +139,7 @@ public class ForecastServiceTestCase extends BaseServiceTestCase {
 		}
 		this.forecastService.removeInBatch(entities);
 		entities = this.forecastService.getAll();
-		Assert.isTrue(CollectionUtils.isEmpty(entities));
+		Assert.assertTrue(CollectionUtils.isEmpty(entities));
 	}
 
 	@Test
@@ -149,7 +149,7 @@ public class ForecastServiceTestCase extends BaseServiceTestCase {
 			this.forecastService.save(entity);
 		}
 		List<Forecast> entities = this.forecastService.getAll();
-		Assert.isTrue(CollectionUtils.isNotEmpty(entities) && entities.size() == 5);
+		Assert.assertTrue(CollectionUtils.isNotEmpty(entities) && entities.size() == 5);
 	}
 
 	@Test
@@ -160,15 +160,15 @@ public class ForecastServiceTestCase extends BaseServiceTestCase {
 		}
 		Map<String, Object> searchParams = new HashMap<String, Object>();
 		Page<Forecast> page = this.forecastService.getPage(searchParams, 1, 5);
-		Assert.isTrue(page != null && page.getSize() == 5);
+		Assert.assertTrue(page != null && page.getSize() == 5);
 		searchParams.put("EQ_name", "test-10");
 		page = this.forecastService.getPage(searchParams, 1, 5);
-		Assert.isTrue(page != null && page.getTotalElements() == 1);
+		Assert.assertTrue(page != null && page.getTotalElements() == 1);
 		searchParams = new HashMap<String, Object>();
 		searchParams.put("LIKE_name", "test");
 		page = this.forecastService.getPage(searchParams, 1, 5);
 
-		Assert.isTrue(page != null && page.getTotalElements() == 25 && page.getNumberOfElements() == 5);
+		Assert.assertTrue(page != null && page.getTotalElements() == 25 && page.getNumberOfElements() == 5);
 
 	}
 
@@ -181,7 +181,7 @@ public class ForecastServiceTestCase extends BaseServiceTestCase {
 			id = entity.getId();
 		}
 		Forecast e = this.forecastService.get(id);
-		Assert.isTrue(e != null);
+		Assert.assertTrue(e != null);
 	}
 
 	@Test
@@ -195,6 +195,6 @@ public class ForecastServiceTestCase extends BaseServiceTestCase {
 			}
 		}
 		List<Forecast> entities = this.forecastService.getAll(ids);
-		Assert.isTrue(entities != null && entities.size() == 5);
+		Assert.assertTrue(entities != null && entities.size() == 5);
 	}
 }

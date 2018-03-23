@@ -64,7 +64,7 @@ public class ForecastIndexServiceImpl extends BaseMongoServiceImpl<ForecastIndex
 		// res = new PageImpl<ForecastIndex>(items);
 		//
 		// }
-		return this.dao.getPage(searchParams, page, size);
+		return super.getPage(searchParams, page, size);
 	}
 
 	@Override

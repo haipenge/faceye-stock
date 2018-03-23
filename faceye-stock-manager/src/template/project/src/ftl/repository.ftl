@@ -1,7 +1,7 @@
 package ${project.packageName}.component.${component.packageName}.repository.mongo;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.querydsl.QueryDslPredicateExecutor;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
 import ${project.packageName}.component.${component.packageName}.entity.${entity.className};
 import com.faceye.feature.repository.mongo.BaseMongoRepository;

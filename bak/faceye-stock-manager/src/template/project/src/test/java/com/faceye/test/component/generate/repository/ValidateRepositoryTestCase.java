@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
+import org.junit.Assert;
 
 import com.faceye.component.generate.entity.Validate;
 import com.faceye.component.generate.repository.mongo.ValidateRepository;
@@ -34,24 +34,24 @@ public class ValidateRepositoryTestCase extends BaseRepositoryTestCase {
 		Validate entity = new Validate();
 		this.validateRepository.save(entity);
 		Iterable<Validate> entities = this.validateRepository.findAll();
-		Assert.isTrue(entities.iterator().hasNext());
+		Assert.assertTrue(entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testDelete() throws Exception {
 		Validate entity = new Validate();
 		this.validateRepository.save(entity);
-        this.validateRepository.delete(entity.getId());
+        this.validateRepository.deleteById(entity.getId());
         Iterable<Validate> entities = this.validateRepository.findAll();
-		Assert.isTrue(!entities.iterator().hasNext());
+		Assert.assertTrue(!entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testFindOne() throws Exception {
 		Validate entity = new Validate();
 		this.validateRepository.save(entity);
-		Validate validate=this.validateRepository.findOne(entity.getId());
-		Assert.isTrue(validate!=null);
+		Validate validate=this.validateRepository.findById(entity.getId()).get();
+		Assert.assertTrue(validate!=null);
 	}
 
 	

@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.util.Assert;
+import org.junit.Assert;
 
 import ${project.packageName}.component.${component.packageName}.entity.${entity.className};
 import ${project.packageName}.component.${component.packageName}.service.${entity.className}Service;
@@ -38,7 +38,7 @@ public class ${entity.className}ServiceTestCase extends BaseServiceTestCase {
 	 */
 	@Before
 	public void set() throws Exception {
-		Assert.isTrue(${entity.className?uncap_first}Service != null);
+		Assert.assertTrue(${entity.className?uncap_first}Service != null);
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class ${entity.className}ServiceTestCase extends BaseServiceTestCase {
 		${entity.className} ${entity.className?uncap_first} = new ${entity.className}();
 		this.${entity.className?uncap_first}Service.save(${entity.className?uncap_first});
 		List<${entity.className}> ${entity.className?uncap_first}s = this.${entity.className?uncap_first}Service.getAll();
-		Assert.isTrue(CollectionUtils.isNotEmpty(${entity.className?uncap_first}s));
+		Assert.assertTrue(CollectionUtils.isNotEmpty(${entity.className?uncap_first}s));
 	}
 
 	@Test
@@ -75,7 +75,7 @@ public class ${entity.className}ServiceTestCase extends BaseServiceTestCase {
 		${entity.className} ${entity.className?uncap_first} = new ${entity.className}();
 		this.${entity.className?uncap_first}Service.save(${entity.className?uncap_first});
 		List<${entity.className}> ${entity.className?uncap_first}s = this.${entity.className?uncap_first}Service.getAll();
-		Assert.isTrue(CollectionUtils.isNotEmpty(${entity.className?uncap_first}s));
+		Assert.assertTrue(CollectionUtils.isNotEmpty(${entity.className?uncap_first}s));
 	}
 
 	@Test
@@ -85,7 +85,7 @@ public class ${entity.className}ServiceTestCase extends BaseServiceTestCase {
 			this.${entity.className?uncap_first}Service.save(${entity.className?uncap_first});
 		}
 		List<${entity.className}> ${entity.className?uncap_first}s = this.${entity.className?uncap_first}Service.getAll();
-		Assert.isTrue(CollectionUtils.isNotEmpty(${entity.className?uncap_first}s) && ${entity.className?uncap_first}s.size() == 5);
+		Assert.assertTrue(CollectionUtils.isNotEmpty(${entity.className?uncap_first}s) && ${entity.className?uncap_first}s.size() == 5);
 	}
 
 	@Test
@@ -94,7 +94,7 @@ public class ${entity.className}ServiceTestCase extends BaseServiceTestCase {
 		this.${entity.className?uncap_first}Service.save(${entity.className?uncap_first});
 		logger.debug(">>Entity id is:" + ${entity.className?uncap_first}.getId());
 		${entity.className} e = this.${entity.className?uncap_first}Service.get(${entity.className?uncap_first}.getId());
-		Assert.isTrue(e != null);
+		Assert.assertTrue(e != null);
 	}
 
 	@Test
@@ -103,7 +103,7 @@ public class ${entity.className}ServiceTestCase extends BaseServiceTestCase {
 		this.${entity.className?uncap_first}Service.save(${entity.className?uncap_first});
 		this.${entity.className?uncap_first}Service.remove(${entity.className?uncap_first});
 		List<${entity.className}> ${entity.className?uncap_first}s = this.${entity.className?uncap_first}Service.getAll();
-		Assert.isTrue(CollectionUtils.isEmpty(${entity.className?uncap_first}s));
+		Assert.assertTrue(CollectionUtils.isEmpty(${entity.className?uncap_first}s));
 	}
 
 	@Test
@@ -113,10 +113,10 @@ public class ${entity.className}ServiceTestCase extends BaseServiceTestCase {
 			this.${entity.className?uncap_first}Service.save(${entity.className?uncap_first});
 		}
 		List<${entity.className}> ${entity.className?uncap_first}s = this.${entity.className?uncap_first}Service.getAll();
-		Assert.isTrue(CollectionUtils.isNotEmpty(${entity.className?uncap_first}s) && ${entity.className?uncap_first}s.size() == 5);
+		Assert.assertTrue(CollectionUtils.isNotEmpty(${entity.className?uncap_first}s) && ${entity.className?uncap_first}s.size() == 5);
 		this.${entity.className?uncap_first}Service.removeAllInBatch();
 		${entity.className?uncap_first}s = this.${entity.className?uncap_first}Service.getAll();
-		Assert.isTrue(CollectionUtils.isEmpty(${entity.className?uncap_first}s));
+		Assert.assertTrue(CollectionUtils.isEmpty(${entity.className?uncap_first}s));
 	}
 
 	@Test
@@ -127,7 +127,7 @@ public class ${entity.className}ServiceTestCase extends BaseServiceTestCase {
 		}
 		this.${entity.className?uncap_first}Service.removeAll();
 		List<${entity.className}> ${entity.className?uncap_first}s = this.${entity.className?uncap_first}Service.getAll();
-		Assert.isTrue(CollectionUtils.isEmpty(${entity.className?uncap_first}s));
+		Assert.assertTrue(CollectionUtils.isEmpty(${entity.className?uncap_first}s));
 	}
 
 	@Test
@@ -141,7 +141,7 @@ public class ${entity.className}ServiceTestCase extends BaseServiceTestCase {
 		}
 		this.${entity.className?uncap_first}Service.removeInBatch(${entity.className?uncap_first}s);
 		${entity.className?uncap_first}s = this.${entity.className?uncap_first}Service.getAll();
-		Assert.isTrue(CollectionUtils.isEmpty(${entity.className?uncap_first}s));
+		Assert.assertTrue(CollectionUtils.isEmpty(${entity.className?uncap_first}s));
 	}
 
 	@Test
@@ -151,7 +151,7 @@ public class ${entity.className}ServiceTestCase extends BaseServiceTestCase {
 			this.${entity.className?uncap_first}Service.save(${entity.className?uncap_first});
 		}
 		List<${entity.className}> ${entity.className?uncap_first}s = this.${entity.className?uncap_first}Service.getAll();
-		Assert.isTrue(CollectionUtils.isNotEmpty(${entity.className?uncap_first}s) && ${entity.className?uncap_first}s.size() == 5);
+		Assert.assertTrue(CollectionUtils.isNotEmpty(${entity.className?uncap_first}s) && ${entity.className?uncap_first}s.size() == 5);
 	}
 
 	@Test
@@ -162,14 +162,14 @@ public class ${entity.className}ServiceTestCase extends BaseServiceTestCase {
 		}
 		Map<String, Object> searchParams = new HashMap<String, Object>();
 		Page<${entity.className}> page = this.${entity.className?uncap_first}Service.getPage(searchParams, 1, 5);
-		Assert.isTrue(page != null && page.getSize() == 5);
+		Assert.assertTrue(page != null && page.getSize() == 5);
 		searchParams.put("EQ_name", "test-10");
 		page = this.${entity.className?uncap_first}Service.getPage(searchParams, 1, 5);
-		Assert.isTrue(page != null && page.getTotalElements() == 1);
+		Assert.assertTrue(page != null && page.getTotalElements() == 1);
 		searchParams = new HashMap<String, Object>();
 		searchParams.put("LIKE_name", "test");
 		page = this.${entity.className?uncap_first}Service.getPage(searchParams, 1, 5);
-		Assert.isTrue(page != null && page.getTotalElements() == 25 && page.getNumberOfElements() == 5);
+		Assert.assertTrue(page != null && page.getTotalElements() == 25 && page.getNumberOfElements() == 5);
 	}
 
 	@Test
@@ -181,7 +181,7 @@ public class ${entity.className}ServiceTestCase extends BaseServiceTestCase {
 			id = ${entity.className?uncap_first}.getId();
 		}
 		${entity.className} e = this.${entity.className?uncap_first}Service.get(id);
-		Assert.isTrue(e != null);
+		Assert.assertTrue(e != null);
 	}
 
 	@Test
@@ -195,6 +195,6 @@ public class ${entity.className}ServiceTestCase extends BaseServiceTestCase {
 			}
 		}
 		List<${entity.className}> ${entity.className?uncap_first}s = this.${entity.className?uncap_first}Service.getAll(ids);
-		Assert.isTrue(${entity.className?uncap_first}s != null && ${entity.className?uncap_first}s.size() == 5);
+		Assert.assertTrue(${entity.className?uncap_first}s != null && ${entity.className?uncap_first}s.size() == 5);
 	}
 }

@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
+import org.junit.Assert;
 
 import com.faceye.component.stock.entity.ReportCategory;
 import com.faceye.component.stock.repository.mongo.ReportCategoryRepository;
@@ -34,24 +34,24 @@ public class ReportCategoryRepositoryTestCase extends BaseRepositoryTestCase {
 		ReportCategory entity = new ReportCategory();
 		this.reportCategoryRepository.save(entity);
 		Iterable<ReportCategory> entities = this.reportCategoryRepository.findAll();
-		Assert.isTrue(entities.iterator().hasNext());
+		Assert.assertTrue(entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testDelete() throws Exception {
 		ReportCategory entity = new ReportCategory();
 		this.reportCategoryRepository.save(entity);
-        this.reportCategoryRepository.delete(entity.getId());
+        this.reportCategoryRepository.deleteById(entity.getId());
         Iterable<ReportCategory> entities = this.reportCategoryRepository.findAll();
-		Assert.isTrue(!entities.iterator().hasNext());
+		Assert.assertTrue(!entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testFindOne() throws Exception {
 		ReportCategory entity = new ReportCategory();
 		this.reportCategoryRepository.save(entity);
-		ReportCategory reportCategory=this.reportCategoryRepository.findOne(entity.getId());
-		Assert.isTrue(reportCategory!=null);
+		ReportCategory reportCategory=this.reportCategoryRepository.findById(entity.getId()).get();
+		Assert.assertTrue(reportCategory!=null);
 	}
 
 	

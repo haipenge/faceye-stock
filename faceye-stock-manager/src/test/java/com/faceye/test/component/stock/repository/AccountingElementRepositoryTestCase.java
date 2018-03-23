@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
+import org.junit.Assert;
 
 import com.faceye.component.stock.entity.AccountingElement;
 import com.faceye.component.stock.repository.mongo.AccountingElementRepository;
@@ -34,24 +34,24 @@ public class AccountingElementRepositoryTestCase extends BaseRepositoryTestCase 
 		AccountingElement entity = new AccountingElement();
 		this.accountingElementRepository.save(entity);
 		Iterable<AccountingElement> entities = this.accountingElementRepository.findAll();
-		Assert.isTrue(entities.iterator().hasNext());
+		Assert.assertTrue(entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testDelete() throws Exception {
 		AccountingElement entity = new AccountingElement();
 		this.accountingElementRepository.save(entity);
-        this.accountingElementRepository.delete(entity.getId());
+        this.accountingElementRepository.deleteById(entity.getId());
         Iterable<AccountingElement> entities = this.accountingElementRepository.findAll();
-		Assert.isTrue(!entities.iterator().hasNext());
+		Assert.assertTrue(!entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testFindOne() throws Exception {
 		AccountingElement entity = new AccountingElement();
 		this.accountingElementRepository.save(entity);
-		AccountingElement accountingElement=this.accountingElementRepository.findOne(entity.getId());
-		Assert.isTrue(accountingElement!=null);
+		AccountingElement accountingElement=this.accountingElementRepository.findById(entity.getId()).get();
+		Assert.assertTrue(accountingElement!=null);
 	}
 
 	

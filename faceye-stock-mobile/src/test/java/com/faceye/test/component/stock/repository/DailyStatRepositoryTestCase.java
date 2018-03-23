@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
+import org.junit.Assert;
 
 import com.faceye.component.stock.entity.DailyStat;
 import com.faceye.component.stock.repository.mongo.DailyStatRepository;
@@ -34,24 +34,24 @@ public class DailyStatRepositoryTestCase extends BaseRepositoryTestCase {
 		DailyStat entity = new DailyStat();
 		this.dailyStatRepository.save(entity);
 		Iterable<DailyStat> entities = this.dailyStatRepository.findAll();
-		Assert.isTrue(entities.iterator().hasNext());
+		Assert.assertTrue(entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testDelete() throws Exception {
 		DailyStat entity = new DailyStat();
 		this.dailyStatRepository.save(entity);
-        this.dailyStatRepository.delete(entity.getId());
+        this.dailyStatRepository.deleteById(entity.getId());
         Iterable<DailyStat> entities = this.dailyStatRepository.findAll();
-		Assert.isTrue(!entities.iterator().hasNext());
+		Assert.assertTrue(!entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testFindOne() throws Exception {
 		DailyStat entity = new DailyStat();
 		this.dailyStatRepository.save(entity);
-		DailyStat dailyStat=this.dailyStatRepository.findOne(entity.getId());
-		Assert.isTrue(dailyStat!=null);
+		DailyStat dailyStat=this.dailyStatRepository.findById(entity.getId()).get();
+		Assert.assertTrue(dailyStat!=null);
 	}
 
 	

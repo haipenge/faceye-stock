@@ -18,7 +18,7 @@ import com.faceye.component.stock.repository.mongo.DailyStatRepository;
 import com.faceye.component.stock.repository.mongo.customer.DailyStatCustomerRepository;
 import com.faceye.component.stock.service.DailyStatService;
 
-import com.faceye.feature.util.ServiceException;
+ 
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.querydsl.core.types.Predicate;
@@ -40,7 +40,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 	
 	
 	@Override
-	public Page<DailyStat> getPage(Map<String, Object> searchParams, int page, int size) throws ServiceException {
+	public Page<DailyStat> getPage(Map<String, Object> searchParams, int page, int size)   {
 		if (page != 0) {
 			page = page - 1;
 		}

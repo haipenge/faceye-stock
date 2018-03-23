@@ -22,7 +22,7 @@ import com.faceye.component.stock.service.CategoryService;
 import com.faceye.component.stock.service.StockService;
 import com.faceye.component.stock.util.StockFetcher;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
-import com.faceye.feature.util.ServiceException;
+ 
 import com.faceye.feature.util.http.Http;
 
 @Service

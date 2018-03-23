@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
+import org.junit.Assert;
 
 import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.repository.mongo.StockRepository;
@@ -34,24 +34,24 @@ public class StockRepositoryTestCase extends BaseRepositoryTestCase {
 		Stock entity = new Stock();
 		this.stockRepository.save(entity);
 		Iterable<Stock> entities = this.stockRepository.findAll();
-		Assert.isTrue(entities.iterator().hasNext());
+		Assert.assertTrue(entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testDelete() throws Exception {
 		Stock entity = new Stock();
 		this.stockRepository.save(entity);
-        this.stockRepository.delete(entity.getId());
+        this.stockRepository.deleteById(entity.getId());
         Iterable<Stock> entities = this.stockRepository.findAll();
-		Assert.isTrue(!entities.iterator().hasNext());
+		Assert.assertTrue(!entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testFindOne() throws Exception {
 		Stock entity = new Stock();
 		this.stockRepository.save(entity);
-		Stock stock=this.stockRepository.findOne(entity.getId());
-		Assert.isTrue(stock!=null);
+		Stock stock=this.stockRepository.findById(entity.getId()).get();
+		Assert.assertTrue(stock!=null);
 	}
 
 	

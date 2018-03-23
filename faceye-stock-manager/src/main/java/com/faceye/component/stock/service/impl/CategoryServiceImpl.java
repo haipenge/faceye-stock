@@ -19,7 +19,7 @@ import com.faceye.component.stock.repository.mongo.customer.CategoryCustomerRepo
 import com.faceye.component.stock.service.CategoryService;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
-import com.faceye.feature.util.ServiceException;
+ 
 import com.querydsl.core.types.Predicate;
 /**
  * Category 服务实现类<br>

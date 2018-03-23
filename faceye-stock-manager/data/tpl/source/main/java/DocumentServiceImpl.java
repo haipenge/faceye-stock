@@ -18,7 +18,7 @@ import com.faceye.component.@component.name@.repository.mongo.@entity.name@Repos
 import com.faceye.component.@component.name@.repository.mongo.customer.@entity.name@CustomerRepository;
 import com.faceye.component.@component.name@.service.@entity.name@Service;
 
-import com.faceye.feature.util.ServiceException;
+ 
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.querydsl.core.types.Predicate;
@@ -40,7 +40,7 @@ public class @entity.name@ServiceImpl extends BaseMongoServiceImpl<@entity.name@
 	
 	
 	@Override
-	public Page<@entity.name@> getPage(Map<String, Object> searchParams, int page, int size) throws ServiceException {
+	public Page<@entity.name@> getPage(Map<String, Object> searchParams, int page, int size)   {
 		if (page != 0) {
 			page = page - 1;
 		}
@@ -68,7 +68,7 @@ public class @entity.name@ServiceImpl extends BaseMongoServiceImpl<@entity.name@
 //			res = new PageImpl<@entity.name@>(items);
 //
 //		}
-		return this.dao.getPage(searchParams, page, size);;
+		return super.getPage(searchParams, page, size);;
 	}
 	
 }/**@generate-service-source@**/

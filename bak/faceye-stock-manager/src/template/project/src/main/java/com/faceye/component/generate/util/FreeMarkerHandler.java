@@ -35,7 +35,7 @@ public class FreeMarkerHandler {
 	private static final String TPL_DIR_CONFIG_KEY = "generate.template.dir";
 
 	private FreeMarkerHandler() {
-		TPL_DIR = BeanContextUtil.getInstance().getBean(PropertyService.class).get(TPL_DIR_CONFIG_KEY);
+		TPL_DIR = BeanContextUtil.getBean(PropertyService.class).get(TPL_DIR_CONFIG_KEY);
 	}
 
 	static class FreeMarkerHandlerHolder {

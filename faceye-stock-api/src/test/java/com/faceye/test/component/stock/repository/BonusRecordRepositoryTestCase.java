@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
+import org.junit.Assert;
 
 import com.faceye.component.stock.entity.BonusRecord;
 import com.faceye.component.stock.repository.mongo.BonusRecordRepository;
@@ -34,24 +34,24 @@ public class BonusRecordRepositoryTestCase extends BaseRepositoryTestCase {
 		BonusRecord entity = new BonusRecord();
 		this.bonusRecordRepository.save(entity);
 		Iterable<BonusRecord> entities = this.bonusRecordRepository.findAll();
-		Assert.isTrue(entities.iterator().hasNext());
+		Assert.assertTrue(entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testDelete() throws Exception {
 		BonusRecord entity = new BonusRecord();
 		this.bonusRecordRepository.save(entity);
-        this.bonusRecordRepository.delete(entity.getId());
+        this.bonusRecordRepository.deleteById(entity.getId());
         Iterable<BonusRecord> entities = this.bonusRecordRepository.findAll();
-		Assert.isTrue(!entities.iterator().hasNext());
+		Assert.assertTrue(!entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testFindOne() throws Exception {
 		BonusRecord entity = new BonusRecord();
 		this.bonusRecordRepository.save(entity);
-		BonusRecord bonusRecord=this.bonusRecordRepository.findOne(entity.getId());
-		Assert.isTrue(bonusRecord!=null);
+		BonusRecord bonusRecord=this.bonusRecordRepository.findById(entity.getId()).get();
+		Assert.assertTrue(bonusRecord!=null);
 	}
 
 	

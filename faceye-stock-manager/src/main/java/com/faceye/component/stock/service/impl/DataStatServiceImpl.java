@@ -615,7 +615,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		searchParams.put("LT|dateCycle", reportData.getDate());
 		searchParams.put("EQ|type", reportData.getType());
 		searchParams.put("SORT|dateCycle", "desc");
-		Page<DataStat> dataStats=this.dao.getPage(searchParams, 1, 0);
+		Page<DataStat> dataStats=this.getPage(searchParams, 1, 0);
 //		Page<ReportData> reportDatas = this.reportDataService.getPage(searchParams, 1, 0);
 		if (dataStats != null && CollectionUtils.isNotEmpty(dataStats.getContent())) {
 			DataStat lastPeriodDataStat = dataStats.getContent().get(0);

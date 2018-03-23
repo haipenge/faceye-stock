@@ -5,7 +5,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
+import org.junit.Assert;
 
 import com.faceye.component.generate.entity.Property;
 import com.faceye.component.generate.repository.mongo.PropertyRepository;
@@ -36,16 +36,16 @@ public class PropertyRepositoryTestCase extends BaseRepositoryTestCase {
 		Property entity = new Property();
 		this.propertyRepository.save(entity);
 		Iterable<Property> entities = this.propertyRepository.findAll();
-		Assert.isTrue(entities.iterator().hasNext());
+		Assert.assertTrue(entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testDelete() throws Exception {
 		Property entity = new Property();
 		this.propertyRepository.save(entity);
-        this.propertyRepository.delete(entity.getId());
+        this.propertyRepository.deleteById(entity.getId());
         Iterable<Property> entities = this.propertyRepository.findAll();
-		Assert.isTrue(!entities.iterator().hasNext());
+		Assert.assertTrue(!entities.iterator().hasNext());
 	}
 
 	@Test
@@ -54,15 +54,15 @@ public class PropertyRepositoryTestCase extends BaseRepositoryTestCase {
 		entity.setId(100001L);
 		entity.setName("test");
 		this.propertyRepository.save(entity);
-		Property property=this.propertyRepository.findOne(entity.getId());
-		Assert.isTrue(property!=null);
+		Property property=this.propertyRepository.findById(entity.getId()).get();
+		Assert.assertTrue(property!=null);
 	}
 	
 	@Test
 	public void testGetPropertyByName() throws Exception{
 		String name="test";
 		Property property=this.propertyRepository.getPropertyByName(name);
-		Assert.isTrue(property!=null&&StringUtils.equals("test", property.getName()));
+		Assert.assertTrue(property!=null&&StringUtils.equals("test", property.getName()));
 	}
 
 	@Test
@@ -73,10 +73,10 @@ public class PropertyRepositoryTestCase extends BaseRepositoryTestCase {
 		entity.setPropertyName("property-name");
 		this.propertyRepository.save(entity);
 		Property property=this.propertyRepository.getPropertyByPropertyName("property-name");
-		Assert.isTrue(property!=null&&StringUtils.equals("property-name", property.getPropertyName()));
-		this.propertyRepository.delete(property);
-		Property p=this.propertyRepository.findOne(100002L);
-		Assert.isTrue(p==null);
+		Assert.assertTrue(property!=null&&StringUtils.equals("property-name", property.getPropertyName()));
+		this.propertyRepository.deleteById(property);
+		Property p=this.propertyRepository.findById(100002L);
+		Assert.assertTrue(p==null);
 	}
 	
 }

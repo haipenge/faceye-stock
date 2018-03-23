@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
+import org.junit.Assert;
 
 import com.faceye.component.stock.entity.Mechanism;
 import com.faceye.component.stock.repository.mongo.MechanismRepository;
@@ -34,24 +34,24 @@ public class MechanismRepositoryTestCase extends BaseRepositoryTestCase {
 		Mechanism entity = new Mechanism();
 		this.mechanismRepository.save(entity);
 		Iterable<Mechanism> entities = this.mechanismRepository.findAll();
-		Assert.isTrue(entities.iterator().hasNext());
+		Assert.assertTrue(entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testDelete() throws Exception {
 		Mechanism entity = new Mechanism();
 		this.mechanismRepository.save(entity);
-        this.mechanismRepository.delete(entity.getId());
+        this.mechanismRepository.deleteById(entity.getId());
         Iterable<Mechanism> entities = this.mechanismRepository.findAll();
-		Assert.isTrue(!entities.iterator().hasNext());
+		Assert.assertTrue(!entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testFindOne() throws Exception {
 		Mechanism entity = new Mechanism();
 		this.mechanismRepository.save(entity);
-		Mechanism mechanism=this.mechanismRepository.findOne(entity.getId());
-		Assert.isTrue(mechanism!=null);
+		Mechanism mechanism=this.mechanismRepository.findById(entity.getId()).get();
+		Assert.assertTrue(mechanism!=null);
 	}
 
 	

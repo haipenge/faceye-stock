@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
-import com.faceye.feature.util.ServiceException;
+ 
 /**
  * 模块:${component.name}->${project.packageName}.compoent.${component.packageName}.service<br>
  * 说明:${entity.description!""}<br>

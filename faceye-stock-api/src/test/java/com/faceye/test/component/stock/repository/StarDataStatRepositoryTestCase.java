@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
+import org.junit.Assert;
 
 import com.faceye.component.stock.entity.StarDataStat;
 import com.faceye.component.stock.repository.mongo.StarDataStatRepository;
@@ -34,24 +34,24 @@ public class StarDataStatRepositoryTestCase extends BaseRepositoryTestCase {
 		StarDataStat entity = new StarDataStat();
 		this.starDataStatRepository.save(entity);
 		Iterable<StarDataStat> entities = this.starDataStatRepository.findAll();
-		Assert.isTrue(entities.iterator().hasNext());
+		Assert.assertTrue(entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testDelete() throws Exception {
 		StarDataStat entity = new StarDataStat();
 		this.starDataStatRepository.save(entity);
-        this.starDataStatRepository.delete(entity.getId());
+        this.starDataStatRepository.deleteById(entity.getId());
         Iterable<StarDataStat> entities = this.starDataStatRepository.findAll();
-		Assert.isTrue(!entities.iterator().hasNext());
+		Assert.assertTrue(!entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testFindOne() throws Exception {
 		StarDataStat entity = new StarDataStat();
 		this.starDataStatRepository.save(entity);
-		StarDataStat starDataStat=this.starDataStatRepository.findOne(entity.getId());
-		Assert.isTrue(starDataStat!=null);
+		StarDataStat starDataStat=this.starDataStatRepository.findById(entity.getId()).get();
+		Assert.assertTrue(starDataStat!=null);
 	}
 
 	

@@ -18,7 +18,7 @@ import com.faceye.component.stock.repository.mongo.customer.FinancialDataCustome
 import com.faceye.component.stock.service.FinancialDataService;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
-import com.faceye.feature.util.ServiceException;
+ 
 import com.querydsl.core.types.Predicate;
 
 /**

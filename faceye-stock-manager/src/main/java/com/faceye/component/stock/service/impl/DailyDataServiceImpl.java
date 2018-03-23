@@ -47,7 +47,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 		implements DailyDataService {
 
 	// 爬取数据年限
-	@Value("#{property[stock.crawl.daily.data.years]}")
+	@Value("#{property['stock.crawl.daily.data.years']}")
 	private String CRAWL_STOCK_DAILY_DATA_YEARS = "";
 	// 默认爬取三年数据
 	private Integer DEFAULT_CRAWL_STOCK_DAILY_DATA_YEARS = 3;
@@ -93,7 +93,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 		if (currentMonth >= 1 && currentMonth <= 3) {
 			jidu = "1";
 		}
-		if (currentMonth >= 4 && currentMonth <= 6) {
+		if (currentMonth >= 4 && currentMonth <= 6) { 
 			jidu = "2";
 		}
 		if (currentMonth >= 7 && currentMonth <= 9) {
@@ -205,7 +205,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 			for (Stock stock : stocks) {
 				Map params = new HashMap();
 				params.put("EQ|stockId", stock.getId());
-				// long count =
+				// long count = 
 				// this.dailyDataCustomerRepository.getCount(params);
 				// if (count < 30) {
 				this.initDailyData(stock.getCode());
@@ -527,7 +527,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 	// public void computeDailyDataAvg(DailyData dailyData) {
 	// QDailyData qDailyData = QDailyData.dailyData;
 	// Long stockId = dailyData.getStockId();
-	// Stock stock = this.stockRepository.findOne(stockId);
+	// Stock stock = this.stockRepository.findById(stockId);
 	// Date date = dailyData.getDate();
 	// Predicate predicate = null;
 	// BooleanBuilder builder = new BooleanBuilder();

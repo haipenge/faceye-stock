@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
+import org.junit.Assert;
 
 import com.faceye.component.stock.entity.Valuation;
 import com.faceye.component.stock.repository.mongo.ValuationRepository;
@@ -34,24 +34,24 @@ public class ValuationRepositoryTestCase extends BaseRepositoryTestCase {
 		Valuation entity = new Valuation();
 		this.valuationRepository.save(entity);
 		Iterable<Valuation> entities = this.valuationRepository.findAll();
-		Assert.isTrue(entities.iterator().hasNext());
+		Assert.assertTrue(entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testDelete() throws Exception {
 		Valuation entity = new Valuation();
 		this.valuationRepository.save(entity);
-        this.valuationRepository.delete(entity.getId());
+        this.valuationRepository.deleteById(entity.getId());
         Iterable<Valuation> entities = this.valuationRepository.findAll();
-		Assert.isTrue(!entities.iterator().hasNext());
+		Assert.assertTrue(!entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testFindOne() throws Exception {
 		Valuation entity = new Valuation();
 		this.valuationRepository.save(entity);
-		Valuation valuation=this.valuationRepository.findOne(entity.getId());
-		Assert.isTrue(valuation!=null);
+		Valuation valuation=this.valuationRepository.findById(entity.getId()).get();
+		Assert.assertTrue(valuation!=null);
 	}
 
 	

@@ -13,15 +13,15 @@
 		<faceye-security-manager-mongo.version>1.0</faceye-security-manager-mongo.version>
 		<faceye-stock-entity.version>1.0</faceye-stock-entity.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jdk.version>1.7</jdk.version>
+		<jdk.version>1.8</jdk.version>
 
 		<jetty.version>9.0.2.v20130417</jetty.version>
 		<!-- <jetty.version>9.4.2.v20170220</jetty.version> -->
 		<jetty.orbit.version>3.0.0.v201112011016</jetty.orbit.version>
-		<querydsl.version>4.1.2</querydsl.version>
+		<querydsl.version>4.2.0</querydsl.version>
 		<servlet-api.version>3.0-alpha-1</servlet-api.version>
 		<junit.version>4.12</junit.version>
-		<spring.version>4.3.9.RELEASE</spring.version>
+		<spring.version>5.0.4.RELEASE</spring.version>
 	</properties>
 	<dependencies>
 		<dependency>

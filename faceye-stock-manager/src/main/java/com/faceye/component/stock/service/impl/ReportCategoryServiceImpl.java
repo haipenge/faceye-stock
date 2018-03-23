@@ -18,7 +18,7 @@ import com.faceye.component.stock.repository.mongo.ReportCategoryRepository;
 import com.faceye.component.stock.repository.mongo.customer.ReportCategoryCustomerRepository;
 import com.faceye.component.stock.service.ReportCategoryService;
 import com.faceye.component.stock.util.StockConstants;
-import com.faceye.feature.util.ServiceException;
+ 
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.querydsl.core.types.Predicate;

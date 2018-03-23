@@ -12,10 +12,10 @@
 	<properties>
 		<faceye-feature.version>1.0</faceye-feature.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jdk.version>1.7</jdk.version>
+		<jdk.version>1.8</jdk.version>
 		<jetty.version>9.0.2.v20130417</jetty.version>
 		<jetty.orbit.version>3.0.0.v201112011016</jetty.orbit.version>
-		<querydsl.version>4.1.2</querydsl.version>
+		<querydsl.version>4.2.0</querydsl.version>
 	</properties>
 	<dependencies>
 		<dependency>

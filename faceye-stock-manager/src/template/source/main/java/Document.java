@@ -13,6 +13,7 @@ import java.util.Date;
 import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.annotation.CreatedDate;
 /**
  * @entity.name@ ORM 实体<br>
  * 数据库表:@component.name@_@entity.config.name@<br>
@@ -42,6 +43,7 @@ public class @entity.name@ implements Serializable {
 	 * @author haipenge<br>
 	 */
 	@DateTimeFormat(pattern="yyyy-MM-dd hh24:mi:ss")
+	@CreateDate
 	private Date createDate;
 
 	public Date getCreateDate() {

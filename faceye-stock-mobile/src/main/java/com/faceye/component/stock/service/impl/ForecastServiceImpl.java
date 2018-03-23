@@ -18,7 +18,7 @@ import com.faceye.component.stock.repository.mongo.ForecastRepository;
 import com.faceye.component.stock.repository.mongo.customer.ForecastCustomerRepository;
 import com.faceye.component.stock.service.ForecastService;
 
-import com.faceye.feature.util.ServiceException;
+ 
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.querydsl.core.types.Predicate;
@@ -40,7 +40,7 @@ public class ForecastServiceImpl extends BaseMongoServiceImpl<Forecast, Long, Fo
 	
 	
 	@Override
-	public Page<Forecast> getPage(Map<String, Object> searchParams, int page, int size) throws ServiceException {
+	public Page<Forecast> getPage(Map<String, Object> searchParams, int page, int size)   {
 		if (page != 0) {
 			page = page - 1;
 		}
@@ -68,7 +68,7 @@ public class ForecastServiceImpl extends BaseMongoServiceImpl<Forecast, Long, Fo
 //			res = new PageImpl<Forecast>(items);
 //
 //		}
-		return this.dao.getPage(searchParams, page, size);;
+		return super.getPage(searchParams, page, size);;
 	}
 	
 }/**@generate-service-source@**/

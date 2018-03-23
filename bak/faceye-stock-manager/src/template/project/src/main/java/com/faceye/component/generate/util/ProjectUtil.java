@@ -14,7 +14,7 @@ import com.faceye.feature.util.bean.BeanContextUtil;
 public class ProjectUtil {
 	public static String getProjectDir(Project project) {
 		String dir = "";
-		String generateDir=BeanContextUtil.getInstance().getBean(PropertyService.class).get("generate.output.dir");
+		String generateDir=BeanContextUtil.getBean(PropertyService.class).get("generate.output.dir");
 //		if (project != null) {
 //			StringBuilder sb = new StringBuilder();
 //			sb.append(generateDir);

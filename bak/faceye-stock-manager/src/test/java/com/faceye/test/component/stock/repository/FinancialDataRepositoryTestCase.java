@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
+import org.junit.Assert;
 
 import com.faceye.component.stock.entity.FinancialData;
 import com.faceye.component.stock.repository.mongo.FinancialDataRepository;
@@ -34,24 +34,24 @@ public class FinancialDataRepositoryTestCase extends BaseRepositoryTestCase {
 		FinancialData entity = new FinancialData();
 		this.financialDataRepository.save(entity);
 		Iterable<FinancialData> entities = this.financialDataRepository.findAll();
-		Assert.isTrue(entities.iterator().hasNext());
+		Assert.assertTrue(entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testDelete() throws Exception {
 		FinancialData entity = new FinancialData();
 		this.financialDataRepository.save(entity);
-        this.financialDataRepository.delete(entity.getId());
+        this.financialDataRepository.deleteById(entity.getId());
         Iterable<FinancialData> entities = this.financialDataRepository.findAll();
-		Assert.isTrue(!entities.iterator().hasNext());
+		Assert.assertTrue(!entities.iterator().hasNext());
 	}
 
 	@Test
 	public void testFindOne() throws Exception {
 		FinancialData entity = new FinancialData();
 		this.financialDataRepository.save(entity);
-		FinancialData financialData=this.financialDataRepository.findOne(entity.getId());
-		Assert.isTrue(financialData!=null);
+		FinancialData financialData=this.financialDataRepository.findById(entity.getId()).get();
+		Assert.assertTrue(financialData!=null);
 	}
 
 	

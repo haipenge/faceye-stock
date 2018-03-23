@@ -18,7 +18,7 @@ import com.faceye.component.stock.repository.mongo.ValuationRepository;
 import com.faceye.component.stock.repository.mongo.customer.ValuationCustomerRepository;
 import com.faceye.component.stock.service.ValuationService;
 
-import com.faceye.feature.util.ServiceException;
+ 
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.querydsl.core.types.Predicate;
@@ -40,7 +40,7 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 	
 	
 	@Override
-	public Page<Valuation> getPage(Map<String, Object> searchParams, int page, int size) throws ServiceException {
+	public Page<Valuation> getPage(Map<String, Object> searchParams, int page, int size)   {
 		if (page != 0) {
 			page = page - 1;
 		}

@@ -43,7 +43,7 @@ public class ${entity.className}ServiceImpl extends BaseServiceImpl<${entity.cla
      * 创建日期:${.now}<br>
 	*/
 	@Override
-	public Page<${entity.className}> getPage(Map<String, Object> searchParams, int page, int size) throws ServiceException {
+	public Page<${entity.className}> getPage(Map<String, Object> searchParams, int page, int size)   {
 		if (page != 0) {
 			page = page - 1;
 		}

@@ -33,7 +33,7 @@ import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.faceye.feature.service.job.thread.BaseThread;
 import com.faceye.feature.util.DateUtil;
 import com.faceye.feature.util.MathUtil;
-import com.faceye.feature.util.ServiceException;
+ 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -476,7 +476,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 	// public void computeDailyDataAvg(DailyData dailyData) {
 	// QDailyData qDailyData = QDailyData.dailyData;
 	// Long stockId = dailyData.getStockId();
-	// Stock stock = this.stockRepository.findOne(stockId);
+	// Stock stock = this.stockRepository.findById(stockId);
 	// Date date = dailyData.getDate();
 	// Predicate predicate = null;
 	// BooleanBuilder builder = new BooleanBuilder();

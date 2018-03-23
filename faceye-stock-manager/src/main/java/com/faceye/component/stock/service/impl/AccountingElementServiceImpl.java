@@ -18,7 +18,7 @@ import com.faceye.component.stock.repository.mongo.AccountingElementRepository;
 import com.faceye.component.stock.repository.mongo.customer.AccountingElementCustomerRepository;
 import com.faceye.component.stock.service.AccountingElementService;
 
-import com.faceye.feature.util.ServiceException;
+ 
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.querydsl.core.types.Predicate;
