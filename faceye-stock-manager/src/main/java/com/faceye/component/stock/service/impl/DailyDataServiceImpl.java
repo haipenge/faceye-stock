@@ -47,14 +47,10 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 		implements DailyDataService {
 
 	// 爬取数据年限
-<<<<<<< HEAD
-	@Value("#{property['stock.crawl.daily.data.years']}")
-	private String CRAWL_STOCK_DAILY_DATA_YEARS = "";
-=======
+
 //	@Value("#{property['faceye.manager.user.register.role.id']}")
 	@Value("#{property['stock.crawl.daily.data.years']}")
 	private String crawlStockDailyDataYears = "";
->>>>>>> 4f8e11511c1d21dc1109fdb535923ef32857a1bf
 	// 默认爬取三年数据
 	private Integer DEFAULT_CRAWL_STOCK_DAILY_DATA_YEARS = 3;
 	@Autowired

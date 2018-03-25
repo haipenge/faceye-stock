@@ -1,10 +1,8 @@
 package com.faceye.component.stock.repository.mongo.customer;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import java.util.List;
 
 import com.faceye.component.stock.entity.AccountingElement;
-import com.faceye.feature.repository.mongo.BaseMongoRepository;
 /**
  * AccountingElement 实体DAO<br>
  * @author @haipenge <br>
@@ -13,5 +11,5 @@ import com.faceye.feature.repository.mongo.BaseMongoRepository;
  */
 public interface AccountingElementCustomerRepository {
 	
-	
+	public List<AccountingElement> getAccountingElementsByReportCategory(Long reportCategoryId);
 }/**@generate-repository-source@**/
