@@ -115,6 +115,7 @@ public class CrawlFinancialDataServiceTestCase extends BaseServiceTestCase {
 //		stockCodes.add("300127");
 //		stockCodes.add("300224");
 		//稀土行业股票结束
+		stockCodes.add("000998");//隆平高科
 
 	}
 	

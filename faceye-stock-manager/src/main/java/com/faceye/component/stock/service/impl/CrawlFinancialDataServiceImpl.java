@@ -58,7 +58,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	@Autowired
 	private StockService stockService = null;
 	@Autowired
-	private CategoryService categoryService =null;
+	private CategoryService categoryService = null;
 	@Autowired
 	private AccountingSubjectService accountingSubjectService = null;
 	@Autowired
@@ -260,26 +260,30 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 	 * @Date:2017年3月12日 下午9:49:46
 	 */
 	private void saveParseData(Stock stock, List<Map<String, String>> records, AccountingSubject accountingSubject) {
-		Map params = new HashMap();
-		params.put("EQ|stockId", stock.getId());
-		List<ReportData> reportDatas = this.reportDataService.getPage(params, 0, 0).getContent();
-		Map<String, ReportData> structs = this.buildReportDataStruct(reportDatas);
-		for (Map record : records) {
-			String date = MapUtils.getString(record, "date");
-			String data = MapUtils.getString(record, "data");
-			Date dDate = DateUtil.getDateFromString(date + " 12:00:00", "yyyy-MM-dd HH:mm:ss");
-			ReportData reportData = null;
-			if (structs.containsKey(date)) {
-				reportData = structs.get(date);
-			} else {
-				reportData = new ReportData();
-				reportData.setDate(dDate);
-				reportData.setStockId(stock.getId());
-				structs.put(date, reportData);
+		try {
+			Map params = new HashMap();
+			params.put("EQ|stockId", stock.getId());
+			List<ReportData> reportDatas = this.reportDataService.getPage(params, 0, 0).getContent();
+			Map<String, ReportData> structs = this.buildReportDataStruct(reportDatas);
+			for (Map record : records) {
+				String date = MapUtils.getString(record, "date");
+				String data = MapUtils.getString(record, "data");
+				Date dDate = DateUtil.getDateFromString(date + " 12:00:00", "yyyy-MM-dd HH:mm:ss");
+				ReportData reportData = null;
+				if (structs.containsKey(date)) {
+					reportData = structs.get(date);
+				} else {
+					reportData = new ReportData();
+					reportData.setDate(dDate);
+					reportData.setStockId(stock.getId());
+					structs.put(date, reportData);
+				}
+				this.setReportData(reportData, accountingSubject, data);
 			}
-			this.setReportData(reportData, accountingSubject, data);
+			this.reportDataService.save(structs.values());
+		} catch (Exception e) {
+			logger.error(">>FaceYe throws Exception :" + e);
 		}
-		this.reportDataService.save(structs.values());
 	}
 
 	/**
@@ -379,14 +383,16 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 			if (accountingSubjects == null) {
 				accountingSubjects = this.getAccountingSubjects();
 			}
+			logger.debug(">>FaceYe start to crawl stock:" + stock.getName() + " report data now.");
 			/**
 			 * 爬取财报数据
 			 */
+			int urlCounts = accountingSubjects.size();
 			if (CollectionUtils.isNotEmpty(accountingSubjects)) {
 				for (AccountingSubject accountingSubject : accountingSubjects) {
 					url = accountingSubject.getSinaUrl();
 					url = StringUtils.replace(url, "000998", code);
-					logger.debug(">>FaceYe --> Crawl Financial Data Url is:" + url);
+					logger.debug(">>FaceYe --> " + urlCounts-- + "Crawl Financial Data Url is:" + url);
 					String content = Http.getInstance().get(url, "gb2312");
 					if (StringUtils.isNotEmpty(content)) {
 						this.parse(stock, accountingSubject, content);
@@ -401,6 +407,7 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 					// }
 				}
 			}
+			logger.debug(">>FaceYe finish crawl stock " + stock.getName() + " report data.");
 			// 爬取股本变化记录
 			this.crawlTotalStocksNum(stock);
 			// 爬取分红记录
@@ -765,7 +772,5 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 		}
 
 	}
-
-	
 
 }
