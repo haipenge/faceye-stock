@@ -220,7 +220,7 @@ public class DailyDataServiceTestCase extends BaseServiceTestCase {
 	public void testInitDailyData() throws Exception{
 		boolean res=false;
 		String code="000099";
-		code="600518";
+		code="000998";
 		Stock stock=this.stockService.getStockByCode(code);
 		this.dailyDataService.initDailyData(code);
 //		this.dailyDataService.initDailyData();
