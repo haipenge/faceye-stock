@@ -319,6 +319,9 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 					logger.error(">>FaceYe Throws Exception when thread sleep.");
 				}
 				start++;
+				params = new HashMap();
+				params.put("EQ|stockId", stock.getId());
+				params.put("SORT|date", "asc");
 				dailyDatas = this.dailyDataService.getPage(params, start, size).getContent();
 				index = 0;
 				if (CollectionUtils.isEmpty(dailyDatas)) {

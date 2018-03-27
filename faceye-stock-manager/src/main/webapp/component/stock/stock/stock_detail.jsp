@@ -2,7 +2,7 @@
 <%@ page language="java"
 	import="java.util.*,com.faceye.feature.util.*,com.faceye.feature.util.host.*"
 	pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
-<script src="<c:url value="/js/lib/acharts/acharts.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/lib/echarts/echarts.min.js"/>"></script>
 <link rel="stylesheet" type="text/css"
 	href="<c:url value="/css/component/stock/stock/stock.css"/>" />
 <script type="text/javascript"
@@ -31,7 +31,7 @@
 		<div class="content">
 			<div id="msg"></div>
 			<div class="detail-section">
-				<div id="show-pe"></div>
+				<div id="show-pe" style="height:800px;"></div>
 			</div>
 		</div>
 	</div>

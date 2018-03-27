@@ -7,6 +7,7 @@ import javax.persistence.Id;
 
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.format.annotation.DateTimeFormat;
 /**
  * DailyData ORM 实体
  * 数据库表:stock_dailyData
@@ -163,7 +164,7 @@ public class DailyData implements Serializable {
     * 数据库字段:date
     * @author haipenge
     */
-    
+    @DateTimeFormat(pattern="yyyy-MM-dd hh24:mi:ss")
 	private  Date date;
 	public Date getDate() {
 		return date;
