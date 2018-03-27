@@ -1,6 +1,5 @@
 package com.faceye.component.stock.service.impl;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.faceye.component.stock.entity.DailyData;
 import com.faceye.component.stock.entity.DailyStat;
+import com.faceye.component.stock.entity.DataStat;
 import com.faceye.component.stock.entity.ReportData;
 import com.faceye.component.stock.entity.StarDataStat;
 import com.faceye.component.stock.entity.Stock;
@@ -25,13 +25,13 @@ import com.faceye.component.stock.repository.mongo.customer.DailyDataCustomerRep
 import com.faceye.component.stock.repository.mongo.customer.DailyStatCustomerRepository;
 import com.faceye.component.stock.service.DailyDataService;
 import com.faceye.component.stock.service.DailyStatService;
+import com.faceye.component.stock.service.DataStatService;
 import com.faceye.component.stock.service.ReportDataService;
 import com.faceye.component.stock.service.StarDataStatService;
 import com.faceye.component.stock.service.StockService;
 import com.faceye.component.stock.util.StockConstants;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
- 
 import com.querydsl.core.types.Predicate;
 
 /**
@@ -55,6 +55,8 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 	private ReportDataService reportDataService = null;
 	@Autowired
 	private StarDataStatService starDataStatService = null;
+	@Autowired
+	private DataStatService dataStataService = null;
 	@Autowired
 	private DailyDataCustomerRepository dailyDataCustomerRepository = null;
 
@@ -269,6 +271,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 			Double pe = null;
 			// 计算动态市盈率
 			Double dynamicPe = null;
+			Double pb = null;
 			if (dailyData != null) {
 				Double shoupanjia = dailyData.getShoupanjia();
 				params = new HashMap();
@@ -278,13 +281,27 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 				params.put("SORT|date", "desc");
 				// 取得最近一份年报
 				List<ReportData> reportDatas = this.reportDataService.getPage(params, 1, 1).getContent();
+				params = new HashMap();
+				params.put("EQ|stockId", stock.getId());
+				params.put("EQ|type", StockConstants.REPORT_TYPE_YEAR);
+				params.put("LTE|dateCycle", dailyData.getDate());
+				params.put("SORT|dateCycle", "desc");
+				List<DataStat> dataStats = this.dataStataService.getPage(params, 1, 1).getContent();
 				// 取得每股盈利
 				Double yearEps = null;
+				Double yearBPS = null;
 				if (CollectionUtils.isNotEmpty(reportDatas)) {
 					yearEps = reportDatas.get(0).getInComeSheet().getEle10().getMgsy_131();
+					if (yearEps != null && yearEps > 0 && shoupanjia != null) {
+						pe = shoupanjia / yearEps;
+					}
 				}
-				if (yearEps != null && yearEps > 0 && shoupanjia != null) {
-					pe = shoupanjia / yearEps;
+
+				if (CollectionUtils.isNotEmpty(dataStats)) {
+					yearBPS = dataStats.get(0).getBps();
+					if (yearBPS != null && yearBPS > 0 && shoupanjia != null) {
+						pb = shoupanjia / yearBPS;
+					}
 				}
 				params = new HashMap();
 				params.put("EQ|stockId", stock.getId());
@@ -304,7 +321,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 					}
 				}
 				// 计算市净率
-				Double pb = null;
+
 				dailyData.setPe(pe);
 				dailyData.setDynamicPe(dynamicPe);
 				dailyData.setPb(pb);
@@ -452,7 +469,8 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 		for (DailyData dailyData : dailyDatas) {
 			Date dailyDate = dailyData.getDate();
 			// 向前10个交易日，寻找是否有快线上穿慢线的情况
-			//dailyDate = new Date(dailyDate.getTime() - 10 * 24 * 60 * 60 * 1000L);
+			// dailyDate = new Date(dailyDate.getTime() - 10 * 24 * 60 * 60 *
+			// 1000L);
 			Map macdParams = new HashMap();
 			macdParams.put("EQ|stockId", stock.getId());
 			macdParams.put("GT|date", dailyData.getDate());

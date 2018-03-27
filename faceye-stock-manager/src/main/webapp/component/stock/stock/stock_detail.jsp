@@ -2,7 +2,8 @@
 <%@ page language="java"
 	import="java.util.*,com.faceye.feature.util.*,com.faceye.feature.util.host.*"
 	pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
-<script type="text/javascript" src="<c:url value="/js/lib/echarts/echarts.min.js"/>"></script>
+<script type="text/javascript"
+	src="<c:url value="/js/lib/echarts/echarts.min.js"/>"></script>
 <link rel="stylesheet" type="text/css"
 	href="<c:url value="/css/component/stock/stock/stock.css"/>" />
 <script type="text/javascript"
@@ -12,8 +13,8 @@
 
 <div class="page-head">
 	<h2>
-		股票趋势 ${stock.name} <span class="span-suffix">(${stock.code})</span>
-		<input type="hidden" name="stockId" value="${stock.id}">
+		股票趋势 ${stock.name} <span class="span-suffix">(${stock.code})</span> <input
+			type="hidden" name="stockId" value="${stock.id}">
 	</h2>
 </div>
 <div class="cl-mcont">
@@ -27,11 +28,91 @@
 	</div>
 	 -->
 	<div class="block-flat">
-		<div class="content">行业:${stock.business}&nbsp;&nbsp;概念:<c:forEach var="category" items="${stock.categories}">${category.name}</c:forEach></div>
+		<div class="content">
+			行业:${stock.business}&nbsp;&nbsp;概念:
+			<c:forEach var="category" items="${stock.categories}">${category.name}</c:forEach>
+		</div>
 		<div class="content">
 			<div id="msg"></div>
-			<div class="detail-section">
-				<div id="show-pe" style="height:800px;"></div>
+
+		</div>
+		<div class="row dash-cols">
+			<div class="col-md-6">
+				<div class="block">
+					<div class="content">
+						<div id="show-pe" style="height: 400px;"></div>
+					</div>
+				</div>
+				<div class="block">
+					<div class="content">
+						<div id="show-grossProfitMargin" style="height: 400px;"></div>
+					</div>
+				</div>
+				<div class="block">
+					<div class="content">
+
+						<div id="show-totalAssetsTurnover" style="height: 400px;"></div>
+					</div>
+				</div>
+				<div class="block">
+					<div class="content">
+						<div id="show-debtToAssetsRatio" style="height: 400px;"></div>
+					</div>
+				</div>
+				<div class="block">
+					<div class="content">
+						<div id="show-coreProfitMargin" style="height: 400px;"></div>
+					</div>
+				</div>
+				<div class="block">
+					<div class="content">
+						<div id="show-bps" style="height: 400px;"></div>
+					</div>
+				</div>
+				<div class="block">
+					<div class="content">
+						<div id="show-x" style="height: 400px;"></div>
+					</div>
+				</div>
+				
+			</div>
+			<div class="col-md-6">
+				<div class="block">
+					<div class="content">
+						<div id="show-pb" style="height: 400px;"></div>
+					</div>
+				</div>
+				<div class="block">
+					<div class="content">
+						<div id="show-netProfitMargin" style="height: 400px;"></div>
+					</div>
+				</div>
+				<div class="block">
+					<div class="content">
+						<div id="show-totalAssetsNetProfitMargin" style="height: 400px;"></div>
+					</div>
+				</div>
+				<div class="block">
+					<div class="content">
+						<div id="show-roe" style="height: 400px;"></div>
+					</div>
+				</div>
+				
+				<div class="block">
+					<div class="content">
+						<div id="show-eps" style="height: 400px;"></div>
+					</div>
+				</div>
+				<div class="block">
+					<div class="content">
+						<div id="show-x" style="height: 400px;"></div>
+					</div>
+				</div>
+				<div class="block">
+					<div class="content">
+						<div id="show-x" style="height: 400px;"></div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
