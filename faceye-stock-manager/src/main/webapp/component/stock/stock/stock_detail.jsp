@@ -37,81 +37,48 @@
 
 		</div>
 		<div class="row dash-cols">
-			<div class="col-md-6">
-				<div class="block">
-					<div class="content">
-						<div id="show-pe" style="height: 400px;"></div>
-					</div>
-				</div>
-				<div class="block">
-					<div class="content">
-						<div id="show-grossProfitMargin" style="height: 400px;"></div>
-					</div>
-				</div>
-				<div class="block">
-					<div class="content">
-
-						<div id="show-totalAssetsTurnover" style="height: 400px;"></div>
-					</div>
-				</div>
-				<div class="block">
-					<div class="content">
-						<div id="show-debtToAssetsRatio" style="height: 400px;"></div>
-					</div>
-				</div>
-				<div class="block">
-					<div class="content">
-						<div id="show-coreProfitMargin" style="height: 400px;"></div>
-					</div>
-				</div>
-				<div class="block">
-					<div class="content">
-						<div id="show-bps" style="height: 400px;"></div>
-					</div>
-				</div>
-				<div class="block">
-					<div class="content">
-						<div id="show-x" style="height: 400px;"></div>
-					</div>
+			<div class="col-md-4" style="padding:0 5px 0 10;">
+				<div class="block" style="margin-bottom:10px;">
+						<div id="show-pe" style="height: 300px;"></div>
 				</div>
 				
+				<div class="block" style="margin-bottom:10px;">
+						<div id="show-bps" style="height: 300px;"></div>
+				</div>
+				<div class="block" style="margin-bottom:10px;">
+						<div id="show-roce" style="height: 300px;"></div>
+				</div>
+				<div class="block" style="margin-bottom:10px;">
+						<div id="show-totalAssetsTurnover" style="height: 300px;"></div>
+				</div>
 			</div>
-			<div class="col-md-6">
-				<div class="block">
-					<div class="content">
-						<div id="show-pb" style="height: 400px;"></div>
-					</div>
+			<div class="col-md-4" style="padding:0;">
+				<div class="block" style="margin-bottom:10px;">
+						<div id="show-pb" style="height: 300px;"></div>
 				</div>
-				<div class="block">
-					<div class="content">
-						<div id="show-netProfitMargin" style="height: 400px;"></div>
-					</div>
+				<div class="block" style="margin-bottom:10px;">
+						<div id="show-grossProfitMargin" style="height: 300px;"></div>
 				</div>
-				<div class="block">
-					<div class="content">
-						<div id="show-totalAssetsNetProfitMargin" style="height: 400px;"></div>
-					</div>
+
+				<div class="block" style="margin-bottom:10px;">
+						<div id="show-totalAssetsNetProfitMargin" style="height: 300px;"></div>
 				</div>
-				<div class="block">
-					<div class="content">
-						<div id="show-roe" style="height: 400px;"></div>
-					</div>
+				<div class="block" style="margin-bottom:10px;">
+						<div id="show-roe" style="height: 300px;"></div>
 				</div>
-				
-				<div class="block">
-					<div class="content">
-						<div id="show-eps" style="height: 400px;"></div>
-					</div>
+			</div>
+			<div class="col-md-4" style="padding:0 10 0 5px;">
+			<div class="block" style="margin-bottom:10px;">
+						<div id="show-eps" style="height: 300px;"></div>
 				</div>
-				<div class="block">
-					<div class="content">
-						<div id="show-x" style="height: 400px;"></div>
-					</div>
+				<div class="block" style="margin-bottom:10px;">
+						<div id="show-netProfitMargin" style="height: 300px;"></div>
 				</div>
-				<div class="block">
-					<div class="content">
-						<div id="show-x" style="height: 400px;"></div>
-					</div>
+				<div class="block" style="margin-bottom:10px;">
+						<div id="show-coreProfitMargin" style="height: 300px;"></div>
+				</div>
+				<div class="block" style="margin-bottom:10px;">
+						<div id="show-debtToAssetsRatio" style="height: 300px;"></div>
 				</div>
 			</div>
 		</div>
