@@ -26,7 +26,7 @@
 
 	<target name="scp-product" depends="clean-target,tar">
 		<scp
-			todir="dev:psuitxeesonge@120.27.51.168:/app/source/faceye-generate-search-manager"
+			todir="dev:@120.27.51.168:/app/source/faceye-generate-search-manager"
 			trust="true" sftp="true">
 			<fileset dir="${basedir}/target">
 				<include name="**/*.tar.gz" />
