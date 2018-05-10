@@ -2,6 +2,7 @@ package com.faceye.component.stock.service.job;
 
 import org.quartz.DisallowConcurrentExecution;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.faceye.component.stock.service.StockService;
@@ -17,6 +18,7 @@ import com.faceye.feature.service.job.impl.BaseJob;
 public class InitStockJob extends BaseJob {
 	@Autowired
     private StockService stockService=null;
+	@Scheduled(cron="0 55 10 * * ?")
 	@Override
 	public void run() {
 		stockService.initStocks();

@@ -2,6 +2,7 @@ package com.faceye.component.stock.service.job;
 
 import org.quartz.DisallowConcurrentExecution;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.faceye.component.stock.service.DailyDataService;
@@ -19,7 +20,7 @@ public class ComputeStockDailyDataAvgJob extends BaseJob {
 
 	@Autowired
 	private DailyDataService dailyDataService=null;
-	
+	@Scheduled(cron="0 30 16 * * ?")
 	@Override
 	public void run() {
 		this.dailyDataService.computeDailyDataLines();;

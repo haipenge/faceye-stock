@@ -56,6 +56,7 @@ var StockChart = {
 				var coreProfitMargins=new Array();
 				var epss=new Array();
 				var bpss=new Array();
+				var roces=new Array();
 				for(var i=0;i<data.length;i++){
 					var record=data[i];
 					var date=new Date();
@@ -70,6 +71,7 @@ var StockChart = {
 					coreProfitMargins.push(record.coreProfitMargin);
 					epss.push(record.eps);
 					bpss.push(record.bps);
+					roces.push(record.roce);
 				}
 				StockChart.buildChart(grossProfitMargins,dates,'毛利率','show-grossProfitMargin');
 				StockChart.buildChart(netProfitMargins,dates,'净利率','show-netProfitMargin');
@@ -80,6 +82,7 @@ var StockChart = {
 				StockChart.buildChart(coreProfitMargins,dates,'核心利润率','show-coreProfitMargin');
 				StockChart.buildChart(epss,dates,'EPS','show-eps');
 				StockChart.buildChart(bpss,dates,'BPS','show-bps');
+				StockChart.buildChart(roces,dates,'ROCE=净利润/股东权益','show-roce');
 			}
 		});
 	},
@@ -103,7 +106,14 @@ var StockChart = {
 			title : {
 				left : 'center',
 				text : title,
-				top : 0
+				top : 0,
+				textStyle:{
+					fontSize:12,
+					fontWeight:'bold'
+				},
+				itemGap:5,
+				top:1,
+				bottom:1
 			},
 			toolbox : {
 				feature : {
@@ -112,7 +122,13 @@ var StockChart = {
 					},
 					restore : {},
 					saveAsImage : {}
-				}
+				},
+				itemSize:10,
+				itemGap:8
+			},
+			grid:{
+				top:30,
+				right:10
 			},
 			xAxis : {
 				type : 'category',
