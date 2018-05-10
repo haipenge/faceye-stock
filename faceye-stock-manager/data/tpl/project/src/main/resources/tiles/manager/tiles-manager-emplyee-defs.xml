@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+    <!-- 模块:crm 业务对像:Emplyee 管理后台 tiles模板配置 -->
+    <!-- 作者:haipege -->
+    <!-- Emplyee 管理 首页(列表页) -->
+	<definition name="crm.emplyee.manager" extends="default.manager">
+	    <put-attribute name="default-center" value="crm.emplyee.center"></put-attribute>
+	</definition>
+	<definition name="crm.emplyee.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/crm/emplyee/emplyee_center.jsp"></put-attribute>
+	</definition>
+	
+	<!-- Emplyee 新增,编辑页面 -->
+	<definition name="crm.emplyee.update" extends="default.manager">
+	    <put-attribute name="default-center" value="crm.emplyee.update.center"></put-attribute>
+	</definition>
+	<definition name="crm.emplyee.update.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/crm/emplyee/emplyee_update.jsp"></put-attribute>
+	</definition>
+	
+	<!-- Emplyee 明细页 -->
+	<definition name="crm.emplyee.detail" extends="default.manager">
+	    <put-attribute name="default-center" value="crm.emplyee.detail.center"></put-attribute>
+	</definition>
+	<definition name="crm.emplyee.detail.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/crm/emplyee/emplyee_detail.jsp"></put-attribute>
+	</definition>
+	
+</tiles-definitions>

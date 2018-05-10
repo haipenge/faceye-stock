@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+    <!-- 模块:generate 业务对像:Entity 管理后台 tiles模板配置 -->
+    <!-- 作者:haipege -->
+    <!-- Entity 管理 首页(列表页) -->
+	<definition name="generate.entity.manager" extends="default.manager">
+	    <put-attribute name="default-center" value="generate.entity.center"></put-attribute>
+	</definition>
+	<definition name="generate.entity.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/generate/entity/entity_center.jsp"></put-attribute>
+	</definition>
+	
+	<!-- Entity 新增,编辑页面 -->
+	<definition name="generate.entity.update" extends="default.manager">
+	    <put-attribute name="default-center" value="generate.entity.update.center"></put-attribute>
+	</definition>
+	<definition name="generate.entity.update.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/generate/entity/entity_update.jsp"></put-attribute>
+	</definition>
+	
+	<!-- Entity 明细页 -->
+	<definition name="generate.entity.detail" extends="default.manager">
+	    <put-attribute name="default-center" value="generate.entity.detail.center"></put-attribute>
+	</definition>
+	<definition name="generate.entity.detail.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/generate/entity/entity_detail.jsp"></put-attribute>
+	</definition>
+	
+	<!-- Entity form builder -->
+	<definition name="generate.entity.formBuilder" extends="default.manager">
+	    <put-attribute name="default-center" value="generate.entity.formBuilder.center"></put-attribute>
+	</definition>
+	<definition name="generate.entity.formBuilder.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/generate/entity/entity_form_builder.jsp"></put-attribute>
+	</definition>
+	
+</tiles-definitions>

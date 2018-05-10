@@ -3,18 +3,14 @@
 <!-- Author @haipenge -->
 <!-- E-mail:haipenge@gmail.com -->
 <project name="generate-tools" basedir="." default="help">
-	<import file="build-scp.xml"></import>
 	<import file="build-empty-project.xml" />
 	<property file="build.properties"></property>
 	<!-- 定义常量 -->
-	<!-- 临时输出目录 -->
-	<property name="output.dir" value="${basedir}/target/output"></property>
-	<property name="generate.project.dir" value=".."></property>
 	<!-- 默认包名 -->
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties" />
 	<taskdef resource="net/sf/antcontrib/antlib.xml">
 		<classpath>
-			<pathelement location="/program/apache-ant-1.9.2/lib/ant-contrib-1.0b3.jar" />
+			<pathelement location="/program/apache-ant-1.9.7/lib/ant-contrib-1.0b3.jar" />
 		</classpath>
 	</taskdef>
 	<target name="info">
@@ -23,7 +19,7 @@
 		<echo>************FaceYe 项目自助化工具*************</echo>
 		<echo>****解决问题:解决项目初期搭建调度与集成耗时现像</echo>
 		<echo>****项目模板包括:</echo>
-		<echo>1.Web前端.</echo>
+		<echo>1.Web前端(含WEB+Wap).</echo>
 		<echo>2.管理后台.</echo>
 		<echo>3.移动服务端.</echo>
 		<echo>4.andorid(todo).</echo>
@@ -44,13 +40,19 @@
 		<echo>****Email:haipenge@gmail.com</echo>
 		<echo>*****************************************************************
 		</echo>
+		<echo>basedir --> ${basedir}</echo>
+		<echo>project.root.dir --> ${project.root.dir}</echo>
+		<echo>project.root.name --> ${project.root.name}</echo>
+		<echo>package --> ${package}</echo>
+		<echo>package.path --> ${package.path} </echo>
+		<echo>output.dir --> ${output.dir}</echo>
 	</target>
 	<target name="help" depends="info">
 		<echo>1.创建一个新项目: generate-project | generate-empty-project</echo>
 		<echo>2.创建一个模块: generate-component</echo>
 		<echo>3.创建实体 : generate-entity</echo>
 		<echo>4.为实体增加属性: generate-entity-property | generate-entity-properties</echo>
-		<echo>5.修改模板:修改src/template/source 下的模板类</echo>
+		<echo>5.修改模板:修改data/tpl/source 下的模板类</echo>
 		<echo>6.删除一个实体: remove-entity</echo>
 		<echo>7.删除一个模块: remove-component</echo>
 	</target>
@@ -105,6 +107,10 @@
 						<param name="generate.project.name" value="${generate.project.name}"></param>
 						<param name="generate.project.package.name" value="${generate.project.package.name}"></param>
 					</antcall>
+					<antcall target="generate-project-mobile">
+						<param name="generate.project.name" value="${generate.project.name}"></param>
+						<param name="generate.project.package.name" value="${generate.project.package.name}"></param>
+					</antcall>
 				</then>
 			</elseif>
 			<!-- 3 管理后台+服务端+Web前端+android -->
@@ -120,6 +126,10 @@
 						<param name="generate.project.package.name" value="${generate.project.package.name}"></param>
 					</antcall>
 					<antcall target="generate-project-web">
+						<param name="generate.project.name" value="${generate.project.name}"></param>
+						<param name="generate.project.package.name" value="${generate.project.package.name}"></param>
+					</antcall>
+					<antcall target="generate-project-mobile">
 						<param name="generate.project.name" value="${generate.project.name}"></param>
 						<param name="generate.project.package.name" value="${generate.project.package.name}"></param>
 					</antcall>
@@ -154,7 +164,7 @@
 		<mkdir dir="${output.dir}/project/src/main/resources/i18n" />
 		<copy todir="${output.dir}/project" overwrite="true" encoding="UTF-8"
 			outputencoding="UTF-8" includeEmptyDirs="true">
-			<fileset dir="${basedir}/src/template/project">
+			<fileset dir="${basedir}/data/tpl/project">
 				<exclude name="src/main/java/com/faceye/**"></exclude>
 				<exclude name="src/test/java/com/faceye/**"></exclude>
 				<exclude name="pom.xml"></exclude>
@@ -163,7 +173,7 @@
 			<fileset dir="${basedir}">
 				<include name="build*.xml"></include>
 			</fileset>
-			<fileset dir="${basedir}/src/template/source">
+			<fileset dir="${basedir}/data/tpl/source">
 				<include name="build.properties"></include>
 				<include name="pom*.xml"></include>
 			</fileset>
@@ -180,7 +190,7 @@
 			todir="${output.dir}/project/src/main/java/${generate.project.package.path}"
 			overwrite="true" encoding="UTF-8" outputencoding="UTF-8"
 			includeEmptyDirs="true">
-			<fileset dir="${basedir}/src/template/project/src/main/java/com/faceye">
+			<fileset dir="${basedir}/data/tpl/project/src/main/java/com/faceye">
 				<include name="**/**/*.java"></include>
 			</fileset>
 		</copy>
@@ -260,6 +270,29 @@
 			<replacefilter token="project-name" value="${generate.project.name}-web"></replacefilter>
 		</replace>
 	</target>
+	<!-- 创建项目Mobile前台 -->
+	<target name="generate-project-mobile">
+		<echo message="创建项目Web/mobile端"></echo>
+		<input message="请输入项目名称(注：项目名称后面会自动增加'-mobile字样)" addProperty="generate.project.name"></input>
+		<input message="请输入包名，如com.faceye" addProperty="generate.project.package.name"></input>
+		<property name="generate.project.mobile.path"
+			value="${generate.project.dir}/${generate.project.name}/${generate.project.name}-mobile"></property>
+		<mkdir dir="${generate.project.mobile.path}"></mkdir>
+		<copy todir="${generate.project.mobile.path}" overwrite="true"
+			encoding="UTF-8" outputencoding="UTF-8" includeEmptyDirs="true">
+			<fileset dir="${output.dir}/project">
+				<include name="**/**/*.*"></include>
+			</fileset>
+		</copy>
+		<replace dir="${generate.project.mobile.path}" encoding="UTF-8">
+			<include name="pom*.xml"></include>
+			<replacefilter token="project-name-entity" value="${generate.project.name}-entity"></replacefilter>
+			<replacefilter token="project-name-security-manager-mongo"
+				value="faceye-security-manager-mongo"></replacefilter>
+			<replacefilter token="project-group-id" value="${generate.project.package.name}"></replacefilter>
+			<replacefilter token="project-name" value="${generate.project.name}-mobile"></replacefilter>
+		</replace>
+	</target>
 	<!-- 创建移动服务端 -->
 	<target name="generate-project-api">
 		<echo message="创建项目api"></echo>
@@ -298,8 +331,7 @@
 		<mkdir dir="${generate.project.entity.path}" />
 		<copy todir="${generate.project.entity.path}" overwrite="true"
 			encoding="UTF-8" outputencoding="UTF-8" includeEmptyDirs="true">
-			<copy todir="${generate.project.api.path}" overwrite="true"
-				encoding="UTF-8" outputencoding="UTF-8">
+			
 				<fileset dir="${output.dir}/project">
 					<include name="**/doc/*.*" />
 					<include name="**/entity/*.*" />
@@ -314,7 +346,6 @@
 					value="${generate.project.package.name}"></replacefilter>
 				<replacefilter token="project-name" value="${generate.project.name}-entity"></replacefilter>
 			</replace>
-		</copy>
 	</target>
 
 	<!-- 删除项目管理后台 -->
@@ -344,65 +375,67 @@
 	<!-- 创建一个模块 -->
 	<target name="generate-component">
 		<input message="请输入模块名称" addProperty="component.name"></input>
-		<property name="component.path"
-			value="${basedir}/src/main/java/${package.path}/component/${component.name}"></property>
-		<property name="component.test.path"
-			value="${basedir}/src/test/java/${package.path}/test/component/${component.name}"></property>
-		<property name="entity.path"
-			value="${project.root.dir}/${project.root.name}-entity/src/main/java/${package.path}/component/${component.name}/entity"></property>
-		<!--实体的资源文件路径 -->
-		<property name="entity.properties.path"
-			value="${project.root.dir}/${project.root.name}-entity/src/main/resources/i18n">
-		</property>
-		<property name="api.path"
-			value="${project.root.dir}/${project.root.name}-api/src/main/java/${package.path}/component/${component.name}"></property>
-		<property name="api.test.path"
-			value="${project.root.dir}/${project.root.name}-api/src/test/java/${package.path}/component/${component.name}"></property>
-
-		<!-- 生成 Entity 项目模块 -->
-		<mkdir dir="${entity.path}"></mkdir>
-		<mkdir dir="${entity.properties.path}"></mkdir>
-		<!-- 生成 Manager 项目模块 -->
-		<mkdir dir="${component.path}/repository"></mkdir>
-		<mkdir dir="${component.path}/service/impl"></mkdir>
-		<mkdir dir="${component.path}/controller"></mkdir>
-		<mkdir dir="${component.test.path}/repository/jpa"></mkdir>
-		<mkdir dir="${component.test.path}/repository/mongo"></mkdir>
-		<mkdir dir="${component.test.path}/controller"></mkdir>
-		<mkdir dir="${component.test.path}/service"></mkdir>
-		<mkdir dir="${basedir}/src/main/webapp/component/${component.name}"></mkdir>
-		<mkdir dir="${basedir}/src/main/webapp/js/component/${component.name}"></mkdir>
-		<mkdir dir="${basedir}/src/main/webapp/css/component/${component.name}"></mkdir>
-		<!-- 生成API项目模块 -->
-		<mkdir dir="${api.path}" />
-		<mkdir dir="${api.path}/repository" />
-		<mkdir dir="${api.path}/service/impl" />
-		<mkdir dir="${api.path}/controller" />
-		<mkdir dir="${api.test.path}/repository/jpa" />
-		<mkdir dir="${api.test.path}/repository/mongo" />
-		<mkdir dir="${api.test.path}/service" />
-		<mkdir dir="${api.test.path}/controller" />
-
+		<for list="manager,api,web,mobile,entity" param="dynamic.project.name" delimiter=",">
+			<sequential>
+				<echo>${project.root.dir}/${project.root.name}-@{dynamic.project.name}</echo>
+		         <mkdir dir="${project.dir.prefix}-@{dynamic.project.name}/${component.src.dir}/${component.name}"/>
+			  <if>
+			     <equals arg1="@{dynamic.project.name}" arg2="entity"></equals>
+			   <then>
+				  <mkdir dir="${project.dir.prefix}-@{dynamic.project.name}/${component.src.dir}/${component.name}/entity"/>
+			   </then>
+			 <else>
+				<!--Repository-->
+			    <mkdir dir="${project.dir.prefix}-@{dynamic.project.name}/${component.src.dir}/${component.name}/repository/mongo/gen"/>
+			    <mkdir dir="${project.dir.prefix}-@{dynamic.project.name}/${component.src.dir}/${component.name}/repository/mongo/customer/impl"/>
+			    <!--Service-->
+				<mkdir dir="${project.dir.prefix}-@{dynamic.project.name}/${component.src.dir}/${component.name}/service/impl"/>
+				<!--Controller-->
+				<mkdir dir="${project.dir.prefix}-@{dynamic.project.name}/${component.src.dir}/${component.name}/controller"/>
+				 <!--Test-->
+				 <!--Repository-->
+			    <mkdir dir="${project.dir.prefix}-@{dynamic.project.name}/${component.test.src.dir}/${component.name}/repository"/>
+			    <!--Service-->
+				<mkdir dir="${project.dir.prefix}-@{dynamic.project.name}/${component.test.src.dir}/${component.name}/service"/>
+				<!--Controller-->
+				<mkdir dir="${project.dir.prefix}-@{dynamic.project.name}/${component.test.src.dir}/${component.name}/controller"/>
+			  </else>
+		     </if>
+			 <if>
+			     <equals arg1="@{dynamic.project.name}" arg2="entity"></equals>
+			     <then>
+                    <echo>Entity</echo>				  
+			     </then>
+			  <elseif>
+				 <equals arg1="@{dynamic.project.name}" arg2="api"></equals>
+				  <then><echo>Api</echo></then>
+			  </elseif>
+			  <else>
+			     <mkdir dir="${project.dir.prefix}-@{dynamic.project.name}/${component.web.dir}/component/${component.name}"/>
+				 <mkdir dir="${project.dir.prefix}-@{dynamic.project.name}/${component.web.dir}/js/${component.name}"/>
+				 <mkdir dir="${project.dir.prefix}-@{dynamic.project.name}/${component.web.dir}/css/${component.name}"/>
+			  </else>
+			 </if>
+		    </sequential>
+		</for>
 	</target>
+	
+	
 	<!-- 生成源码 涵盖Entity,Dao(repository),Service,Controller,JSP,js,css -->
 	<target name="generate-entity">
 		<echo message="生成源码 涵盖Entity,Dao(repository),Service,Controller,JSP,js,css"></echo>
 		<antcall target="clean-generate-path"></antcall>
 		<input message="请输入模块名(不含包名)" addProperty="component.name"></input>
-		<property name="entity.path"
-			value="${project.root.dir}/${project.root.name}-entity/src/main/java/${package.path}/component/${component.name}/entity"></property>
+		<property name="entity.path" value="${project.entity.path}/${component.src.dir}/${component.name}/entity"></property>
 		<!--实体的资源文件路径 -->
-		<property name="entity.properties.path"
-			value="${project.root.dir}/${project.root.name}-entity/src/main/resources/i18n">
+		<property name="entity.properties.path" value="${project.entity.path}/${resources.dir}/i18n">
 		</property>
 		<!-- API项目路径 -->
-		<property name="api.path"
-			value="${project.root.dir}/${project.root.name}-api/src/main/java/${package.path}/component/${component.name}"></property>
-		<property name="api.test.path"
-			value="${project.root.dir}/${project.root.name}-api/src/test/java/${package.path}/component/${component.name}"></property>
+		<property name="api.path" value="${project.api.path}/${component.src.dir}/${component.name}"></property>
+		<property name="api.test.path" value="${project.api.path}/${component.test.src.dir}/${component.name}"></property>
+		<property name="manager.test.path" value="${project.manager.path}/${component.test.src.dir}/${component.name}"></property>
 
-		<property name="component.path"
-			value="${basedir}/src/main/java/${package.path}/component/${component.name}"></property>
+		<property name="component.path" value="${project.manager.path}/${component.src.dir}/${component.name}"></property>
 		<input message="请输入实体名称" addProperty="entity.name"></input>
 		<input message="请输入实体的配置名,如:User->user" addProperty="entity.config.name"></input>
 		<input message="请输入实体描述:" addProperty="entity.title"></input>
@@ -416,64 +449,59 @@
 		<mkdir dir="${output.dir}/source/main/webapp/js"></mkdir>
 		<mkdir dir="${output.dir}/source/main/webapp/css"></mkdir>
 		<!-- 生成web目录 -->
-		<mkdir
-			dir="${basedir}/src/main/webapp/component/${component.name}/${entity.config.name}/"></mkdir>
-		<mkdir
-			dir="${basedir}/src/main/webapp/js/component/${component.name}/${entity.config.name}/"></mkdir>
-		<mkdir
-			dir="${basedir}/src/main/webapp/css/component/${component.name}/${entity.config.name}/"></mkdir>
+		<mkdir dir="${project.manager.path}/${component.web.dir}/component/${component.name}/${entity.config.name}/"></mkdir>
+		<mkdir dir="${project.manager.path}/${component.web.dir}/js/component/${component.name}/${entity.config.name}/"></mkdir>
+		<mkdir dir="${project.manager.path}/${component.web.dir}/css/component/${component.name}/${entity.config.name}/"></mkdir>
+		<!-- Web project -->
+		<!-- Web项目路径 -->
+		<property name="web.path" value="${project.web.path}/${component.src.dir}/${component.name}"></property>
+		<property name="web.project.path" value="${project.web.path}"></property>
+		<property name="web.test.path" value="${project.web.path}/${component.test.src.dir}/${component.name}"></property>
+		<mkdir dir="${web.path}" />
+		<mkdir dir="${web.test.path}" />
+		<mkdir dir="${web.project.path}/src/main/webapp/component/${component.name}/${entity.config.name}/"></mkdir>
+		<mkdir dir="${web.project.path}/src/main/webapp/js/component/${component.name}/${entity.config.name}/"></mkdir>
+		<mkdir dir="${web.project.path}/src/main/webapp/css/component/${component.name}/${entity.config.name}/"></mkdir>
+		<!-- Mobile web project  -->
+		<property name="mobile.path" value="${project.mobile.path}/${component.src.dir}/${component.name}"></property>
+		<property name="mobile.project.path" value="${project.mobile.path}"></property>
+		<property name="mobile.test.path" value="${project.mobile.path}/${component.test.src.dir}/${component.name}"></property>
+		<mkdir dir="${mobile.path}" />
+		<mkdir dir="${mobile.test.path}" />
+		<!-- mobile project -->
+		<mkdir dir="${mobile.project.path}/src/main/webapp/component/${component.name}/${entity.config.name}/"></mkdir>
+		<mkdir dir="${mobile.project.path}/src/main/webapp/js/component/${component.name}/${entity.config.name}/"></mkdir>
+		<mkdir dir="${mobile.project.path}/src/main/webapp/css/component/${component.name}/${entity.config.name}/"></mkdir>
 		<!--生成实体目录 -->
 		<mkdir dir="${entity.path}" />
 		<mkdir dir="${entity.properties.path}" />
-		<!-- 拷贝java文件 -->
+		<!-- 拷贝java模板文件 -->
 		<copy todir="${output.dir}/source/main/java" overwrite="true"
 			encoding="UTF-8" outputencoding="UTF-8">
-			<fileset dir="${basedir}/src/template/source/main/java">
+			<fileset dir="${basedir}/data/tpl/source/main/java">
 				<include name="*.java"></include>
 			</fileset>
 		</copy>
 		<copy todir="${output.dir}/source/test/java" overwrite="true"
 			encoding="UTF-8" outputencoding="UTF-8">
-			<fileset dir="${basedir}/src/template/source/test/java">
+			<fileset dir="${basedir}/data/tpl/source/test/java">
 				<include name="*.java"></include>
 			</fileset>
 		</copy>
 		<!-- 拷贝资源文件 -->
-		<copy todir="${output.dir}/source/main/resources/i18n" overwrite="true"
+		<copy todir="${output.dir}/source/main/resources" overwrite="true"
 			encoding="UTF-8" outputencoding="UTF-8">
-			<fileset dir="${basedir}/src/template/source/main/resources/i18n">
-				<include name="*.*"></include>
+			<fileset dir="${basedir}/data/tpl/source/main/resources">
+				<include name="**/*.*"></include>
 			</fileset>
 		</copy>
-		<!-- 拷贝tiles文件 -->
-		<copy todir="${output.dir}/source/main/resources/tiles"
-			overwrite="true" encoding="UTF-8" outputencoding="UTF-8">
-			<fileset dir="${basedir}/src/template/source/main/resources/tiles">
-				<include name="tiles-manager-defs-template.xml"></include>
-			</fileset>
-		</copy>
-		<!-- 拷贝jsp文件 -->
-		<copy todir="${output.dir}/source/main/webapp/jsp" overwrite="true"
+		<!-- 拷贝web文件 -->
+		<copy todir="${output.dir}/source/main/webapp" overwrite="true"
 			encoding="UTF-8" outputencoding="UTF-8">
-			<fileset dir="${basedir}/src/template/source/main/webapp/jsp">
-				<include name="*.jsp"></include>
+			<fileset dir="${basedir}/data/tpl/source/main/webapp">
+				<include name="**/*.*"></include>
 			</fileset>
 		</copy>
-		<!-- 拷贝js文件 -->
-		<copy todir="${output.dir}/source/main/webapp/js" overwrite="true"
-			encoding="UTF-8" outputencoding="UTF-8">
-			<fileset dir="${basedir}/src/template/source/main/webapp/js">
-				<include name="*.js"></include>
-			</fileset>
-		</copy>
-		<!-- 拷贝css文件 -->
-		<copy todir="${output.dir}/source/main/webapp/css" overwrite="true"
-			encoding="UTF-8" outputencoding="UTF-8">
-			<fileset dir="${basedir}/src/template/source/main/webapp/css">
-				<include name="*.css"></include>
-			</fileset>
-		</copy>
-
 		<!-- 处理java,tiles,xml,jsp,js,css文件 -->
 		<replace dir="${output.dir}/source" encoding="UTF-8">
 			<include name="**/*.*"></include>
@@ -482,85 +510,84 @@
 			<replacefilter token="@entity.config.name@" value="${entity.config.name}"></replacefilter>
 			<replacefilter token="@entity.title@" value="${entity.title}"></replacefilter>
 		</replace>
-
-		<!-- 移动java文件 -->
-
-		<if>
-			<!-- 如果使用的是jpa做持久化 -->
-			<equals arg1="${repository.type}" arg2="mongo"></equals>
-			<then>
-				<property name="repository.entity.package" value="entity"></property>
-				<property name="class.name.prefix" value="Document"></property>
-			</then>
-			<elseif>
-				<equals arg1="${repository.type}" arg2="jpa"></equals>
-				<then>
-					<property name="repository.entity.package" value="entity"></property>
-					<property name="class.name.prefix" value="Example"></property>
-				</then>
-			</elseif>
-		</if>
-		<echo message="${repository.entity.package}" />
-		<move file="${output.dir}/source/main/java/${class.name.prefix}.java"
-			tofile="${entity.path}/${entity.name}.java" encoding="UTF-8"></move>
-		<move
-			file="${output.dir}/source/main/java/${class.name.prefix}Repository.java"
-			tofile="${component.path}/repository/${repository.type}/${entity.name}Repository.java"
-			encoding="UTF-8"></move>
-		<copy todir="${api.path}/repository" encoding="UTF-8">
-			<fileset dir="${component.path}/repository/${repository.type}">
-				<include name="${entity.name}Repository.java" />
-			</fileset>
+<!--可考虑去除-->
+		<property name="class.name.prefix" value="Document"></property>
+		<move file="${output.dir}/source/main/java/${class.name.prefix}.java" tofile="${entity.path}/${entity.name}.java" encoding="UTF-8">  </move>
+		<for list="${component.path}/repository/${repository.type},${api.path}/repository/${repository.type},${web.path}/repository/${repository.type},${mobile.path}/repository/${repository.type}" param="dynamic.repository.path" delimiter=",">
+		<sequential>
+			<copy tofile="@{dynamic.repository.path}/${entity.name}Repository.java" file="${output.dir}/source/main/java/${class.name.prefix}Repository.java" overwrite="true" force="true" encoding="UTF-8">
 		</copy>
-		<move
-			file="${output.dir}/source/main/java/${class.name.prefix}Service.java"
-			tofile="${component.path}/service/${entity.name}Service.java"
-			encoding="UTF-8"></move>
-
-		<copy todir="${api.path}/service" encoding="UTF-8">
-			<fileset dir="${component.path}/service">
-				<include name="${entity.name}Service.java" />
-			</fileset>
+		</sequential>
+		</for>
+		<!-- Gen Repository -->
+		<for list="${component.path}/repository/${repository.type}/gen,${api.path}/repository/${repository.type}/gen,${web.path}/repository/${repository.type}/gen,${mobile.path}/repository/${repository.type}/gen" param="dynamic.repository.path" delimiter=",">
+		<sequential>
+			<copy tofile="@{dynamic.repository.path}/${entity.name}GenRepository.java" file="${output.dir}/source/main/java/${class.name.prefix}GenRepository.java" overwrite="true" force="true" encoding="UTF-8">
 		</copy>
-		<move
-			file="${output.dir}/source/main/java/${class.name.prefix}ServiceImpl.java"
-			tofile="${component.path}/service/impl/${entity.name}ServiceImpl.java"
-			encoding="UTF-8"></move>
-		<copy todir="${api.path}/service/impl" encoding="UTF-8">
-			<fileset dir="${component.path}/service/impl">
-				<include name="${entity.name}ServiceImpl.java" />
-			</fileset>
+			</sequential>
+		</for>
+		<!-- Customer Repository -->
+		<for list="${component.path}/repository/${repository.type}/customer,${api.path}/repository/${repository.type}/customer,${web.path}/repository/${repository.type}/customer,${mobile.path}/repository/${repository.type}/customer" param="dynamic.repository.path" delimiter=",">
+		<sequential>
+			<copy tofile="@{dynamic.repository.path}/${entity.name}CustomerRepository.java" file="${output.dir}/source/main/java/${class.name.prefix}CustomerRepository.java" overwrite="true" force="true" encoding="UTF-8">
 		</copy>
+			</sequential>
+		</for>
+		<!-- Customer Repository Impl -->
+		<for list="${component.path}/repository/${repository.type}/customer/impl,${api.path}/repository/${repository.type}/customer/impl,${web.path}/repository/${repository.type}/customer/impl,${mobile.path}/repository/${repository.type}/customer/impl" param="dynamic.repository.path" delimiter=",">
+			<sequential>
+		<copy tofile="@{dynamic.repository.path}/${entity.name}CustomerRepositoryImpl.java" file="${output.dir}/source/main/java/${class.name.prefix}CustomerRepositoryImpl.java" overwrite="true" force="true" encoding="UTF-8">
+		</copy>
+			</sequential>
+		</for>
+		<!--Service-->
+		<for list="${component.path}/service,${api.path}/service,${web.path}/service,${mobile.path}/service" param="dynamic.repository.path" delimiter=",">
+			<sequential>
+		<copy tofile="@{dynamic.repository.path}/${entity.name}Service.java" file="${output.dir}/source/main/java/${class.name.prefix}Service.java" overwrite="true" force="true" encoding="UTF-8">
+		</copy>
+			</sequential>
+		</for>
+		<for list="${component.path}/service/impl,${api.path}/service/impl,${web.path}/service/impl,${mobile.path}/service/impl" param="dynamic.repository.path" delimiter=",">
+			<sequential>
+		<copy tofile="@{dynamic.repository.path}/${entity.name}ServiceImpl.java" file="${output.dir}/source/main/java/${class.name.prefix}ServiceImpl.java" overwrite="true" force="true" encoding="UTF-8">
+		</copy>
+			</sequential>
+		</for>
+		<!--Controller-->
 		<move
 			file="${output.dir}/source/main/java/${class.name.prefix}Controller.java"
 			tofile="${component.path}/controller/${entity.name}Controller.java"
 			encoding="UTF-8"></move>
+		<copy todir="${web.path}/controller">
+			<fileset dir="${component.path}/controller">
+				<include name="${entity.name}Controller.java" />
+			</fileset>
+		</copy>
+		<copy todir="${mobile.path}/controller">
+			<fileset dir="${component.path}/controller">
+				<include name="${entity.name}Controller.java" />
+			</fileset>
+		</copy>
 		<move
 			file="${output.dir}/source/main/java/${class.name.prefix}ApiController.java"
 			tofile="${api.path}/controller/${entity.name}Controller.java"
 			encoding="UTF-8"></move>
 
 		<!-- 移动测试类 -->
-		<move file="${output.dir}/source/test/java/DocumentRepositoryTestCase.java"
-			tofile="${basedir}/src/test/java/${package.path}/test/component/${component.name}/repository/${entity.name}RepositoryTestCase.java"
-			encoding="UTF-8"></move>
-
-		<copy todir="${api.test.path}/repository" encoding="UTF-8">
-			<fileset
-				dir="${basedir}/src/test/java/${package.path}/test/component/${component.name}/repository">
-				<include name="${entity.name}RepositoryTestCase.java" />
-			</fileset>
+		<!-- Repository test case-->
+		<for list="${manager.test.path}/repository,${api.test.path}/repository,${web.test.path}/repository,${mobile.test.path}/repository" param="dynamic.repository.path" delimiter=",">
+			<sequential>
+		<copy tofile="@{dynamic.repository.path}/${entity.name}RepositoryTestCase.java" file="${output.dir}/source/test/java/DocumentRepositoryTestCase.java" overwrite="true" force="true" encoding="UTF-8">
 		</copy>
-		<move file="${output.dir}/source/test/java/DocumentServiceTestCase.java"
-			tofile="${basedir}/src/test/java/${package.path}/test/component/${component.name}/service/${entity.name}ServiceTestCase.java"
-			encoding="UTF-8"></move>
-		<copy todir="${api.test.path}/service" encoding="UTF-8">
-			<fileset
-				dir="${basedir}/src/test/java/${package.path}/test/component/${component.name}/service">
-				<include name="${entity.name}ServiceTestCase.java" />
-			</fileset>
+			</sequential>
+		</for>
+		<!--Service Test case-->
+		<for list="${manager.test.path}/service,${api.test.path}/service,${web.test.path}/service,${mobile.test.path}/service" param="dynamic.repository.path" delimiter=",">
+			<sequential>
+		<copy tofile="@{dynamic.repository.path}/${entity.name}ServiceTestCase.java" file="${output.dir}/source/test/java/DocumentServiceTestCase.java" overwrite="true" force="true" encoding="UTF-8">
 		</copy>
-
+			</sequential>
+		</for>
 		<!-- 移动properties文件 -->
 		<native2ascii encoding="UTF-8"
 			src="${output.dir}/source/main/resources/i18n" includes="Entity_zh_CN.source"
@@ -569,11 +596,18 @@
 			tofile="${entity.properties.path}/${entity.config.name}_zh_CN.properties"
 			encoding="UTF-8"></move>
 
-
 		<!-- 移动tiles文件（manager) -->
 		<move
 			file="${output.dir}/source/main/resources/tiles/tiles-manager-defs-template.xml"
 			tofile="${basedir}/src/main/resources/tiles/manager/tiles-manager-${entity.config.name}-defs.xml"
+			encoding="UTF-8"></move>
+		<move
+			file="${output.dir}/source/main/resources/tiles/tiles-web-defs-template.xml"
+			tofile="${web.project.path}/src/main/resources/tiles/web/tiles-web-${entity.config.name}-defs.xml"
+			encoding="UTF-8"></move>
+		<move
+			file="${output.dir}/source/main/resources/tiles/tiles-mobile-defs-template.xml"
+			tofile="${web.project.path}/src/main/resources/tiles/mobile/tiles-mobile-${entity.config.name}-defs.xml"
 			encoding="UTF-8"></move>
 		<!-- 移动jsp文件 -->
 		<move file="${output.dir}/source/main/webapp/jsp/Entity_update.jsp"
@@ -585,14 +619,58 @@
 		<move file="${output.dir}/source/main/webapp/jsp/Entity_center.jsp"
 			tofile="${basedir}/src/main/webapp/component/${component.name}/${entity.config.name}/${entity.config.name}_center.jsp"
 			encoding="UTF-8"></move>
+		<!-- Copy 2 Web project -->
+		<copy
+			todir="${web.project.path}/src/main/webapp/component/${component.name}/${entity.config.name}">
+			<fileset
+				dir="${basedir}/src/main/webapp/component/${component.name}/${entity.config.name}">
+				<include name="*"></include>
+			</fileset>
+		</copy>
+		<!--Copy 2 mobile project-->
+		<copy
+			todir="${mobile.project.path}/src/main/webapp/component/${component.name}/${entity.config.name}">
+			<fileset
+				dir="${basedir}/src/main/webapp/component/${component.name}/${entity.config.name}">
+				<include name="*"></include>
+			</fileset>
+		</copy>
 		<!-- 移动js文件 -->
 		<move file="${output.dir}/source/main/webapp/js/Entity.js"
 			tofile="${basedir}/src/main/webapp/js/component/${component.name}/${entity.config.name}/${entity.config.name}.js"
 			encoding="UTF-8"></move>
+		<copy
+			todir="${web.project.path}/src/main/webapp/js/component/${component.name}/${entity.config.name}">
+			<fileset
+				dir="${basedir}/src/main/webapp/js/component/${component.name}/${entity.config.name}">
+				<include name="*" />
+			</fileset>
+		</copy>
+		<copy
+			todir="${mobile.project.path}/src/main/webapp/js/component/${component.name}/${entity.config.name}">
+			<fileset
+				dir="${basedir}/src/main/webapp/js/component/${component.name}/${entity.config.name}">
+				<include name="*" />
+			</fileset>
+		</copy>
 		<!-- 移动css文件 -->
 		<move file="${output.dir}/source/main/webapp/css/Entity.css"
 			tofile="${basedir}/src/main/webapp/css/component/${component.name}/${entity.config.name}/${entity.config.name}.css"
 			encoding="UTF-8"></move>
+		<copy
+			todir="${web.project.path}/src/main/webapp/css/component/${component.name}/${entity.config.name}">
+			<fileset
+				dir="${basedir}/src/main/webapp/css/component/${component.name}/${entity.config.name}">
+				<include name="*" />
+			</fileset>
+		</copy>
+		<copy
+			todir="${mobile.project.path}/src/main/webapp/css/component/${component.name}/${entity.config.name}">
+			<fileset
+				dir="${basedir}/src/main/webapp/css/component/${component.name}/${entity.config.name}">
+				<include name="*" />
+			</fileset>
+		</copy>
 		<!-- 生成管理菜单 -->
 		<loadfile property="entity.manager.menu.jsp.source"
 			srcFile="${output.dir}/source/main/webapp/jsp/Entity_manager_list_group_item.jsp"
@@ -601,11 +679,9 @@
 			<regexp pattern="&lt;\!--@generate-entity-manager-list-group-item@--&gt;" />
 			<substitution expression="${entity.manager.menu.jsp.source}" />
 			<fileset dir="${basedir}/src/main/webapp/component/core/template/manager">
-				<include name="default_center_left.jsp" />
+				<include name="faceye-example_default_center_left.jsp" />
 			</fileset>
 		</replaceregexp>
-
-
 		<!-- 引导用户生成三个属性,中断可使用CTRL+C,如要继续生成其它属性,使用 generate-entity-property task. -->
 		<echo
 			message="已生成实体对像${entity.name}及其对应的业务操作,${entity.name}中已包含id属性,可以根据引导，继续生成其它属性"></echo>
@@ -634,11 +710,17 @@
 			value="${project.root.dir}/${project.root.name}-api/src/main/java/${package.path}/component/${component.name}"></property>
 		<property name="api.test.path"
 			value="${project.root.dir}/${project.root.name}-api/src/test/java/${package.path}/component/${component.name}"></property>
+			<property name="mobile.path"
+			value="${project.root.dir}/${project.root.name}-mobile/src/main/java/${package.path}/component/${component.name}"></property>
+		<property name="mobile.test.path"
+			value="${project.root.dir}/${project.root.name}-mobile/src/test/java/${package.path}/component/${component.name}"></property>
 		<!-- 清除java文件 -->
 		<delete
 			dir="${basedir}/src/main/java/${package.path}/component/${component.name}">
 			<include name="**/**/${entity.name}.java"></include>
 			<include name="**/**/${entity.name}Repository.java"></include>
+			<include name="**/**/${entity.name}**Repository.java"></include>
+			<include name="**/**/${entity.name}**RepositoryImpl.java"></include>
 			<include name="**/**/${entity.name}RepositoryImpl.java"></include>
 			<include name="**/**/${entity.name}Service.java"></include>
 			<include name="**/**/${entity.name}ServiceImpl.java"></include>
@@ -652,6 +734,17 @@
 		</delete>
 		<delete dir="${api.path}">
 		     <include name="**/${entity.name}Repository.java"></include>
+		     	<include name="**/**/${entity.name}**Repository.java"></include>
+			<include name="**/**/${entity.name}**RepositoryImpl.java"></include>
+			<include name="**/${entity.name}RepositoryImpl.java"></include>
+			<include name="**/${entity.name}Service.java"></include>
+			<include name="**/${entity.name}ServiceImpl.java"></include>
+			<include name="**/${entity.name}Controller.java"></include>
+		</delete>
+		<delete dir="${mobile.path}">
+		     <include name="**/${entity.name}Repository.java"></include>
+		     	<include name="**/**/${entity.name}**Repository.java"></include>
+			<include name="**/**/${entity.name}**RepositoryImpl.java"></include>
 			<include name="**/${entity.name}RepositoryImpl.java"></include>
 			<include name="**/${entity.name}Service.java"></include>
 			<include name="**/${entity.name}ServiceImpl.java"></include>
@@ -778,13 +871,13 @@
 		</property>
 		<copy todir="${output.dir}/source/main/java" overwrite="true"
 			encoding="UTF-8" outputencoding="UTF-8">
-			<fileset dir="${basedir}/src/template/source/main/java">
+			<fileset dir="${basedir}/data/tpl/source/main/java">
 				<include name="${class.name.prefix}Method.java"></include>
 			</fileset>
 		</copy>
 		<copy todir="${output.dir}/source/main/resources/i18n" overwrite="true"
 			encoding="UTF-8" outputencoding="UTF-8">
-			<fileset dir="${basedir}/src/template/source/main/resources/i18n">
+			<fileset dir="${basedir}/data/tpl/source/main/resources/i18n">
 				<include name="Entity_property_i18n.properties"></include>
 			</fileset>
 		</copy>
@@ -863,7 +956,7 @@
 		</replaceregexp>
 		<!-- 加载 jsp属性update文件 -->
 		<loadfile property="property.jsp.update.source"
-			srcFile="${basedir}/src/template/source/main/webapp/jsp/Entity_property_update.jsp"
+			srcFile="${basedir}/data/tpl/source/main/webapp/jsp/Entity_property_update.jsp"
 			encoding="UTF-8" />
 		<replaceregexp encoding="UTF-8" flags="g">
 			<regexp pattern="&lt;\!--@generate-entity-jsp-property-update@--&gt;" />
@@ -875,7 +968,7 @@
 		</replaceregexp>
 		<!-- 加载jsp 属性 property detail 文件 -->
 		<loadfile property="property.jsp.detail.source"
-			srcFile="${basedir}/src/template/source/main/webapp/jsp/Entity_property_detail.jsp"
+			srcFile="${basedir}/data/tpl/source/main/webapp/jsp/Entity_property_detail.jsp"
 			encoding="UTF-8" />
 		<replaceregexp encoding="UTF-8" flags="g">
 			<regexp pattern="&lt;\!--@generate-entity-jsp-property-detail@--&gt;" />
@@ -888,7 +981,7 @@
 
 		<!-- 加载jsp center query 文件 -->
 		<loadfile property="property.jsp.query.source"
-			srcFile="${basedir}/src/template/source/main/webapp/jsp/Entity_query.jsp"
+			srcFile="${basedir}/data/tpl/source/main/webapp/jsp/Entity_query.jsp"
 			encoding="UTF-8" />
 		<replaceregexp encoding="UTF-8" flags="g">
 			<regexp pattern="&lt;\!--@generate-entity-jsp-query-detail@--&gt;" />
@@ -924,7 +1017,7 @@
 	<!-- Int project template -->
 	<target name="init-project-template">
 		<antcall target="clean-generate-path"></antcall>
-		<delete dir="${basedir}/src/template/project/src"></delete>
+		<delete dir="${basedir}/data/tpl/project/src"></delete>
 		<mkdir dir="${output.dir}/project/src"></mkdir>
 		<copy todir="${output.dir}/project/src" overwrite="true"
 			encoding="UTF-8" outputencoding="UTF-8">
@@ -938,81 +1031,10 @@
 				<include name="*.xml"></include>
 			</fileset>
 		</copy>
-		<copy todir="${basedir}/src/template/project" overwrite="true"
+		<copy todir="${basedir}/data/tpl/project" overwrite="true"
 			encoding="UTF-8" outputencoding="UTF-8">
 			<fileset dir="${output.dir}/project">
 				<include name="**/**/**.*"></include>
-			</fileset>
-		</copy>
-	</target>
-
-
-	<!-- 升级相关项目的build文件 -->
-	<target name="update-project-build">
-		<antcall target="clean-generate-path"></antcall>
-		<input message="输入要升级的项目" addProperty="update.project.name"></input>
-		<if>
-			<equals arg1="${update.project.name}" arg2="search">
-			</equals>
-			<then>
-				<antcall target="update-project-build-faceye-generate-search-manager"></antcall>
-				<antcall target="update-project-build-faceye-generate-search-web"></antcall>
-			</then>
-			<elseif>
-				<equals arg1="${update.project.name}" arg2="hadoop"></equals>
-				<then>
-					<antcall target="update-project-build-faceye-generate-hadoop-manager"></antcall>
-				</then>
-			</elseif>
-
-		</if>
-	</target>
-
-	<!-- Update Search Manager -->
-	<target name="update-project-build-faceye-generate-search-manager">
-		<copy todir="../faceye-generate-search/faceye-generate-search-manager"
-			overwrite="true">
-			<fileset dir="${basedir}">
-				<include name="build-tools.xml"></include>
-			</fileset>
-		</copy>
-		<copy
-			todir="../faceye-generate-search/faceye-generate-search-manager/src/template"
-			overwrite="true">
-			<fileset dir="${basedir}/src/template">
-				<include name="*/**/*.*"></include>
-			</fileset>
-		</copy>
-	</target>
-	<!-- Update search web -->
-	<target name="update-project-build-faceye-generate-search-web">
-		<copy todir="../faceye-generate-search/faceye-generate-search-web"
-			overwrite="true">
-			<fileset dir="${basedir}">
-				<include name="build-tools.xml"></include>
-			</fileset>
-		</copy>
-		<copy
-			todir="../faceye-generate-search/faceye-generate-search-web/src/template"
-			overwrite="true">
-			<fileset dir="${basedir}/src/template">
-				<include name="*/**/*.*"></include>
-			</fileset>
-		</copy>
-	</target>
-	<!-- Update faceye-generate-hadoop Manager -->
-	<target name="update-project-build-faceye-generate-hadoop-manager">
-		<copy todir="../faceye-generate-hadoop/faceye-generate-hadoop-manager"
-			overwrite="true">
-			<fileset dir="${basedir}">
-				<include name="build-tools.xml"></include>
-			</fileset>
-		</copy>
-		<copy
-			todir="../faceye-generate-hadoop/faceye-generate-hadoop-manager/src/template"
-			overwrite="true">
-			<fileset dir="${basedir}/src/template">
-				<include name="*/**/*.*"></include>
 			</fileset>
 		</copy>
 	</target>

@@ -1,0 +1,10 @@
+#Author @haipenge
+#@component.name@ @entity.name@  properties Config
+@component.name@.@entity.config.name@=@entity.title@
+@component.name@.@entity.config.name@.manager=@entity.title@管理
+@component.name@.@entity.config.name@.edit=编辑@entity.title@
+@component.name@.@entity.config.name@.add=新增@entity.title@
+@component.name@.@entity.config.name@.remove=删除@entity.title@
+@component.name@.@entity.config.name@.detail=@entity.title@详情
+
+#@generate-entity-property-i18n-source@

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	<persistence-unit name="feature" transaction-type="RESOURCE_LOCAL">
+		<!-- 如果实体被打进jar包，启用以下配置 -->
+		<!--  <jar-file>WEB-INF/lib/faceye-feature-1.0.jar</jar-file>-->
+		<!-- 
+		<jar-file>${x.faceye.feature.jar.path}</jar-file>
+		 -->
+		 <jar-file>${x.faceye.feature.jar.path}</jar-file>
+		 <!-- Java SE环境中需显示列出实体名，测试环境中需要使用到。生产环境，不需要 -->
+		 <class>com.faceye.component.security.entity.Role</class>
+		 <class>com.faceye.component.security.entity.Resource</class>
+		 <class>com.faceye.component.security.entity.User</class>
+		 <class>com.faceye.component.security.entity.Menu</class>
+
+		<!-- 如果使用nativeSQL查询，启用以下配置 -->
+		<!-- <mapping-file>META-INF/mappers.xml</mapping-file> -->
+	</persistence-unit>
+</persistence>

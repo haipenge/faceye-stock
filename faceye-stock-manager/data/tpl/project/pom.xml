@@ -2,25 +2,27 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<!-- <parent> <groupId>org.faceye</groupId> <artifactId>faceye-feature</artifactId> 
-		<version>1.0</version> <relativePath>../parent/</relativePath> </parent> -->
-	<groupId>faceye-generate-manager</groupId>
-	<artifactId>faceye-generate-manager</artifactId>
+	<!-- <parent> <groupId>org.faceye</groupId> <artifactId>faceye-generate-feature</artifactId> <version>1.0</version> <relativePath>../parent/</relativePath> 
+		</parent> -->
+	<groupId>com.faceye</groupId>
+	<artifactId>faceye-stock-manager</artifactId>
 	<version>1.0</version>
-	<packaging>war</packaging>
-	<name>faceye-generate-manager</name>
+	<packaging>jar</packaging>
+	<name>faceye-stock-manager</name>
 	<properties>
+		<faceye-security-manager-mongo.version>1.0</faceye-security-manager-mongo.version>
+		<faceye-stock-entity.version>1.0</faceye-stock-entity.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.8</jdk.version>
+
 		<jetty.version>9.0.2.v20130417</jetty.version>
+		<!-- <jetty.version>9.4.2.v20170220</jetty.version> -->
 		<jetty.orbit.version>3.0.0.v201112011016</jetty.orbit.version>
-		<querydsl.version>3.6.3</querydsl.version>
+		<querydsl.version>4.2.1</querydsl.version>
 		<servlet-api.version>3.0-alpha-1</servlet-api.version>
 		<junit.version>4.12</junit.version>
-		<spring.version>4.1.6.RELEASE</spring.version>
-		<freemarker.version>2.3.22</freemarker.version>
-		<faceye-security-manager-mongo.version>1.0</faceye-security-manager-mongo.version>
-		<faceye-generate-entity.version>1.0</faceye-generate-entity.version>
+		<spring.version>5.0.4.RELEASE</spring.version>
+		<quartz.version>2.3.0</quartz.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -30,8 +32,8 @@
 		</dependency>
 		<dependency>
 			<groupId>com.faceye</groupId>
-			<artifactId>faceye-generate-entity</artifactId>
-			<version>${faceye-generate-entity.version}</version>
+			<artifactId>faceye-stock-entity</artifactId>
+			<version>${faceye-stock-entity.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -53,13 +55,14 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.freemarker</groupId>
-			<artifactId>freemarker</artifactId>
-			<version>${freemarker.version}</version>
-		</dependency>
+    <groupId>org.quartz-scheduler</groupId>
+    <artifactId>quartz</artifactId>
+    <version>${quartz.version}</version>
+</dependency>
+
 	</dependencies>
 	<build>
-		<finalName>faceye-generate-manager</finalName>
+		<finalName>faceye-stock-manager</finalName>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
@@ -69,18 +72,9 @@
 				</excludes>
 			</resource>
 			<resource>
-				<directory>../../faceye-feature/src/main/resources</directory>
-				<includes>
-					<include>i18n/*</include>
-					<include>tiles/manager/*</include>
-					<include>tiles/web/*</include>
-				</includes>
-				<filtering>true</filtering>
-			</resource>
-			<resource>
 				<directory>../../faceye-feature-mongo/src/main/resources</directory>
 				<includes>
-					<include>i18n/*</include>
+					<include>i18n/**</include>
 					<include>tiles/manager/*.*</include>
 					<include>conf/applicationContext-config.xml</include>
 					<include>conf/applicationContext-mongo.xml</include>
@@ -89,13 +83,20 @@
 				<filtering>true</filtering>
 			</resource>
 			<resource>
-				<directory>../../faceye-security/faceye-security-manager-mongo/src/main/resources</directory>
+				<directory>../../faceye-security-manager-mongo/faceye-security-manager-mongo/src/main/resources</directory>
 				<includes>
-					<include>i18n/*</include>
+					<include>i18n/**</include>
 					<include>tiles/manager/*.*</include>
 					<include>conf/applicationContext-security.xml</include>
 				</includes>
 				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>../../faceye-feature/src/main/resources</directory>
+				<includes>
+					<include>i18n/*</include>
+					<include>tiles/manager/*.*</include>
+				</includes>
 			</resource>
 		</resources>
 		<plugins>
@@ -113,20 +114,38 @@
 				<version>${jetty.version}</version>
 				<configuration>
 					<scanIntervalSeconds>15000000</scanIntervalSeconds>
+					<!-- 
+					<systemProperties>
+					 <properties>
+					   <property>
+					     <name>add-to-start</name>
+					     <value>servlets</value>
+					   </property>
+					 
+					 </properties>
+					</systemProperties>
+					-->
 					<webApp>
 						<contextPath>/</contextPath>
 						<defaultsDescriptor>src/main/resources/webdefault.xml</defaultsDescriptor>
 						<descriptor>src/main/webapp/WEB-INF/web.xml</descriptor>
 						<baseResource implementation="org.eclipse.jetty.util.resource.ResourceCollection">
-							<resourcesAsCSV>src/main/webapp,../../faceye-security/faceye-security-manager-mongo/src/main/webapp,../../faceye-feature-mongo/src/main/webapp,../../faceye-feature/src/main/webapp</resourcesAsCSV>
+							<resourcesAsCSV>src/main/webapp,../../faceye-feature-mongo/src/main/webapp,../../faceye-security-manager-mongo/faceye-security-manager-mongo/src/main/webapp,../../faceye-feature/src/main/webapp</resourcesAsCSV>
 						</baseResource>
 					</webApp>
+					
 				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.eclipse.jetty</groupId>
+						<artifactId>jetty-servlet</artifactId>
+						<version>${jetty.version}</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>com.mysema.maven</groupId>
 				<artifactId>apt-maven-plugin</artifactId>
-				<!-- <version>${querydsl.version}</version> -->
 				<executions>
 					<execution>
 						<goals>
@@ -138,24 +157,7 @@
 						</configuration>
 					</execution>
 				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>com.mysema.querydsl</groupId>
-						<artifactId>querydsl-apt</artifactId>
-						<version>${querydsl.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>com.mysema.querydsl</groupId>
-						<artifactId>querydsl-mongodb</artifactId>
-						<classifier>apt</classifier>
-						<version>${querydsl.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>com.mysema.querydsl</groupId>
-						<artifactId>querydsl-codegen</artifactId>
-						<version>${querydsl.version}</version>
-					</dependency>
-				</dependencies>
+
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -185,7 +187,22 @@
 						</goals>
 						<configuration>
 							<dest>target/classes/i18n</dest>
-							<src>../faceye-generate-entity/src/main/resources/i18n</src>
+							<src>../faceye-stock-entity/src/main/resources/i18n</src>
+							<encoding>UTF-8</encoding>
+							<includes>
+								*.properties
+							</includes>
+						</configuration>
+					</execution>
+					<execution>
+						<id>native2ascii-utf8-resources-security</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>native2ascii</goal>
+						</goals>
+						<configuration>
+							<dest>target/classes/i18n</dest>
+							<src>../../faceye-security-manager-mongo/faceye-security-entity-mongo/src/main/resources/i18n</src>
 							<encoding>UTF-8</encoding>
 							<includes>
 								*.properties
@@ -210,8 +227,7 @@
 				<configuration>
 					<!-- not append assembly id in release file name -->
 					<appendAssemblyId>false</appendAssemblyId>
-					<!-- <descriptors> <descriptor> src/main/assemble/package.xml </descriptor> 
-						</descriptors> -->
+					<!-- <descriptors> <descriptor> src/main/assemble/package.xml </descriptor> </descriptors> -->
 				</configuration>
 				<executions>
 					<execution>
@@ -223,18 +239,15 @@
 						<configuration>
 							<skipAssembly>false</skipAssembly><!-- 跳过这个执行器 -->
 							<!-- 自定义输出目录（finalName为最终项目构建名称） -->
-							<!-- <outputDirectory> ${project.build.directory}/${project.build.finalName}/WEB-INF/lib 
-								</outputDirectory> -->
+							<!-- <outputDirectory> ${project.build.directory}/${project.build.finalName}/WEB-INF/lib </outputDirectory> -->
 							<!-- 描述符文件 -->
 							<descriptors>
 								<descriptor>src/main/resources/assembly/jar.xml</descriptor>
 							</descriptors>
 						</configuration>
 					</execution>
-					<!-- <execution> <id>make-zip</id> <phase>package</phase> <goals> <goal>single</goal> 
-						</goals> <configuration> <skipAssembly>true</skipAssembly> <descriptors> 
-						<descriptor>src/main/assembly/zip.xml</descriptor> </descriptors> </configuration> 
-						</execution> -->
+					<!-- <execution> <id>make-zip</id> <phase>package</phase> <goals> <goal>single</goal> </goals> <configuration> <skipAssembly>true</skipAssembly> 
+						<descriptors> <descriptor>src/main/assembly/zip.xml</descriptor> </descriptors> </configuration> </execution> -->
 				</executions>
 			</plugin>
 			<plugin>
@@ -257,20 +270,6 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-shade-plugin</artifactId> 
-				<executions> <execution> <phase>package</phase> <goals> <goal>shade</goal> 
-				</goals> <configuration> <shadedArtifactAttached>true</shadedArtifactAttached> 
-				<shadedClassifierName>jar-with-dependencies</shadedClassifierName> <transformers> 
-				<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"> 
-				<mainClass>com.faceye.feature.service.impl.BeanContextUtil</mainClass> </transformer> 
-				<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer"> 
-				<resource>META-INF/spring.handlers</resource> </transformer> <transformer 
-				implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer"> 
-				<resource>META-INF/spring.schemas</resource> </transformer> <transformer 
-				implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer"> 
-				<resource>META-INF/spring.tooling</resource> </transformer> </transformers> 
-				</configuration> </execution> </executions> </plugin> -->
-
 		</plugins>
 	</build>
 	<profiles>
@@ -283,9 +282,8 @@
 				<filters>
 					<filter>src/main/filters/dev.properties</filter>
 				</filters>
-				<!-- <resources> <resource> <directory>src/main/webapp/jsp</directory> 
-					<filtering>true</filtering> <includes> <include>config.json</include> </includes> 
-					</resource> </resources> -->
+				<!-- <resources> <resource> <directory>src/main/webapp/jsp</directory> <filtering>true</filtering> <includes> <include>config.json</include> 
+					</includes> </resource> </resources> -->
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -298,22 +296,17 @@
 							<webResources>
 								<resource>
 									<directory>src/main/webapp</directory>
-									<!-- <excludes> <exclude>jsp/config.json</exclude> </excludes> -->
 									<filtering>true</filtering>
 								</resource>
 								<resource>
-									<directory>../../faceye-security/faceye-security-manager-mongo/src/main/webapp</directory>
-									<filtering>true</filtering>
+									<directory>../../faceye-security-manager-mongo/faceye-security-manager-mongo/src/main/webapp</directory>
 								</resource>
 								<resource>
 									<directory>../../faceye-feature-mongo/src/main/webapp</directory>
-									<filtering>true</filtering>
 								</resource>
 								<resource>
 									<directory>../../faceye-feature/src/main/webapp</directory>
-									<filtering>true</filtering>
 								</resource>
-
 							</webResources>
 							<resourceEncoding>UTF-8</resourceEncoding>
 							<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
@@ -346,20 +339,16 @@
 							<webResources>
 								<resource>
 									<directory>src/main/webapp</directory>
-									<!-- <excludes> <exclude>jsp/config.json</exclude> </excludes> -->
 									<filtering>true</filtering>
 								</resource>
 								<resource>
-									<directory>../../faceye-security/faceye-security-manager-mongo/src/main/webapp</directory>
-									<filtering>true</filtering>
+									<directory>../../faceye-security-manager-mongo/faceye-security-manager-mongo/src/main/webapp</directory>
 								</resource>
 								<resource>
 									<directory>../../faceye-feature-mongo/src/main/webapp</directory>
-									<filtering>true</filtering>
 								</resource>
 								<resource>
 									<directory>../../faceye-feature/src/main/webapp</directory>
-									<filtering>true</filtering>
 								</resource>
 							</webResources>
 							<resourceEncoding>UTF-8</resourceEncoding>
@@ -395,20 +384,16 @@
 							<webResources>
 								<resource>
 									<directory>src/main/webapp</directory>
-									<!-- <excludes> <exclude>jsp/config.json</exclude> </excludes> -->
 									<filtering>true</filtering>
 								</resource>
 								<resource>
-									<directory>../../faceye-security/faceye-security-manager-mongo/src/main/webapp</directory>
-									<filtering>true</filtering>
+									<directory>../../faceye-security-manager-mongo/faceye-security-manager-mongo/src/main/webapp</directory>
 								</resource>
 								<resource>
 									<directory>../../faceye-feature-mongo/src/main/webapp</directory>
-									<filtering>true</filtering>
 								</resource>
 								<resource>
 									<directory>../../faceye-feature/src/main/webapp</directory>
-									<filtering>true</filtering>
 								</resource>
 							</webResources>
 							<resourceEncoding>UTF-8</resourceEncoding>
@@ -422,6 +407,53 @@
 				</plugins>
 			</build>
 		</profile>
+
+		<profile>
+			<id>cloud</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<filters>
+					<filter>src/main/filters/cloud.properties</filter>
+				</filters>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<configuration>
+							<archive>
+								<addMavenDescriptor>false</addMavenDescriptor>
+							</archive>
+							<archiveClasses>false</archiveClasses>
+							<webXml>src/main/webapp/WEB-INF/web.xml</webXml>
+							<webResources>
+								<resource>
+									<directory>src/main/webapp</directory>
+									<filtering>true</filtering>
+								</resource>
+								<resource>
+									<directory>../../faceye-security-manager-mongo/faceye-security-manager-mongo/src/main/webapp</directory>
+								</resource>
+								<resource>
+									<directory>../../faceye-feature-mongo/src/main/webapp</directory>
+								</resource>
+								<resource>
+									<directory>../../faceye-feature/src/main/webapp</directory>
+								</resource>
+							</webResources>
+							<resourceEncoding>UTF-8</resourceEncoding>
+							<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
+							<packingExcludes>
+								<exclude>/**/**/*jetty*.jar</exclude>
+							</packingExcludes>
+							<warSourceExcludes>%regex[^.+(?:(?&lt;!(?:-|\.)min)\.js)]</warSourceExcludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
 		<profile>
 			<id>jdk-1.7</id>
 			<activation>
@@ -436,52 +468,10 @@
 		</profile>
 	</profiles>
 	<repositories>
-		<repository>
-			<id>nexus</id>
-			<name>Team Nexus Repository</name>
-			<url>http://nexus.easou.com/nexus/content/groups/public</url>
-		</repository>
-		<repository>
-			<id>thirdparty</id>
-			<name>Team Nexus Repository</name>
-			<url>http://nexus.easou.com/nexus/content/repositories/thirdparty</url>
-		</repository>
-		<repository>
-			<id>releases</id>
-			<name>Team Nexus Repository</name>
-			<url>http://nexus.easou.com/nexus/content/repositories/releases</url>
-		</repository>
-		<repository>
-			<id>spring-snapshot</id>
-			<name>Spring Snapshot Repository</name>
-			<url>http://repo.springsource.org/snapshot</url>
-		</repository>
+
 	</repositories>
 	<pluginRepositories>
-		<pluginRepository>
-			<id>nexus</id>
-			<name>Team Nexus Repository</name>
-			<url>http://nexus.easou.com/nexus/content/groups/public</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
-		<pluginRepository>
-			<id>thirdparty</id>
-			<name>Team Nexus Repository</name>
-			<url>http://nexus.easou.com/nexus/content/repositories/thirdparty</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
-		<pluginRepository>
-			<id>releases</id>
-			<name>Team Nexus Repository</name>
-			<url>http://nexus.easou.com/nexus/content/repositories/releases</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
+
 	</pluginRepositories>
 </project>
 	

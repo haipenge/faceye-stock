@@ -1,0 +1,11 @@
+/**
+*说明:Stock css样式表控制
+*作者:@haipenge
+*/
+.increase-color {
+	color: red;
+}
+
+.decrease-color {
+	color: green;
+}

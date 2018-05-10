@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+    <!-- 模块:generate 业务对像:Component 管理后台 tiles模板配置 -->
+    <!-- 作者:haipege -->
+    <!-- Component 管理 首页(列表页) -->
+	<definition name="generate.component.manager" extends="default.manager">
+	    <put-attribute name="default-center" value="generate.component.center"></put-attribute>
+	</definition>
+	<definition name="generate.component.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/generate/component/component_center.jsp"></put-attribute>
+	</definition>
+	
+	<!-- Component 新增,编辑页面 -->
+	<definition name="generate.component.update" extends="default.manager">
+	    <put-attribute name="default-center" value="generate.component.update.center"></put-attribute>
+	</definition>
+	<definition name="generate.component.update.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/generate/component/component_update.jsp"></put-attribute>
+	</definition>
+	
+	<!-- Component 明细页 -->
+	<definition name="generate.component.detail" extends="default.manager">
+	    <put-attribute name="default-center" value="generate.component.detail.center"></put-attribute>
+	</definition>
+	<definition name="generate.component.detail.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/generate/component/component_detail.jsp"></put-attribute>
+	</definition>
+	
+</tiles-definitions>

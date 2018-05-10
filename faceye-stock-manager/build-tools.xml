@@ -331,8 +331,6 @@
 		<mkdir dir="${generate.project.entity.path}" />
 		<copy todir="${generate.project.entity.path}" overwrite="true"
 			encoding="UTF-8" outputencoding="UTF-8" includeEmptyDirs="true">
-			<copy todir="${generate.project.api.path}" overwrite="true"
-				encoding="UTF-8" outputencoding="UTF-8">
 				<fileset dir="${output.dir}/project">
 					<include name="**/doc/*.*" />
 					<include name="**/entity/*.*" />
@@ -347,7 +345,6 @@
 					value="${generate.project.package.name}"></replacefilter>
 				<replacefilter token="project-name" value="${generate.project.name}-entity"></replacefilter>
 			</replace>
-		</copy>
 	</target>
 
 	<!-- 删除项目管理后台 -->

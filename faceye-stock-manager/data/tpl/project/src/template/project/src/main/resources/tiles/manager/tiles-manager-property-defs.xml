@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+    <!-- 模块:generate 业务对像:Property 管理后台 tiles模板配置 -->
+    <!-- 作者:haipege -->
+    <!-- Property 管理 首页(列表页) -->
+	<definition name="generate.property.manager" extends="default.manager">
+	    <put-attribute name="default-center" value="generate.property.center"></put-attribute>
+	</definition>
+	<definition name="generate.property.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/generate/property/property_center.jsp"></put-attribute>
+	</definition>
+	
+	<!-- Property 新增,编辑页面 -->
+	<definition name="generate.property.update" extends="default.manager">
+	    <put-attribute name="default-center" value="generate.property.update.center"></put-attribute>
+	</definition>
+	<definition name="generate.property.update.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/generate/property/property_update.jsp"></put-attribute>
+	</definition>
+	
+	<!-- Property 明细页 -->
+	<definition name="generate.property.detail" extends="default.manager">
+	    <put-attribute name="default-center" value="generate.property.detail.center"></put-attribute>
+	</definition>
+	<definition name="generate.property.detail.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/generate/property/property_detail.jsp"></put-attribute>
+	</definition>
+	
+</tiles-definitions>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+    <!-- 模块:stock 业务对像:ForecastIndex 管理后台 tiles模板配置 -->
+    <!-- 作者:haipege -->
+    <!-- ForecastIndex 管理 首页(列表页) -->
+	<definition name="stock.forecastIndex.manager" extends="default.manager">
+	    <put-attribute name="default-center" value="stock.forecastIndex.center"></put-attribute>
+	</definition>
+	<definition name="stock.forecastIndex.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/stock/forecastIndex/forecastIndex_center.jsp"></put-attribute>
+	</definition>
+	
+	<!-- ForecastIndex 新增,编辑页面 -->
+	<definition name="stock.forecastIndex.update" extends="default.manager">
+	    <put-attribute name="default-center" value="stock.forecastIndex.update.center"></put-attribute>
+	</definition>
+	<definition name="stock.forecastIndex.update.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/stock/forecastIndex/forecastIndex_update.jsp"></put-attribute>
+	</definition>
+	
+	<!-- ForecastIndex 明细页 -->
+	<definition name="stock.forecastIndex.detail" extends="default.manager">
+	    <put-attribute name="default-center" value="stock.forecastIndex.detail.center"></put-attribute>
+	</definition>
+	<definition name="stock.forecastIndex.detail.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/stock/forecastIndex/forecastIndex_detail.jsp"></put-attribute>
+	</definition>
+	
+</tiles-definitions>
