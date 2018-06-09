@@ -23,6 +23,7 @@ import com.faceye.component.stock.entity.DataStat;
 import com.faceye.component.stock.entity.Forecast;
 import com.faceye.component.stock.entity.ForecastIndex;
 import com.faceye.component.stock.entity.ReportData;
+import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.entity.Valuation;
 import com.faceye.component.stock.repository.mongo.ValuationRepository;
 import com.faceye.component.stock.repository.mongo.customer.ValuationCustomerRepository;
@@ -210,10 +211,15 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 	 */
 	public Valuation valuationWithMechanismForecast(Long stockId, ForecastIndex forecastIndex) {
 		Valuation valuation = this.getValuationByForecastIndex(forecastIndex);
+		Stock stock=this.stockService.get(stockId);
 		// 获取每日数据分析
 		Map dailyStatParams = new HashMap();
 		dailyStatParams.put("EQ|stockId", stockId);
 		List<DailyStat> dailyStats = this.dailyStatService.getPage(dailyStatParams, 0, 1).getContent();
+		if(CollectionUtils.isEmpty(dailyStats)){
+			this.dailyStatService.statStockDailyData(stock);
+			dailyStats = this.dailyStatService.getPage(dailyStatParams, 0, 1).getContent();
+		}
 		DailyStat dailyStat = CollectionUtils.isNotEmpty(dailyStats) ? dailyStats.get(0) : null;
 		// 必要报酬率【贴现率】选GDP 增速
 		Double pro = 0.075;
@@ -456,7 +462,7 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 				try {
 					this.valuationWithMechanismForecast(stockId, forecastIndex);
 				} catch (Exception e) {
-					logger.error(">>FaceYe error:股票估值异常:" + e);
+					logger.error(">>FaceYe error:股票估值异常:{}" , e);
 				}
 			}
 		}

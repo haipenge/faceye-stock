@@ -52,6 +52,8 @@ public class ValuationServiceTestCase extends BaseServiceTestCase {
 		stockCode="000333";
 		//茅台
 		stockCode="600519";
+		//隆平高科
+		stockCode="000998";
 		stock=this.stockService.getStockByCode(stockCode);
 		if(stock!=null){
 			//this.crawlFinancialDataService.crawlStock(stock, false);
@@ -86,6 +88,13 @@ public class ValuationServiceTestCase extends BaseServiceTestCase {
 		}
 		logger.error(sb.toString());
 		Assert.assertTrue(StringUtils.isNotEmpty(sb.toString()));
+	}
+	@Test
+	public void testDoOnStockValuation() throws Exception{
+		Map searchParams=new HashMap();
+		searchParams.put("EQ|stockId", stock.getId());
+		searchParams.put("SORT|period", "asc");
+		this.valuationService.doStockValuation(stock.getId());
 	}
 	
 	private String valuationResult(List<Valuation> valuations,Double roce){

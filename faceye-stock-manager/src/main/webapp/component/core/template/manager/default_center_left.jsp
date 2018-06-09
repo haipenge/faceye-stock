@@ -14,7 +14,11 @@
 						<img src="<c:url value="/js/lib/clean-zone/images/avatar1_50.jpg"/>" alt="Avatar" />
 					</div>
 					<div class="info">
-						<a href="#">Jeff Hanneman</a> <img src="<c:url value="/js/lib/clean-zone/images/state_online.png"/>" alt="Status" /> <span>Online</span>
+						<a href="#"><c:if
+						test="${not empty pageContext.request.userPrincipal}">
+						<sec:authentication property="principal.username" />
+					</c:if></a> 
+						 <img src="<c:url value="/js/lib/clean-zone/images/state_online.png"/>" alt="Status" /> <span>Online</span>
 					</div>
 				</div>
 				<ul class="cl-vnavigation">
