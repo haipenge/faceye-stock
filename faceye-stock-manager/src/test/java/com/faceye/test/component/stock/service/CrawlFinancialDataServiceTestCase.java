@@ -49,7 +49,7 @@ public class CrawlFinancialDataServiceTestCase extends BaseServiceTestCase {
 			stock = this.stockService.getStockByCode(code);
 			if (stock != null) {
 				logger.debug(">>Stock is:" + stock.getName() + "(" + stock.getCode() + ")");
-				this.crawlFinancialDataService.crawlStock(stock);
+				this.crawlFinancialDataService.crawlStock(stock,false);
 			} else {
 				logger.debug(">>Stock:" + code + " is empty.");
 			}
@@ -115,7 +115,8 @@ public class CrawlFinancialDataServiceTestCase extends BaseServiceTestCase {
 //		stockCodes.add("300127");
 //		stockCodes.add("300224");
 		//稀土行业股票结束
-		stockCodes.add("000998");//隆平高科
+//		stockCodes.add("000998");//隆平高科
+		stockCodes.add("000651");//格力
 
 	}
 	

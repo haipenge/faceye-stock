@@ -73,11 +73,11 @@ public class TotalStock implements Serializable {
     * @author haipenge<br>
     */
     
-	private  Integer stockNum;
-	public Integer getStockNum() {
+	private  Double stockNum;
+	public Double getStockNum() {
 		return stockNum;
 	}
-	public void setStockNum(Integer stockNum) {
+	public void setStockNum(Double stockNum) {
 		this.stockNum = stockNum;
 	}
 	

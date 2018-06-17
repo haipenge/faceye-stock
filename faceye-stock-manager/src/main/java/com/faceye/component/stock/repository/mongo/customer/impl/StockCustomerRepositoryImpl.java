@@ -48,6 +48,7 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 		String sortDailyStatPe = MapUtils.getString(searchParams, "SORT|dailyStat.pe");
 		String sortPriceAmplitude = MapUtils.getString(searchParams, "SORT|dailyStat.priceAmplitude");
 		String sortTodayIncreaseRate = MapUtils.getString(searchParams, "SORT|dailyStat.todayIncreaseRate");
+		String sortMarketValue=MapUtils.getString(searchParams, "SORT|dailyStat.marketValue");
 		List<Long> inIds = (List) MapUtils.getObject(searchParams, "IN|id");
 		Sort sort = null;
 		Query query = new Query();
@@ -154,6 +155,21 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 					sort = new Sort(Direction.DESC, "dailyStat.todayIncreaseRate");
 				} else {
 					sort.and(new Sort(Direction.DESC, "dailyStat.todayIncreaseRate"));
+				}
+			}
+		}
+		if(StringUtils.isNotEmpty(sortMarketValue)){
+			if(StringUtils.equalsIgnoreCase(sortMarketValue, "asc")){
+				if(sort==null){
+					sort=new Sort(Direction.ASC,"dailyStat.marketValue");
+				}else{
+					sort.and(new Sort(Direction.ASC,"dailyStat.marketValue"));
+				}
+			}else{
+				if(sort==null){
+					sort=new Sort(Direction.DESC,"dailyStat.marketValue");
+				}else{
+					sort.and(new Sort(Direction.DESC,"dailyStat.marketValue"));
 				}
 			}
 		}

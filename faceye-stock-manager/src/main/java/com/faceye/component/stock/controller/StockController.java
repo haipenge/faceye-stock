@@ -59,7 +59,7 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 	public String home(HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page page = null;
 		Map searchParams = this.filterParams(request);
-		page = this.service.getPage(searchParams, getPage(searchParams), getSize(searchParams));
+		page = this.service.getPage(searchParams, getPage(searchParams), 50);
 		this.resetSearchParams(searchParams);
 		model.addAttribute("searchParams", searchParams);
 		model.addAttribute("page", page);

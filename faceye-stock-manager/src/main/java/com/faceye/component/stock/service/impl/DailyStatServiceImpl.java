@@ -20,6 +20,7 @@ import com.faceye.component.stock.entity.DataStat;
 import com.faceye.component.stock.entity.ReportData;
 import com.faceye.component.stock.entity.StarDataStat;
 import com.faceye.component.stock.entity.Stock;
+import com.faceye.component.stock.entity.TotalStock;
 import com.faceye.component.stock.repository.mongo.DailyStatRepository;
 import com.faceye.component.stock.repository.mongo.customer.DailyDataCustomerRepository;
 import com.faceye.component.stock.repository.mongo.customer.DailyStatCustomerRepository;
@@ -29,6 +30,7 @@ import com.faceye.component.stock.service.DataStatService;
 import com.faceye.component.stock.service.ReportDataService;
 import com.faceye.component.stock.service.StarDataStatService;
 import com.faceye.component.stock.service.StockService;
+import com.faceye.component.stock.service.TotalStockService;
 import com.faceye.component.stock.util.StockConstants;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
@@ -59,6 +61,8 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 	private DataStatService dataStataService = null;
 	@Autowired
 	private DailyDataCustomerRepository dailyDataCustomerRepository = null;
+	@Autowired
+	private TotalStockService totalStockService=null;
 
 	@Autowired
 	public DailyStatServiceImpl(DailyStatRepository dao) {
@@ -205,6 +209,15 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 			dailyStat.setTopPriceOf30Day(topPriceOf30Days);
 			dailyStat.setTopPriceDate(topPriceDate);
 			dailyStat.setTodayPrice(todayPrice);
+			//计算当前市值
+			Map totalStockParams=new HashMap();
+			totalStockParams.put("EQ|stockId", stock.getId());
+			Page<TotalStock> totalStocks=this.totalStockService.getPage(totalStockParams, 1, 1);
+			if(totalStocks!=null && CollectionUtils.isNotEmpty(totalStocks.getContent())){
+				TotalStock totalStock=totalStocks.getContent().get(0);
+				Double stockNum=totalStock.getStockNum();
+				dailyStat.setMarketValue(dailyStat.getTodayPrice()*stockNum);
+			}
 			// 计算股价振幅
 			Double priceAmplitude = null;
 			Double priceChangeDeep = topPriceOf30Days - lowerPriceOf30Days;

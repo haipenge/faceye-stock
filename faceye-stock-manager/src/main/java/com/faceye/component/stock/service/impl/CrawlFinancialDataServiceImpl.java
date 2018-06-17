@@ -436,8 +436,9 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 		if (StringUtils.isNotEmpty(content)) {
 			try {
 				List<Map<String, String>> results = RegexpUtil.match(content, regexp);
-				TotalStock totalStock = null;
+				
 				if (CollectionUtils.isNotEmpty(results)) {
+					TotalStock totalStock = null;
 					for (int i = 0; i < results.size(); i++) {
 						Map<String, String> map = results.get(i);
 						String value = StringUtils.trim(map.get("1"));
@@ -451,10 +452,11 @@ public class CrawlFinancialDataServiceImpl implements CrawlFinancialDataService 
 							value = StringUtils.replace(value, "万股", "");
 							if (NumberUtils.isNumber(value)) {
 								Double stockNum = NumberUtils.toDouble(value) * 10000;
-								totalStock.setStockNum(stockNum.intValue());
+								totalStock.setStockNum(stockNum);
 							}
 							if (totalStock != null) {
 								this.totalStockService.save(totalStock);
+								totalStock=null;
 							}
 						} else {
 							if (totalStock == null) {

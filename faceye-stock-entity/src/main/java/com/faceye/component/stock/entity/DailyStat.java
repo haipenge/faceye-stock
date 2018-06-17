@@ -277,6 +277,19 @@ public class DailyStat implements Serializable {
 	public void setTodayIncreaseRate(Double todayIncreaseRate) {
 		this.todayIncreaseRate = todayIncreaseRate;
 	}
+	/**
+	 * 市值
+	 */
+	private Double marketValue=0.0D;
+
+	public Double getMarketValue() {
+		return marketValue;
+	}
+
+	public void setMarketValue(Double marketValue) {
+		this.marketValue = marketValue;
+	}
+	
 	
 }/**@generate-entity-source@**/
 	
