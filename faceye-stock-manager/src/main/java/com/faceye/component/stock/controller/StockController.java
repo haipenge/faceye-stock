@@ -247,8 +247,18 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 	 */
 	@RequestMapping("/superInit")
 	public String superInit(Long stockId){
-		this.service.superInitStock(stockId);
+		SuperStockDataInitThread thread=new SuperStockDataInitThread(stockId);
+		thread.start();
 		return AjaxResult.getInstance().buildDefaultResult(true);
+	}
+	class SuperStockDataInitThread extends Thread{
+		private Long stockId=0L;
+		public SuperStockDataInitThread(Long stockId){
+			this.stockId=stockId;
+		}
+		public void run(){
+			service.superInitStock(stockId);
+		}
 	}
 
 }
