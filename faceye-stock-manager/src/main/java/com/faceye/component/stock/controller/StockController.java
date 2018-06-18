@@ -25,8 +25,10 @@ import com.faceye.component.stock.entity.Category;
 import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.service.CategoryService;
 import com.faceye.component.stock.service.CrawlFinancialDataService;
+import com.faceye.component.stock.service.ReportDataService;
 import com.faceye.component.stock.service.StarDataStatService;
 import com.faceye.component.stock.service.StockService;
+import com.faceye.component.stock.service.wrapper.ReportResult;
 import com.faceye.component.stock.util.StockConstants;
 import com.faceye.feature.controller.BaseController;
 import com.faceye.feature.util.AjaxResult;
@@ -42,6 +44,8 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 	private CategoryService categoryService = null;
 	@Autowired
 	private StarDataStatService starDataStatService = null;
+	@Autowired
+	private ReportDataService reportDataService=null;
 
 	@Autowired
 	public StockController(StockService service) {
@@ -198,7 +202,7 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 	}
 
 	/**
-	 * 根据关键字查询时股票提示
+	 * 股票看板
 	 * 
 	 * @param request
 	 * @return
@@ -206,13 +210,18 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 	 * @Author:haipenge
 	 * @Date:2016年12月28日 下午12:33:19
 	 */
-	@RequestMapping("/queryTips")
-	@ResponseBody
-	public List<Stock> queryTips(HttpServletRequest request) {
-		List<Stock> stocks = null;
-
-		return stocks;
+	@RequestMapping("/stockBoard")
+	public String stockBoard(HttpServletRequest request,Model model) {
+		Map params=HttpUtil.getRequestParams(request);
+		Long stockId=MapUtils.getLong(params, "stockId");
+		Stock stock=this.service.get(stockId);
+		model.addAttribute("stock", stock);
+		ReportResult reportResult=reportDataService.getWrapReporter(stockId, StockConstants.REPORT_TYPE_YEAR, 2L, null);
+		model.addAttribute("reportResult", reportResult);
+		return "stock.stock.board";
 	}
+	
+	
 
 	/**
 	 * 初始化股票所属分类
@@ -227,6 +236,19 @@ public class StockController extends BaseController<Stock, Long, StockService> {
 	public String initStockCategory() {
 		boolean res = this.service.initStockCategory();
 		return AjaxResult.getInstance().buildDefaultResult(res);
+	}
+	/**
+	 * 超级初始化
+	 * @param stockId
+	 * @return
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2018年6月18日 下午3:33:15
+	 */
+	@RequestMapping("/superInit")
+	public String superInit(Long stockId){
+		this.service.superInitStock(stockId);
+		return AjaxResult.getInstance().buildDefaultResult(true);
 	}
 
 }

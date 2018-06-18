@@ -36,4 +36,13 @@ public interface StockService extends BaseService<Stock,Long>{
 	 */
 	public void export(Map searchParams,OutputStream stream);
 	
+	/**
+	 * 对一只股票进行超级初始化，财报，每日数据，以及相关分析
+	 * @param stockId
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2018年6月18日 下午3:34:21
+	 */
+	public void superInitStock(Long stockId);
+	
 }/**@generate-service-source@**/

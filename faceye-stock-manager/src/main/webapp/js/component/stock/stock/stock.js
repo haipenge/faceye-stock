@@ -8,6 +8,8 @@ var Stock = {
 		$('#btn-multi-stock-compare').click(function(){Stock.multiStockReportCompare();});
 		$('#init-system').click(function(){Stock.initSystem();return false;});
 		$('#export').click(function(){Stock.exportExcel();return false;});
+		$('.super-stock-data-init').click(function(){var stockId=$(this).parent().parent().attr("id");Stock.superInitStockData(stockId);return false;});
+		$('.super-stock-data-init-in-board').click(function(){var stockId=$('input[name="stockId"]').val();Stock.superInitStockData(stockId);return false;});
 	},
 	/**
 	 * 初始化股票分类
@@ -68,6 +70,43 @@ var Stock = {
 		$('#query-form').submit();
 		url='/stock/stock/home';
 		$('#query-form').attr('action',url);
+	},
+	/**
+	 * 对股票数据进行超级初始化与计算
+	 */
+	superInitStockData:function(stockId){
+		$.ajax({
+			url:'/stock/stock/superInit',
+			type:'post',
+			data:{
+				stockId:stockId
+			},
+			timeout:180000,
+			beforeSend:function(xhr){
+				var m = new Msg({
+					msg : '已开始数据爬取任务...'
+				});
+				m.show();
+				var win=new Modal({
+				id:'data-crawl-wati-win',
+				header:false,
+				title:'数据爬取',
+				body:'正在进行数据爬取,请稍后...'
+				});
+				win.show();
+				return true;
+			},
+			success:function(data,status,xhr){
+				if (data.result) {
+					var m = new Msg({
+						msg : '完成数据爬取'
+					});
+					m.show();
+					$('#data-crawl-wati-win').remove();
+					window.location.reload();
+				}
+			}
+		});
 	}
 };
 $(document).ready(function(){Stock.init();});

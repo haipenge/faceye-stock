@@ -3,6 +3,7 @@ package com.faceye.component.stock.service;
 import java.util.List;
 
 import com.faceye.component.stock.entity.ReportData;
+import com.faceye.component.stock.service.wrapper.ReportResult;
 import com.faceye.component.stock.service.wrapper.WrapReporter;
 import com.faceye.feature.service.BaseService;
 /**
@@ -30,6 +31,18 @@ public interface ReportDataService extends BaseService<ReportData,Long>{
 	 * @Date:2017年7月23日 下午3:35:28
 	 */
 	public void clearReportData(Long stockId);
+	
+	/**
+	 * 
+	 * @param stockId
+	 * @param type,报表分类，年报，季报？0（年报），1（一季报），2，3
+	 * @param startDate:起始日期
+	 * @return
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2018年6月18日 上午11:39:09
+	 */
+	public ReportResult getWrapReporter(Long stockId,Integer type,Long reportCategoryId,Long startDate);
 	
 	
 }/**@generate-service-source@**/

@@ -31,6 +31,7 @@ import com.faceye.component.stock.service.DataStatService;
 import com.faceye.component.stock.service.ReportCategoryService;
 import com.faceye.component.stock.service.ReportDataService;
 import com.faceye.component.stock.service.StockService;
+import com.faceye.component.stock.service.wrapper.ReportResult;
 import com.faceye.component.stock.service.wrapper.WrapCompareReporter;
 import com.faceye.component.stock.service.wrapper.WrapReporter;
 import com.faceye.component.stock.util.StockConstants;
@@ -118,13 +119,7 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 		if (type == 4) {
 			type = null;
 		}
-		ReportCategory reportCategory = null;
-		if (reportCategoryId != null) {
-			reportCategory = this.reportCategoryService.get(reportCategoryId);
-		} else {
-			// 财务摘要
-			reportCategory = this.reportCategoryService.getReportCategoryByCode(StockConstants.REPORT_CATEOGRY_FINANCIAL_SUMMARY);
-		}
+		
 		watch.stop();
 		// 获取每日数据分析
 		Map dailyStatParams = new HashMap();
@@ -133,38 +128,17 @@ public class ReportDataController extends BaseController<ReportData, Long, Repor
 		DailyStat dailyStat = CollectionUtils.isNotEmpty(dailyStats) ? dailyStats.get(0) : null;
 		model.addAttribute("dailyStat", dailyStat);
 
-		if (StringUtils.equals(reportCategory.getCode(), StockConstants.REPORT_CATEOGRY_FINANCIAL_SUMMARY)) {
-			// 财务接要,获取财务分析数据
-			// 杜邦分析数据
-			Map dataStatParams = new HashMap();
-			dataStatParams.put("EQ|stockId", stockId);
-			if (type != null) {
-				dataStatParams.put("EQ|type", type);
-			}
-			if (startDate != null) {
-				dataStatParams.put("LT|dateCycle", new Date(startDate));
-			}
-			dataStatParams.put("SORT|dateCycle", "desc");
-			List<DataStat> dataStats = this.dataStatService.getPage(dataStatParams, 1, 5).getContent();
-			model.addAttribute("dataStats", dataStats);
+		ReportCategory reportCategory = null;
+		if (reportCategoryId != null) {
+			reportCategory = this.reportCategoryService.get(reportCategoryId);
 		} else {
-			Map params = new HashMap();
-			params.put("EQ|stockId", stockId);
-			if (type != null) {
-				params.put("EQ|type", type);
-			}
-			if (startDate != null) {
-				params.put("LT|date", new Date(startDate));
-			}
-			params.put("SORT|date", "desc");
-			watch.start("1");
-			List<ReportData> reportDatas = this.service.getPage(params, 1, 5).getContent();
-			watch.stop();
-			watch.start("2");
-			wrapReporter = this.service.wrapReportData(reportDatas, reportCategory.getCode());
-			watch.stop();
-			model.addAttribute("wrapReporter", wrapReporter);
+			// 财务摘要
+			reportCategory = this.reportCategoryService.getReportCategoryByCode(StockConstants.REPORT_CATEOGRY_FINANCIAL_SUMMARY);
 		}
+
+		ReportResult reportResult=this.service.getWrapReporter(stockId, type, reportCategoryId, startDate);
+		model.addAttribute("wrapReporter", reportResult.getWrapReporter());
+		model.addAttribute("dataStats", reportResult.getDataStats());
 		model.addAttribute("reportCategory", reportCategory);
 		model.addAttribute("reportCategories", reportCategories);
 		logger.error("-------------------------Stop Watch monitor------------------------------------");

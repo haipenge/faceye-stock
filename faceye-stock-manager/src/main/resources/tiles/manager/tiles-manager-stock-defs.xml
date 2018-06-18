@@ -27,4 +27,14 @@
 	    <put-attribute name="default-center-right" value="/component/stock/stock/stock_detail.jsp"></put-attribute>
 	</definition>
 	
+	<!-- Stock 看板 -->
+	
+	<definition name="stock.stock.board" extends="default.manager">
+	    <put-attribute name="default-center" value="stock.stock.board.center"></put-attribute>
+	</definition>
+	<definition name="stock.stock.board.center" extends="default.center">
+	    <put-attribute name="default-center-right" value="/component/stock/stock/stock_board.jsp"></put-attribute>
+	</definition>
+	
+	
 </tiles-definitions>

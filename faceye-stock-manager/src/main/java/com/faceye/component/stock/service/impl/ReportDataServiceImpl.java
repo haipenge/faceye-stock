@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -15,10 +16,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
 import com.faceye.component.stock.entity.AccountingElement;
 import com.faceye.component.stock.entity.AccountingSubject;
+import com.faceye.component.stock.entity.DataStat;
 import com.faceye.component.stock.entity.ReportCategory;
 import com.faceye.component.stock.entity.ReportData;
 import com.faceye.component.stock.repository.mongo.ReportDataRepository;
@@ -26,9 +27,11 @@ import com.faceye.component.stock.repository.mongo.customer.DataStatCustomerRepo
 import com.faceye.component.stock.repository.mongo.customer.ReportDataCustomerRepository;
 import com.faceye.component.stock.service.AccountingElementService;
 import com.faceye.component.stock.service.AccountingSubjectService;
+import com.faceye.component.stock.service.DataStatService;
 import com.faceye.component.stock.service.ReportCategoryService;
 import com.faceye.component.stock.service.ReportDataService;
 import com.faceye.component.stock.service.wrapper.Data2Record;
+import com.faceye.component.stock.service.wrapper.ReportResult;
 import com.faceye.component.stock.service.wrapper.WrapRecords;
 import com.faceye.component.stock.service.wrapper.WrapReporter;
 import com.faceye.component.stock.service.wrapper.WrapReporterTitle;
@@ -57,6 +60,10 @@ public class ReportDataServiceImpl extends BaseMongoServiceImpl<ReportData, Long
 	private ReportCategoryService reportCategorySerivce = null;
 	@Autowired
 	private DataStatCustomerRepository dataStatCustomerRepository=null;
+	@Autowired
+	private ReportCategoryService reportCategoryService=null;
+	@Autowired
+	private DataStatService dataStatService=null;
 
 	@Autowired
 	public ReportDataServiceImpl(ReportDataRepository dao) {
@@ -244,6 +251,47 @@ public class ReportDataServiceImpl extends BaseMongoServiceImpl<ReportData, Long
 	public void clearReportData(Long stockId) {
 		this.reportDataRepositoryCustomerRepository.removeReportData(stockId);
 		this.dataStatCustomerRepository.removeDataStat(stockId);
+	}
+
+	@Override
+	public ReportResult getWrapReporter(Long stockId,Integer type,Long reportCategoryId,Long startDate) {
+		ReportResult reportResult=new ReportResult();
+		ReportCategory reportCategory = null;
+		if (reportCategoryId != null) {
+			reportCategory = this.reportCategoryService.get(reportCategoryId);
+		} else {
+			// 财务摘要
+			reportCategory = this.reportCategoryService.getReportCategoryByCode(StockConstants.REPORT_CATEOGRY_FINANCIAL_SUMMARY);
+		}
+		if (StringUtils.equals(reportCategory.getCode(), StockConstants.REPORT_CATEOGRY_FINANCIAL_SUMMARY)) {
+			// 财务接要,获取财务分析数据
+			// 杜邦分析数据
+			Map dataStatParams = new HashMap();
+			dataStatParams.put("EQ|stockId", stockId);
+			if (type != null) {
+				dataStatParams.put("EQ|type", type);
+			}
+			if (startDate != null) {
+				dataStatParams.put("LT|dateCycle", new Date(startDate));
+			}
+			dataStatParams.put("SORT|dateCycle", "desc");
+			List<DataStat> dataStats = this.dataStatService.getPage(dataStatParams, 1, 5).getContent();
+			reportResult.setDataStats(dataStats);
+		} else {
+			Map params = new HashMap();
+			params.put("EQ|stockId", stockId);
+			if (type != null) {
+				params.put("EQ|type", type);
+			}
+			if (startDate != null) {
+				params.put("LT|date", new Date(startDate));
+			}
+			params.put("SORT|date", "desc");
+			List<ReportData> reportDatas = this.getPage(params, 1, 5).getContent();
+			WrapReporter wrapReporter = this.wrapReportData(reportDatas, reportCategory.getCode());
+			reportResult.setWrapReporter(wrapReporter);
+		}
+		return reportResult;
 	}
 
 }/** @generate-service-source@ **/

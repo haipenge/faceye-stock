@@ -204,7 +204,7 @@ public class DailyStatServiceTestCase extends BaseServiceTestCase {
 	
 	@Test
 	public void testStatStockDailyData() throws Exception{
-		Stock stock=this.stockService.getStockByCode("000651");
+		Stock stock=this.stockService.getStockByCode("000998");
 		if(stock!=null){
 			this.dailyStatService.statStockDailyData(stock);
 		}

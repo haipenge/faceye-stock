@@ -3,7 +3,6 @@ package com.faceye.component.stock.service.impl;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +19,9 @@ import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.repository.mongo.StockRepository;
 import com.faceye.component.stock.repository.mongo.customer.StockCustomerRepository;
 import com.faceye.component.stock.service.CategoryService;
+import com.faceye.component.stock.service.CrawlFinancialDataService;
+import com.faceye.component.stock.service.DailyDataService;
+import com.faceye.component.stock.service.DailyStatService;
 import com.faceye.component.stock.service.DataStatService;
 import com.faceye.component.stock.service.StockService;
 import com.faceye.component.stock.util.StockConstants;
@@ -46,7 +48,12 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 
 	@Autowired
 	private DataStatService dataStatService = null;
-
+	@Autowired
+	private DailyDataService dailyDataService=null;
+	@Autowired
+	private CrawlFinancialDataService crawlFinancialDataService=null;
+	@Autowired
+	private DailyStatService dailyStatService=null;
 	private DecimalFormat df = new DecimalFormat("######0.00");
 
 	@Autowired
@@ -478,6 +485,17 @@ public class StockServiceImpl extends BaseMongoServiceImpl<Stock, Long, StockRep
 			}
 		} catch (Exception e) {
 			logger.error(">>Exception:" + e);
+		}
+	}
+
+	@Override
+	public void superInitStock(Long stockId) {
+		Stock stock=this.get(stockId);
+		if(stock!=null){
+			this.crawlFinancialDataService.crawlStock(stock, false);
+			this.dailyDataService.initDailyData(stock.getCode());
+			this.dataStatService.stat(stock);
+			this.dailyStatService.statStockDailyData(stock);
 		}
 	}
 
