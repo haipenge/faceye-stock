@@ -19,7 +19,7 @@ import com.faceye.feature.service.job.impl.BaseJob;
 public class DailyStatJob  extends BaseJob {
 	@Autowired
     private DailyStatService dailyStatService=null;
-@Scheduled(cron="0 0 16 * * ?")
+//@Scheduled(cron="0 0 16 * * ?")
 	@Override
 	public void run() {
 		//计算30日股价波幅

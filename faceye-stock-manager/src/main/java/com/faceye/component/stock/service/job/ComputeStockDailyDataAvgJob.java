@@ -20,7 +20,7 @@ public class ComputeStockDailyDataAvgJob extends BaseJob {
 
 	@Autowired
 	private DailyDataService dailyDataService=null;
-	@Scheduled(cron="0 30 16 * * ?")
+//	@Scheduled(cron="0 30 16 * * ?")
 	@Override
 	public void run() {
 		this.dailyDataService.computeDailyDataLines();;

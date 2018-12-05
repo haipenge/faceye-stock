@@ -18,11 +18,10 @@ import com.faceye.feature.service.job.impl.BaseJob;
 public class InitStockJob extends BaseJob {
 	@Autowired
     private StockService stockService=null;
-	@Scheduled(cron="0 55 10 * * ?")
+//	@Scheduled(cron="0 55 10 * * ?")
 	@Override
 	public void run() {
 		stockService.initStocks();
-		
 	}
 
 }
