@@ -21,7 +21,8 @@ public class CrawlFinancialDataJob extends BaseJob {
 	@Autowired
 	private CrawlFinancialDataService crawlFinancialDataService = null;
 
-	@Scheduled(cron="0 30 18 * * ?")
+//	@Scheduled(cron="0 30 18 * * ?")
+	@Scheduled(cron="${cron.crawl.financial.data.job}")
 	@Override
 	public void run() {
 		logger.debug(">>FaceYe start run crawl financial data job");
