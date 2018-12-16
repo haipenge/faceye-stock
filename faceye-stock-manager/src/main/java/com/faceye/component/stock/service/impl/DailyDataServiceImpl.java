@@ -30,6 +30,7 @@ import com.faceye.component.stock.repository.mongo.customer.DailyDataCustomerRep
 import com.faceye.component.stock.service.DailyDataService;
 import com.faceye.component.stock.service.DailyStatService;
 import com.faceye.component.stock.service.StarDataStatService;
+import com.faceye.component.stock.service.StockService;
 import com.faceye.component.stock.util.StockFetcher;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.MultiQueueService;
@@ -67,6 +68,8 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 	private DailyStatService dailyStatService = null;
 	@Autowired
 	private StarDataStatService starDataStarService = null;
+	@Autowired
+	private StockService stockService=null;
 
 	// 均线周期
 	private static Integer[] AVG_DAYS = new Integer[] { 5, 10, 20, 30, 60, 120, 250 };
@@ -204,9 +207,13 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 
 	@Override
 	public void initDailyData() {
-		List<Stock> stocks = this.stockRepository.findAll();
-		if (CollectionUtils.isNotEmpty(stocks)) {
-			for (Stock stock : stocks) {
+		int start=0;
+		int size=100;
+	    boolean isFinish=false;
+	    while(!isFinish){
+	    Page<Stock> stocks=this.stockService.getPage(null, 0, size);
+		if (CollectionUtils.isNotEmpty(stocks.getContent())) {
+			for (Stock stock : stocks.getContent()) {
 				Map params = new HashMap();
 				params.put("EQ|stockId", stock.getId());
 				// long count = 
@@ -221,6 +228,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 				// }
 			}
 		}
+	    }
 	}
 
 	/**
