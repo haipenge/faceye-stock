@@ -213,6 +213,11 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 				// this.dailyDataCustomerRepository.getCount(params);
 				// if (count < 30) {
 				this.initDailyData(stock.getCode());
+				try {
+					Thread.sleep(500L);
+				} catch (InterruptedException e) {
+					logger.error(">>FaceYe Throws Exception:",e);
+				}
 				// }
 			}
 		}

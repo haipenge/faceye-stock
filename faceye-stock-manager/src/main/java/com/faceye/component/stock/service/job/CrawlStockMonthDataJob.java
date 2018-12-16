@@ -26,7 +26,7 @@ public class CrawlStockMonthDataJob extends BaseJob {
 	@Scheduled(cron="${cron.crawl.stock.month.data.job}")
 	@Override
 	public void run() {
-		this.stockService.initStocks();
+//		this.stockService.initStocks();
 		this.dailyDataService.initDailyData();
 	}
 	
