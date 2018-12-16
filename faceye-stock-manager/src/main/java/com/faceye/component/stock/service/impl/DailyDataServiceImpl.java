@@ -44,12 +44,11 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 
 @Service
-public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, DailyDataRepository>
-		implements DailyDataService {
+public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, DailyDataRepository> implements DailyDataService {
 
 	// 爬取数据年限
 
-//	@Value("#{property['faceye.manager.user.register.role.id']}")
+	// @Value("#{property['faceye.manager.user.register.role.id']}")
 	@Value("#{property['stock.crawl.daily.data.years']}")
 	private String crawlStockDailyDataYears = "";
 	// 默认爬取三年数据
@@ -69,7 +68,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 	@Autowired
 	private StarDataStatService starDataStarService = null;
 	@Autowired
-	private StockService stockService=null;
+	private StockService stockService = null;
 
 	// 均线周期
 	private static Integer[] AVG_DAYS = new Integer[] { 5, 10, 20, 30, 60, 120, 250 };
@@ -87,7 +86,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 		// List<Map<String, String>> data = fetcher.getStockDailyData(code, "",
 		// "");
 		Stock stock = this.stockRepository.getStockByCode(code);
-		Integer crawlStockDataYears=getCrawlStockDailyDataYears();
+		Integer crawlStockDataYears = getCrawlStockDailyDataYears();
 		this.removeDailyDataByStock(stock.getId());
 		Calendar calendar = Calendar.getInstance();
 		Date now = new Date();
@@ -98,7 +97,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 		if (currentMonth >= 1 && currentMonth <= 3) {
 			jidu = "1";
 		}
-		if (currentMonth >= 4 && currentMonth <= 6) { 
+		if (currentMonth >= 4 && currentMonth <= 6) {
 			jidu = "2";
 		}
 		if (currentMonth >= 7 && currentMonth <= 9) {
@@ -108,9 +107,8 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 			jidu = "4";
 		}
 		String jidus[] = new String[] { "1", "2", "3", "4" };
-		logger.debug(">>FaceYe current jidu is:" + jidu + ",year is:" + year+",init stock+  "+stock.getName()+" ["+code+"] daily data ");
-		
-		
+		logger.debug(">>FaceYe current jidu is:" + jidu + ",year is:" + year + ",init stock+  " + stock.getName() + " [" + code + "] daily data ");
+
 		if (Integer.parseInt(jidu) > 0) {
 			for (int i = 1; i <= Integer.parseInt(jidu); i++) {
 				this.fetchHistoryData(code, "" + year, "" + i);
@@ -130,6 +128,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 
 	/**
 	 * 获取爬取数据的年限(默认三年)
+	 * 
 	 * @return
 	 */
 	private Integer getCrawlStockDailyDataYears() {
@@ -207,28 +206,31 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 
 	@Override
 	public void initDailyData() {
-		int start=0;
-		int size=100;
-	    boolean isFinish=false;
-	    while(!isFinish){
-	    Page<Stock> stocks=this.stockService.getPage(null, 0, size);
-		if (CollectionUtils.isNotEmpty(stocks.getContent())) {
-			for (Stock stock : stocks.getContent()) {
-				Map params = new HashMap();
-				params.put("EQ|stockId", stock.getId());
-				// long count = 
-				// this.dailyDataCustomerRepository.getCount(params);
-				// if (count < 30) {
-				this.initDailyData(stock.getCode());
-				try {
-					Thread.sleep(500L);
-				} catch (InterruptedException e) {
-					logger.error(">>FaceYe Throws Exception:",e);
+		int start = 0;
+		int size = 100;
+		boolean isFinish = false;
+		while (!isFinish) {
+			Page<Stock> stocks = this.stockService.getPage(null, 0, size);
+			if (CollectionUtils.isNotEmpty(stocks.getContent())) {
+				for (Stock stock : stocks.getContent()) {
+					Map params = new HashMap();
+					params.put("EQ|stockId", stock.getId());
+					// long count =
+					// this.dailyDataCustomerRepository.getCount(params);
+					// if (count < 30) {
+					this.initDailyData(stock.getCode());
+					try {
+						Thread.sleep(500L);
+					} catch (InterruptedException e) {
+						logger.error(">>FaceYe Throws Exception:", e);
+					}
+					// }
 				}
-				// }
+				start++;
+			} else {
+				isFinish = true;
 			}
 		}
-	    }
 	}
 
 	/**
@@ -270,8 +272,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 			// this.stockQueueService.addAll(stocks);
 			for (int i = 0; i < stocks.size(); i++) {
 				Stock stock = stocks.get(i);
-				logger.debug(">>FaceYe --> stock index is:" + stock.getName() + "(" + stock.getCode() + "),index is:"
-						+ i + ",total size is:" + stocks.size());
+				logger.debug(">>FaceYe --> stock index is:" + stock.getName() + "(" + stock.getCode() + "),index is:" + i + ",total size is:" + stocks.size());
 				this.computeDailyDataLines(stock);
 			}
 		}
@@ -310,13 +311,12 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 			for (DailyData dailyData : dailyDatas) {
 				Integer[] days = new Integer[] { 5, 10, 20, 30, 60, 120, 250 };
 				if (index % 50 == 0) {
-					logger.debug(">>FaceYe --> current compute daily index is,stock is:" + stock.getName() + "("
-							+ stock.getCode() + "),daily data size:" + dailyDatas.size() + ",index :" + index);
+					logger.debug(">>FaceYe --> current compute daily index is,stock is:" + stock.getName() + "(" + stock.getCode() + "),daily data size:" + dailyDatas.size()
+							+ ",index :" + index);
 				}
 				boolean isNeed2Compute = false;
-				if (dailyData.getAvg10() == null || dailyData.getAvg120() == null || dailyData.getAvg20() == null
-						|| dailyData.getAvg250() == null || dailyData.getAvg30() == null || dailyData.getAvg5() == null
-						|| dailyData.getAvg60() == null) {
+				if (dailyData.getAvg10() == null || dailyData.getAvg120() == null || dailyData.getAvg20() == null || dailyData.getAvg250() == null || dailyData.getAvg30() == null
+						|| dailyData.getAvg5() == null || dailyData.getAvg60() == null) {
 					isNeed2Compute = true;
 				}
 				if (isNeed2Compute) {
@@ -367,8 +367,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 	}
 
 	/**
-	 * 计算每天的EMA,(EMA12,EMA26) EMAtoday=α * ( Pricetoday - EMAyesterday ) +
-	 * EMAyesterday;
+	 * 计算每天的EMA,(EMA12,EMA26) EMAtoday=α * ( Pricetoday - EMAyesterday ) + EMAyesterday;
 	 * 
 	 * @param stock
 	 * @Desc:
@@ -464,8 +463,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 					this.crawlDailyData(stock);
 					Thread.sleep(2000L);
 				} catch (Exception e) {
-					logger.debug(">>FaceYe throws Exception wen crawl stock daily data.exception is:" + e.toString()
-							+ ",stock code is:" + stock.getCode());
+					logger.debug(">>FaceYe throws Exception wen crawl stock daily data.exception is:" + e.toString() + ",stock code is:" + stock.getCode());
 				}
 			}
 		} else {
@@ -493,8 +491,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 			String volume = MapUtils.getString(data, "volume");
 			String money = MapUtils.getString(data, "money");
 			String yesterdayPrice = MapUtils.getString(data, "yesterdayPrice");
-			if (StringUtils.isNotEmpty(open) && Double.parseDouble(open) > 0 && !StringUtils.equals(open, "0.00")
-					&& !StringUtils.equals(close, "0.00")) {
+			if (StringUtils.isNotEmpty(open) && Double.parseDouble(open) > 0 && !StringUtils.equals(open, "0.00") && !StringUtils.equals(close, "0.00")) {
 				String date = MapUtils.getString(data, "date");
 				String time = MapUtils.getString(data, "time");
 				// boolean isDailyDataExist =

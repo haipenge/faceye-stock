@@ -1,5 +1,7 @@
-faceye-stock-feature
+faceye-stock-manager
 ==============
+      2018.12.12.
+      mongo server:10.12.70.49 
           
       开始之前：
       1.配置${ANT_HOME},${M2_HOME}
@@ -76,4 +78,6 @@ faceye-stock-feature
       2014.10.30
       1.增加邮件发送模块
       2.增加velicity模板支持的HTML邮件
+      
+      
       
