@@ -14,7 +14,8 @@ public class DataStatJob extends BaseJob {
 	@Autowired
 	private DataStatService dataStatService = null;
 
-//	@Scheduled(cron="0 0 8 * * ?")
+//    @Scheduled(cron="0 0 8 * * ?")
+	@Scheduled(cron="${cron.data.stat.job}")
 	@Override
 	public void run() {
 		this.dataStatService.stat();

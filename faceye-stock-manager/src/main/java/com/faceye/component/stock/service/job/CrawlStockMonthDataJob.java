@@ -23,6 +23,7 @@ public class CrawlStockMonthDataJob extends BaseJob {
 	@Autowired
 	private StockService stockService=null;
 //	@Scheduled(cron="0 45 14 * * ?")
+	@Scheduled(cron="${cron.crawl.stock.month.data.job}")
 	@Override
 	public void run() {
 		this.stockService.initStocks();
