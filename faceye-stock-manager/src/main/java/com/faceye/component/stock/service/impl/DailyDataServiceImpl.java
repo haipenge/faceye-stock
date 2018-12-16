@@ -210,7 +210,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 		int size = 100;
 		boolean isFinish = false;
 		while (!isFinish) {
-			Page<Stock> stocks = this.stockService.getPage(null, 0, size);
+			Page<Stock> stocks = this.stockService.getPage(null, start, size);
 			if (CollectionUtils.isNotEmpty(stocks.getContent())) {
 				for (Stock stock : stocks.getContent()) {
 					Map params = new HashMap();
