@@ -209,28 +209,24 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 		int start = 0;
 		int size = 100;
 		boolean isFinish = false;
-		while (!isFinish) {
-			Page<Stock> stocks = this.stockService.getPage(null, start, size);
-			if (CollectionUtils.isNotEmpty(stocks.getContent())) {
-				for (Stock stock : stocks.getContent()) {
+//		while (!isFinish) {
+//			Page<Stock> stocks = this.stockService.getPage(null, start, size);
+		List<Stock> stocks=this.stockRepository.findAll();
+			if (CollectionUtils.isNotEmpty(stocks)) {
+				for (Stock stock : stocks) {
 					Map params = new HashMap();
 					params.put("EQ|stockId", stock.getId());
 					// long count =
 					// this.dailyDataCustomerRepository.getCount(params);
 					// if (count < 30) {
 					this.initDailyData(stock.getCode());
-					try {
-						Thread.sleep(500L);
-					} catch (InterruptedException e) {
-						logger.error(">>FaceYe Throws Exception:", e);
-					}
 					// }
 				}
 				start++;
 			} else {
 				isFinish = true;
 			}
-		}
+//		}
 	}
 
 	/**
