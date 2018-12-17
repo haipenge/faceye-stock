@@ -177,9 +177,9 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 						// 60 * 1000L) {
 						// continue;
 						// }
-						boolean isDailyDataExist = this.isDailyDataExist(code, date) == null;
+						boolean isDailyDataExist = this.isDailyDataExist(code, date) != null;
 						date += " 15:00:00";
-						if (isDailyDataExist) {
+						if (!isDailyDataExist) {
 							DailyData dailyData = new DailyData();
 							// dailyData.setStockCode(stock.getCode());
 							dailyData.setStockId(stock.getId());
@@ -431,8 +431,9 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 			QDailyData qDailyData = QDailyData.dailyData;
 			BooleanBuilder builder = new BooleanBuilder();
 			builder.and(qDailyData.stockId.eq(stock.getId()));
-			builder.and(qDailyData.date.before(DateUtil.getDateFromString(endDate)));
-			builder.and(qDailyData.date.after(DateUtil.getDateFromString(startDate)));
+			builder.and(qDailyData.date.between(DateUtil.getDateFromString(startDate), DateUtil.getDateFromString(endDate)));
+//			builder.and(qDailyData.date.before(DateUtil.getDateFromString(endDate)));
+//			builder.and(qDailyData.date.after(DateUtil.getDateFromString(startDate)));
 			List<DailyData> dailyDatas = (List) this.dao.findAll(builder.getValue());
 			if (CollectionUtils.isNotEmpty(dailyDatas)) {
 				dailyData = dailyDatas.get(0);
