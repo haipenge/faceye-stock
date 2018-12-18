@@ -21,6 +21,7 @@ public class ComputeStockDailyDataAvgJob extends BaseJob {
 	@Autowired
 	private DailyDataService dailyDataService=null;
 //	@Scheduled(cron="0 30 16 * * ?")
+	@Scheduled(cron="${cron.compute.stock.daily.data.avg.job}")
 	@Override
 	public void run() {
 		this.dailyDataService.computeDailyDataLines();;

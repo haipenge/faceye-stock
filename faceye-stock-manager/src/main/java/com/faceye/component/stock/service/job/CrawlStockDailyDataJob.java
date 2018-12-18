@@ -19,6 +19,7 @@ public class CrawlStockDailyDataJob extends BaseJob {
     @Autowired
 	private DailyDataService dailyDataService=null;
 //    @Scheduled(cron="0 10 15 * * ?")
+    @Scheduled(cron="${cron.crawl.stock.daily.data.job}")
 	@Override
 	public void run() {
 		logger.debug(">>FaceYe start 2 crawl daily data.");
