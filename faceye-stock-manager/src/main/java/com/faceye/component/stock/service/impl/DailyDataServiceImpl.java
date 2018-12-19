@@ -87,7 +87,7 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 		// "");
 		Stock stock = this.stockRepository.getStockByCode(code);
 		Integer crawlStockDataYears = getCrawlStockDailyDataYears();
-		this.removeDailyDataByStock(stock.getId());
+//		this.removeDailyDataByStock(stock.getId());
 		Calendar calendar = Calendar.getInstance();
 		Date now = new Date();
 		int year = calendar.get(Calendar.YEAR);
