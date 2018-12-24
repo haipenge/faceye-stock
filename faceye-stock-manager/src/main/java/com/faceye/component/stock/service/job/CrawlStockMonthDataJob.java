@@ -27,7 +27,7 @@ public class CrawlStockMonthDataJob extends BaseJob {
 	@Override
 	public void run() {
 //		this.stockService.initStocks();
-//		this.dailyDataService.initDailyData();
+		this.dailyDataService.initDailyData();
 	}
 	
 }
