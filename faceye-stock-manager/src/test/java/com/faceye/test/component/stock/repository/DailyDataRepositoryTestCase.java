@@ -1,19 +1,23 @@
 package com.faceye.test.component.stock.repository;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.junit.Assert;
 
 import com.faceye.component.stock.entity.DailyData;
 import com.faceye.component.stock.repository.mongo.DailyDataRepository;
 import com.faceye.test.feature.repository.BaseRepositoryTestCase;
+
 /**
  * DailyData DAO 测试
- * @author @haipenge 
- * haipenge@gmail.com
-*  Create Date:2014年5月26日
+ * 
+ * @author @haipenge haipenge@gmail.com Create Date:2014年5月26日
  */
 public class DailyDataRepositoryTestCase extends BaseRepositoryTestCase {
 	@Autowired
@@ -41,8 +45,8 @@ public class DailyDataRepositoryTestCase extends BaseRepositoryTestCase {
 	public void testDelete() throws Exception {
 		DailyData entity = new DailyData();
 		this.dailyDataRepository.save(entity);
-        this.dailyDataRepository.deleteById(entity.getId());
-        Iterable<DailyData> entities = this.dailyDataRepository.findAll();
+		this.dailyDataRepository.deleteById(entity.getId());
+		Iterable<DailyData> entities = this.dailyDataRepository.findAll();
 		Assert.assertTrue(!entities.iterator().hasNext());
 	}
 
@@ -50,9 +54,10 @@ public class DailyDataRepositoryTestCase extends BaseRepositoryTestCase {
 	public void testFindOne() throws Exception {
 		DailyData entity = new DailyData();
 		this.dailyDataRepository.save(entity);
-		DailyData dailyData=this.dailyDataRepository.findById(entity.getId()).get();
-		Assert.assertTrue(dailyData!=null);
+		DailyData dailyData = this.dailyDataRepository.findById(entity.getId()).get();
+		Assert.assertTrue(dailyData != null);
 	}
 
 	
+
 }

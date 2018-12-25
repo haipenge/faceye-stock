@@ -1,6 +1,7 @@
 package com.faceye.test.component.stock.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,12 +17,15 @@ import org.springframework.test.annotation.Rollback;
 
 import com.faceye.component.stock.entity.DailyData;
 import com.faceye.component.stock.entity.DailyStat;
+import com.faceye.component.stock.entity.QDailyData;
 import com.faceye.component.stock.entity.StarDataStat;
 import com.faceye.component.stock.entity.Stock;
 import com.faceye.component.stock.service.DailyDataService;
 import com.faceye.component.stock.service.DailyStatService;
 import com.faceye.component.stock.service.StarDataStatService;
 import com.faceye.component.stock.service.StockService;
+import com.faceye.feature.repository.mongo.DatePair;
+import com.faceye.feature.util.DateUtil;
 import com.faceye.test.feature.service.BaseServiceTestCase;
 
 
@@ -277,6 +281,23 @@ public class DailyDataServiceTestCase extends BaseServiceTestCase {
 		
 		Assert.assertTrue(res);
 	}
-	
-	
+	@Test
+	public void testGetDailyData() throws Exception {
+		String code="000998";
+		Stock stock=this.stockService.getStockByCode(code);
+		Date now = new Date();
+		Date start = new Date(now.getTime()- 30 * 24 * 60 * 60 * 1000L);
+		logger.debug(">>FaceYe --> Now:"+DateUtil.formatDate(now));
+		logger.debug(">>FaceYe --> Start:"+DateUtil.formatDate(start));
+		DatePair pair=new DatePair(start,now);
+		Map params = new HashMap();
+//		params.put("BTW|date", pair);
+		params.put("EQ|stockId", stock.getId());
+		params.put("GTE|date", start);
+		params.put("LTE|date", now);
+		Page page=this.dailyDataService.getPage(params, 1, 100);
+		logger.debug("Size is:"+page.getSize()+",total is:"+page.getTotalElements()+",list size :"+page.getContent().size());
+		QDailyData qDate=QDailyData.dailyData;
+		Assert.assertTrue(page!=null && page.getTotalElements() <30);
+	}
 }

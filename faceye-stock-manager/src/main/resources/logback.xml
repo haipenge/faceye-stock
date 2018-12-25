@@ -112,6 +112,7 @@
 
 	<!-- project default level -->
 	<logger name="com.faceye" level="${logger.level.faceye}" />
+	<logger name="com.faceye.feature" level="error"/>
 	<logger name="com.mongodb" level="${logger.level}"/>
 	
 
