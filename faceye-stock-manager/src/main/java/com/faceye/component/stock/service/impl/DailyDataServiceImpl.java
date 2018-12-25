@@ -38,6 +38,7 @@ import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.faceye.feature.service.job.thread.BaseThread;
 import com.faceye.feature.util.DateUtil;
 import com.faceye.feature.util.MathUtil;
+import com.faceye.feature.util.http.Http;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -153,6 +154,15 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 		if (stock != null) {
 			StockFetcher fetcher = new StockFetcher();
 			List<Map<String, String>> data = fetcher.getStockDataList(code, "" + year, jidu);
+			if(CollectionUtils.isEmpty(data)){
+				String url = "http://money.finance.sina.com.cn/corp/go.php/vMS_MarketHistory/stockid/" + code.toLowerCase() + ".phtml?year=" + year + "&jidu=" + jidu;
+				logger.debug(">>FaceYe fetch stock daily data url is:"+url);
+				String content = Http.getInstance().get(url, "gb2312");
+				if(StringUtils.contains(content, "退")){
+					stock.setIsExistMarket(Boolean.TRUE);
+					this.stockService.save(stock);
+				}
+			}
 			if (CollectionUtils.isNotEmpty(data)) {
 				List<DailyData> willSavedDailyData = new ArrayList<DailyData>(0);
 				for (Map<String, String> map : data) {
@@ -480,6 +490,8 @@ public class DailyDataServiceImpl extends BaseMongoServiceImpl<DailyData, Long, 
 		StockFetcher fetcher = new StockFetcher();
 		Map data = fetcher.getLiveDataFromSina(queryCode);
 		if (MapUtils.isNotEmpty(data)) {
+			stock.setIsExistMarket(Boolean.FALSE);
+			this.stockService.save(stock);
 			// 处理停牌的股票 开盘价，收盘价为0.00
 			String open = MapUtils.getString(data, "open");
 			String close = MapUtils.getString(data, "close");

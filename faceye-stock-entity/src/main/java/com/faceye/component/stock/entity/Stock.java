@@ -145,6 +145,18 @@ public class Stock implements Serializable {
 	public void setLastStarAppearDate(Date lastStarAppearDate) {
 		this.lastStarAppearDate = lastStarAppearDate;
 	}
+	/**
+	 * 是否已退市
+	 */
+	private Boolean isExistMarket=Boolean.FALSE;
+
+	public Boolean getIsExistMarket() {
+		return isExistMarket;
+	}
+
+	public void setIsExistMarket(Boolean isExistMarket) {
+		this.isExistMarket = isExistMarket;
+	}
 	
 
 }/** @generate-entity-source@ **/
