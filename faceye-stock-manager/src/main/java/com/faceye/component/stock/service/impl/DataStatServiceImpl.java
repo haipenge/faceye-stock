@@ -1,6 +1,7 @@
 package com.faceye.component.stock.service.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -34,6 +35,7 @@ import com.faceye.component.stock.service.TotalStockService;
 import com.faceye.component.stock.service.ValuationService;
 import com.faceye.component.stock.service.wrapper.StatRecord;
 import com.faceye.component.stock.util.StockConstants;
+import com.faceye.feature.repository.mongo.DatePair;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.faceye.feature.util.DateUtil;
@@ -61,7 +63,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	@Autowired
 	private BonusRecordService bonusRecordService = null;
 	@Autowired
-	private ValuationService valuationService=null;
+	private ValuationService valuationService = null;
 
 	@Autowired
 	public DataStatServiceImpl(DataStatRepository dao) {
@@ -109,7 +111,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		}
 		return res;
 	}
-	
+
 	boolean isStated = false;
 
 	@Override
@@ -133,6 +135,9 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 			Map params = new HashMap();
 			params.put("EQ|stockId", stock.getId());
 			params.put("SORT|date", "asc");
+			Date now = new Date();
+
+			Calendar calendar = Calendar.getInstance();
 			List<ReportData> reportDatas = this.reportDataService.getPage(params, 0, 0).getContent();
 			for (ReportData reportData : reportDatas) {
 				try {
@@ -142,7 +147,7 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 					if (dataStat == null) {
 						dataStat = new DataStat();
 						dataStat.setStockId(stock.getId());
-//						dataStat.setDateCycle(DateUtil.getDateFromString(sDate + " 00:00:00", "yyyy-MM-dd HH:mm:ss"));
+						// dataStat.setDateCycle(DateUtil.getDateFromString(sDate + " 00:00:00", "yyyy-MM-dd HH:mm:ss"));
 						dataStat.setDateCycle(date);
 					}
 					// 净利率
@@ -161,13 +166,27 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 					this.statCoreProfitMargin(stock, reportData, dataStat);
 					// 分析每股指标
 					this.statEveryStockData(stock, reportData, dataStat);
-					this.save(dataStat);
+					DataStat savedDataStat = this.save(dataStat);
+					// 如果是年报，进入将分析数据存储入stock对像的流程-add 2019.04.05
+					if (reportData.getType() == StockConstants.REPORT_TYPE_YEAR) {
+						// 存储原则：只存储最近一年的财报分析数据至Stock对像
+						calendar.setTime(now);
+						int currentYear = calendar.get(Calendar.YEAR);
+						calendar.setTime(reportData.getDate());
+						int reportYear = calendar.get(Calendar.YEAR);
+						int years = currentYear - reportYear;
+						if (years <= 2) {
+							stock.setDataStat(savedDataStat);
+							this.stockService.save(stock);
+						}
+
+					}
 				} catch (Exception e) {
-					logger.error(">>Faceye --> 分析股票:"+stock.getCode()+",抛出异常:" + e);
+					logger.error(">>Faceye --> 分析股票:" + stock.getCode() + ",抛出异常:" + e);
 				}
 			}
 		}
-		//根据机构评测进行估值
+		// 根据机构评测进行估值
 		this.valuationService.doStockValuation(stock.getId());
 	}
 
@@ -415,16 +434,16 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		DataStat dataStat = null;
 		Map params = new HashMap();
 		params.put("EQ|stockId", stock.getId());
-		params.put("GTE|dateCycle", DateUtil.getDateFromString(date + " 00:00:00", "yyyy-MM-dd HH:mm:ss"));
-		params.put("LTE|dateCycle", DateUtil.getDateFromString(date + " 23:59:59", "yyyy-MM-dd HH:mm:ss"));
+		DatePair datePair=new DatePair(DateUtil.getDateFromString(date + " 00:00:00", "yyyy-MM-dd HH:mm:ss"),DateUtil.getDateFromString(date + " 23:59:59", "yyyy-MM-dd HH:mm:ss"));
+//		params.put("GTE|dateCycle", DateUtil.getDateFromString(date + " 00:00:00", "yyyy-MM-dd HH:mm:ss"));
+//		params.put("LTE|dateCycle", DateUtil.getDateFromString(date + " 23:59:59", "yyyy-MM-dd HH:mm:ss"));
+		params.put("BTW|dateCycle", datePair);
 		List<DataStat> dataStats = this.getPage(params, 1, 0).getContent();
 		if (CollectionUtils.isNotEmpty(dataStats)) {
 			dataStat = dataStats.get(0);
 		}
 		return dataStat;
 	}
-
-	
 
 	/**
 	 * 根据特定条件筛选股票
@@ -585,9 +604,11 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 			String sDate = DateUtil.formatDate(date, "yyyy-MM-dd");
 			String sEndDate = DateUtil.formatDate(date, "yyyy");
 			Date start = DateUtil.getDateFromString(sDate + " 00:00:01");
-			Date end = DateUtil.getDateFromString(NumberUtils.toInt(sEndDate)+1 + "-12-31 23:59:59");
-			searchParams.put("GTE|publishDate", start);
-			searchParams.put("LTE|publishDate", end);
+			Date end = DateUtil.getDateFromString(NumberUtils.toInt(sEndDate) + 1 + "-12-31 23:59:59");
+//			searchParams.put("GTE|publishDate", start);
+//			searchParams.put("LTE|publishDate", end);
+			DatePair datePair=new DatePair(start,end);
+			searchParams.put("BTW|publishDate", datePair);
 			searchParams.put("SORT|publishDate", "asc");
 			Page<BonusRecord> bonusRecords = this.bonusRecordService.getPage(searchParams, 1, 0);
 			if (bonusRecords != null && CollectionUtils.isNotEmpty(bonusRecords.getContent())) {
@@ -597,9 +618,8 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	}
 
 	/**
-	 * 普通股权益报酬率（净利润/股东权益[前一期]）：注：股份变化化引起本数据的变化 ，因是每股指标，所以，使用 ROCE(1)=ESP(1)/BPS(0)
-	 * 本处认为净利润=会计期内股东的综合收益
-	 * 同时，没有考虑期初，期末股本变化对数据影响
+	 * 普通股权益报酬率（净利润/股东权益[前一期]）：注：股份变化化引起本数据的变化 ，因是每股指标，所以，使用 ROCE(1)=ESP(1)/BPS(0) 本处认为净利润=会计期内股东的综合收益 同时，没有考虑期初，期末股本变化对数据影响
+	 * 
 	 * @param totalStock
 	 * @param reportData
 	 * @param dataStat
@@ -615,14 +635,14 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		searchParams.put("LT|dateCycle", reportData.getDate());
 		searchParams.put("EQ|type", reportData.getType());
 		searchParams.put("SORT|dateCycle", "desc");
-		Page<DataStat> dataStats=this.getPage(searchParams, 1, 0);
-//		Page<ReportData> reportDatas = this.reportDataService.getPage(searchParams, 1, 0);
+		Page<DataStat> dataStats = this.getPage(searchParams, 1, 0);
+		// Page<ReportData> reportDatas = this.reportDataService.getPage(searchParams, 1, 0);
 		if (dataStats != null && CollectionUtils.isNotEmpty(dataStats.getContent())) {
 			DataStat lastPeriodDataStat = dataStats.getContent().get(0);
 			// 期初股东权益
-			Double bps0=lastPeriodDataStat.getBps();
-			Double eps1=dataStat.getEps();
-//			Double netAssets = lastPeriodReportData.getBalanceSheet().getEle17().getCbsheet86_243();
+			Double bps0 = lastPeriodDataStat.getBps();
+			Double eps1 = dataStat.getEps();
+			// Double netAssets = lastPeriodReportData.getBalanceSheet().getEle17().getCbsheet86_243();
 			if (bps0 != null && eps1 != null && bps0 > 0) {
 				dataStat.setRoce(eps1 / bps0);
 			}

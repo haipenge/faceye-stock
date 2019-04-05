@@ -24,6 +24,7 @@ import com.faceye.component.stock.service.ForecastIndexService;
 import com.faceye.component.stock.service.ForecastService;
 import com.faceye.component.stock.service.ValuationService;
 import com.faceye.component.stock.service.wrapper.WrapForecast;
+import com.faceye.feature.repository.mongo.DatePair;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.faceye.feature.util.DateUtil;
 
@@ -95,8 +96,10 @@ public class ForecastServiceImpl extends BaseMongoServiceImpl<Forecast, Long, Fo
 		// searchParams.put("EQ|mechanism", mechanism);
 		Date start = DateUtil.getDateFromString(reportDate + " 00:00:00");
 		Date end = DateUtil.getDateFromString(reportDate + " 23:59:59");
-		searchParams.put("GTE|reportDate", start);
-		searchParams.put("LTE|reportDate", end);
+//		searchParams.put("GTE|reportDate", start);
+//		searchParams.put("LTE|reportDate", end);
+		DatePair datePair=new DatePair(start,end);
+		searchParams.put("BTW|reportDate", datePair);
 		Page<Forecast> forecasts = this.getPage(searchParams, 1, 0);
 		if (forecasts != null && CollectionUtils.isNotEmpty(forecasts.getContent())) {
 			forecast = forecasts.getContent().get(0);

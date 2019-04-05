@@ -203,7 +203,7 @@ public class DataStatServiceTestCase extends BaseServiceTestCase {
 	}
 	@Test
 	public void statStock() throws Exception{
-		Stock stock=this.stockService.getStockByCode("000998");
+		Stock stock=this.stockService.getStockByCode("000651");
 		this.dataStatService.stat(stock);
 		Assert.assertTrue(true);
 	}

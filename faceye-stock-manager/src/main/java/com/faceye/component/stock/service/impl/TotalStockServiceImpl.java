@@ -19,6 +19,7 @@ import com.faceye.component.stock.entity.TotalStock;
 import com.faceye.component.stock.repository.mongo.TotalStockRepository;
 import com.faceye.component.stock.repository.mongo.customer.TotalStockCustomerRepository;
 import com.faceye.component.stock.service.TotalStockService;
+import com.faceye.feature.repository.mongo.DatePair;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.faceye.feature.util.DateUtil;
@@ -90,8 +91,10 @@ public class TotalStockServiceImpl extends BaseMongoServiceImpl<TotalStock, Long
 		searchParams.put("EQ|stockId", stockId);
 		Date startDate = DateUtil.getDateFromString(changeDate + " 00:00:00");
 		Date endDate = DateUtil.getDateFromString(changeDate + " 23:59:59");
-		searchParams.put("GTE|changeDate", startDate);
-		searchParams.put("LTE|changeDate", endDate);
+//		searchParams.put("GTE|changeDate", startDate);
+//		searchParams.put("LTE|changeDate", endDate);
+		DatePair datePair=new DatePair(startDate,endDate);
+		searchParams.put("BTW|changeDate", datePair);
 		Page<TotalStock> res = this.getPage(searchParams, 1, 1);
 		if(res!=null && CollectionUtils.isNotEmpty(res.getContent())){
 			totalStock=res.getContent().get(0);

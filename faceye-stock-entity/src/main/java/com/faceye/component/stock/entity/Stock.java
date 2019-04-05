@@ -134,6 +134,19 @@ public class Stock implements Serializable {
 		this.dailyStat = dailyStat;
 	}
 	/**
+	 * 最近年报分析数据
+	 */
+	private DataStat dataStat=null;
+	
+	public DataStat getDataStat() {
+		return dataStat;
+	}
+
+	public void setDataStat(DataStat dataStat) {
+		this.dataStat = dataStat;
+	}
+
+	/**
 	 * 最后一个星标出现的时间（依据均线）
 	 */
 	private Date lastStarAppearDate=null;

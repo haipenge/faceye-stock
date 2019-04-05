@@ -14,6 +14,7 @@ import com.faceye.component.stock.entity.Mechanism;
 import com.faceye.component.stock.repository.mongo.ForecastIndexRepository;
 import com.faceye.component.stock.repository.mongo.customer.ForecastIndexCustomerRepository;
 import com.faceye.component.stock.service.ForecastIndexService;
+import com.faceye.feature.repository.mongo.DatePair;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.faceye.feature.util.DateUtil;
 
@@ -74,8 +75,10 @@ public class ForecastIndexServiceImpl extends BaseMongoServiceImpl<ForecastIndex
 		searchParams.put("EQ|stockId", stockId);
 		searchParams.put("EQ|mechanism.$id", mechanism.getId());
 		String sDate = DateUtil.formatDate(reportDate, "yyyy-MM-dd");
-		searchParams.put("GTE|reportDate", DateUtil.getDateFromString(sDate + " 00:00:00","yyyy-MM-dd HH:mm:ss"));
-		searchParams.put("LTE|reportDate", DateUtil.getDateFromString(sDate + " 23:59:59","yyyy-MM-dd HH:mm:ss"));
+		DatePair datePair=new DatePair(DateUtil.getDateFromString(sDate + " 00:00:00","yyyy-MM-dd HH:mm:ss"),DateUtil.getDateFromString(sDate + " 23:59:59","yyyy-MM-dd HH:mm:ss"));
+		searchParams.put("BTW|reportDate", datePair);
+//		searchParams.put("GTE|reportDate", DateUtil.getDateFromString(sDate + " 00:00:00","yyyy-MM-dd HH:mm:ss"));
+//		searchParams.put("LTE|reportDate", DateUtil.getDateFromString(sDate + " 23:59:59","yyyy-MM-dd HH:mm:ss"));
 		Page<ForecastIndex> indexs = this.getPage(searchParams, 1, 0);
 		if (indexs != null && CollectionUtils.isNotEmpty(indexs.getContent())) {
 			forecastIndex = indexs.getContent().get(0);

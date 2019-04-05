@@ -35,6 +35,7 @@ import com.faceye.component.stock.service.ReportDataService;
 import com.faceye.component.stock.service.StockService;
 import com.faceye.component.stock.service.ValuationService;
 import com.faceye.component.stock.util.StockConstants;
+import com.faceye.feature.repository.mongo.DatePair;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.impl.BaseMongoServiceImpl;
 import com.faceye.feature.util.DateUtil;
@@ -191,8 +192,11 @@ public class ValuationServiceImpl extends BaseMongoServiceImpl<Valuation, Long, 
 		searchParams.put("EQ|stockId", stockId);
 		String startDate = DateUtil.formatDate(period, "yyyy-MM-dd") + " 00:00:00";
 		String endDate = DateUtil.formatDate(period, "yyyy-MM-dd") + " 23:59:59";
-		searchParams.put("GTE|period", DateUtil.getDateFromString(startDate));
-		searchParams.put("LTE|period", DateUtil.getDateFromString(endDate));
+//		searchParams.put("GTE|period", DateUtil.getDateFromString(startDate));
+//		searchParams.put("LTE|period", DateUtil.getDateFromString(endDate));
+		DatePair datePair=new DatePair(DateUtil.getDateFromString(startDate),DateUtil.getDateFromString(endDate));
+		searchParams.put("BTW|period", datePair);
+		
 		List<Valuation> valuations = this.getPage(searchParams, 1, 0).getContent();
 		if (CollectionUtils.isNotEmpty(valuations)) {
 			valuation = valuations.get(0);
