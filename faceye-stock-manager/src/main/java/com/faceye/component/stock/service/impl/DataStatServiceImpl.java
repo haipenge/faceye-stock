@@ -150,22 +150,24 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 						// dataStat.setDateCycle(DateUtil.getDateFromString(sDate + " 00:00:00", "yyyy-MM-dd HH:mm:ss"));
 						dataStat.setDateCycle(date);
 					}
-					// 净利率
-					this.statNetProfitMargin(stock, reportData, dataStat);
-					// 总资产周转率
-					this.statTotalAssetsTurnover(stock, reportData, dataStat);
-					// 总资产利润率
-					this.statTotalAssetsNeProfitMargin(stock, reportData, dataStat);
-					// 负债率
-					this.statDebtToAssetsRatio(stock, reportData, dataStat);
-					// 净资产回报率
-					this.statROE(stock, dataStat);
-					// 毛利率
-					this.statGrossProfitMargin(stock, reportData, dataStat);
-					// 计算核心利润率
-					this.statCoreProfitMargin(stock, reportData, dataStat);
-					// 分析每股指标
-					this.statEveryStockData(stock, reportData, dataStat);
+					this.statNetProfitMargin(stock, reportData, dataStat);					// 净利率
+					this.statTotalAssetsTurnover(stock, reportData, dataStat);					// 总资产周转率
+					this.statTotalAssetsNeProfitMargin(stock, reportData, dataStat);					// 总资产利润率
+					this.statDebtToAssetsRatio(stock, reportData, dataStat);					// 负债率
+					this.statROE(stock, dataStat);					// 净资产回报率
+					this.statGrossProfitMargin(stock, reportData, dataStat);					// 毛利率
+					this.statCoreProfitMargin(stock, reportData, dataStat);					// 计算核心利润率
+					this.statEveryStockData(stock, reportData, dataStat);					// 分析每股指标
+					//以下开始唐朝分析
+					statShengChanZiChanAndZongZiChan(reportData, dataStat);//生产资产/总资产
+					statYingShouAndZongZiChan(reportData, dataStat);//应收/总资产
+					statHuoBiZiJinAndYouXiFuZhai(reportData, dataStat);//货币资金/有息负债
+					statFeiZhuYeZiChanAndZongZiChan(reportData, dataStat);//非主业资产/总资产
+					statShuiQianLiRunZongErAndShengChanZiChan(reportData, dataStat);//税前利润/生产资产
+					statFeiYongRate(reportData,dataStat);//三费/营业总收入
+					statResearchFeeRate(reportData,dataStat);//研发费用/营业总收入
+					statMoneyInCome(reportData,dataStat);//经营现金流量净额/净利润
+					statCashFlowType(reportData,dataStat);//现金流类型
 					DataStat savedDataStat = this.save(dataStat);
 					// 如果是年报，进入将分析数据存储入stock对像的流程-add 2019.04.05
 					if (reportData.getType() == StockConstants.REPORT_TYPE_YEAR) {
@@ -434,9 +436,10 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 		DataStat dataStat = null;
 		Map params = new HashMap();
 		params.put("EQ|stockId", stock.getId());
-		DatePair datePair=new DatePair(DateUtil.getDateFromString(date + " 00:00:00", "yyyy-MM-dd HH:mm:ss"),DateUtil.getDateFromString(date + " 23:59:59", "yyyy-MM-dd HH:mm:ss"));
-//		params.put("GTE|dateCycle", DateUtil.getDateFromString(date + " 00:00:00", "yyyy-MM-dd HH:mm:ss"));
-//		params.put("LTE|dateCycle", DateUtil.getDateFromString(date + " 23:59:59", "yyyy-MM-dd HH:mm:ss"));
+		DatePair datePair = new DatePair(DateUtil.getDateFromString(date + " 00:00:00", "yyyy-MM-dd HH:mm:ss"),
+				DateUtil.getDateFromString(date + " 23:59:59", "yyyy-MM-dd HH:mm:ss"));
+		// params.put("GTE|dateCycle", DateUtil.getDateFromString(date + " 00:00:00", "yyyy-MM-dd HH:mm:ss"));
+		// params.put("LTE|dateCycle", DateUtil.getDateFromString(date + " 23:59:59", "yyyy-MM-dd HH:mm:ss"));
 		params.put("BTW|dateCycle", datePair);
 		List<DataStat> dataStats = this.getPage(params, 1, 0).getContent();
 		if (CollectionUtils.isNotEmpty(dataStats)) {
@@ -605,9 +608,9 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 			String sEndDate = DateUtil.formatDate(date, "yyyy");
 			Date start = DateUtil.getDateFromString(sDate + " 00:00:01");
 			Date end = DateUtil.getDateFromString(NumberUtils.toInt(sEndDate) + 1 + "-12-31 23:59:59");
-//			searchParams.put("GTE|publishDate", start);
-//			searchParams.put("LTE|publishDate", end);
-			DatePair datePair=new DatePair(start,end);
+			// searchParams.put("GTE|publishDate", start);
+			// searchParams.put("LTE|publishDate", end);
+			DatePair datePair = new DatePair(start, end);
 			searchParams.put("BTW|publishDate", datePair);
 			searchParams.put("SORT|publishDate", "asc");
 			Page<BonusRecord> bonusRecords = this.bonusRecordService.getPage(searchParams, 1, 0);
@@ -618,7 +621,8 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	}
 
 	/**
-	 * 普通股权益报酬率（净利润/股东权益[前一期]）：注：股份变化化引起本数据的变化 ，因是每股指标，所以，使用 ROCE(1)=ESP(1)/BPS(0) 本处认为净利润=会计期内股东的综合收益 同时，没有考虑期初，期末股本变化对数据影响
+	 * 普通股权益报酬率（净利润/股东权益[前一期]）：
+	 * 注：股份变化化引起本数据的变化 ，因是每股指标，所以，使用 ROCE(1)=ESP(1)/BPS(0) 本处认为净利润=会计期内股东的综合收益 同时，没有考虑期初，期末股本变化对数据影响
 	 * 
 	 * @param totalStock
 	 * @param reportData
@@ -671,4 +675,313 @@ public class DataStatServiceImpl extends BaseMongoServiceImpl<DataStat, Long, Da
 	}
 	///////////////////////////////////////// 结束分析每股指标////////////////////////////////////////////////
 
+	/////// 以下开始唐朝分析资产负债表分析///
+	//statShengChanZiChanAndZongZiChan
+	//statYingShouAndZongZiChan
+	//statHuoBiZiJinAndYouXiFuZhai
+	//statFeiZhuYeZiChanAndZongZiChan
+	//statShuiQianLiRunZongErAndShengChanZiChan
+	/**
+	 * 生产资产/总资产 
+	 * 生产资产->有形资产：组成部分：固定资产+在建工程+工程物资+土地
+	 * 
+	 * @param totalStock
+	 * @param reportData
+	 * @param dataStat
+	 * @throws Exception
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2019年4月7日 下午3:43:03
+	 */
+	private void statShengChanZiChanAndZongZiChan(ReportData reportData, DataStat dataStat) throws Exception {
+		Double res = 0.0D;
+		// 计算生产资产
+		Double shengChanZiChan = this.getShengChanZiChan(reportData);
+		res=shengChanZiChan/reportData.getBalanceSheet().getEle14().getCbsheet46_189();
+		dataStat.setShengchanZichanAndZongZiChan(res);
+	}
+
+	/**
+	 * 应收/总资产
+	 * 应收=资产负债表所有『应收]科目总额度-应收票据中的银行承兑汇票
+	 * 
+	 * 说明：本次计算在资产负债表中，无法区分银行承兑和商业承兑汇票
+	 * @param totalStock
+	 * @param reportData
+	 * @param dataStat
+	 * @throws Exception
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2019年4月7日 下午3:43:37
+	 */
+	private void statYingShouAndZongZiChan(ReportData reportData, DataStat dataStat) throws Exception {
+		Double res=0.0D;
+		Double yingShou=0.0D;
+		if(reportData.getBalanceSheet().getEle14().getCbsheet42_166()!=null){
+		 yingShou=reportData.getBalanceSheet().getEle14().getCbsheet42_166();//长期应收款
+		}
+		if(reportData.getBalanceSheet().getEle13().getCbsheet4_143()!=null){
+		yingShou+=reportData.getBalanceSheet().getEle13().getCbsheet4_143();//应收票据
+		}
+		if(reportData.getBalanceSheet().getEle13().getCbsheet7_144()!=null){
+		yingShou+=reportData.getBalanceSheet().getEle13().getCbsheet7_144();//应收帐款
+		}
+		if(reportData.getBalanceSheet().getEle13().getCbsheet125_146()!=null){
+		yingShou+=reportData.getBalanceSheet().getEle13().getCbsheet125_146();//应收保费
+		}
+		if(reportData.getBalanceSheet().getEle13().getCbsheet126_147()!=null){
+		yingShou+=reportData.getBalanceSheet().getEle13().getCbsheet126_147();//应收分保障款
+		}
+		if(reportData.getBalanceSheet().getEle13().getCbsheet127_148()!=null){
+		yingShou+=reportData.getBalanceSheet().getEle13().getCbsheet127_148();//应收分保合同保障金
+		}
+		if(reportData.getBalanceSheet().getEle13().getCbsheet6_149()!=null){
+		yingShou+=reportData.getBalanceSheet().getEle13().getCbsheet6_149();//应收利息
+		}
+		if(reportData.getBalanceSheet().getEle13().getCbsheet5_150()!=null){
+		yingShou+=reportData.getBalanceSheet().getEle13().getCbsheet5_150();//应收股利
+		}
+		if(reportData.getBalanceSheet().getEle13().getCbsheet8_151()!=null){
+		yingShou+=reportData.getBalanceSheet().getEle13().getCbsheet8_151();//其它应收
+		}
+		if(reportData.getBalanceSheet().getEle13().getCbsheet65_152()!=null){
+		yingShou+=reportData.getBalanceSheet().getEle13().getCbsheet65_152();//应收出口退税款
+		}
+		if(reportData.getBalanceSheet().getEle13().getCbsheet127_153()!=null){
+		yingShou+=reportData.getBalanceSheet().getEle13().getCbsheet127_153();//应收补贴款
+		}
+		if(reportData.getBalanceSheet().getEle13().getCbsheet144_154()!=null){
+		yingShou+=reportData.getBalanceSheet().getEle13().getCbsheet144_154();//应收保障金
+		}
+		if(reportData.getBalanceSheet().getEle13().getCbsheet13_155()!=null){
+		yingShou+=reportData.getBalanceSheet().getEle13().getCbsheet13_155();//内部应收款
+		}
+		//@TODO:分析应收票据中银行承兑汇票数据，从应收中减去，haipenge 2019.04.07
+		res=yingShou/reportData.getBalanceSheet().getEle14().getCbsheet46_189();
+		dataStat.setYingShouAndZongZiChan(res);
+	}
+
+	/**
+	 * 货币资金/有息负债
+	 * 
+	 * 一般情况下，“短期借款”、“长期借款”、“应付债券”、“一年内到期的非流动性负债”、“一年内到期的融资租赁负债”、“长期融资租赁负债”都是有息负债。此外，应付票据、应付账款、其他应付款，都可能是有息的
+	 * @param totalStock
+	 * @param reportData
+	 * @param dataStat
+	 * @throws Exception
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2019年4月7日 下午3:44:58
+	 */
+	private void statHuoBiZiJinAndYouXiFuZhai( ReportData reportData, DataStat dataStat) throws Exception {
+		Double res= 0.0D;
+		Double youXiFuZhai=0.0D;
+		if(reportData.getBalanceSheet().getEle15().getCbsheet47_190()!=null){
+		 youXiFuZhai +=reportData.getBalanceSheet().getEle15().getCbsheet47_190();//短期借款
+		}
+		if(reportData.getBalanceSheet().getEle15().getCbsheet131_191()!=null){
+		youXiFuZhai +=reportData.getBalanceSheet().getEle15().getCbsheet131_191();//向中央银行的借款
+		}
+		if(reportData.getBalanceSheet().getEle16().getCbsheet67_222()!=null){
+		youXiFuZhai += reportData.getBalanceSheet().getEle16().getCbsheet67_222();//长期借款
+		}
+		if(reportData.getBalanceSheet().getEle15().getCbsheet64_218()!=null){
+		youXiFuZhai += reportData.getBalanceSheet().getEle15().getCbsheet64_218();//应付短期债券
+		}
+		if(reportData.getBalanceSheet().getEle16().getCbsheet68_223()!=null){
+		youXiFuZhai += reportData.getBalanceSheet().getEle16().getCbsheet68_223();//应付债券
+		}
+		if(reportData.getBalanceSheet().getEle15().getCbsheet62_219()!=null){
+		youXiFuZhai += reportData.getBalanceSheet().getEle15().getCbsheet62_219();//一年内到期的非流动性负债
+		}
+		res=reportData.getBalanceSheet().getEle13().getCbsheet1_138()/youXiFuZhai;// 货币资金/有息负债
+		dataStat.setHuoBiZiJinAndYouXiFuZhai(res);
+	}
+
+	/**
+	 * 非主业资产/总资产
+	 * 非主业资产：
+	 * 制造业公司：交易性金融资产+可供出售的金融资产+持有到期投资+银行理财产品+投资性房地产
+	 * @param totalStock
+	 * @param reportData
+	 * @param dataStat
+	 * @throws Exception
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2019年4月7日 下午3:45:20
+	 */
+	private void statFeiZhuYeZiChanAndZongZiChan( ReportData reportData, DataStat dataStat) throws Exception {
+		Double res =0.0D;
+		Double feiZhuYeZiChan=0.0D;
+		if(reportData.getBalanceSheet().getEle13().getCbsheet110_141()!=null){
+		 feiZhuYeZiChan+=reportData.getBalanceSheet().getEle13().getCbsheet110_141();//交易性金融资产
+		}
+		if(reportData.getBalanceSheet().getEle14().getCbsheet111_164()!=null){
+		feiZhuYeZiChan += reportData.getBalanceSheet().getEle14().getCbsheet111_164();//可供出售金融资产
+		}
+		if(reportData.getBalanceSheet().getEle14().getCbsheet112_165()!=null){
+		feiZhuYeZiChan +=reportData.getBalanceSheet().getEle14().getCbsheet112_165();//持有到期投资
+		}
+		if(reportData.getBalanceSheet().getEle14().getCbsheet113_169()!=null){
+		feiZhuYeZiChan += reportData.getBalanceSheet().getEle14().getCbsheet113_169();//投资性房地产
+		}
+		//TODO ->feiZhuYeZiChan += 银行理财产品 -> 2019.04.07 haipenge
+		res=feiZhuYeZiChan/reportData.getBalanceSheet().getEle14().getCbsheet46_189();
+		dataStat.setFeiZhuYeZiChanAndZongZiChan(res);
+	}
+
+	/**
+	 * 税前利润总额/生产资产 如数值超过2倍银行利率，刚属于轻资产公司，否则属于重资产公司。
+	 * 税前利润总额=营业利润+营业外收入-营业外支出+补贴收入+汇兑损益
+	 * @param totalStock
+	 * @param reportData
+	 * @param dataStat
+	 * @throws Exception
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2019年4月7日 下午3:48:37
+	 */
+	private void statShuiQianLiRunZongErAndShengChanZiChan( ReportData reportData, DataStat dataStat) throws Exception {
+		Double res =0.0D;
+		Double shengChanZiChan=this.getShengChanZiChan(reportData);//生产资产
+		res=reportData.getInComeSheet().getEle8().getCinst19_125()/shengChanZiChan;//利润总额/生产资产
+		dataStat.setShuiQianLiRunZongErAndShengChanZiChan(res);
+	}
+
+	/**
+	 * 取得生产资产 生产资产->有形资产：组成部分：固定资产+在建工程+工程物资+土地
+	 * 
+	 * @param reportData
+	 * @return
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2019年4月7日 下午3:57:53
+	 */
+	private Double getShengChanZiChan(ReportData reportData) {
+		Double res = 0.0D;
+		if(reportData.getBalanceSheet().getEle14().getCbsheet31_172()!=null){
+		    res += reportData.getBalanceSheet().getEle14().getCbsheet31_172(); // cbsheet31_172,固定资产净值
+		}
+		if(reportData.getBalanceSheet().getEle14().getCbsheet34_175()!=null){
+		    res += reportData.getBalanceSheet().getEle14().getCbsheet34_175(); // getCbsheet34_175，在建工程
+		}
+		if(reportData.getBalanceSheet().getEle14().getCbsheet33_176()!=null){
+		    res += reportData.getBalanceSheet().getEle14().getCbsheet33_176(); // getCbsheet33_176，工程物资
+		}
+		return res;
+
+	}
+	
+	/**
+	 * 费用率=三费/营业总收入
+	 * 情况1：如果财务费用是正数（利息支出-利息收入），则费用=账务费用+管理费用+销售费用
+	 * 情况2：如果财务费用是负数（利息支出-利息收入），则费用=管理费用+销售费用
+	 * @param reportData
+	 * @param dataStat
+	 * @throws Exception
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2019年4月7日 下午9:04:10
+	 */
+	private void statFeiYongRate(ReportData reportData,DataStat dataStat) throws Exception{
+		Double res=0.0D;
+		Double feiYong=0D;
+		if(reportData.getInComeSheet().getEle7().getCinst9_110()!=null){
+		 feiYong=reportData.getInComeSheet().getEle7().getCinst9_110();//管理费用+
+		}
+		if(reportData.getInComeSheet().getEle7().getCinst8_109()!=null){
+		feiYong+=reportData.getInComeSheet().getEle7().getCinst8_109();//销售费用
+		}
+		Double caiWuFeiYong = reportData.getInComeSheet().getEle7().getCinst10_111();
+		if(caiWuFeiYong!=null &&caiWuFeiYong>0){
+			feiYong +=caiWuFeiYong;
+		}
+		if(reportData.getInComeSheet().getEle6().getCinst61_89()!=0){
+		res=feiYong/reportData.getInComeSheet().getEle6().getCinst61_89();//三费/营业总收入
+		}
+		dataStat.setFeiYongRate(res);
+	}
+
+	/**
+	 * 研发费用率=研发费用/营业总收入
+	 * @param reportData
+	 * @param dataStat
+	 * @throws Exception
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2019年4月7日 下午9:23:32
+	 */
+	private void statResearchFeeRate(ReportData reportData,DataStat dataStat) throws Exception{
+		Double res=0D;
+		if(reportData.getInComeSheet().getEle7().getCinst77_101()!=null &&reportData.getInComeSheet().getEle6().getCinst61_89()!=null &&reportData.getInComeSheet().getEle6().getCinst61_89()!=0 ){
+		 res=reportData.getInComeSheet().getEle7().getCinst77_101()/reportData.getInComeSheet().getEle6().getCinst61_89();
+		}
+		dataStat.setResearchFeeRate(res);
+	}
+	/**
+	 * 经营现金流量净额/净利润，持续大于1的公司为好公司。
+	 * @param reportData
+	 * @param dataStat
+	 * @throws Exception
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2019年4月7日 下午9:31:08
+	 */
+	private void statMoneyInCome(ReportData reportData,DataStat dataStat) throws Exception{
+		Double res=0.0D;
+		if(reportData.getCashFlowSheet().getEle2().getCfst10_25()!=null && reportData.getInComeSheet().getEle9().getCinst24_128()!=null &&reportData.getInComeSheet().getEle9().getCinst24_128()!=0){
+		res=reportData.getCashFlowSheet().getEle2().getCfst10_25()/reportData.getInComeSheet().getEle9().getCinst24_128();
+		}
+		dataStat.setMoneyInCome(res);
+	}
+	/**
+	 * 以经、投、筹资活动现金流量划分企业;
+	 * 1.经>0,投>0,筹>0:妖精;
+	 * 2.经>0,投>0,筹<0:老母鸡;
+	 * 3.经>0,投<0,筹>0:蛮牛;
+	 * 4.经>0,投<0,筹<0:奶牛;
+	 * 5.经<0,投>0,筹>0:骗吃骗喝;
+	 * 6.经<0,投>0,筹<0:混吃等死;
+	 * 7.经<0,投<0,筹>0:赌徒;
+	 * 8.经<0,投<0,筹<0:大出血;
+	 * @param reportData
+	 * @param dataStat
+	 * @throws Exception
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2019年4月7日 下午9:47:44
+	 */
+	private void statCashFlowType(ReportData reportData,DataStat dataStat) throws Exception{
+		Integer res=0;
+		Double jingYingCashFlow=reportData.getCashFlowSheet().getEle2().getCfst10_25();
+		Double touZiCashFlow=reportData.getCashFlowSheet().getEle3().getCfst20_40();
+		Double chouZiashFlow=reportData.getCashFlowSheet().getEle4().getCfst30_51();
+		if(jingYingCashFlow==null){
+			jingYingCashFlow=0D;
+		}
+		if(touZiCashFlow==null){
+			touZiCashFlow=0D;
+		}
+		if(chouZiashFlow==null){
+			chouZiashFlow=0D;
+		}
+		if(jingYingCashFlow>0 && touZiCashFlow>0 && chouZiashFlow>0 ){
+			res=1;
+		}else if(jingYingCashFlow>0 && touZiCashFlow>0 && chouZiashFlow<0){
+			res=2;
+		}else if(jingYingCashFlow>0 && touZiCashFlow<0 && chouZiashFlow>0){
+			res=3;
+		}else if(jingYingCashFlow>0 && touZiCashFlow<0 && chouZiashFlow<0){
+			res=4;
+		}else if(jingYingCashFlow<0 && touZiCashFlow>0 && chouZiashFlow>0){
+			res=5;
+		}else  if(jingYingCashFlow<0 && touZiCashFlow>0 && chouZiashFlow<0){
+			res=6;
+		}else if(jingYingCashFlow<0 && touZiCashFlow<0 && chouZiashFlow>0){
+			res=7;
+		}else if(jingYingCashFlow<0 && touZiCashFlow<0 && chouZiashFlow<0){
+			res=8;
+		}
+		dataStat.setCashFlowType(res);
+	}
 }/** @generate-service-source@ **/

@@ -45,8 +45,7 @@ import com.querydsl.core.types.Predicate;
  */
 
 @Service
-public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, DailyStatRepository>
-		implements DailyStatService {
+public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, DailyStatRepository> implements DailyStatService {
 	@Autowired
 	private DailyStatCustomerRepository dailyStatCustomerRepository = null;
 	@Autowired
@@ -62,7 +61,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 	@Autowired
 	private DailyDataCustomerRepository dailyDataCustomerRepository = null;
 	@Autowired
-	private TotalStockService totalStockService=null;
+	private TotalStockService totalStockService = null;
 
 	@Autowired
 	public DailyStatServiceImpl(DailyStatRepository dao) {
@@ -209,14 +208,14 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 			dailyStat.setTopPriceOf30Day(topPriceOf30Days);
 			dailyStat.setTopPriceDate(topPriceDate);
 			dailyStat.setTodayPrice(todayPrice);
-			//计算当前市值
-			Map totalStockParams=new HashMap();
+			// 计算当前市值
+			Map totalStockParams = new HashMap();
 			totalStockParams.put("EQ|stockId", stock.getId());
-			Page<TotalStock> totalStocks=this.totalStockService.getPage(totalStockParams, 1, 1);
-			if(totalStocks!=null && CollectionUtils.isNotEmpty(totalStocks.getContent())){
-				TotalStock totalStock=totalStocks.getContent().get(0);
-				Double stockNum=totalStock.getStockNum();
-				dailyStat.setMarketValue(dailyStat.getTodayPrice()*stockNum);
+			Page<TotalStock> totalStocks = this.totalStockService.getPage(totalStockParams, 1, 1);
+			if (totalStocks != null && CollectionUtils.isNotEmpty(totalStocks.getContent())) {
+				TotalStock totalStock = totalStocks.getContent().get(0);
+				Double stockNum = totalStock.getStockNum();
+				dailyStat.setMarketValue(dailyStat.getTodayPrice() * stockNum);
 			}
 			// 计算股价振幅
 			Double priceAmplitude = null;
@@ -244,8 +243,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 	}
 
 	/**
-	 * 分析市盈率 同花顺软件中： 市盈率=股价/去年年报EPS 动态市盈率(TTM)=股价/（最新报表EPS*（1/报表截止日占全年的比例）-->同花顺
-	 * 。<br>
+	 * 分析市盈率 同花顺软件中： 市盈率=股价/去年年报EPS 动态市盈率(TTM)=股价/（最新报表EPS*（1/报表截止日占全年的比例）-->同花顺 。<br>
 	 * 市净率指的是每股股价与每股净资产的比率。每股净资产= 股东权益÷总股数<br>
 	 * 
 	 * 另： 动态市盈率＝静态市盈率/(1+年复合增长率)N次方<br>
@@ -284,6 +282,8 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 			Double pe = null;
 			// 计算动态市盈率
 			Double dynamicPe = null;
+			// 计算滚动市盈率TTM
+			Double ttmPe = 0.0D;
 			Double pb = null;
 			if (dailyData != null) {
 				Double shoupanjia = dailyData.getShoupanjia();
@@ -333,10 +333,49 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 						}
 					}
 				}
-				// 计算市净率
+
+				// 计算滚动市盈率ttmPe
+				reportDatas = this.reportDataService.getPage(params, 1, 6).getContent();
+				if (CollectionUtils.isNotEmpty(reportDatas)) {
+					Double totalEps = 0.0D;
+					ReportData firstReportData = reportDatas.get(0);
+					// 如果是年报
+					if (firstReportData.getType() == StockConstants.REPORT_TYPE_YEAR) {
+						if (firstReportData.getInComeSheet().getEle10().getMgsy_131() != null) {
+							totalEps = firstReportData.getInComeSheet().getEle10().getMgsy_131();
+						}
+					} else {
+						if (reportDatas.size() > 4) {
+							for (int i = 0; i < 4; i++) {
+								ReportData rd = reportDatas.get(i);
+								if (rd.getInComeSheet().getEle10().getMgsy_131() != null) {
+									totalEps += rd.getInComeSheet().getEle10().getMgsy_131();
+								} else {
+									totalEps = 0D;
+									break;
+								}
+							}
+							if (totalEps > 0 && reportDatas.size() >= 5) {
+								ReportData rd = reportDatas.get(4);
+								if (rd != null&&rd.getInComeSheet().getEle10().getMgsy_131()!=null) {
+									totalEps -= rd.getInComeSheet().getEle10().getMgsy_131();
+								} else {
+									totalEps = 0D;
+								}
+							} else {
+								totalEps = 0D;
+							}
+						}
+					}
+					if (totalEps > 0) {
+						ttmPe = shoupanjia / totalEps;
+					}
+				}
 
 				dailyData.setPe(pe);
 				dailyData.setDynamicPe(dynamicPe);
+				dailyData.setTtmPe(ttmPe);
+				// 计算市净率
 				dailyData.setPb(pb);
 				this.dailyDataService.save(dailyData);
 
@@ -357,6 +396,8 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 				if (CollectionUtils.isEmpty(dailyDatas)) {
 					dailyStat.setPe(pe);
 					dailyStat.setDynamicPe(dynamicPe);
+					dailyStat.setPb(pb);
+					dailyStat.setTtmPe(ttmPe);
 					this.save(dailyStat);
 				}
 			}
@@ -427,8 +468,7 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 							starDailyData = null;
 						}
 					} else {
-						if (dailyData.getAvg5() < dailyData.getAvg10() || dailyData.getAvg10() < dailyData.getAvg20()
-								|| dailyData.getAvg5() < dailyData.getAvg20()) {
+						if (dailyData.getAvg5() < dailyData.getAvg10() || dailyData.getAvg10() < dailyData.getAvg20() || dailyData.getAvg5() < dailyData.getAvg20()) {
 							isStarData = false;
 							count = 0;
 							signIndex = 0;
@@ -524,11 +564,9 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 			boolean isContinue = true;
 			for (DailyData dailyData : dailyDatas) {
 				// 发现在0轴下方，dif 上穿dea的数据
-				if (isContinue && dailyData.getDif() < 0 && dailyData.getDea() < 0
-						&& dailyData.getDif() > dailyData.getDea()) {
+				if (isContinue && dailyData.getDif() < 0 && dailyData.getDea() < 0 && dailyData.getDif() > dailyData.getDea()) {
 					dailyData.setStarDataType(StockConstants.STOCK_STAR_TYPE_3);
-					logger.debug(">>FaceYe find a macd star now. dif > dea " + dailyData.getDif() + " > "
-							+ dailyData.getDea());
+					logger.debug(">>FaceYe find a macd star now. dif > dea " + dailyData.getDif() + " > " + dailyData.getDea());
 					this.dailyDataService.save(dailyData);
 					isContinue = false;
 				}
@@ -575,10 +613,8 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 				Map starDataStatParams = new HashMap();
 				starDataStatParams.put("EQ|starDailyDataId", starDailyData.getId());
 				starDataStatParams.put("EQ|starType", starDailyData.getStarDataType());
-				List<StarDataStat> starDataStats = this.starDataStatService.getPage(starDataStatParams, 1, 0)
-						.getContent();
-				StarDataStat starDataStat = CollectionUtils.isNotEmpty(starDataStats) ? starDataStats.get(0)
-						: new StarDataStat();
+				List<StarDataStat> starDataStats = this.starDataStatService.getPage(starDataStatParams, 1, 0).getContent();
+				StarDataStat starDataStat = CollectionUtils.isNotEmpty(starDataStats) ? starDataStats.get(0) : new StarDataStat();
 				starDataStat.setStarDailyDataId(starDailyData.getId());
 				starDataStat.setStarDataDate(starDailyData.getDate());
 				starDataStat.setStockId(stock.getId());
@@ -603,42 +639,28 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 						}
 						if (i <= 7) {
 							max5DayPrice = (data.getShoupanjia() > max5DayPrice) ? data.getShoupanjia() : max5DayPrice;
-							max10DayPrice = (data.getShoupanjia() > max10DayPrice) ? data.getShoupanjia()
-									: max10DayPrice;
-							max20DayPrice = (data.getShoupanjia() > max20DayPrice) ? data.getShoupanjia()
-									: max20DayPrice;
-							max30DayPrice = (data.getShoupanjia() > max30DayPrice) ? data.getShoupanjia()
-									: max30DayPrice;
-							max60DayPrice = (data.getShoupanjia() > max60DayPrice) ? data.getShoupanjia()
-									: max60DayPrice;
+							max10DayPrice = (data.getShoupanjia() > max10DayPrice) ? data.getShoupanjia() : max10DayPrice;
+							max20DayPrice = (data.getShoupanjia() > max20DayPrice) ? data.getShoupanjia() : max20DayPrice;
+							max30DayPrice = (data.getShoupanjia() > max30DayPrice) ? data.getShoupanjia() : max30DayPrice;
+							max60DayPrice = (data.getShoupanjia() > max60DayPrice) ? data.getShoupanjia() : max60DayPrice;
 						}
 						if (i > 7 && i <= 12) {
-							max10DayPrice = (data.getShoupanjia() > max10DayPrice) ? data.getShoupanjia()
-									: max10DayPrice;
-							max20DayPrice = (data.getShoupanjia() > max20DayPrice) ? data.getShoupanjia()
-									: max20DayPrice;
-							max30DayPrice = (data.getShoupanjia() > max30DayPrice) ? data.getShoupanjia()
-									: max30DayPrice;
-							max60DayPrice = (data.getShoupanjia() > max60DayPrice) ? data.getShoupanjia()
-									: max60DayPrice;
+							max10DayPrice = (data.getShoupanjia() > max10DayPrice) ? data.getShoupanjia() : max10DayPrice;
+							max20DayPrice = (data.getShoupanjia() > max20DayPrice) ? data.getShoupanjia() : max20DayPrice;
+							max30DayPrice = (data.getShoupanjia() > max30DayPrice) ? data.getShoupanjia() : max30DayPrice;
+							max60DayPrice = (data.getShoupanjia() > max60DayPrice) ? data.getShoupanjia() : max60DayPrice;
 						}
 						if (i > 12 && i <= 22) {
-							max20DayPrice = (data.getShoupanjia() > max20DayPrice) ? data.getShoupanjia()
-									: max20DayPrice;
-							max30DayPrice = (data.getShoupanjia() > max30DayPrice) ? data.getShoupanjia()
-									: max30DayPrice;
-							max60DayPrice = (data.getShoupanjia() > max60DayPrice) ? data.getShoupanjia()
-									: max60DayPrice;
+							max20DayPrice = (data.getShoupanjia() > max20DayPrice) ? data.getShoupanjia() : max20DayPrice;
+							max30DayPrice = (data.getShoupanjia() > max30DayPrice) ? data.getShoupanjia() : max30DayPrice;
+							max60DayPrice = (data.getShoupanjia() > max60DayPrice) ? data.getShoupanjia() : max60DayPrice;
 						}
 						if (i > 22 && i <= 32) {
-							max30DayPrice = (data.getShoupanjia() > max30DayPrice) ? data.getShoupanjia()
-									: max30DayPrice;
-							max60DayPrice = (data.getShoupanjia() > max60DayPrice) ? data.getShoupanjia()
-									: max60DayPrice;
+							max30DayPrice = (data.getShoupanjia() > max30DayPrice) ? data.getShoupanjia() : max30DayPrice;
+							max60DayPrice = (data.getShoupanjia() > max60DayPrice) ? data.getShoupanjia() : max60DayPrice;
 						}
 						if (i > 32 && i <= 62) {
-							max60DayPrice = (data.getShoupanjia() > max60DayPrice) ? data.getShoupanjia()
-									: max60DayPrice;
+							max60DayPrice = (data.getShoupanjia() > max60DayPrice) ? data.getShoupanjia() : max60DayPrice;
 						}
 					}
 					if (start2BuyPrice > 0) {

@@ -5,6 +5,8 @@ import java.util.Date;
 
 import javax.persistence.Id;
 
+import org.bson.codecs.pojo.annotations.BsonIgnore;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -333,6 +335,148 @@ public class DataStat implements Serializable {
 	public void setPe(Double pe) {
 		this.pe = pe;
 	}
+	
+	
+	////以下是唐朝分析指标///
+	//资产负债表
+	/**
+	 * 生产资产/总资产
+	 * 生产资产->有形资产：组成部分：固定资产+在建工程+工程物资+土地
+	 */
+	private Double shengchanZichanAndZongZiChan=0.0D;
+
+	public Double getShengchanZichanAndZongZiChan() {
+		return shengchanZichanAndZongZiChan;
+	}
+
+	public void setShengchanZichanAndZongZiChan(Double shengchanZichanAndZongZiChan) {
+		this.shengchanZichanAndZongZiChan = shengchanZichanAndZongZiChan;
+	}
+	
+	
+	/**
+	 * 应收/总资产
+	 */
+	private Double yingShouAndZongZiChan=0.0D;
+
+	public Double getYingShouAndZongZiChan() {
+		return yingShouAndZongZiChan;
+	}
+
+	public void setYingShouAndZongZiChan(Double yingShouAndZongZiChan) {
+		this.yingShouAndZongZiChan = yingShouAndZongZiChan;
+	}
+	
+	/**
+	 * 货币资金/有息负债
+	 */
+	private Double huoBiZiJinAndYouXiFuZhai=0.0D;
+
+	public Double getHuoBiZiJinAndYouXiFuZhai() {
+		return huoBiZiJinAndYouXiFuZhai;
+	}
+
+	public void setHuoBiZiJinAndYouXiFuZhai(Double huoBiZiJinAndYouXiFuZhai) {
+		this.huoBiZiJinAndYouXiFuZhai = huoBiZiJinAndYouXiFuZhai;
+	}
+
+	/**
+	 * 非主业资产/总资产
+	 */
+	private Double feiZhuYeZiChanAndZongZiChan=0.0D;
+
+	public Double getFeiZhuYeZiChanAndZongZiChan() {
+		return feiZhuYeZiChanAndZongZiChan;
+	}
+
+	public void setFeiZhuYeZiChanAndZongZiChan(Double feiZhuYeZiChanAndZongZiChan) {
+		this.feiZhuYeZiChanAndZongZiChan = feiZhuYeZiChanAndZongZiChan;
+	}
+	
+	/**
+	 * 税前利润总额/生产资产
+	 */
+	
+	private Double shuiQianLiRunZongErAndShengChanZiChan=0.0D;
+
+	public Double getShuiQianLiRunZongErAndShengChanZiChan() {
+		return shuiQianLiRunZongErAndShengChanZiChan;
+	}
+
+	public void setShuiQianLiRunZongErAndShengChanZiChan(Double shuiQianLiRunZongErAndShengChanZiChan) {
+		this.shuiQianLiRunZongErAndShengChanZiChan = shuiQianLiRunZongErAndShengChanZiChan;
+	}
+	
+	/**
+	 * 费用率
+	 */
+	private Double feiYongRate=0.0D;
+
+	public Double getFeiYongRate() {
+		return feiYongRate;
+	}
+
+	public void setFeiYongRate(Double feiYongRate) {
+		this.feiYongRate = feiYongRate;
+	}
+	/**
+	 * 研发费用率
+	 */
+	private Double researchFeeRate=0.0D;
+
+	public Double getResearchFeeRate() {
+		return researchFeeRate;
+	}
+
+	public void setResearchFeeRate(Double researchFeeRate) {
+		this.researchFeeRate = researchFeeRate;
+	}
+	
+	/**
+	 * 经营现金流量净额/净利润
+	 */
+	private Double moneyInCome=0.0D;
+
+	public Double getMoneyInCome() {
+		return moneyInCome;
+	}
+
+	public void setMoneyInCome(Double moneyInCome) {
+		this.moneyInCome = moneyInCome;
+	}
+	/**
+	 * 以经、投、筹资活动现金流量划分企业;
+	 * 1.经>0,投>0,筹>0:妖精;
+	 * 2.经>0,投>0,筹<0:老母鸡;
+	 * 3.经>0,投<0,筹>0:蛮牛;
+	 * 4.经>0,投<0,筹<0:奶牛;
+	 * 5.经<0,投>0,筹>0:骗吃骗喝;
+	 * 6.经<0,投>0,筹<0:混吃等死;
+	 * 7.经<0,投<0,筹>0:赌徒;
+	 * 8.经<0,投<0,筹<0:大出血;
+	 * 
+	 */
+	private Integer cashFlowType=0;
+
+	public Integer getCashFlowType() {
+		return cashFlowType;
+	}
+
+	public void setCashFlowType(Integer cashFlowType) {
+		this.cashFlowType = cashFlowType;
+	}
+	
+	@Transient
+	private String cashFlowTypeName="未知";
+
+	public String getCashFlowTypeName() {
+		return CashFlowTypeNames.getName(getCashFlowType());
+	}
+
+	public void setCashFlowTypeName(String cashFlowTypeName) {
+		this.cashFlowTypeName = cashFlowTypeName;
+	}
+	
 	
 	
 	

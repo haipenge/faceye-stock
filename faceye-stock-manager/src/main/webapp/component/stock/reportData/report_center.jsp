@@ -15,20 +15,21 @@
 				<c:if test="${dailyStat.topPriceDate lt dailyStat.lowPriceDate }">
 					<c:set var="price-css" value="price-fall" />
 				</c:if>
-				市盈率:<fmt:formatNumber value="${dailyStat.pe }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;
-				动态市盈率:<fmt:formatNumber value="${dailyStat.dynamicPe}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;
-				30天最高价:￥ <fmt:formatNumber value="${dailyStat.topPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;(<fmt:formatDate
+				PE:<fmt:formatNumber value="${dailyStat.pe }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;
+				PE(TTM):<fmt:formatNumber value="${dailyStat.ttmPe }" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;
+				DPE:<fmt:formatNumber value="${dailyStat.dynamicPe}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;
+				30最高:￥ <fmt:formatNumber value="${dailyStat.topPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;(<fmt:formatDate
 					value="${dailyStat.topPriceDate }" pattern="MM-dd" />)&nbsp;&nbsp;
-				30天最低价:￥ <fmt:formatNumber value="${dailyStat.lowPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;(<fmt:formatDate
+				30最低:￥ <fmt:formatNumber value="${dailyStat.lowPriceOf30Day}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />&nbsp;&nbsp;(<fmt:formatDate
 					value="${dailyStat.lowPriceDate }" pattern="MM-dd" />)&nbsp;&nbsp;
 				<c:set var="priceAmplitudeColor" value="red" />
 				<c:if test="${dailyStat.priceAmplitude lt 0 }">
 					<c:set var="priceAmplitudeColor" value="green" />
 				</c:if>
-				30天波幅:<font color="${priceAmplitudeColor}"><fmt:formatNumber value="${100* dailyStat.priceAmplitude}" type="number" pattern="#,##0.0#" maxFractionDigits="2"
+				30波幅:<font color="${priceAmplitudeColor}"><fmt:formatNumber value="${100* dailyStat.priceAmplitude}" type="number" pattern="#,##0.0#" maxFractionDigits="2"
 						groupingUsed="true" />%</font>
 			</c:if>
-			当天价格:
+			股价:
 			<fmt:formatNumber value="${dailyStat.todayPrice}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />
 			&nbsp;&nbsp;
 			<c:set var="todayIncreaseRateColor" value="red" />
@@ -48,7 +49,7 @@
 		</div>
 	</div>
 	<div class="row">
-	  <div class="content">
+	  <div class="content" stype="margin-left:15px;margin-right:15px;">
 	  行业:${stock.business}&nbsp;&nbsp;概念:<c:forEach var="category" items="${stock.categories}">${category.name}</c:forEach>
 	  </div>
 	</div>
@@ -165,7 +166,7 @@
 						<c:if test="${not empty dataStats}">
 							<!-- 总资产净利率 -->
 							<tr>
-								<th rowspan="6" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">杜邦分析</th>
+								<th rowspan="6" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;vertical-align: middle;">杜邦分析</th>
 								<td>总资产净利率</td>
 								<c:forEach items="${dataStats}" var="dataStat">
 									<td class="text-right"><fmt:formatNumber value="${dataStat.totalAssetsNetProfitMargin *100 }" type="number" pattern="#,##0.0#" maxFractionDigits="1"
@@ -210,14 +211,99 @@
 							</tr>
 						</c:if>
 						<!-- 财务摘要-杜邦分析结束  -->
+						<!-- 唐朝分析 -->
+						<c:if test="${not empty dataStats}">
+						<tr>
+						  <th rowspan="9" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;vertical-align: middle;">唐朝</th>
+						  <!-- 生产资产/总资产 -->
+						  <td>生产资产/总资产</td>
+						  <c:forEach items="${dataStats}" var ="dataStat">
+						      <td class="text-right"><fmt:formatNumber value="${dataStat.shengchanZichanAndZongZiChan*100}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
+						  </c:forEach>
+						</tr>
+						</c:if>
+						<!-- 应收/总资产 -->
+						<c:if test="${not empty dataStats}">
+						<tr>
+						  <td>应收/总资产</td>
+						  <c:forEach items="${dataStats}" var ="dataStat">
+						      <td class="text-right"><fmt:formatNumber value="${dataStat.yingShouAndZongZiChan*100}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
+						  </c:forEach>
+						</tr>
+						</c:if>
+						<!-- 货币资金/有息负债 -->
+						<c:if test="${not empty dataStats}">
+						<tr>
+						  <td>货币资金/有息负债</td>
+						  <c:forEach items="${dataStats}" var ="dataStat">
+						      <td class="text-right"><fmt:formatNumber value="${dataStat.huoBiZiJinAndYouXiFuZhai}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
+						  </c:forEach>
+						</tr>
+						</c:if>
+						<!-- 非主业资产/总资产 -->
+						<c:if test="${not empty dataStats}">
+						<tr>
+						  <td>非主业资产/总资产</td>
+						  <c:forEach items="${dataStats}" var ="dataStat">
+						      <td class="text-right"><fmt:formatNumber value="${dataStat.feiZhuYeZiChanAndZongZiChan*100}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
+						  </c:forEach>
+						</tr>
+						</c:if>
+						<!-- 税前利润总额/生产资产 -->
+						<c:if test="${not empty dataStats}">
+						<tr>
+						  <td >税前利润总额/生产资产</td>
+						  <c:forEach items="${dataStats}" var ="dataStat">
+						      <td class="text-right" ><fmt:formatNumber value="${dataStat.shuiQianLiRunZongErAndShengChanZiChan*100}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
+						  </c:forEach>
+						</tr>
+						</c:if>
+						<!-- 研发费用/营业总收入 -->
+						<c:if test="${not empty dataStats}">
+						<tr>
+						  <td >研发费用/营业总收入</td>
+						  <c:forEach items="${dataStats}" var ="dataStat">
+						      <td class="text-right" ><fmt:formatNumber value="${dataStat.researchFeeRate*100}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
+						  </c:forEach>
+						</tr>
+						</c:if>
+						<!-- 三费/营业总收入 -->
+						<c:if test="${not empty dataStats}">
+						<tr>
+						  <td  style="border-bottom: 1px solid gray;">三费/营业总收入</td>
+						  <c:forEach items="${dataStats}" var ="dataStat">
+						      <td class="text-right"  style="border-bottom: 1px solid gray;"><fmt:formatNumber value="${dataStat.feiYongRate*100}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
+						  </c:forEach>
+						</tr>
+						</c:if>
+						
+						<!-- 经营现金流量净额/净利润 -->
+						<c:if test="${not empty dataStats}">
+						<tr>
+						  <td >经营现金流量净额/净利润</td>
+						  <c:forEach items="${dataStats}" var ="dataStat">
+						      <td class="text-right" ><fmt:formatNumber value="${dataStat.moneyInCome*100}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
+						  </c:forEach>
+						</tr>
+						</c:if>
+						<!-- 现金流类型 -->
+						<c:if test="${not empty dataStats}">
+						<tr>
+						  <td >现金流类型</td>
+						  <c:forEach items="${dataStats}" var ="dataStat">
+						      <td class="text-right" >${dataStat.cashFlowTypeName}</td>
+						  </c:forEach>
+						</tr>
+						</c:if>
+						
 						<!-- 其它财务指标分析 -->
 						<c:if test="${not empty dataStats}">
 							<!-- 核心利润率 -->
 							<tr>
-								<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">其它</th>
-								<td style="border-bottom: 2px solid gray;">核心利润率</td>
+								<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;border-top: 2px solid gray;">其它</th>
+								<td style="border-bottom: 2px solid gray;border-top: 2px solid gray;">核心利润率</td>
 								<c:forEach items="${dataStats}" var="dataStat">
-									<td class="text-right" style="border-bottom: 2px solid gray;"><fmt:formatNumber value="${dataStat.coreProfitMargin *100 }" type="number" pattern="#,##0.0#"
+									<td class="text-right" style="border-bottom: 2px solid gray;border-top: 2px solid gray;"><fmt:formatNumber value="${dataStat.coreProfitMargin *100 }" type="number" pattern="#,##0.0#"
 											maxFractionDigits="1" groupingUsed="true" />%</td>
 								</c:forEach>
 							</tr>
@@ -277,50 +363,50 @@
 						<!-- 盈利能力 -->
 						<c:if test="${not empty dataStats}">
 							<tr>
-								<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">盈利能力</th>
+								<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;vertical-align: middle;">盈利能力</th>
 							</tr>
 						</c:if>
 						<!-- 偿债能力 -->
 						<c:if test="${not empty dataStats}">
 							<tr>
-								<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">偿债能力</th>
+								<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;vertical-align: middle;">偿债能力</th>
 							</tr>
 						</c:if>
 						<!-- 成长能力 -->
 						<c:if test="${not empty dataStats}">
 							<tr>
-								<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">成长能力</th>
+								<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;vertical-align: middle;">成长能力</th>
 							</tr>
 						</c:if>
 						<!-- 营运能力 -->
 						<c:if test="${not empty dataStats}">
 							<tr>
-								<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">营运能力</th>
+								<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;vertical-align: middle;">营运能力</th>
 							</tr>
 						</c:if>
 						<!-- 现金状况 -->
 						<c:if test="${not empty dataStats}">
 							<tr>
-								<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">现金状况</th>
+								<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;vertical-align: middle;">现金状况</th>
 							</tr>
 						</c:if>
 						<!-- 分红能力 -->
 						<c:if test="${not empty dataStats}">
 							<tr>
-								<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">分红能力</th>
+								<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;vertical-align: middle;">分红能力</th>
 							</tr>
 						</c:if>
 						<!-- 资本结构 -->
 						<c:if test="${not empty dataStats}">
 							<tr>
-								<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">资本结构</th>
+								<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;vertical-align: middle;">资本结构</th>
 							</tr>
 						</c:if>
 
 						<!-- 收益质量 -->
 						<c:if test="${not empty dataStats}">
 							<tr>
-								<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;">收益质量</th>
+								<th rowspan="1" style="margin: 0 auto; width: 20px; line-height: 24px; border-bottom: 2px solid gray;vertical-align: middle;">收益质量</th>
 							</tr>
 						</c:if>
 					</table>

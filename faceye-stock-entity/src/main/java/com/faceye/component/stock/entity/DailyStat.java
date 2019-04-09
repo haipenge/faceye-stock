@@ -206,6 +206,18 @@ public class DailyStat implements Serializable {
 	public void setDynamicPe(Double dynamicPe) {
 		this.dynamicPe = dynamicPe;
 	}
+	/**
+	 *市盈率TTM：波动市赢率
+	 */
+	private Double ttmPe=0.0D;
+
+	public Double getTtmPe() {
+		return ttmPe;
+	}
+
+	public void setTtmPe(Double ttmPe) {
+		this.ttmPe = ttmPe;
+	}
 
 	/**
 	 * 说明:市净率<br>

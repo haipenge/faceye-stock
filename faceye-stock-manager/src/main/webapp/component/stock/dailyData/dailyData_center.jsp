@@ -38,6 +38,9 @@
 							<th><fmt:message key='stock.dailyData.kaipanjia'></fmt:message></th>
 							<th><fmt:message key='stock.dailyData.shoupanjia'></fmt:message></th>
 							<th>昨收</th>
+							<th>PE</th>
+							<th>PE(TTM)</th>
+							<th>DPE</th>
 							<th><fmt:message key='stock.dailyData.dangqianjiage'></fmt:message></th>
 							<th><fmt:message key='stock.dailyData.jintianzuigaojia'></fmt:message></th>
 							<th><fmt:message key='stock.dailyData.jintianzuidijia'></fmt:message></th>
@@ -65,6 +68,11 @@
 							<td><fmt:formatNumber value="${dailyData.kaipanjia}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 							<td><fmt:formatNumber value="${dailyData.shoupanjia}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 							<td><fmt:formatNumber value="${dailyData.yesterdayPrice}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
+							
+							<td><fmt:formatNumber value="${dailyData.pe}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
+							<td><fmt:formatNumber value="${dailyData.ttmPe}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
+							<td><fmt:formatNumber value="${dailyData.dynamicPe}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
+							
 							<td><fmt:formatNumber value="${dailyData.dangqianjiage}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 							<td><fmt:formatNumber value="${dailyData.jintianzuigaojia}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
 							<td><fmt:formatNumber value="${dailyData.jintianzuidijia}" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>

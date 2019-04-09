@@ -129,6 +129,9 @@
 								href="<c:url value="/stock/stock/home?EQ|category.$id=${searchParams.categoryid}&GTE|dailyStat.pe=${searchParams.minPe }&LTE|dailyStat.pe=${searchParams.maxPe}&like|name=${searchParams.name }&like|code=${searchParams.code}&SORT|dailyStat.marketValue=${empty searchParams.sortPe or searchParams.sortPe eq 'asc' ? 'desc':'asc' }"/>">市值
 									${empty searchParams.sortPe or searchParams.sortPe eq 'asc' ? '<i class="fa fa-chevron-circle-up"></i>':'<i class="fa fa-chevron-circle-down"></i>' }</a></th>
 							<th>当前股价</th>
+							<th>ROE</th>
+							<th>核心利润率</th>
+							<th>净利率</th>
 							<th><a
 								href="<c:url value="/stock/stock/home?EQ|category.$id=${searchParams.categoryid}&GTE|dailyStat.pe=${searchParams.minPe }&LTE|dailyStat.pe=${searchParams.maxPe}&like|name=${searchParams.name }&like|code=${searchParams.code}&SORT|dailyStat.pe=${empty searchParams.sortPe or searchParams.sortPe eq 'asc' ? 'desc':'asc' }"/>">PE
 									${empty searchParams.sortPe or searchParams.sortPe eq 'asc' ? '<i class="fa fa-chevron-circle-up"></i>':'<i class="fa fa-chevron-circle-down"></i>' }</a></th>
@@ -158,6 +161,18 @@
 								<td class="text-right"><fmt:formatNumber
 										value="${stock.dailyStat.todayPrice }" type="number"
 										pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" /></td>
+								<td><fmt:formatNumber
+										value="${stock.dataStat.roe  *100 }"
+										type="number" pattern="#,##0.0#" maxFractionDigits="1"
+										groupingUsed="true" />%</td>
+								<td><fmt:formatNumber
+										value="${stock.dataStat.coreProfitMargin  *100 }"
+										type="number" pattern="#,##0.0#" maxFractionDigits="1"
+										groupingUsed="true" />%</td>
+								<td><fmt:formatNumber
+										value="${stock.dataStat.netProfitMargin  *100 }"
+										type="number" pattern="#,##0.0#" maxFractionDigits="1"
+										groupingUsed="true" />%
 								<td><span class="pull-left"><fmt:formatNumber
 											value="${stock.dailyStat.pe }" type="number"
 											pattern="#,##0.0#" maxFractionDigits="1" groupingUsed="true" /></span><span

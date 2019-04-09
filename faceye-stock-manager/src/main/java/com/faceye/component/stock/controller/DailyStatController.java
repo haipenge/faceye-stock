@@ -217,6 +217,7 @@ public class DailyStatController extends BaseController<DailyStat, Long, DailySt
 				this.dailyDataService.computeDailyDataLines(stock);
 				this.service.statDailyData2FindStar(stock);
 				this.service.statStarData(stock);
+				this.service.statPriceIn30Days(stock);
 				
 			}
 		}

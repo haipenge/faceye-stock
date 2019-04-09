@@ -507,6 +507,19 @@ public class DailyData implements Serializable {
 	public void setDynamicPe(Double dynamicPe) {
 		this.dynamicPe = dynamicPe;
 	}
+	
+	/**
+	 * 滚动市盈率
+	 */
+	private Double ttmPe=0.0D;
+	
+	public Double getTtmPe() {
+		return ttmPe;
+	}
+	public void setTtmPe(Double ttmPe) {
+		this.ttmPe = ttmPe;
+	}
+
 	/**
 	 * 市净率
 	 */
