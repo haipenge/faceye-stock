@@ -215,7 +215,9 @@ public class DailyStatServiceImpl extends BaseMongoServiceImpl<DailyStat, Long, 
 			if (totalStocks != null && CollectionUtils.isNotEmpty(totalStocks.getContent())) {
 				TotalStock totalStock = totalStocks.getContent().get(0);
 				Double stockNum = totalStock.getStockNum();
+				if(stockNum!=null && dailyStat.getTodayPrice()!=null){
 				dailyStat.setMarketValue(dailyStat.getTodayPrice() * stockNum);
+				}
 			}
 			// 计算股价振幅
 			Double priceAmplitude = null;
