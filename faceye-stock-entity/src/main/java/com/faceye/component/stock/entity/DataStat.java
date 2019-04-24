@@ -406,7 +406,24 @@ public class DataStat implements Serializable {
 	public void setShuiQianLiRunZongErAndShengChanZiChan(Double shuiQianLiRunZongErAndShengChanZiChan) {
 		this.shuiQianLiRunZongErAndShengChanZiChan = shuiQianLiRunZongErAndShengChanZiChan;
 	}
+	/**
+	 * 是否是重资产公司：税前利润总额/生产资产 > 2倍银行贷款利率 = 轻
+	 */
+	@Transient
+	private Boolean isWeightCompony=Boolean.TRUE;
 	
+	
+	public Boolean getIsWeightCompony() {
+		if(shuiQianLiRunZongErAndShengChanZiChan>=0.12){
+			isWeightCompony=false;
+		}
+		return isWeightCompony;
+	}
+
+	public void setIsWeightCompony(Boolean isWeightCompony) {
+		this.isWeightCompony = isWeightCompony;
+	}
+
 	/**
 	 * 费用率
 	 */

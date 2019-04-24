@@ -254,7 +254,7 @@
 						<tr>
 						  <td >税前利润总额/生产资产</td>
 						  <c:forEach items="${dataStats}" var ="dataStat">
-						      <td class="text-right" ><fmt:formatNumber value="${dataStat.shuiQianLiRunZongErAndShengChanZiChan*100}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%</td>
+						      <td class="text-right" ><fmt:formatNumber value="${dataStat.shuiQianLiRunZongErAndShengChanZiChan*100}" type="number" pattern="#,##0.0#" maxFractionDigits="2" groupingUsed="true" />%<c:if test="${dataStat.isWeightCompony eq true}" >(重)</c:if><c:if test="${dataStat.isWeightCompony eq false}" >(轻)</c:if></td>
 						  </c:forEach>
 						</tr>
 						</c:if>
