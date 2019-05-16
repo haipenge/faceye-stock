@@ -198,8 +198,10 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 				//sort = new Sort(Direction.ASC,"dataStat.shengchanZichanAndZongZiChan");
 				//sort.and(new Sort(Direction.ASC, "dailyStat.pe"));
 				//货币资金/有息负债
-				sort.and(new Sort(Direction.DESC,"dataStat.huoBiZiJinAndYouXiFuZhai"));
+				//sort.and(new Sort(Direction.DESC,"dataStat.huoBiZiJinAndYouXiFuZhai"));
 //				sort.and(new Sort(Direction.DESC, "dailyStat.todayIncreaseRate"));
+				//将利率
+				sort.and(new Sort(Direction.DESC,"dataStata.totalAssetsNetProfitMargin"));
 			}
 		}
 		query.with(sort);
