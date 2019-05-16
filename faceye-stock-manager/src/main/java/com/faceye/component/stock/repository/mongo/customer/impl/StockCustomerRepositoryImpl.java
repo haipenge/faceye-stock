@@ -190,8 +190,10 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 		} else {
 			// 默认按pe从小到大排序
 			if (sort == null) {
-				// sort = new Sort(Direction.ASC, "dailyStat.pe");
-				sort = new Sort(Direction.DESC, "dailyStat.todayIncreaseRate");
+				//默认按ROE从大到小排列
+				sort = new Sort(Direction.DESC,"dataStat.roe");
+				sort.and(new Sort(Direction.ASC, "dailyStat.pe"));
+//				sort.and(new Sort(Direction.DESC, "dailyStat.todayIncreaseRate"));
 			}
 		}
 		query.with(sort);
