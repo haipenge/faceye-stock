@@ -192,7 +192,13 @@ public class StockCustomerRepositoryImpl implements StockCustomerRepository {
 			if (sort == null) {
 				//默认按ROE从大到小排列
 				sort = new Sort(Direction.DESC,"dataStat.roe");
-				sort.and(new Sort(Direction.ASC, "dailyStat.pe"));
+				//经营现金流量净额/净利润
+				sort.and(new Sort(Direction.DESC,"dataStat.moneyInCome"));
+				//轻重公司
+				sort = new Sort(Direction.ASC,"dataStat.shengchanZichanAndZongZiChan");
+				//sort.and(new Sort(Direction.ASC, "dailyStat.pe"));
+				//货币资金/有息负债
+				sort.and(new Sort(Direction.DESC,"dataStat.huoBiZiJinAndYouXiFuZhai"));
 //				sort.and(new Sort(Direction.DESC, "dailyStat.todayIncreaseRate"));
 			}
 		}
