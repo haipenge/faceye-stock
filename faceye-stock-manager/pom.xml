@@ -9,6 +9,7 @@
 	<version>1.0</version>
 	<packaging>jar</packaging>
 	<name>faceye-stock-manager</name>
+
 	<properties>
 		<faceye-security-manager-mongo.version>1.0</faceye-security-manager-mongo.version>
 		<faceye-stock-entity.version>1.0</faceye-stock-entity.version>
